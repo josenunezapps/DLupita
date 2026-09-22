@@ -1804,3 +1804,138 @@ blockquote{border-color:rgba(22,25,28,.11)}
     height:9px;
   }
 }
+
+
+/* =========================================================
+   DOÑA LUPITA · PIZZA 6 PORCIONES + WHATSAPP
+   Cinco porciones visibles, una faltante.
+   ========================================================= */
+.wa.pizza-wa{
+  width:76px;
+  min-width:76px;
+  height:76px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  overflow:visible;
+}
+.wa.pizza-wa::after{display:none!important}
+.wa.pizza-wa:hover{
+  transform:translateY(-4px) scale(1.045);
+  box-shadow:none;
+  filter:none;
+}
+.pizza-wa::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:50%;
+  border:1px solid rgba(201,170,106,.24);
+  opacity:0;
+  transform:scale(.88);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.pizza-wa:hover::before{
+  opacity:1;
+  transform:scale(1);
+}
+
+.pizza-float.pizza-six{
+  position:relative;
+  width:66px;
+  height:66px;
+  display:block;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  transform:rotate(-9deg);
+  filter:drop-shadow(0 13px 20px rgba(0,0,0,.24));
+  overflow:visible;
+}
+
+.pizza-six-art{
+  width:66px;
+  height:66px;
+  display:block;
+  overflow:visible;
+}
+.pizza-slices path{
+  fill:#f3ce62;
+  stroke:#b66d2b;
+  stroke-width:4.2;
+  stroke-linejoin:round;
+}
+.pizza-slices path:nth-child(2),
+.pizza-slices path:nth-child(4){
+  fill:#f7d875;
+}
+.pizza-toppings circle{
+  fill:#a9252f;
+  stroke:#7e1921;
+  stroke-width:1;
+}
+.pizza-toppings .pizza-basil{
+  fill:#4f7d42;
+  stroke:#365f30;
+  stroke-width:.7;
+  transform-box:fill-box;
+  transform-origin:center;
+}
+.pizza-toppings .pizza-basil:first-of-type{transform:rotate(-28deg)}
+.pizza-toppings .pizza-basil:last-of-type{transform:rotate(34deg)}
+.pizza-center{
+  fill:#e8bd4e;
+  stroke:#b66d2b;
+  stroke-width:1.4;
+}
+
+.wa-badge{
+  position:absolute;
+  right:-4px;
+  bottom:-3px;
+  z-index:10;
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#25D366;
+  border:3px solid #fff;
+  box-shadow:0 7px 16px rgba(0,0,0,.24);
+  transform:rotate(9deg);
+}
+.wa-badge svg{
+  width:15px;
+  height:15px;
+  display:block;
+  fill:#fff;
+}
+
+@media(max-width:720px){
+  .wa.pizza-wa{
+    width:66px;
+    min-width:66px;
+    height:66px;
+    right:12px;
+    bottom:12px;
+  }
+  .pizza-float.pizza-six,
+  .pizza-six-art{
+    width:58px;
+    height:58px;
+  }
+  .wa-badge{
+    width:25px;
+    height:25px;
+    right:-3px;
+    bottom:-2px;
+  }
+  .wa-badge svg{
+    width:14px;
+    height:14px;
+  }
+}
