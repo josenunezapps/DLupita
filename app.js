@@ -155,3 +155,40 @@ function paintBusinessStatus() {
 paintBusinessStatus();
 setInterval(paintBusinessStatus, 60 * 1000);
 
+
+// Premium shell interactions
+const siteHeader = document.querySelector('.nav-wrap');
+
+function syncPremiumHeader() {
+  if (siteHeader) siteHeader.classList.toggle('scrolled', window.scrollY > 28);
+}
+syncPremiumHeader();
+window.addEventListener('scroll', syncPremiumHeader, { passive: true });
+
+tabs.forEach(tab => {
+  tab.setAttribute('role', 'tab');
+  tab.setAttribute('aria-selected', tab.classList.contains('active') ? 'true' : 'false');
+});
+document.querySelector('.menu-tabs')?.setAttribute('role', 'tablist');
+
+tabs.forEach(tab => tab.addEventListener('click', () => {
+  tabs.forEach(item => item.setAttribute('aria-selected', item === tab ? 'true' : 'false'));
+}));
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && nav?.classList.contains('open')) {
+    nav.classList.remove('open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.focus();
+  }
+});
+
+document.addEventListener('click', event => {
+  if (!nav?.classList.contains('open')) return;
+  const insideNav = nav.contains(event.target);
+  const onToggle = toggle?.contains(event.target);
+  if (!insideNav && !onToggle) {
+    nav.classList.remove('open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  }
+});
