@@ -77,7 +77,7 @@
         <a href="#opiniones">Opiniones</a>
         <a href="#visitanos">Ubicación</a>
         <span class="nav-status" id="navStatus" aria-live="polite"><i></i><span>Consultando horario…</span></span>
-        <a class="order-btn" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">Hacer pedido</a>
+        <a class="order-btn" href="#pedido" id="navOrderBtn">Armar pedido <span class="nav-order-count" id="navOrderCount">0</span></a>
       </nav>
     </div>
   </header>
@@ -170,7 +170,7 @@
           <span class="overline dark">NUESTRA CARTA</span>
           <h2>Elegí lo que se te antoja.</h2>
         </div>
-        <p>Algunos clásicos de la casa. Consultanos por variedades, disponibilidad y precios del día.</p>
+        <p>Elegí tus favoritos y armá el pedido acá. Después lo enviás completo por WhatsApp para confirmar disponibilidad y precios.</p>
       </div>
 
       <div class="menu-tabs reveal">
@@ -183,8 +183,76 @@
       <div class="menu-list reveal" id="menuList" aria-live="polite"></div>
 
       <div class="menu-cta reveal">
-        <span>¿Querés conocer toda la carta?</span>
-        <a href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20consultar%20la%20carta" target="_blank" rel="noopener">Escribinos por WhatsApp ↗</a>
+        <span>¿No encontrás lo que buscás?</span>
+        <a href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20consultar%20la%20carta%20completa" target="_blank" rel="noopener">Consultar carta completa ↗</a>
+      </div>
+    </section>
+
+
+    <section class="order-builder container" id="pedido" aria-labelledby="orderTitle">
+      <div class="order-builder-head">
+        <div>
+          <span class="overline dark">PEDIDO RÁPIDO</span>
+          <h2 id="orderTitle">Armá tu pedido.</h2>
+        </div>
+        <p>Sumá productos desde la carta, ajustá cantidades y mandanos todo junto por WhatsApp. La disponibilidad y el precio final se confirman por mensaje.</p>
+      </div>
+
+      <div class="order-builder-grid">
+        <div class="order-summary" aria-live="polite">
+          <div class="order-summary-top">
+            <div>
+              <small>TU SELECCIÓN</small>
+              <strong><span id="orderItemCount">0</span> productos</strong>
+            </div>
+            <button class="order-clear" id="clearOrder" type="button" disabled>Vaciar</button>
+          </div>
+
+          <div class="order-items" id="orderItems">
+            <div class="order-empty">
+              <span>+</span>
+              <h3>Tu pedido está vacío</h3>
+              <p>Agregá productos desde la carta para empezar.</p>
+              <a href="#carta">Ir a la carta</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-details">
+          <div class="order-detail-heading">
+            <small>DATOS DEL PEDIDO</small>
+            <h3>Lo dejamos listo para enviar.</h3>
+          </div>
+
+          <label class="order-field">
+            <span>Nombre <small>opcional</small></span>
+            <input type="text" id="orderName" maxlength="60" autocomplete="name" placeholder="Tu nombre">
+          </label>
+
+          <div class="order-choice">
+            <span>¿Cómo querés recibirlo?</span>
+            <label><input type="radio" name="orderMode" value="Retiro en local" checked> <b>Retiro en local</b><small>Don Bosco 314</small></label>
+            <label><input type="radio" name="orderMode" value="Consultar envío"> <b>Consultar envío</b><small>Se confirma por WhatsApp</small></label>
+          </div>
+
+          <label class="order-field">
+            <span>Hora preferida <small>opcional</small></span>
+            <input type="time" id="orderTime">
+          </label>
+
+          <label class="order-field">
+            <span>Notas <small>opcional</small></span>
+            <textarea id="orderNotes" rows="4" maxlength="280" placeholder="Ej: sin aceitunas, sabores de empanadas, aclaraciones..."></textarea>
+          </label>
+
+          <div class="order-actions">
+            <button class="order-send" id="sendOrder" type="button" disabled>
+              <span>Enviar pedido por WhatsApp</span>
+              <b>↗</b>
+            </button>
+            <p>No se cobra desde la web. Doña Lupita confirma disponibilidad, precio y pedido por WhatsApp.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -224,7 +292,7 @@
         <h2>Venís por la comida.<br><em>Volvés por la mesa.</em></h2>
         <p>Pizza al medio, empanadas recién hechas y tiempo para conversar. Esa es nuestra manera de recibirte.</p>
         <div class="closing-story-actions">
-          <a class="primary-cta" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">Hacer un pedido</a>
+          <a class="primary-cta" href="#pedido">Armar un pedido</a>
           <span>Don Bosco 314 · Ushuaia</span>
         </div>
       </div>
@@ -262,7 +330,11 @@
     <div class="container footer-bottom"><span>Doña Lupita · Ushuaia</span><span>El gusto es nuestro.</span></div>
   </footer>
 
-  <a class="wa" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener" aria-label="WhatsApp">✆</a>
+  <a class="wa" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita" target="_blank" rel="noopener" aria-label="Abrir WhatsApp de Doña Lupita">✆</a>
+  <a class="mobile-order-bar" id="mobileOrderBar" href="#pedido" aria-label="Ver pedido">
+    <span>Mi pedido</span>
+    <b id="mobileOrderCount">0</b>
+  </a>
   <script src="app.js"></script>
 </body>
 </html>
