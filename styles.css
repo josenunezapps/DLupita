@@ -688,3 +688,211 @@ blockquote footer{letter-spacing:.04em}
   *,*:before,*:after{animation:none!important;transition:none!important}
   .hero-media img{transform:none!important}
 }
+
+
+/* =========================================================
+   DOÑA LUPITA · LUXE LIGHT PALETTE
+   Menos marrón, más marfil / carbón / bordó / champagne.
+   ========================================================= */
+:root{
+  --red:#9f1f2d;
+  --red-dark:#74141f;
+  --wine:#5c1320;
+  --wine-2:#2b0f15;
+  --gold:#c9aa6a;
+  --gold-soft:#eadfc8;
+  --cream:#f0ece4;
+  --cream-light:#fbfaf7;
+  --wood:#34383c;
+  --ink:#16191c;
+  --muted:#676b70;
+  --paper:#f6f3ed;
+  --line:rgba(22,25,28,.10);
+  --shadow:0 24px 70px rgba(15,18,20,.10);
+  --shadow-deep:0 32px 90px rgba(8,10,12,.24);
+}
+
+body{
+  background:
+    radial-gradient(circle at 15% 10%,rgba(201,170,106,.07),transparent 24%),
+    linear-gradient(180deg,#fbfaf7 0%,#f4f1eb 100%);
+  color:var(--ink);
+}
+
+.nav-inner{
+  background:rgba(17,19,21,.76);
+  border-color:rgba(255,255,255,.14);
+  box-shadow:0 14px 42px rgba(0,0,0,.16);
+}
+.nav-wrap.scrolled .nav-inner{
+  background:rgba(17,19,21,.94);
+  box-shadow:0 14px 44px rgba(0,0,0,.22);
+}
+.brand-icon{
+  background:#fff;
+  border-color:rgba(201,170,106,.28);
+}
+.nav .order-btn{
+  background:linear-gradient(135deg,#f4e7cf,#c9aa6a);
+  color:#202326;
+}
+
+.hero{background:#0d0f10}
+.hero-media img{
+  filter:saturate(.92) contrast(1.08) brightness(.78);
+}
+.hero-overlay{
+  background:
+    radial-gradient(circle at 76% 24%,rgba(201,170,106,.12),transparent 22%),
+    linear-gradient(90deg,rgba(8,10,11,.94) 0%,rgba(12,14,15,.78) 42%,rgba(14,16,17,.35) 70%,rgba(14,16,17,.15) 100%),
+    linear-gradient(0deg,rgba(8,10,11,.72),transparent 62%);
+}
+.hero:after{
+  background:linear-gradient(180deg,transparent,rgba(8,10,11,.42));
+}
+.hero h1 em{color:#eadfc8}
+.hero-note{
+  border-color:rgba(255,255,255,.16);
+  background:rgba(18,20,22,.46);
+}
+.rating-row span{color:#e1c993}
+
+.intro,.menu-section,.share-section{background:transparent}
+.intro-label,.overline.dark,.menu-price,.menu-cta a{color:var(--red)}
+.intro-copy p,.menu-title p,.share-copy p,.menu-item p{color:var(--muted)}
+.intro h2,.bento-text h3,.menu-item h3,.menu-title h2,.share-copy h2{color:#191c1f}
+
+.bento figure{
+  background:#e7e8e8;
+  box-shadow:0 18px 48px rgba(15,18,20,.08);
+}
+.bento figure:after{border-color:rgba(255,255,255,.32)}
+.bento-text{border-top-color:rgba(22,25,28,.12)}
+
+.favorites{
+  background:
+    radial-gradient(circle at 78% 18%,rgba(159,31,45,.18),transparent 26%),
+    radial-gradient(circle at 12% 76%,rgba(201,170,106,.08),transparent 23%),
+    linear-gradient(135deg,#111315 0%,#171a1d 60%,#0c0e0f 100%);
+}
+.favorites:before{border-color:rgba(201,170,106,.10)}
+.favorites .overline.dark{color:#d8bd84}
+.favorites h2{color:#fff}
+.fav-card{
+  background:#17191b;
+  border-color:rgba(255,255,255,.08);
+}
+.fav-card:after{
+  background:linear-gradient(0deg,rgba(5,6,7,.94) 0%,rgba(5,6,7,.20) 58%,rgba(5,6,7,.02) 100%);
+}
+
+.menu-tabs{
+  background:#fff;
+  border-color:rgba(22,25,28,.08);
+  box-shadow:0 10px 30px rgba(15,18,20,.05);
+}
+.menu-tab{color:#6b7075}
+.menu-tab:hover{background:#f4f5f5;color:var(--red)}
+.menu-tab.active{
+  background:#17191b;
+  color:#fff;
+  box-shadow:0 10px 24px rgba(15,18,20,.16);
+}
+.menu-item{
+  background:rgba(255,255,255,.88);
+  border-color:rgba(22,25,28,.08);
+  box-shadow:0 12px 34px rgba(15,18,20,.05);
+}
+.menu-item:hover{
+  border-color:rgba(159,31,45,.20);
+  box-shadow:0 18px 44px rgba(15,18,20,.09);
+}
+.menu-cta{
+  background:#fff;
+  border-color:rgba(22,25,28,.08);
+}
+
+.nasa{
+  background:
+    radial-gradient(circle at 14% 16%,rgba(255,255,255,.07),transparent 22%),
+    linear-gradient(135deg,#8f1b28 0%,#a62332 50%,#6f1520 100%);
+}
+.nasa-big,.nasa-copy span{color:#f0dfbc}
+.nasa-link{border-color:rgba(255,255,255,.34)}
+
+.share-photo{
+  background:#fff;
+  box-shadow:0 28px 80px rgba(15,18,20,.12);
+}
+
+.reviews{
+  background:
+    radial-gradient(circle at 92% 8%,rgba(201,170,106,.08),transparent 22%),
+    linear-gradient(180deg,#f8f6f1,#f0ece5);
+}
+.reviews:before{color:rgba(22,25,28,.035)}
+.score{color:var(--red)}
+.review-stars{color:#b52a37}
+.reviews-score p,blockquote footer{color:#6a6f73}
+blockquote{border-color:rgba(22,25,28,.11)}
+
+.visit{
+  background:
+    radial-gradient(circle at 10% 8%,rgba(201,170,106,.08),transparent 20%),
+    linear-gradient(135deg,#111315,#1a1d20);
+  border-color:rgba(255,255,255,.05);
+  box-shadow:0 34px 95px rgba(8,10,12,.18);
+}
+.visit .overline{color:#e3c98e}
+.visit dl div{border-color:rgba(255,255,255,.09)}
+.visit dt{color:rgba(255,255,255,.48)}
+
+.site-footer{
+  background:#0f1113;
+  color:rgba(255,255,255,.58);
+}
+.footer-grid strong{color:#f6f1e7}
+.footer-grid p,.footer-grid a{color:rgba(255,255,255,.55)}
+.footer-grid a:hover{color:#e3c98e}
+.footer-bottom{
+  border-color:rgba(255,255,255,.07);
+  color:rgba(255,255,255,.34);
+}
+
+.wa{
+  border-color:#fbfaf7;
+  box-shadow:0 18px 44px rgba(14,79,40,.22);
+}
+
+/* Premium details: cleaner surfaces and restrained contrast */
+.primary-cta{
+  background:linear-gradient(135deg,#a52130,#7c1722);
+  box-shadow:0 14px 30px rgba(159,31,45,.20);
+}
+.primary-cta:hover{box-shadow:0 18px 36px rgba(159,31,45,.28)}
+.ghost-cta{
+  background:rgba(255,255,255,.055);
+  border-color:rgba(255,255,255,.24);
+}
+.menu-section,.intro,.share-section{position:relative}
+.menu-section:before,.share-section:before{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  border:1px solid rgba(201,170,106,.12);
+  border-radius:50%;
+  pointer-events:none;
+}
+.menu-section:before{right:-90px;top:80px}
+.share-section:before{left:-110px;bottom:40px}
+
+@media(max-width:720px){
+  .nav-inner{background:rgba(17,19,21,.93)}
+  .hero-overlay{
+    background:
+      linear-gradient(90deg,rgba(8,10,11,.90),rgba(8,10,11,.52)),
+      linear-gradient(0deg,rgba(8,10,11,.76),transparent 65%);
+  }
+  .menu-section:before,.share-section:before{display:none}
+}
