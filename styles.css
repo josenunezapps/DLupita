@@ -1193,3 +1193,472 @@ blockquote{border-color:rgba(22,25,28,.11)}
   .menu-section{padding-top:94px;padding-bottom:94px}
   .reviews{padding-top:94px;padding-bottom:94px}
 }
+
+
+/* =========================================================
+   DOÑA LUPITA · ORDER EXPERIENCE
+   Pedido real por WhatsApp + carga inmediata.
+   ========================================================= */
+
+/* El contenido ya no aparece por tramos al scrollear. */
+.reveal,
+.reveal.visible{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
+}
+
+/* Carta accionable */
+.menu-item{
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+}
+.menu-item-copy{min-width:0}
+.menu-add{
+  min-width:116px;
+  min-height:44px;
+  padding:0 13px 0 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  border:1px solid rgba(22,25,28,.10);
+  border-radius:999px;
+  background:#17191b;
+  color:#fff;
+  font:800 12px/1 "Manrope",system-ui,sans-serif;
+  cursor:pointer;
+  transition:transform .16s ease,background .16s ease,border-color .16s ease;
+}
+.menu-add b{
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.10);
+  font-size:18px;
+  line-height:1;
+}
+.menu-add:hover{
+  transform:translateY(-2px);
+  background:var(--red);
+  border-color:var(--red);
+}
+.menu-add.added{
+  background:#247a49;
+  border-color:#247a49;
+}
+.nav-order-count{
+  min-width:22px;
+  height:22px;
+  padding:0 6px;
+  display:inline-grid;
+  place-items:center;
+  margin-left:6px;
+  border-radius:999px;
+  background:rgba(32,35,38,.13);
+  color:#202326;
+  font-size:10px;
+}
+.nav-order-count.pulse{
+  animation:orderPulse .42s ease;
+}
+@keyframes orderPulse{
+  50%{transform:scale(1.22)}
+}
+
+/* Armador de pedido */
+.order-builder{
+  padding-top:130px;
+  padding-bottom:130px;
+}
+.order-builder-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 430px;
+  align-items:end;
+  gap:70px;
+  margin-bottom:42px;
+}
+.order-builder-head h2{
+  margin:8px 0 0;
+  color:#17191b;
+  font:600 clamp(56px,6vw,86px)/.9 "Cormorant Garamond",Georgia,serif;
+  letter-spacing:-.045em;
+}
+.order-builder-head p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.75;
+}
+.order-builder-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(360px,.75fr);
+  gap:18px;
+  align-items:start;
+}
+.order-summary,
+.order-details{
+  border:1px solid rgba(22,25,28,.08);
+  border-radius:28px;
+  background:#fff;
+  box-shadow:0 18px 60px rgba(15,18,20,.07);
+}
+.order-summary{overflow:hidden}
+.order-summary-top{
+  min-height:94px;
+  padding:22px 26px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border-bottom:1px solid rgba(22,25,28,.08);
+  background:#faf9f6;
+}
+.order-summary-top>div{
+  display:flex;
+  flex-direction:column;
+}
+.order-summary-top small,
+.order-detail-heading small{
+  color:var(--red);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
+}
+.order-summary-top strong{
+  margin-top:6px;
+  color:#1a1d20;
+  font:600 27px/1 "Cormorant Garamond",Georgia,serif;
+}
+.order-clear{
+  padding:9px 12px;
+  border:0;
+  background:transparent;
+  color:var(--red);
+  font:800 11px/1 "Manrope",system-ui,sans-serif;
+  cursor:pointer;
+}
+.order-clear:disabled{opacity:.3;cursor:default}
+.order-items{
+  min-height:300px;
+  padding:8px 26px 18px;
+}
+.order-empty{
+  min-height:275px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.order-empty>span{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(22,25,28,.10);
+  border-radius:50%;
+  color:var(--red);
+  font-size:27px;
+}
+.order-empty h3{
+  margin:14px 0 4px;
+  font:600 28px/1 "Cormorant Garamond",Georgia,serif;
+}
+.order-empty p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+}
+.order-empty a{
+  margin-top:16px;
+  color:var(--red);
+  font-size:12px;
+  font-weight:800;
+}
+.order-line{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:18px;
+  min-height:92px;
+  padding:18px 36px 18px 0;
+  border-bottom:1px solid rgba(22,25,28,.08);
+}
+.order-line:last-child{border-bottom:0}
+.order-line-copy small{
+  color:#8a8e92;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.16em;
+}
+.order-line-copy h3{
+  margin:5px 0 0;
+  color:#1a1d20;
+  font:600 25px/1 "Cormorant Garamond",Georgia,serif;
+}
+.order-qty{
+  height:38px;
+  display:flex;
+  align-items:center;
+  border:1px solid rgba(22,25,28,.10);
+  border-radius:999px;
+  overflow:hidden;
+  background:#faf9f6;
+}
+.order-qty button{
+  width:36px;
+  height:36px;
+  border:0;
+  background:transparent;
+  color:#1a1d20;
+  font-size:19px;
+  cursor:pointer;
+}
+.order-qty button:hover{background:#f0eee9}
+.order-qty strong{
+  min-width:26px;
+  text-align:center;
+  font-size:12px;
+}
+.order-remove{
+  position:absolute;
+  top:10px;
+  right:0;
+  width:26px;
+  height:26px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#9da0a3;
+  font-size:20px;
+  cursor:pointer;
+}
+.order-remove:hover{color:var(--red);background:#f8eeee}
+
+.order-details{
+  position:sticky;
+  top:96px;
+  padding:28px;
+}
+.order-detail-heading{
+  padding-bottom:22px;
+  border-bottom:1px solid rgba(22,25,28,.08);
+}
+.order-detail-heading h3{
+  margin:6px 0 0;
+  color:#1a1d20;
+  font:600 31px/1 "Cormorant Garamond",Georgia,serif;
+}
+.order-field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:20px;
+}
+.order-field>span,
+.order-choice>span{
+  color:#303438;
+  font-size:11px;
+  font-weight:800;
+}
+.order-field>span small{
+  margin-left:5px;
+  color:#9a9da0;
+  font-weight:600;
+}
+.order-field input,
+.order-field textarea{
+  width:100%;
+  border:1px solid rgba(22,25,28,.11);
+  border-radius:14px;
+  background:#faf9f6;
+  color:#1a1d20;
+  font:600 13px/1.4 "Manrope",system-ui,sans-serif;
+  outline:none;
+}
+.order-field input{
+  height:49px;
+  padding:0 14px;
+}
+.order-field textarea{
+  resize:vertical;
+  min-height:96px;
+  padding:13px 14px;
+}
+.order-field input:focus,
+.order-field textarea:focus{
+  border-color:rgba(159,31,45,.42);
+  box-shadow:0 0 0 3px rgba(159,31,45,.07);
+}
+.order-choice{
+  display:grid;
+  gap:8px;
+  margin-top:20px;
+}
+.order-choice>span{margin-bottom:2px}
+.order-choice label{
+  position:relative;
+  display:grid;
+  grid-template-columns:22px 1fr;
+  grid-template-rows:auto auto;
+  column-gap:8px;
+  align-items:center;
+  min-height:58px;
+  padding:10px 12px;
+  border:1px solid rgba(22,25,28,.10);
+  border-radius:14px;
+  background:#faf9f6;
+  cursor:pointer;
+}
+.order-choice input{
+  grid-row:1/span 2;
+  accent-color:var(--red);
+}
+.order-choice b{font-size:12px}
+.order-choice small{
+  color:#8a8e92;
+  font-size:10px;
+}
+.order-actions{
+  margin-top:24px;
+  padding-top:22px;
+  border-top:1px solid rgba(22,25,28,.08);
+}
+.order-send{
+  width:100%;
+  min-height:54px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border:0;
+  border-radius:999px;
+  background:#1fbd5b;
+  color:#fff;
+  font:800 13px/1 "Manrope",system-ui,sans-serif;
+  cursor:pointer;
+  box-shadow:0 12px 28px rgba(31,189,91,.20);
+  transition:transform .16s ease,box-shadow .16s ease,opacity .16s ease;
+}
+.order-send b{font-size:18px}
+.order-send:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 16px 34px rgba(31,189,91,.28);
+}
+.order-send:disabled{
+  opacity:.34;
+  cursor:not-allowed;
+  box-shadow:none;
+}
+.order-actions p{
+  margin:11px 4px 0;
+  color:#929699;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.mobile-order-bar{display:none}
+.wa:after{content:"WhatsApp"}
+
+@media(max-width:980px){
+  .order-builder-head{grid-template-columns:1fr;gap:18px}
+  .order-builder-grid{grid-template-columns:1fr}
+  .order-details{position:static}
+}
+
+@media(max-width:720px){
+  body{padding-bottom:72px}
+  .order-builder{
+    padding-top:92px;
+    padding-bottom:92px;
+  }
+  .order-builder-head{margin-bottom:26px}
+  .order-builder-head h2{font-size:52px}
+  .order-builder-grid{gap:12px}
+  .order-summary,.order-details{border-radius:22px}
+  .order-summary-top{padding:18px 19px;min-height:80px}
+  .order-items{padding:5px 19px 13px;min-height:250px}
+  .order-empty{min-height:235px}
+  .order-line{
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:12px;
+    padding:17px 30px 17px 0;
+  }
+  .order-line-copy h3{font-size:23px}
+  .order-remove{right:-3px}
+  .order-details{padding:22px 19px}
+  .menu-item{
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:12px;
+  }
+  .menu-add{
+    min-width:48px;
+    width:48px;
+    height:48px;
+    padding:0;
+    justify-content:center;
+  }
+  .menu-add span{display:none}
+  .menu-add b{
+    width:auto;
+    height:auto;
+    background:transparent;
+    font-size:22px;
+  }
+  .menu-price{font-size:11px}
+  .nav-order-count{margin-left:5px}
+  .mobile-order-bar{
+    position:fixed;
+    left:16px;
+    right:86px;
+    bottom:16px;
+    z-index:59;
+    min-height:58px;
+    padding:0 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-radius:999px;
+    background:#17191b;
+    color:#fff;
+    box-shadow:0 18px 44px rgba(0,0,0,.20);
+    font-size:12px;
+    font-weight:800;
+    transform:translateY(85px);
+    opacity:0;
+    transition:transform .22s ease,opacity .22s ease;
+  }
+  .mobile-order-bar.has-items{
+    transform:none;
+    opacity:1;
+  }
+  .mobile-order-bar b{
+    min-width:30px;
+    height:30px;
+    padding:0 8px;
+    display:grid;
+    place-items:center;
+    border-radius:999px;
+    background:var(--red);
+    font-size:11px;
+  }
+  .mobile-order-bar.pulse{animation:orderBarPulse .42s ease}
+  @keyframes orderBarPulse{
+    50%{transform:scale(1.025)}
+  }
+  .wa{
+    right:16px;
+    bottom:16px;
+  }
+  .wa:after{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .menu-add,.order-send,.mobile-order-bar{transition:none!important}
+  .nav-order-count.pulse,.mobile-order-bar.pulse{animation:none!important}
+}
