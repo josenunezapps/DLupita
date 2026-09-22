@@ -1662,3 +1662,145 @@ blockquote{border-color:rgba(22,25,28,.11)}
   .menu-add,.order-send,.mobile-order-bar{transition:none!important}
   .nav-order-count.pulse,.mobile-order-bar.pulse{animation:none!important}
 }
+
+
+/* =========================================================
+   DOÑA LUPITA · FLOATING MINI PIZZA
+   Reemplaza visualmente WhatsApp sin cambiar su función.
+   ========================================================= */
+.wa.pizza-wa{
+  width:70px;
+  min-width:70px;
+  height:70px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+  transition:transform .18s ease,filter .18s ease;
+}
+.wa.pizza-wa::after{display:none!important}
+.wa.pizza-wa:hover{
+  transform:translateY(-4px) rotate(-3deg) scale(1.045);
+  box-shadow:none;
+  filter:brightness(1.03);
+}
+
+.pizza-float{
+  position:relative;
+  width:62px;
+  height:62px;
+  display:block;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 48% 45%,#f5d36a 0 54%,transparent 55%),
+    radial-gradient(circle at 50% 50%,#d99035 0 70%,#b76c28 71% 82%,#8c4b1f 83% 100%);
+  border:2px solid rgba(97,47,18,.34);
+  box-shadow:
+    0 14px 26px rgba(0,0,0,.24),
+    inset 0 2px 2px rgba(255,255,255,.45),
+    inset 0 -5px 8px rgba(122,62,21,.20);
+  transform:rotate(-8deg);
+}
+.pizza-float::before{
+  content:"";
+  position:absolute;
+  inset:7px;
+  z-index:1;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 28%,rgba(255,255,255,.32) 0 3%,transparent 4%),
+    radial-gradient(circle at 70% 68%,rgba(255,255,255,.22) 0 2.5%,transparent 3.5%),
+    #d84935;
+  box-shadow:
+    inset 0 0 0 3px rgba(171,47,34,.24),
+    inset 0 -5px 10px rgba(117,28,23,.18);
+}
+.pizza-cheese{
+  position:absolute;
+  inset:10px;
+  z-index:2;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 36% 30%,#fff0a2 0 11%,transparent 12%),
+    radial-gradient(circle at 66% 37%,#ffe790 0 10%,transparent 11%),
+    radial-gradient(circle at 50% 69%,#f8d96e 0 14%,transparent 15%),
+    linear-gradient(145deg,#f7da72,#e9ba49);
+  opacity:.96;
+  box-shadow:inset 0 0 9px rgba(180,105,30,.22);
+}
+.pizza-cheese::before,
+.pizza-cheese::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,244,176,.82);
+}
+.pizza-cheese::before{width:9px;height:5px;left:9px;bottom:11px;transform:rotate(22deg)}
+.pizza-cheese::after{width:7px;height:4px;right:8px;top:10px;transform:rotate(-15deg)}
+
+.pizza-pepperoni{
+  position:absolute;
+  z-index:4;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%,#e36352 0 16%,transparent 18%),
+    radial-gradient(circle at 65% 58%,#7f1e25 0 14%,transparent 16%),
+    #a7232d;
+  border:1px solid rgba(92,20,27,.28);
+  box-shadow:0 1px 2px rgba(95,29,20,.30);
+}
+.pizza-pepperoni.p1{top:15px;left:17px}
+.pizza-pepperoni.p2{top:18px;right:15px}
+.pizza-pepperoni.p3{bottom:16px;left:25px}
+.pizza-pepperoni.p4{bottom:20px;right:19px}
+
+.pizza-leaf{
+  position:absolute;
+  z-index:4;
+  width:8px;
+  height:4px;
+  border-radius:80% 20% 80% 20%;
+  background:#4f7d42;
+  box-shadow:inset 0 1px rgba(255,255,255,.18);
+}
+.pizza-leaf.l1{top:30px;left:15px;transform:rotate(32deg)}
+.pizza-leaf.l2{top:28px;right:12px;transform:rotate(-28deg)}
+
+.pizza-wa::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:50%;
+  border:1px solid rgba(201,170,106,.22);
+  opacity:0;
+  transform:scale(.85);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.pizza-wa:hover::before{
+  opacity:1;
+  transform:scale(1);
+}
+
+@media(max-width:720px){
+  .wa.pizza-wa{
+    width:62px;
+    min-width:62px;
+    height:62px;
+    right:14px;
+    bottom:14px;
+  }
+  .pizza-float{
+    width:55px;
+    height:55px;
+  }
+  .pizza-pepperoni{
+    width:9px;
+    height:9px;
+  }
+}
