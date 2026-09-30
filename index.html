@@ -1,40 +1,35 @@
 <!doctype html>
 <html lang="es-AR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#111315" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#8b1e2d">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="format-detection" content="telephone=yes">
   <title>Doña Lupita Ushuaia | Pizzas, empanadas y cocina casera</title>
-  <meta name="description" content="Doña Lupita en Ushuaia. Pizzas, empanadas y cocina casera desde 2012. Don Bosco 314. Pedidos por WhatsApp y teléfono." />
-  <meta name="robots" content="index,follow" />
-  <meta name="format-detection" content="telephone=yes" />
-  <meta property="og:locale" content="es_AR" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Doña Lupita | Pizzas, empanadas y cocina casera en Ushuaia" />
-  <meta property="og:description" content="Comida rica, casera y abundante desde 2012. Don Bosco 314, Ushuaia." />
-  <meta property="og:image" content="assets/og-cover.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Doña Lupita | Ushuaia" />
-  <meta name="twitter:description" content="Pizzas, empanadas y cocina casera desde 2012." />
-  <meta name="twitter:image" content="assets/og-cover.jpg" />
-  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/fachada_fallback.jpg" />
-  <link rel="stylesheet" href="styles.css?v=20260922-lupita1" />
-  <link rel="stylesheet" href="mascot.css?v=20260922-lupita1" />
+  <meta name="description" content="Doña Lupita en Ushuaia: empanadas, pizzas, milanesas, pastas y cocina casera. Don Bosco 314, esquina Gobernador Paz. Pedidos y consultas por teléfono y WhatsApp.">
+
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Doña Lupita | Ushuaia">
+  <meta property="og:description" content="Empanadas, pizzas y cocina casera en Don Bosco 314, Ushuaia. Una casa fueguina desde 2012.">
+  <meta property="og:image" content="assets/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" as="image" href="assets/fachada_fallback.jpg">
+  <link rel="stylesheet" href="styles.css?v=20260930-v2">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "name": "Doña Lupita",
     "image": "assets/og-cover.jpg",
-    "description": "Pizzas, empanadas y cocina casera en Ushuaia desde 2012.",
+    "description": "Pizzería y restaurante de cocina argentina en Ushuaia.",
     "telephone": "+54 2901 43-7675",
+    "email": "lupitapizzas@hotmail.com.ar",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Don Bosco 314",
@@ -47,298 +42,238 @@
     "sameAs": [
       "https://www.instagram.com/lupitaushuaia/",
       "https://www.facebook.com/Lupitapizzeria"
-    ],
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-        "opens": "12:00",
-        "closes": "15:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-        "opens": "20:00",
-        "closes": "24:00"
-      }
     ]
   }
   </script>
 </head>
 <body>
-  <header class="nav-wrap" id="inicio">
-    <div class="nav-inner">
-      <a class="brand" href="#inicio" aria-label="Doña Lupita">
-        <span class="brand-icon"><img src="assets/logo-lupita.png" alt="Logo de Doña Lupita"></span>
-        <span class="brand-text"><b>Doña Lupita</b><small>Ushuaia · desde 2012</small></span>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header" id="inicio">
+    <div class="shell nav-shell">
+      <a class="brand" href="#inicio" aria-label="Doña Lupita, inicio">
+        <img src="assets/logo-lupita.png" alt="Doña Lupita">
+        <span><strong>Doña Lupita</strong><small>Ushuaia · desde 2012</small></span>
       </a>
-      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
-      <nav class="nav" aria-label="Navegación principal">
-        <a href="#historia">Nosotros</a>
-        <a href="#carta">Carta</a>
+
+      <button class="nav-toggle" type="button" aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">☰</button>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navegación principal">
+        <a href="#especialidades">Especialidades</a>
+        <a href="#historia">Historia</a>
         <a href="#opiniones">Opiniones</a>
         <a href="#visitanos">Ubicación</a>
-        <span class="nav-status" id="navStatus" aria-live="polite"><i></i><span>Consultando horario…</span></span>
-        <a class="order-btn" href="#pedido" id="navOrderBtn">Armar pedido <span class="nav-order-count" id="navOrderCount">0</span></a>
+        <a class="nav-order" href="#pedido">Armar pedido <span id="navCartCount">0</span></a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-media">
-        <img src="assets/fachada_fallback.jpg" alt="Fachada de Doña Lupita en Ushuaia" fetchpriority="high" decoding="async">
+  <main id="contenido">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-image">
+        <img src="assets/fachada_fallback.jpg" alt="Fachada de Doña Lupita en la esquina de Don Bosco y Gobernador Paz, Ushuaia" fetchpriority="high">
       </div>
-      <div class="hero-overlay"></div>
-      <div class="hero-content container">
-        <div class="hero-copy reveal">
-          <span class="overline">DOÑA LUPITA · USHUAIA · DESDE 2012</span>
-          <h1>Cocina casera.<br><em>Bien al sur.</em></h1>
-          <p>Empanadas, pizzas y platos abundantes. Una mesa simple, cálida y bien de Ushuaia.</p>
+      <div class="hero-shade"></div>
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">PIZZERÍA · EMPANADAS · COCINA ARGENTINA</p>
+          <h1 id="heroTitle">Sabores de casa,<br><em>en el fin del mundo.</em></h1>
+          <p class="hero-lead">Doña Lupita es una casa gastronómica de Ushuaia conocida por sus empanadas, pizzas y platos abundantes. Desde 2012, en Don Bosco 314.</p>
           <div class="hero-actions">
-            <a class="primary-cta" href="#carta">Ver la carta</a>
-            <a class="ghost-cta" href="tel:+542901437675">Llamar ahora</a>
+            <a class="button button-primary" href="#especialidades">Ver especialidades</a>
+            <a class="button button-light" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20hacer%20una%20consulta" target="_blank" rel="noopener">Consultar por WhatsApp</a>
           </div>
-          <div class="hero-signature" aria-label="Doña Lupita, Ushuaia, desde 2012">
-            <span class="hero-monogram">DL</span>
-            <span class="hero-signature-copy"><b>Doña Lupita</b><small>Don Bosco 314 · Ushuaia</small></span>
+          <div class="hero-meta" aria-label="Datos rápidos">
+            <span>📍 Don Bosco 314</span>
+            <span>☎ 2901 43-7675</span>
+            <span>★ 4,5 en Google</span>
           </div>
         </div>
 
-        <aside class="hero-note reveal">
-          <div class="rating-row"><span>★★★★★</span><b>4,5</b></div>
-          <p>Más de 3.500 opiniones en Google</p>
-          <div class="hero-note-line"></div>
-          <div class="hero-open-status" id="heroStatus" aria-live="polite"><i></i><span>Consultando horario…</span></div>
-          <div class="hero-note-line"></div>
-          <p><b>Don Bosco 314</b><br>Ushuaia, Tierra del Fuego</p>
+        <aside class="hero-card" aria-label="Valoraciones y contacto">
+          <img class="hero-card-logo" src="assets/logo-lupita.png" alt="">
+          <p class="hero-card-kicker">REPUTACIÓN ONLINE</p>
+          <div class="rating-main"><strong>4,5</strong><span>★★★★★</span></div>
+          <p class="rating-caption">3.563 reseñas en Google</p>
+          <div class="hero-divider"></div>
+          <div class="rating-secondary"><b>4,4 / 5</b><span>434 opiniones en Tripadvisor</span></div>
+          <div class="hero-divider"></div>
+          <p class="hero-small">Valoraciones públicas consultadas el 30/09/2026. Pueden cambiar con nuevas reseñas.</p>
         </aside>
       </div>
     </section>
 
-    <section class="intro container reveal" id="historia">
-      <div class="intro-label">NUESTRA CASA</div>
-      <div class="intro-copy">
-        <h2>Una mesa de Ushuaia con identidad propia.</h2>
-        <p>Desde 2012 cocinamos sabores conocidos, porciones generosas y platos hechos para compartir. Sin pretensiones: buena comida, una mesa cálida y ganas de volver.</p>
+    <section class="quick-strip" aria-label="Accesos rápidos">
+      <div class="shell quick-grid">
+        <a href="tel:+542901437675"><span>☎</span><div><small>LLAMAR</small><strong>2901 43-7675</strong></div></a>
+        <a href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita" target="_blank" rel="noopener"><span>💬</span><div><small>WHATSAPP</small><strong>2901 559998</strong></div></a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Do%C3%B1a+Lupita+Don+Bosco+314+Ushuaia" target="_blank" rel="noopener"><span>⌖</span><div><small>CÓMO LLEGAR</small><strong>Don Bosco 314</strong></div></a>
+        <a href="https://www.instagram.com/lupitaushuaia/" target="_blank" rel="noopener"><span>◎</span><div><small>INSTAGRAM</small><strong>@lupitaushuaia</strong></div></a>
       </div>
     </section>
 
-    <section class="bento container reveal">
-      <figure class="bento-a"><img src="assets/interior_salon.webp" alt="Interior cálido de Doña Lupita" loading="lazy" decoding="async"></figure>
-      <figure class="bento-b"><img src="assets/grid_pizza.jpg" alt="Pizza de Doña Lupita" loading="lazy" decoding="async"></figure>
-      <figure class="bento-c"><img src="assets/counter_menu.webp" alt="Mostrador y carta de Doña Lupita" loading="lazy" decoding="async"></figure>
-      <div class="bento-text">
-        <span>CALIDEZ DE CASA</span>
-        <h3>Madera, paredes crema y el ruido de una mesa llena.</h3>
-      </div>
-    </section>
-
-
-    <section class="brand-signature container reveal" aria-label="Identidad Doña Lupita">
-      <div class="brand-signature-mark">
-        <img src="assets/logo-lupita.png" alt="" loading="lazy" decoding="async">
-      </div>
-      <div class="brand-signature-item"><small>DESDE</small><strong>2012</strong><span>Una casa de Ushuaia</span></div>
-      <div class="brand-signature-item"><small>ENCONTRANOS</small><strong>Don Bosco 314</strong><span>En el corazón de la ciudad</span></div>
-      <div class="brand-signature-item"><small>NUESTRA FORMA</small><strong>Hecho para compartir</strong><span>Casero, abundante y sin vueltas</span></div>
-    </section>
-
-    <section class="favorites">
-      <div class="container favorites-head reveal">
-        <span class="overline dark">ESPECIALIDADES DE LA CASA</span>
-        <h2>Los clásicos de Lupita.</h2>
-      </div>
-
-      <div class="favorites-track container">
-        <article class="fav-card fav-main reveal">
-          <img src="assets/grid_empanadas.jpg" alt="Empanadas de Doña Lupita" loading="lazy" decoding="async">
-          <div class="fav-copy"><small>01 · EMPANADAS</small><h3>Sabores clásicos, fueguinos y de la casa.</h3></div>
-        </article>
-        <article class="fav-card reveal">
-          <img src="assets/pizza_compartir.webp" alt="Pizza y empanadas para compartir" loading="lazy" decoding="async">
-          <div class="fav-copy"><small>02 · PIZZAS</small><h3>Al horno, abundantes y para poner al medio.</h3></div>
-        </article>
-        <article class="fav-card reveal">
-          <img src="assets/pizza_huevo.jpg" alt="Pizza de Doña Lupita" loading="lazy" decoding="async">
-          <div class="fav-copy"><small>03 · COCINA CASERA</small><h3>Platos que se sienten conocidos desde el primer bocado.</h3></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="menu-section container" id="carta">
-      <div class="menu-title reveal">
+    <section class="section shell" id="especialidades">
+      <div class="section-heading">
         <div>
-          <span class="overline dark">NUESTRA CARTA</span>
-          <h2>Elegí lo que se te antoja.</h2>
+          <p class="eyebrow dark">LO QUE MÁS SE NOMBRA</p>
+          <h2>Clásicos de Lupita.</h2>
         </div>
-        <p>Elegí tus favoritos y armá el pedido acá. Después lo enviás completo por WhatsApp para confirmar disponibilidad y precios.</p>
+        <p>Las reseñas y publicaciones públicas destacan especialmente las empanadas, las pizzas y la cocina casera. La disponibilidad cambia, por eso los precios y sabores finales se confirman con el local.</p>
       </div>
 
-      <div class="menu-tabs reveal">
-        <button class="menu-tab active" data-category="empanadas">Empanadas</button>
-        <button class="menu-tab" data-category="pizzas">Pizzas</button>
-        <button class="menu-tab" data-category="platos">Platos</button>
-        <button class="menu-tab" data-category="combos">Para compartir</button>
-      </div>
-
-      <div class="menu-list reveal" id="menuList" aria-live="polite"></div>
-
-      <div class="menu-cta reveal">
-        <span>¿No encontrás lo que buscás?</span>
-        <a href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20consultar%20la%20carta%20completa" target="_blank" rel="noopener">Consultar carta completa ↗</a>
+      <div class="food-feature-grid">
+        <article class="food-card food-card-wide">
+          <img src="assets/grid_empanadas.jpg" alt="Empanadas de Doña Lupita" loading="lazy">
+          <div class="food-card-copy"><small>01 · EMPANADAS</small><h3>El sello de la casa</h3><p>Carne cortada a cuchillo, matambre, pollo, roquefort, cordero y otras variedades según disponibilidad.</p></div>
+        </article>
+        <article class="food-card">
+          <img src="assets/pizza_compartir.webp" alt="Pizza de Doña Lupita para compartir" loading="lazy">
+          <div class="food-card-copy"><small>02 · PIZZAS</small><h3>Para poner al medio</h3><p>Clásicas y especialidades de la casa.</p></div>
+        </article>
+        <article class="food-card">
+          <img src="assets/interior_counter.jpg" alt="Interior y mostrador de Doña Lupita" loading="lazy">
+          <div class="food-card-copy"><small>03 · COCINA</small><h3>Platos abundantes</h3><p>Milanesas, pastas, sándwiches, lomitos y otras opciones de cocina argentina.</p></div>
+        </article>
       </div>
     </section>
 
-
-    <section class="order-builder container" id="pedido" aria-labelledby="orderTitle">
-      <div class="order-builder-head">
-        <div>
-          <span class="overline dark">PEDIDO RÁPIDO</span>
-          <h2 id="orderTitle">Armá tu pedido.</h2>
+    <section class="menu-section" id="carta">
+      <div class="shell">
+        <div class="section-heading menu-heading">
+          <div>
+            <p class="eyebrow">PEDIDO RÁPIDO</p>
+            <h2>Elegí y mandalo por WhatsApp.</h2>
+          </div>
+          <p>No publicamos precios que no estén verificados. Armá una selección y Doña Lupita confirma disponibilidad, variantes y precio final por mensaje.</p>
         </div>
-        <p>Sumá productos desde la carta, ajustá cantidades y mandanos todo junto por WhatsApp. La disponibilidad y el precio final se confirman por mensaje.</p>
-      </div>
 
-      <div class="order-builder-grid">
-        <div class="order-summary" aria-live="polite">
-          <div class="order-summary-top">
-            <div>
-              <small>TU SELECCIÓN</small>
-              <strong><span id="orderItemCount">0</span> productos</strong>
+        <div class="menu-layout">
+          <div>
+            <div class="menu-tabs" role="tablist" aria-label="Categorías">
+              <button class="menu-tab active" type="button" data-category="empanadas">Empanadas</button>
+              <button class="menu-tab" type="button" data-category="pizzas">Pizzas</button>
+              <button class="menu-tab" type="button" data-category="cocina">Cocina</button>
+              <button class="menu-tab" type="button" data-category="paraCompartir">Para compartir</button>
             </div>
-            <button class="order-clear" id="clearOrder" type="button" disabled>Vaciar</button>
+            <div class="menu-list" id="menuList" aria-live="polite"></div>
           </div>
 
-          <div class="order-items" id="orderItems">
-            <div class="order-empty">
-              <span>+</span>
-              <h3>Tu pedido está vacío</h3>
-              <p>Agregá productos desde la carta para empezar.</p>
-              <a href="#carta">Ir a la carta</a>
+          <aside class="order-box" id="pedido">
+            <div class="order-box-head">
+              <div><small>TU PEDIDO</small><h3><span id="cartCount">0</span> productos</h3></div>
+              <button id="clearCart" class="text-button" type="button" disabled>Vaciar</button>
             </div>
-          </div>
-        </div>
+            <div class="cart-list" id="cartList"></div>
 
-        <div class="order-details">
-          <div class="order-detail-heading">
-            <small>DATOS DEL PEDIDO</small>
-            <h3>Lo dejamos listo para enviar.</h3>
-          </div>
+            <label class="field"><span>Nombre <small>opcional</small></span><input id="customerName" type="text" maxlength="60" autocomplete="name" placeholder="Tu nombre"></label>
+            <label class="field"><span>Modalidad</span><select id="orderMode"><option>Retiro en el local</option><option>Consultar delivery</option><option>Comer en el local</option></select></label>
+            <label class="field"><span>Aclaraciones <small>opcional</small></span><textarea id="orderNotes" maxlength="300" rows="3" placeholder="Sabores, cantidades especiales, sin algún ingrediente..."></textarea></label>
 
-          <label class="order-field">
-            <span>Nombre <small>opcional</small></span>
-            <input type="text" id="orderName" maxlength="60" autocomplete="name" placeholder="Tu nombre">
-          </label>
-
-          <div class="order-choice">
-            <span>¿Cómo querés recibirlo?</span>
-            <label><input type="radio" name="orderMode" value="Retiro en local" checked> <b>Retiro en local</b><small>Don Bosco 314</small></label>
-            <label><input type="radio" name="orderMode" value="Consultar envío"> <b>Consultar envío</b><small>Se confirma por WhatsApp</small></label>
-          </div>
-
-          <label class="order-field">
-            <span>Hora preferida <small>opcional</small></span>
-            <input type="time" id="orderTime">
-          </label>
-
-          <label class="order-field">
-            <span>Notas <small>opcional</small></span>
-            <textarea id="orderNotes" rows="4" maxlength="280" placeholder="Ej: sin aceitunas, sabores de empanadas, aclaraciones..."></textarea>
-          </label>
-
-          <div class="order-actions">
-            <button class="order-send" id="sendOrder" type="button" disabled>
-              <span>Enviar pedido por WhatsApp</span>
-              <b>↗</b>
-            </button>
-            <p>No se cobra desde la web. Doña Lupita confirma disponibilidad, precio y pedido por WhatsApp.</p>
-          </div>
+            <button class="button button-whatsapp full" id="sendOrder" type="button" disabled>Enviar pedido por WhatsApp ↗</button>
+            <p class="order-note">El pedido queda sujeto a confirmación del comercio. La web no procesa pagos.</p>
+          </aside>
         </div>
       </div>
     </section>
 
-    <section class="nasa reveal">
-      <div class="container nasa-grid">
-        <div class="nasa-big">23—85</div>
-        <div class="nasa-copy">
-          <span>DE USHUAIA A LA ANTÁRTIDA</span>
-          <h2>Nuestras empanadas también volaron con NASA.</h2>
-          <p>En 2017, el equipo de Operation IceBridge encargaba entre 23 y 85 empanadas de Doña Lupita para cada jornada de vuelo científico desde Ushuaia hacia la Antártida.</p>
-        </div>
-        <a class="nasa-link" href="https://science.nasa.gov/blogs/notes-from-the-field/2017/11/16/empanadas-in-flight/" target="_blank" rel="noopener">Ver historia ↗</a>
+    <section class="story section shell" id="historia">
+      <div class="story-media">
+        <img src="assets/interior_salon.webp" alt="Salón de Doña Lupita" loading="lazy">
+        <div class="story-badge"><strong>2012</strong><span>Inicio en Ushuaia</span></div>
+      </div>
+      <div class="story-copy">
+        <p class="eyebrow dark">UNA HISTORIA BIEN FUEGUINA</p>
+        <h2>De una casa de empanadas a alimentar vuelos científicos de NASA.</h2>
+        <p>Doña Lupita abrió en Ushuaia en 2012, impulsada por Nicolás Furlanetto. Cinco años después, durante Operation IceBridge, el equipo de NASA que volaba desde Ushuaia hacia la Antártida encargaba sus empanadas para jornadas científicas de más de nueve horas.</p>
+        <p>NASA documentó pedidos diarios de entre 23 y 85 empanadas, preparadas temprano por el equipo de Doña Lupita. Entre las variedades más mencionadas estaban matambre y carne cortada a cuchillo.</p>
+        <a class="story-link" href="https://science.nasa.gov/blogs/notes-from-the-field/2017/11/16/empanadas-in-flight/" target="_blank" rel="noopener">Leer la historia original en NASA Science ↗</a>
       </div>
     </section>
 
-    <section class="reviews" id="opiniones">
-      <div class="container reviews-grid">
-        <div class="reviews-score reveal">
-          <span class="overline dark">OPINIONES</span>
-          <div class="score">4,5</div>
-          <div class="review-stars">★★★★★</div>
-          <p>Más de 3.500 opiniones en Google</p>
+    <section class="reviews-section" id="opiniones">
+      <div class="shell">
+        <div class="section-heading reviews-heading">
+          <div>
+            <p class="eyebrow">LO QUE DICEN QUIENES FUERON</p>
+            <h2>Miles de opiniones, una idea repetida: volver.</h2>
+          </div>
+          <div class="review-platforms">
+            <span><b>4,5</b> Google · 3.563 reseñas</span>
+            <span><b>4,4</b> Tripadvisor · 434 opiniones</span>
+          </div>
         </div>
-        <div class="reviews-list">
-          <blockquote class="reveal"><p>“Muy atentos, muy rápidos y la comida estupenda.”</p><footer>Carlos Sanchez · Google</footer></blockquote>
-          <blockquote class="reveal"><p>“Las empanadas son exquisitas y tienen variedad para todos los gustos.”</p><footer>Susana Morlacchi · Google</footer></blockquote>
-          <blockquote class="reveal"><p>“Cerca del centro, muy buena atención, buen precio. Lo recomiendo.”</p><footer>Reseña en Google</footer></blockquote>
+
+        <div class="review-grid">
+          <blockquote><div class="stars">★★★★★</div><p>“Muy atentos, muy rápidos y la comida estupenda.”</p><footer>Carlos Sánchez · reseña de Google</footer></blockquote>
+          <blockquote><div class="stars">★★★★★</div><p>“Las empanadas son exquisitas y tienen variedad para todos los gustos.”</p><footer>Susana Morlacchi · reseña de Google</footer></blockquote>
+          <blockquote><div class="stars">★★★★★</div><p>“Las mejores empanadas y pizzas sin dudas.”</p><footer>Facundo López · reseña de Google</footer></blockquote>
+        </div>
+
+        <div class="review-links">
+          <a href="https://www.tripadvisor.com.ar/Restaurant_Review-g312855-d5528786-Reviews-Dona_Lupita-Ushuaia_Province_of_Tierra_del_Fuego_Patagonia.html" target="_blank" rel="noopener">Ver perfil en Tripadvisor ↗</a>
+          <span>Las valoraciones cambian con nuevas opiniones.</span>
         </div>
       </div>
     </section>
 
-    <section class="closing-story reveal" aria-label="Experiencia Doña Lupita">
-      <img src="assets/interior_counter.jpg" alt="La casa de Doña Lupita en Ushuaia" loading="lazy" decoding="async">
-      <div class="closing-story-overlay"></div>
-      <div class="container closing-story-content">
-        <span class="overline">UNA MESA EN USHUAIA</span>
-        <h2>Venís por la comida.<br><em>Volvés por la mesa.</em></h2>
-        <p>Pizza al medio, empanadas recién hechas y tiempo para conversar. Esa es nuestra manera de recibirte.</p>
-        <div class="closing-story-actions">
-          <a class="primary-cta" href="#pedido">Armar un pedido</a>
-          <span>Don Bosco 314 · Ushuaia</span>
-        </div>
+    <section class="section shell gallery-section" aria-label="Galería de Doña Lupita">
+      <div class="section-heading">
+        <div><p class="eyebrow dark">LA CASA</p><h2>Un rincón clásico de Ushuaia.</h2></div>
+        <p>Fachada amarilla, madera, cocina al paso y mesas para quedarse. Una estética que ya forma parte del paisaje del centro.</p>
+      </div>
+      <div class="gallery-grid">
+        <figure><img src="assets/grid_facade.jpg" alt="Fachada de Doña Lupita" loading="lazy"></figure>
+        <figure><img src="assets/pizza_huevo.jpg" alt="Pizza servida en Doña Lupita" loading="lazy"></figure>
+        <figure><img src="assets/beer_table.jpg" alt="Mesa con bebida en Doña Lupita" loading="lazy"></figure>
+        <figure><img src="assets/viejita_estatua.jpg" alt="Figura característica de Doña Lupita" loading="lazy"></figure>
       </div>
     </section>
 
-    <section class="visit container" id="visitanos">
-      <div class="visit-info reveal">
-        <span class="overline">VENÍ A LUPITA</span>
-        <h2>En el corazón de Ushuaia.</h2>
-        <dl>
-          <div><dt>Dirección</dt><dd>Don Bosco 314 · esquina Gobernador Paz</dd></div>
-          <div><dt>Estado</dt><dd><span class="visit-status" id="visitStatus" aria-live="polite">Consultando horario…</span></dd></div>
-          <div><dt>Horarios</dt><dd>Lunes a sábado · 12:00–15:00 · 20:00–00:00<br><small>Domingo cerrado</small></dd></div>
-          <div><dt>Teléfono</dt><dd>+54 2901 43-7675</dd></div>
-          <div><dt>WhatsApp</dt><dd>2901 559998</dd></div>
-        </dl>
-        <div class="visit-actions">
-          <a class="primary-cta" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">Hacer pedido</a>
-          <a class="ghost-cta" href="https://maps.google.com/?q=Don+Bosco+314,+Ushuaia" target="_blank" rel="noopener">Cómo llegar</a>
-          <a class="ghost-cta" href="https://www.instagram.com/lupitaushuaia/" target="_blank" rel="noopener">Instagram</a>
+    <section class="visit-section" id="visitanos">
+      <div class="shell visit-grid">
+        <div class="visit-copy">
+          <p class="eyebrow">VENÍ A DOÑA LUPITA</p>
+          <h2>Don Bosco 314,<br>esquina Gobernador Paz.</h2>
+          <p class="visit-intro">A pocas cuadras del centro de Ushuaia. Hay servicio en el local, para llevar y delivery según disponibilidad.</p>
+
+          <div class="visit-details">
+            <div><small>DIRECCIÓN</small><strong>Don Bosco 314 · Ushuaia</strong></div>
+            <div><small>TELÉFONO</small><strong><a href="tel:+542901437675">+54 2901 43-7675</a></strong></div>
+            <div><small>WHATSAPP PUBLICADO</small><strong><a href="https://wa.me/5492901559998" target="_blank" rel="noopener">+54 9 2901 559998</a></strong></div>
+            <div><small>HORARIOS PUBLICADOS</small><strong>Lun–Sáb · 12:00–15:00 · 20:00–00:00</strong><span>Domingo figura cerrado en varias plataformas. Los horarios difieren entre fuentes: confirmá antes de ir.</span></div>
+          </div>
+
+          <div class="visit-actions">
+            <a class="button button-primary" href="https://www.google.com/maps/search/?api=1&query=Do%C3%B1a+Lupita+Don+Bosco+314+Ushuaia" target="_blank" rel="noopener">Abrir en Maps</a>
+            <a class="button button-outline" href="https://www.instagram.com/lupitaushuaia/" target="_blank" rel="noopener">Instagram</a>
+          </div>
         </div>
-      </div>
-      <div class="visit-map reveal">
-        <iframe title="Mapa Doña Lupita" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Don+Bosco+314,+Ushuaia&output=embed"></iframe>
+
+        <div class="map-wrap">
+          <iframe title="Mapa de Doña Lupita en Ushuaia" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Do%C3%B1a%20Lupita%2C%20Don%20Bosco%20314%2C%20Ushuaia&output=embed"></iframe>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-brand-wrap"><img src="assets/logo-lupita.png" alt="Doña Lupita"><div><strong>Doña Lupita</strong><p>Pizzas, empanadas y cocina casera en Ushuaia.</p></div></div>
-      <div><a href="https://www.instagram.com/lupitaushuaia/" target="_blank" rel="noopener">Instagram ↗</a><a href="https://www.facebook.com/Lupitapizzeria" target="_blank" rel="noopener">Facebook ↗</a></div>
-      <div><a href="tel:+542901437675">2901 43-7675</a><a href="mailto:lupitapizzas@hotmail.com.ar">lupitapizzas@hotmail.com.ar</a></div>
+    <div class="shell footer-main">
+      <div class="footer-brand"><img src="assets/logo-lupita.png" alt="Doña Lupita"><p>Pizzas, empanadas y cocina argentina en Ushuaia desde 2012.</p></div>
+      <div class="footer-links"><strong>Contacto</strong><a href="tel:+542901437675">2901 43-7675</a><a href="mailto:lupitapizzas@hotmail.com.ar">lupitapizzas@hotmail.com.ar</a><a href="https://wa.me/5492901559998" target="_blank" rel="noopener">WhatsApp</a></div>
+      <div class="footer-links"><strong>Redes</strong><a href="https://www.instagram.com/lupitaushuaia/" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/Lupitapizzeria" target="_blank" rel="noopener">Facebook</a><a href="https://science.nasa.gov/blogs/notes-from-the-field/2017/11/16/empanadas-in-flight/" target="_blank" rel="noopener">Historia en NASA</a></div>
     </div>
-    <div class="container footer-bottom"><span>Doña Lupita · Ushuaia</span><span>El gusto es nuestro.</span></div>
+    <div class="shell footer-bottom">
+      <span>Doña Lupita · Ushuaia</span>
+      <span>Información pública verificada el 30 de septiembre de 2026.</span>
+    </div>
   </footer>
 
-  <a class="wa lupita-wa" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp">
-    <img class="lupita-wa-img" src="data:image/webp;base64,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" alt="">
-  </a>
-  <a class="mobile-order-bar" id="mobileOrderBar" href="#pedido" aria-label="Ver pedido">
-    <span>Mi pedido</span>
-    <b id="mobileOrderCount">0</b>
-  </a>
-  <script src="app.js?v=20260922-order2"></script>
+  <a class="floating-wa" href="https://wa.me/5492901559998?text=Hola%20Do%C3%B1a%20Lupita" target="_blank" rel="noopener" aria-label="Escribir a Doña Lupita por WhatsApp">💬<span>WhatsApp</span></a>
+
+  <div class="mobile-cart" id="mobileCart" hidden>
+    <a href="#pedido"><span><b id="mobileCartCount">0</b> en el pedido</span><strong>Revisar ↗</strong></a>
+  </div>
+
+  <script src="app.js?v=20260930-v2" defer></script>
 </body>
 </html>
