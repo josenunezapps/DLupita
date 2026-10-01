@@ -286,42 +286,18 @@ function getBusinessStatus(date = new Date()) {
   const { day, minutes } = getUshuaiaTime(date);
 
   if (day === 0) {
-    return {
-      open: false,
-      short: "Cerrado ahora",
-      detail: "Abre el lunes a las 12:00"
-    };
+    return { open: false, short: "Cerrado ahora", detail: "Abre el lunes a las 12:00" };
   }
-
   if (minutes < 12 * 60) {
-    return {
-      open: false,
-      short: "Cerrado ahora",
-      detail: "Abre hoy a las 12:00"
-    };
+    return { open: false, short: "Cerrado ahora", detail: "Abre hoy a las 12:00" };
   }
-
   if (minutes < 15 * 60) {
-    return {
-      open: true,
-      short: "Abierto ahora",
-      detail: "Hasta las 15:00"
-    };
+    return { open: true, short: "Abierto ahora", detail: "Hasta las 15:00" };
   }
-
   if (minutes < 20 * 60) {
-    return {
-      open: false,
-      short: "Cerrado ahora",
-      detail: "Abre hoy a las 20:00"
-    };
+    return { open: false, short: "Cerrado ahora", detail: "Abre hoy a las 20:00" };
   }
-
-  return {
-    open: true,
-    short: "Abierto ahora",
-    detail: "Hasta las 00:00"
-  };
+  return { open: true, short: "Abierto ahora", detail: "Hasta las 00:00" };
 }
 
 function installBusinessStatusUI() {
@@ -333,41 +309,47 @@ function installBusinessStatusUI() {
     .business-status{
       display:inline-flex;
       align-items:center;
-      gap:8px;
+      gap:7px;
       font-weight:800;
       line-height:1.2;
     }
     .business-status::before{
       content:"";
-      width:9px;
-      height:9px;
+      width:8px;
+      height:8px;
       border-radius:50%;
-      flex:0 0 9px;
+      flex:0 0 8px;
       background:#8b1e2d;
-      box-shadow:0 0 0 4px rgba(139,30,45,.12);
     }
     .business-status.is-open::before{
       background:#28b36a;
-      box-shadow:0 0 0 4px rgba(40,179,106,.15),0 0 16px rgba(40,179,106,.42);
+      box-shadow:0 0 0 3px rgba(40,179,106,.13),0 0 12px rgba(40,179,106,.35);
     }
     .business-status.is-closed::before{
       background:#d34d55;
-      box-shadow:0 0 0 4px rgba(211,77,85,.14);
+      box-shadow:0 0 0 3px rgba(211,77,85,.12);
     }
     .business-status-nav{
-      font-size:.78rem;
-      color:#625b54;
+      font-size:.74rem;
       white-space:nowrap;
+      padding:8px 11px;
+      border-radius:999px;
+      border:1px solid rgba(29,27,24,.10);
+      background:rgba(29,27,24,.035);
+      color:#625b54;
     }
-    .business-status-nav.is-open{color:#147848}
-    .business-status-nav.is-closed{color:#a33740}
-    .business-status-hero{
-      color:rgba(255,255,255,.9);
+    .business-status-nav.is-open{
+      color:#147848;
+      border-color:rgba(20,120,72,.18);
+      background:rgba(40,179,106,.08);
     }
-    .business-status-visit{
-      margin-top:5px;
-      color:#fff;
+    .business-status-nav.is-closed{
+      color:#a33740;
+      border-color:rgba(163,55,64,.16);
+      background:rgba(211,77,85,.07);
     }
+    .business-status-hero{color:rgba(255,255,255,.9)}
+    .business-status-visit{margin-top:5px;color:#fff}
     .business-status-detail{
       display:block;
       margin-top:5px;
@@ -375,8 +357,12 @@ function installBusinessStatusUI() {
       font-weight:600;
       opacity:.72;
     }
-    @media (max-width:1040px){
-      .business-status-nav{display:none}
+    @media (max-width:1120px) and (min-width:821px){
+      .business-status-nav{
+        font-size:.68rem;
+        padding:7px 9px;
+        gap:6px;
+      }
     }
     @media (max-width:820px){
       .business-status-nav{
@@ -384,7 +370,6 @@ function installBusinessStatusUI() {
         margin:7px 14px 5px;
         padding:10px 12px;
         border-radius:12px;
-        background:rgba(29,27,24,.05);
       }
     }
   `;
@@ -427,12 +412,11 @@ function paintBusinessStatus() {
     element.classList.toggle("is-open", status.open);
     element.classList.toggle("is-closed", !status.open);
     element.textContent = status.short;
+    element.title = status.detail;
   });
 
   const detail = document.getElementById("businessStatusDetail");
-  if (detail) {
-    detail.textContent = `${status.detail} · según horario habitual publicado`;
-  }
+  if (detail) detail.textContent = `${status.detail} · según horario habitual publicado`;
 }
 
 installBusinessStatusUI();
