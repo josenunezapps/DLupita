@@ -259,3 +259,182 @@ document.addEventListener("keydown", event => {
 
 renderMenu();
 renderCart();
+
+/* Estado abierto/cerrado según el horario publicado de Doña Lupita.
+   Zona horaria fija de Ushuaia para que no dependa del reloj local del visitante. */
+const BUSINESS_TIME_ZONE = "America/Argentina/Ushuaia";
+
+function getUshuaiaTime(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: BUSINESS_TIME_ZONE,
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(date);
+
+  const getPart = type => parts.find(part => part.type === type)?.value;
+  const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+
+  return {
+    day: days[getPart("weekday")],
+    minutes: Number(getPart("hour")) * 60 + Number(getPart("minute"))
+  };
+}
+
+function getBusinessStatus(date = new Date()) {
+  const { day, minutes } = getUshuaiaTime(date);
+
+  if (day === 0) {
+    return {
+      open: false,
+      short: "Cerrado ahora",
+      detail: "Abre el lunes a las 12:00"
+    };
+  }
+
+  if (minutes < 12 * 60) {
+    return {
+      open: false,
+      short: "Cerrado ahora",
+      detail: "Abre hoy a las 12:00"
+    };
+  }
+
+  if (minutes < 15 * 60) {
+    return {
+      open: true,
+      short: "Abierto ahora",
+      detail: "Hasta las 15:00"
+    };
+  }
+
+  if (minutes < 20 * 60) {
+    return {
+      open: false,
+      short: "Cerrado ahora",
+      detail: "Abre hoy a las 20:00"
+    };
+  }
+
+  return {
+    open: true,
+    short: "Abierto ahora",
+    detail: "Hasta las 00:00"
+  };
+}
+
+function installBusinessStatusUI() {
+  if (document.getElementById("business-status-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "business-status-style";
+  style.textContent = `
+    .business-status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:800;
+      line-height:1.2;
+    }
+    .business-status::before{
+      content:"";
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      flex:0 0 9px;
+      background:#8b1e2d;
+      box-shadow:0 0 0 4px rgba(139,30,45,.12);
+    }
+    .business-status.is-open::before{
+      background:#28b36a;
+      box-shadow:0 0 0 4px rgba(40,179,106,.15),0 0 16px rgba(40,179,106,.42);
+    }
+    .business-status.is-closed::before{
+      background:#d34d55;
+      box-shadow:0 0 0 4px rgba(211,77,85,.14);
+    }
+    .business-status-nav{
+      font-size:.78rem;
+      color:#625b54;
+      white-space:nowrap;
+    }
+    .business-status-nav.is-open{color:#147848}
+    .business-status-nav.is-closed{color:#a33740}
+    .business-status-hero{
+      color:rgba(255,255,255,.9);
+    }
+    .business-status-visit{
+      margin-top:5px;
+      color:#fff;
+    }
+    .business-status-detail{
+      display:block;
+      margin-top:5px;
+      font-size:.72rem;
+      font-weight:600;
+      opacity:.72;
+    }
+    @media (max-width:1040px){
+      .business-status-nav{display:none}
+    }
+    @media (max-width:820px){
+      .business-status-nav{
+        display:flex;
+        margin:7px 14px 5px;
+        padding:10px 12px;
+        border-radius:12px;
+        background:rgba(29,27,24,.05);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  const navOrder = mainNav?.querySelector(".nav-order");
+  if (navOrder && !document.getElementById("businessStatusNav")) {
+    navOrder.insertAdjacentHTML(
+      "beforebegin",
+      '<span class="business-status business-status-nav" id="businessStatusNav" aria-live="polite">Consultando horario…</span>'
+    );
+  }
+
+  const heroMeta = document.querySelector(".hero-meta");
+  if (heroMeta && !document.getElementById("businessStatusHero")) {
+    heroMeta.insertAdjacentHTML(
+      "afterbegin",
+      '<span class="business-status business-status-hero" id="businessStatusHero" aria-live="polite">Consultando horario…</span>'
+    );
+  }
+
+  const visitDetails = document.querySelector(".visit-details");
+  if (visitDetails && !document.getElementById("businessStatusVisit")) {
+    visitDetails.insertAdjacentHTML(
+      "afterbegin",
+      '<div><small>ESTADO SEGÚN HORARIO PUBLICADO</small><strong class="business-status business-status-visit" id="businessStatusVisit" aria-live="polite">Consultando horario…</strong><span id="businessStatusDetail">Horario habitual: Lun–Sáb · 12:00–15:00 · 20:00–00:00</span></div>'
+    );
+  }
+}
+
+function paintBusinessStatus() {
+  const status = getBusinessStatus();
+  const targets = [
+    document.getElementById("businessStatusNav"),
+    document.getElementById("businessStatusHero"),
+    document.getElementById("businessStatusVisit")
+  ].filter(Boolean);
+
+  targets.forEach(element => {
+    element.classList.toggle("is-open", status.open);
+    element.classList.toggle("is-closed", !status.open);
+    element.textContent = status.short;
+  });
+
+  const detail = document.getElementById("businessStatusDetail");
+  if (detail) {
+    detail.textContent = `${status.detail} · según horario habitual publicado`;
+  }
+}
+
+installBusinessStatusUI();
+paintBusinessStatus();
+setInterval(paintBusinessStatus, 60 * 1000);
