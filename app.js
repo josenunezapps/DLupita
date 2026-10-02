@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "5492901559998";
+const WHATSAPP_NUMBER = "5492901535229";
 const CART_KEY = "dlupita-cart-v2";
 
 const menuData = {
