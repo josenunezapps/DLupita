@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#161311">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Demo Zenix Gastronomía · Doña Lupita</title>
+  <meta name="description" content="Demo funcional de Zenix Gastronomía aplicada a Doña Lupita: atención, pedido estructurado, confirmación, panel y derivación humana.">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="demo.css?v=1.0.0">
+</head>
+<body>
+  <header class="demo-header">
+    <div class="shell header-row">
+      <a class="brand" href="index.html" aria-label="Volver a Doña Lupita">
+        <img src="assets/logo-lupita.png" alt="Doña Lupita">
+        <span><strong>Doña Lupita</strong><small>Demo Zenix Gastronomía v1.0</small></span>
+      </a>
+      <div class="header-actions">
+        <span class="demo-badge">DEMO FUNCIONAL</span>
+        <a class="ghost-button" href="index.html">Ver web del negocio</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro shell">
+      <div>
+        <p class="eyebrow">CASO DEMOSTRATIVO · ZENIX AR</p>
+        <h1>Atención automática sin perder el control humano.</h1>
+        <p class="lead">Esta demo reproduce el flujo del MVP: interpreta la consulta, aplica reglas del negocio, arma un pedido, exige confirmación, lo registra y permite que el comercio lo acepte, rechace o derive a una persona.</p>
+      </div>
+      <div class="principle-card">
+        <small>REGLA CENTRAL</small>
+        <strong>La IA conversa.<br>El software decide.</strong>
+        <p>Precios, horarios, disponibilidad y estados nunca se inventan.</p>
+      </div>
+    </section>
+
+    <section class="shell demo-grid" aria-label="Demo de atención y panel del comercio">
+      <article class="panel customer-panel">
+        <div class="panel-head">
+          <div>
+            <span class="status-dot online"></span>
+            <div><small>CLIENTE</small><h2>Asistente Doña Lupita</h2></div>
+          </div>
+          <button class="text-button" id="resetDemo" type="button">Reiniciar</button>
+        </div>
+
+        <div class="chat" id="chatLog" aria-live="polite"></div>
+
+        <div class="quick-actions" aria-label="Consultas de prueba">
+          <button type="button" data-quick="Quiero ver el menú">Ver menú</button>
+          <button type="button" data-quick="¿Están abiertos ahora?">Horarios</button>
+          <button type="button" data-quick="Quiero hacer un pedido">Hacer pedido</button>
+          <button type="button" data-quick="Quiero hablar con una persona">Hablar con persona</button>
+        </div>
+
+        <form class="chat-form" id="chatForm">
+          <input id="chatInput" type="text" maxlength="240" autocomplete="off" placeholder="Escribí como si fueras un cliente…" aria-label="Mensaje">
+          <button type="submit">Enviar</button>
+        </form>
+      </article>
+
+      <aside class="panel order-panel" aria-label="Pedido estructurado">
+        <div class="panel-head compact">
+          <div><small>MOTOR DE PEDIDO</small><h2>Pedido actual</h2></div>
+          <span class="rule-pill" id="orderState">Sin iniciar</span>
+        </div>
+
+        <div id="orderBuilder" class="order-builder">
+          <p class="empty-copy">Usá “Hacer pedido” o escribí lo que querés pedir. El sistema te va a pedir sólo los datos necesarios.</p>
+        </div>
+
+        <div class="order-warning" id="priceWarning">
+          <strong>Precios protegidos</strong>
+          <span>El menú público actual no contiene precios 2026 verificados producto por producto. La demo no los inventa: el total queda pendiente de configuración del comercio.</span>
+        </div>
+
+        <button class="primary-button full" id="confirmOrder" type="button" disabled>Confirmar pedido</button>
+        <button class="secondary-button full" id="handoffButton" type="button">Derivar a una persona</button>
+      </aside>
+    </section>
+
+    <section class="shell business-section">
+      <div class="section-title">
+        <div><p class="eyebrow">VISTA DEL COMERCIO</p><h2>Panel de pedidos y derivaciones</h2></div>
+        <div class="metrics" aria-label="Métricas de la demo">
+          <span><b id="metricOrders">0</b> pedidos</span>
+          <span><b id="metricPending">0</b> pendientes</span>
+          <span><b id="metricHuman">0</b> derivaciones</span>
+        </div>
+      </div>
+
+      <div class="business-grid">
+        <div class="panel orders-panel">
+          <div class="panel-head compact">
+            <div><small>OPERACIÓN</small><h2>Pedidos registrados</h2></div>
+            <button class="text-button" id="clearOrders" type="button">Limpiar demo</button>
+          </div>
+          <div id="ordersList" class="orders-list"></div>
+        </div>
+
+        <aside class="panel rules-panel">
+          <div class="panel-head compact"><div><small>REGLAS ACTIVAS</small><h2>Qué decide el software</h2></div></div>
+          <ul class="rules-list">
+            <li><span>Horario</span><strong>Lun–Sáb · 12–15 / 20–00</strong></li>
+            <li><span>Domingo</span><strong>Cerrado</strong></li>
+            <li><span>Dirección</span><strong>Don Bosco 314</strong></li>
+            <li><span>Pedido</span><strong>Confirmación obligatoria</strong></li>
+            <li><span>Precio</span><strong>Solo dato configurado</strong></li>
+            <li><span>Reclamos / dudas</span><strong>Derivación humana</strong></li>
+          </ul>
+          <div class="rules-note">Esta versión guarda los pedidos de la demo sólo en este navegador. La conexión real con backend/WhatsApp corresponde a la siguiente fase.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="shell flow-section">
+      <p class="eyebrow">FLUJO VALIDABLE</p>
+      <div class="flow-grid">
+        <div><b>1</b><span>Consulta</span></div><i>→</i>
+        <div><b>2</b><span>Intención</span></div><i>→</i>
+        <div><b>3</b><span>Reglas</span></div><i>→</i>
+        <div><b>4</b><span>Confirmación</span></div><i>→</i>
+        <div><b>5</b><span>Pedido</span></div><i>→</i>
+        <div><b>6</b><span>Comercio</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-row">
+      <span>Zenix AR · Demo Zenix Gastronomía v1.0</span>
+      <span>Doña Lupita · caso demostrativo</span>
+    </div>
+  </footer>
+
+  <script src="demo.js?v=1.0.0" defer></script>
+</body>
+</html>
