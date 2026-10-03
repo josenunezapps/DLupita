@@ -170,10 +170,16 @@ function clearCart() {
   renderCart();
 }
 
+function formatOrderItem(data) {
+  if (!data) return "";
+  if (data.category === "empanadas") return `Empanada de ${data.item.name}`;
+  return data.item.name;
+}
+
 function buildOrderMessage() {
   const lines = cart.map(entry => {
     const data = cartEntryData(entry);
-    return data ? `• ${entry.qty} × ${data.item.name}` : null;
+    return data ? `• ${entry.qty} × ${formatOrderItem(data)}` : null;
   }).filter(Boolean);
 
   const name = customerName?.value.trim();
