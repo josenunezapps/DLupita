@@ -1,5 +1,5 @@
 const WHATSAPP_NUMBER = "5492901535229";
-const CART_KEY = "dlupita-cart-sale-v1";
+const CART_KEY = "dlupita-cart-sale-v2";
 const BUSINESS_TIME_ZONE = "America/Argentina/Ushuaia";
 
 const menuData = {
@@ -53,9 +53,11 @@ const orderNotes = document.getElementById("orderNotes");
 const navToggle = document.querySelector(".nav-toggle");
 const mainNav = document.getElementById("mainNav");
 const siteHeader = document.querySelector(".site-header");
+const toast = document.getElementById("toast");
 
 let activeCategory = "empanadas";
 let cart = loadCart();
+let toastTimer = null;
 
 function itemKey(category, index) {
   return `${category}:${index}`;
@@ -69,6 +71,7 @@ function loadCart() {
   try {
     const parsed = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
     if (!Array.isArray(parsed)) return [];
+
     return parsed
       .filter(entry => {
         const [category, index] = String(entry.key || "").split(":");
@@ -97,12 +100,26 @@ function quantityFor(category, index) {
   return cart.find(entry => entry.key === itemKey(category, index))?.qty || 0;
 }
 
+function showToast(message) {
+  if (!toast) return;
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
 function renderMenu() {
   if (!menuList) return;
+
   const items = menuData[activeCategory] || [];
 
   menuList.innerHTML = items.map((item, index) => {
     const qty = quantityFor(activeCategory, index);
+
     return `
       <article class="menu-item">
         <div>
@@ -117,17 +134,48 @@ function renderMenu() {
           data-category="${activeCategory}"
           data-index="${index}"
           aria-label="Agregar ${item.name} al pedido">
-          ${qty ? `Agregar otro · ${qty}` : "Agregar +"}
+          ${qty ? `Sumar otro · ${qty}` : "Agregar al pedido +"}
         </button>
       </article>
     `;
   }).join("");
 }
 
+function updateQuickAddButtons() {
+  document.querySelectorAll("[data-quick-category][data-quick-index]").forEach(button => {
+    const category = button.dataset.quickCategory;
+    const index = Number(button.dataset.quickIndex);
+    const qty = quantityFor(category, index);
+
+    button.classList.toggle("is-added", qty > 0);
+    button.textContent = qty > 0 ? `Sumar otro · ${qty}` : "Sumar al pedido +";
+  });
+}
+
 function cartEntryData(entry) {
   const [category, index] = entry.key.split(":");
   const item = getItem(category, index);
-  return item ? { category, index: Number(index), item, qty: entry.qty } : null;
+
+  return item
+    ? { category, index: Number(index), item, qty: entry.qty }
+    : null;
+}
+
+function formatOrderItem(data) {
+  if (!data) return "";
+
+  if (data.category === "empanadas") {
+    if (data.item.name === "Otros sabores") return "Empanadas · otros sabores";
+    return `Empanada de ${data.item.name}`;
+  }
+
+  if (data.category === "pizzas") {
+    return /^pizza/i.test(data.item.name)
+      ? data.item.name
+      : `Pizza ${data.item.name}`;
+  }
+
+  return data.item.name;
 }
 
 function renderCart() {
@@ -140,54 +188,54 @@ function renderCart() {
   if (sendOrderButton) sendOrderButton.disabled = total === 0;
   if (mobileCart) mobileCart.hidden = total === 0;
 
-  const cartTitle = cartCount?.parentElement;
-  if (cartTitle) {
-    cartTitle.childNodes[cartTitle.childNodes.length - 1].textContent = total === 1 ? " producto" : " productos";
-  }
+  if (cartList) {
+    if (!cart.length) {
+      cartList.innerHTML = '<div class="cart-empty">Todavía no agregaste nada.<br>Elegí productos de la carta para armar tu consulta.</div>';
+    } else {
+      cartList.innerHTML = cart.map(entry => {
+        const data = cartEntryData(entry);
+        if (!data) return "";
 
-  if (!cartList) {
-    renderMenu();
-    return;
+        return `
+          <div class="cart-line" data-key="${entry.key}">
+            <div>
+              <div class="cart-line-title">${formatOrderItem(data)}</div>
+              <div class="cart-line-category">${categoryNames[data.category]}</div>
+            </div>
+            <div class="cart-controls">
+              <button type="button" data-change="-1" aria-label="Quitar uno de ${data.item.name}">−</button>
+              <strong>${entry.qty}</strong>
+              <button type="button" data-change="1" aria-label="Agregar uno de ${data.item.name}">+</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
   }
-
-  if (!cart.length) {
-    cartList.innerHTML = '<div class="cart-empty">Todavía no agregaste nada.<br>Elegí productos de la carta para armar tu consulta.</div>';
-    renderMenu();
-    return;
-  }
-
-  cartList.innerHTML = cart.map(entry => {
-    const data = cartEntryData(entry);
-    if (!data) return "";
-    return `
-      <div class="cart-line" data-key="${entry.key}">
-        <div>
-          <div class="cart-line-title">${formatOrderItem(data)}</div>
-          <div class="cart-line-category">${categoryNames[data.category]}</div>
-        </div>
-        <div class="cart-controls">
-          <button type="button" data-change="-1" aria-label="Quitar uno de ${data.item.name}">−</button>
-          <strong>${entry.qty}</strong>
-          <button type="button" data-change="1" aria-label="Agregar uno de ${data.item.name}">+</button>
-        </div>
-      </div>
-    `;
-  }).join("");
 
   renderMenu();
+  updateQuickAddButtons();
 }
 
-function addItem(category, index) {
-  if (!getItem(category, index)) return;
+function addItem(category, index, announce = true) {
+  const item = getItem(category, index);
+  if (!item) return;
 
   const key = itemKey(category, index);
   const existing = cart.find(entry => entry.key === key);
 
-  if (existing) existing.qty = Math.min(99, existing.qty + 1);
-  else cart.push({ key, qty: 1 });
+  if (existing) {
+    existing.qty = Math.min(99, existing.qty + 1);
+  } else {
+    cart.push({ key, qty: 1 });
+  }
 
   saveCart();
   renderCart();
+
+  if (announce) {
+    showToast(`${formatOrderItem({ category, item })} agregado al pedido`);
+  }
 }
 
 function changeQuantity(key, delta) {
@@ -210,21 +258,7 @@ function clearCart() {
   cart = [];
   saveCart();
   renderCart();
-}
-
-function formatOrderItem(data) {
-  if (!data) return "";
-
-  if (data.category === "empanadas") {
-    if (data.item.name === "Otros sabores") return "Empanadas · otros sabores";
-    return `Empanada de ${data.item.name}`;
-  }
-
-  if (data.category === "pizzas") {
-    return /^pizza/i.test(data.item.name) ? data.item.name : `Pizza ${data.item.name}`;
-  }
-
-  return data.item.name;
+  showToast("Pedido vaciado");
 }
 
 function buildOrderMessage() {
@@ -257,6 +291,16 @@ menuList?.addEventListener("click", event => {
   addItem(button.dataset.category, Number(button.dataset.index));
 });
 
+document.addEventListener("click", event => {
+  const quickButton = event.target.closest("[data-quick-category][data-quick-index]");
+  if (!quickButton) return;
+
+  const category = quickButton.dataset.quickCategory;
+  const index = Number(quickButton.dataset.quickIndex);
+
+  addItem(category, index);
+});
+
 tabs.forEach((tab, index) => {
   tab.setAttribute("role", "tab");
   tab.setAttribute("aria-selected", tab.classList.contains("active") ? "true" : "false");
@@ -266,9 +310,12 @@ tabs.forEach((tab, index) => {
 
   tab.addEventListener("keydown", event => {
     if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+
     event.preventDefault();
+
     const direction = event.key === "ArrowRight" ? 1 : -1;
     const next = tabs[(index + direction + tabs.length) % tabs.length];
+
     next.focus();
     activateTab(next);
   });
@@ -279,6 +326,7 @@ function activateTab(tab) {
 
   tabs.forEach(button => {
     const active = button === tab;
+
     button.classList.toggle("active", active);
     button.setAttribute("aria-selected", String(active));
     button.setAttribute("tabindex", active ? "0" : "-1");
@@ -290,6 +338,7 @@ function activateTab(tab) {
 cartList?.addEventListener("click", event => {
   const button = event.target.closest("[data-change]");
   const line = event.target.closest("[data-key]");
+
   if (!button || !line) return;
 
   changeQuantity(line.dataset.key, Number(button.dataset.change));
@@ -306,26 +355,32 @@ sendOrderButton?.addEventListener("click", () => {
 
 function closeNavigation() {
   if (!mainNav || !navToggle) return;
+
   mainNav.classList.remove("open");
   navToggle.setAttribute("aria-expanded", "false");
 }
 
 navToggle?.addEventListener("click", () => {
   if (!mainNav) return;
+
   const open = mainNav.classList.toggle("open");
   navToggle.setAttribute("aria-expanded", String(open));
 });
 
-mainNav?.querySelectorAll("a").forEach(link => link.addEventListener("click", closeNavigation));
+mainNav?.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", closeNavigation);
+});
 
 document.addEventListener("click", event => {
   if (!mainNav?.classList.contains("open")) return;
   if (mainNav.contains(event.target) || navToggle?.contains(event.target)) return;
+
   closeNavigation();
 });
 
 document.addEventListener("keydown", event => {
   if (event.key !== "Escape" || !mainNav?.classList.contains("open")) return;
+
   closeNavigation();
   navToggle?.focus();
 });
@@ -339,12 +394,12 @@ function getUshuaiaTime(date = new Date()) {
     hourCycle: "h23"
   }).formatToParts(date);
 
-  const value = type => parts.find(part => part.type === type)?.value;
+  const getValue = type => parts.find(part => part.type === type)?.value;
   const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
 
   return {
-    day: days[value("weekday")],
-    minutes: Number(value("hour")) * 60 + Number(value("minute"))
+    day: days[getValue("weekday")],
+    minutes: Number(getValue("hour")) * 60 + Number(getValue("minute"))
   };
 }
 
@@ -376,7 +431,11 @@ function paintBusinessStatus() {
   try {
     status = getBusinessStatus();
   } catch {
-    status = { open: false, short: "Consultar horario", detail: "Lun–Sáb · 12:00–15:00 · 20:00–00:00" };
+    status = {
+      open: false,
+      short: "Consultar horario",
+      detail: "Lun–Sáb · 12:00–15:00 · 20:00–00:00"
+    };
   }
 
   const targets = [
@@ -392,17 +451,20 @@ function paintBusinessStatus() {
     element.title = status.detail;
   });
 
-  const detail = document.getElementById("businessStatusDetail");
-  if (detail) detail.textContent = `${status.detail} · según horario habitual publicado`;
-
   const heroDetail = document.getElementById("businessStatusHeroDetail");
   if (heroDetail) heroDetail.textContent = status.detail;
+
+  const detail = document.getElementById("businessStatusDetail");
+  if (detail) detail.textContent = `${status.detail} · según horario habitual publicado`;
 }
 
 function setupRevealAnimations() {
   const elements = [...document.querySelectorAll(".reveal")];
 
-  if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (
+    !("IntersectionObserver" in window) ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
     elements.forEach(element => element.classList.add("is-visible"));
     return;
   }
@@ -410,24 +472,28 @@ function setupRevealAnimations() {
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
+
       entry.target.classList.add("is-visible");
       observer.unobserve(entry.target);
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
+  }, {
+    threshold: 0.1,
+    rootMargin: "0px 0px -28px 0px"
+  });
 
   elements.forEach(element => observer.observe(element));
 }
 
 function updateHeaderState() {
-  siteHeader?.classList.toggle("is-scrolled", window.scrollY > 20);
+  siteHeader?.classList.toggle("is-scrolled", window.scrollY > 18);
 }
 
 window.addEventListener("scroll", updateHeaderState, { passive: true });
+
 window.addEventListener("resize", () => {
   if (window.innerWidth > 860) closeNavigation();
 });
 
-renderMenu();
 renderCart();
 paintBusinessStatus();
 setupRevealAnimations();
