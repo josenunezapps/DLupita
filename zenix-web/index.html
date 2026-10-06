@@ -459,9 +459,245 @@
       .reveal,.reveal-left,.reveal-right{opacity:1!important;transform:none!important}
     }
 
+  
+    /* Motion layer v3 — kinetic */
+    .ambient-bg{
+      position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none
+    }
+    .ambient-dot{
+      position:absolute;border-radius:50%;opacity:.18;
+      background:radial-gradient(circle at 30% 30%,#fff,var(--violet) 45%,transparent 72%);
+      filter:blur(2px);
+      animation:particleDrift var(--dur) linear infinite;
+      transform:translate3d(0,110vh,0) scale(var(--scale))
+    }
+    @keyframes particleDrift{
+      0%{transform:translate3d(var(--x),110vh,0) scale(var(--scale));opacity:0}
+      10%{opacity:.16}
+      90%{opacity:.13}
+      100%{transform:translate3d(calc(var(--x) + var(--drift)),-18vh,0) scale(var(--scale));opacity:0}
+    }
+    .cursor-glow{
+      position:fixed;left:0;top:0;width:360px;height:360px;border-radius:50%;
+      pointer-events:none;z-index:-1;opacity:0;
+      background:radial-gradient(circle,rgba(107,77,255,.12),rgba(107,77,255,0) 66%);
+      transform:translate(-50%,-50%);
+      transition:opacity .25s ease
+    }
+    .kinetic-band{
+      overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+      background:#fff;transform:rotate(-1deg) scale(1.02);margin:8px 0 22px
+    }
+    .kinetic-track{
+      width:max-content;display:flex;gap:34px;align-items:center;
+      padding:17px 0;font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+      animation:marquee 24s linear infinite
+    }
+    .kinetic-track span{display:flex;align-items:center;gap:34px;white-space:nowrap}
+    .kinetic-track span:after{content:"✦";color:var(--violet)}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+
+    #heroWord{
+      display:inline-block;min-width:.1em;
+      transition:opacity .25s ease,transform .25s ease,filter .25s ease
+    }
+    #heroWord.word-out{opacity:0;transform:translateY(12px);filter:blur(5px)}
+    #heroWord.word-in{animation:wordPop .42s cubic-bezier(.2,.75,.2,1)}
+    @keyframes wordPop{
+      from{opacity:0;transform:translateY(-11px);filter:blur(5px)}
+      to{opacity:1;transform:translateY(0);filter:blur(0)}
+    }
+
+    .mock-shell{isolation:isolate}
+    .mock-shell:before{
+      content:"";position:absolute;inset:-2px;border-radius:36px;z-index:-1;
+      background:conic-gradient(from var(--spin,0deg),transparent 0 20%,#9b86ff 32%,transparent 44% 72%,#6b4dff 83%,transparent 95%);
+      filter:blur(9px);opacity:.42;
+      animation:borderSpin 7s linear infinite
+    }
+    @property --spin{syntax:"<angle>";initial-value:0deg;inherits:false}
+    @keyframes borderSpin{to{--spin:360deg}}
+    .mock-cursor{
+      position:absolute;z-index:8;width:18px;height:24px;left:52%;top:43%;
+      clip-path:polygon(0 0,0 100%,28% 70%,48% 100%,62% 92%,42% 64%,78% 64%);
+      background:#11131b;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2));
+      animation:demoCursor 6s ease-in-out infinite
+    }
+    .mock-ripple{
+      position:absolute;z-index:7;width:12px;height:12px;border:2px solid var(--violet);
+      border-radius:50%;left:67%;top:69%;opacity:0;
+      animation:demoClick 6s ease-out infinite
+    }
+    @keyframes demoCursor{
+      0%,8%{transform:translate(0,0) rotate(-8deg)}
+      28%{transform:translate(80px,34px) rotate(-2deg)}
+      45%{transform:translate(52px,105px) rotate(2deg)}
+      62%{transform:translate(-76px,82px) rotate(-5deg)}
+      82%,100%{transform:translate(0,0) rotate(-8deg)}
+    }
+    @keyframes demoClick{
+      0%,42%{opacity:0;transform:scale(.4)}
+      46%{opacity:.9;transform:scale(.5)}
+      56%{opacity:0;transform:scale(4)}
+      100%{opacity:0}
+    }
+    .mock-feature{
+      position:relative;overflow:hidden
+    }
+    .mock-feature:after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.85) 48%,transparent 74%);
+      transform:translateX(-130%);animation:skeletonSweep 3.6s ease-in-out infinite
+    }
+    .mock-feature:nth-child(2):after{animation-delay:.45s}
+    .mock-feature:nth-child(3):after{animation-delay:.9s}
+    @keyframes skeletonSweep{55%,100%{transform:translateX(130%)}}
+
+    .benefit:before,.project:before,.promise:before{
+      content:"";position:absolute;left:0;top:0;width:0;height:2px;
+      background:linear-gradient(90deg,var(--violet),#bcaeff);
+      transition:width .5s cubic-bezier(.2,.7,.2,1)
+    }
+    .benefit,.project,.promise{position:relative}
+    .benefit:hover:before,.project:hover:before,.promise:hover:before{width:100%}
+    .benefit .icon{transition:transform .4s cubic-bezier(.2,.8,.2,1),background .3s ease}
+    .benefit:hover .icon{transform:rotate(-8deg) scale(1.1);background:#dfd9ff}
+
+    .plan.featured{
+      isolation:isolate;
+      animation:featuredBreath 4.2s ease-in-out infinite
+    }
+    .plan.featured:before{
+      content:"";position:absolute;inset:-1px;z-index:-2;border-radius:29px;
+      background:linear-gradient(120deg,#6b4dff,#d5ccff,#6b4dff);
+      background-size:220% 220%;animation:gradientTravel 5s ease infinite
+    }
+    .plan.featured:after{
+      content:"";position:absolute;inset:1px;z-index:-1;background:#fff;border-radius:27px
+    }
+    @keyframes gradientTravel{
+      0%,100%{background-position:0 50%}
+      50%{background-position:100% 50%}
+    }
+    @keyframes featuredBreath{
+      0%,100%{box-shadow:0 30px 70px rgba(0,0,0,.28),0 0 0 rgba(107,77,255,0)}
+      50%{box-shadow:0 32px 78px rgba(0,0,0,.30),0 0 34px rgba(107,77,255,.22)}
+    }
+
+    .project-visual{position:relative;overflow:hidden}
+    .project-visual:after{
+      content:"";position:absolute;inset:-40%;
+      background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.18) 50%,transparent 58%);
+      transform:translateX(-70%) rotate(8deg);
+      animation:projectShine 5.5s ease-in-out infinite
+    }
+    @keyframes projectShine{
+      0%,58%{transform:translateX(-70%) rotate(8deg)}
+      82%,100%{transform:translateX(70%) rotate(8deg)}
+    }
+    .screen-blocks span{
+      animation:blockPulse 3s ease-in-out infinite
+    }
+    .screen-blocks span:nth-child(2){animation-delay:.3s}
+    .screen-blocks span:nth-child(3){animation-delay:.6s}
+    @keyframes blockPulse{50%{transform:translateY(-4px);background:#e5e1ff}}
+
+    .why-panel{
+      overflow:hidden
+    }
+    .why-panel .big{
+      background:linear-gradient(90deg,#fff,#bfb3ff,#fff);
+      background-size:220% auto;
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      animation:textShimmer 6s linear infinite
+    }
+    @keyframes textShimmer{to{background-position:220% center}}
+    .why-row{overflow:hidden}
+    .why-row:after{
+      content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+      background:var(--violet);transform:scaleY(0);transform-origin:center;
+      transition:transform .35s ease
+    }
+    .why-row{position:relative}
+    .why-row:hover:after{transform:scaleY(1)}
+
+    .process{position:relative}
+    .process:before{
+      content:"";position:absolute;left:8%;right:8%;top:50%;
+      height:1px;background:linear-gradient(90deg,transparent,#c5bbff 20% 80%,transparent);
+      z-index:0
+    }
+    .step{z-index:1;overflow:hidden}
+    .step:before{
+      content:"";position:absolute;width:80px;height:80px;border-radius:50%;
+      right:-24px;top:-24px;background:rgba(107,77,255,.08);
+      transition:transform .45s ease
+    }
+    .step:hover:before{transform:scale(1.8)}
+    .step strong{
+      display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;
+      background:var(--soft);animation:stepPulse 3.4s ease-in-out infinite
+    }
+    .step:nth-child(2) strong{animation-delay:.3s}
+    .step:nth-child(3) strong{animation-delay:.6s}
+    .step:nth-child(4) strong{animation-delay:.9s}
+    .step:nth-child(5) strong{animation-delay:1.2s}
+    @keyframes stepPulse{50%{box-shadow:0 0 0 9px rgba(107,77,255,.07)}}
+
+    .contact-box{position:relative;overflow:hidden}
+    .contact-box:before{
+      content:"";position:absolute;width:280px;height:280px;border-radius:50%;
+      right:-120px;bottom:-140px;
+      background:radial-gradient(circle,rgba(107,77,255,.16),transparent 68%);
+      animation:contactOrb 6s ease-in-out infinite alternate
+    }
+    @keyframes contactOrb{to{transform:translate(-80px,-44px) scale(1.2)}}
+    .field input,.field textarea{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+    .field input:focus,.field textarea:focus{transform:translateY(-2px)}
+
+    .section-head h2{
+      background:linear-gradient(currentColor,currentColor) no-repeat;
+      background-size:0 2px;background-position:0 100%;
+      transition:background-size 1s cubic-bezier(.2,.7,.2,1)
+    }
+    .section-head.is-visible h2{background-size:78px 2px}
+
+    .magnetic{will-change:transform}
+    .scroll-hint{
+      position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+      display:grid;place-items:center;gap:5px;color:#8990a0;font-size:10px;
+      letter-spacing:.1em;text-transform:uppercase;font-weight:800
+    }
+    .scroll-hint i{
+      width:22px;height:34px;border:1px solid #cfd2dd;border-radius:99px;position:relative
+    }
+    .scroll-hint i:after{
+      content:"";position:absolute;left:50%;top:7px;width:3px;height:6px;border-radius:99px;
+      background:var(--violet);transform:translateX(-50%);
+      animation:scrollDot 1.7s ease-in-out infinite
+    }
+    @keyframes scrollDot{
+      0%{opacity:0;transform:translate(-50%,0)}
+      35%{opacity:1}
+      100%{opacity:0;transform:translate(-50%,13px)}
+    }
+
+    @media(max-width:980px){
+      .process:before{display:none}
+      .scroll-hint{display:none}
+    }
+    @media(max-width:620px){
+      .kinetic-band{transform:rotate(-1.5deg) scale(1.04)}
+      .kinetic-track{font-size:11px;gap:24px;padding:14px 0}
+      .cursor-glow{display:none}
+      .mock-cursor,.mock-ripple{display:none}
+    }
+
   </style>
 </head>
 <body>
+  <div class="ambient-bg" id="ambientBg" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
   <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <header>
     <div class="wrap nav">
@@ -485,7 +721,7 @@
         <div class="hero-grid">
           <div>
             <span class="eyebrow">Diseño web para negocios</span>
-            <h1>Tu negocio merece una web que <em>trabaje por vos.</em></h1>
+            <h1>Tu negocio merece una web que <em><span id="heroWord">trabaje por vos.</span></em></h1>
             <p class="hero-copy">
               Diseñamos páginas claras, modernas y rápidas para presentar mejor lo que hacés,
               generar confianza y convertir visitas en consultas reales.
@@ -503,6 +739,8 @@
 
           <div class="mock-shell" aria-label="Vista ilustrativa de una web desarrollada por Zenix">
             <div class="mock-window">
+              <span class="mock-cursor" aria-hidden="true"></span>
+              <span class="mock-ripple" aria-hidden="true"></span>
               <div class="browser-top">
                 <span class="dot"></span><span class="dot"></span><span class="dot"></span>
                 <div class="browser-url"></div>
@@ -534,8 +772,16 @@
           <div class="trust-item"><strong>Rápida y clara</strong><span>Menos fricción, más contacto</span></div>
           <div class="trust-item"><strong>Acompañamiento</strong><span>De la idea a la publicación</span></div>
         </div>
+              <div class="scroll-hint" aria-hidden="true"><i></i><span>Explorá</span></div>
       </div>
     </section>
+
+    <div class="kinetic-band" aria-hidden="true">
+      <div class="kinetic-track">
+        <span>Diseño web</span><span>Landing pages</span><span>Experiencias móviles</span><span>Automatización</span><span>Tiendas online</span><span>Diseño que convierte</span>
+        <span>Diseño web</span><span>Landing pages</span><span>Experiencias móviles</span><span>Automatización</span><span>Tiendas online</span><span>Diseño que convierte</span>
+      </div>
+    </div>
 
     <section class="section" id="beneficios">
       <div class="wrap">
@@ -904,6 +1150,109 @@
           mock.style.transform = 'translateY(' + offset + 'px)';
         }
       }, { passive:true });
+    })();
+  </script>
+
+
+  <script>
+    (function(){
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Ambient particles
+      const ambient = document.getElementById('ambientBg');
+      if (ambient && !reduced) {
+        const count = window.innerWidth < 700 ? 8 : 15;
+        for (let i = 0; i < count; i++) {
+          const d = document.createElement('span');
+          d.className = 'ambient-dot';
+          const size = 18 + Math.random() * 58;
+          d.style.width = size + 'px';
+          d.style.height = size + 'px';
+          d.style.setProperty('--x', (Math.random() * 100) + 'vw');
+          d.style.setProperty('--drift', ((Math.random() - .5) * 34) + 'vw');
+          d.style.setProperty('--scale', (.55 + Math.random() * 1.1).toFixed(2));
+          d.style.setProperty('--dur', (13 + Math.random() * 16).toFixed(1) + 's');
+          d.style.animationDelay = (-Math.random() * 18).toFixed(1) + 's';
+          ambient.appendChild(d);
+        }
+      }
+
+      // Rotating hero phrase
+      const heroWord = document.getElementById('heroWord');
+      if (heroWord && !reduced) {
+        const words = ['trabaje por vos.','genere confianza.','explique lo que hacés.','convierta visitas.','venda mejor tu idea.'];
+        let wi = 0;
+        setInterval(() => {
+          heroWord.classList.add('word-out');
+          setTimeout(() => {
+            wi = (wi + 1) % words.length;
+            heroWord.textContent = words[wi];
+            heroWord.classList.remove('word-out');
+            heroWord.classList.remove('word-in');
+            void heroWord.offsetWidth;
+            heroWord.classList.add('word-in');
+          }, 250);
+        }, 2600);
+      }
+
+      // Cursor glow + magnetic CTA
+      const glow = document.getElementById('cursorGlow');
+      if (glow && window.matchMedia('(pointer:fine)').matches && !reduced) {
+        window.addEventListener('mousemove', e => {
+          glow.style.left = e.clientX + 'px';
+          glow.style.top = e.clientY + 'px';
+          glow.style.opacity = '1';
+        }, {passive:true});
+        document.documentElement.addEventListener('mouseleave', () => glow.style.opacity = '0');
+
+        document.querySelectorAll('.cta').forEach(btn => {
+          btn.classList.add('magnetic');
+          btn.addEventListener('mousemove', e => {
+            const r = btn.getBoundingClientRect();
+            const x = e.clientX - (r.left + r.width / 2);
+            const y = e.clientY - (r.top + r.height / 2);
+            btn.style.transform = 'translate(' + (x * .08) + 'px,' + (y * .12) + 'px) translateY(-2px)';
+          });
+          btn.addEventListener('mouseleave', () => btn.style.transform = '');
+        });
+      }
+
+      // Scroll-reactive hero depth and alternating section drift
+      if (!reduced) {
+        const hero = document.querySelector('.hero-grid');
+        const band = document.querySelector('.kinetic-band');
+        let ticking = false;
+        const parallax = () => {
+          const y = window.scrollY;
+          if (hero && y < 900) {
+            hero.style.transform = 'translateY(' + Math.min(y * .055, 30) + 'px)';
+          }
+          if (band) {
+            band.style.translate = ((y % 80) * -.035) + 'px 0';
+          }
+          ticking = false;
+        };
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            requestAnimationFrame(parallax);
+            ticking = true;
+          }
+        }, {passive:true});
+      }
+
+      // Active process focus while scrolling
+      const steps = [...document.querySelectorAll('.step')];
+      if (steps.length && 'IntersectionObserver' in window) {
+        const stepObs = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              steps.forEach(s => s.style.borderColor = '');
+              entry.target.style.borderColor = '#9d8cff';
+            }
+          });
+        }, {threshold:.65});
+        steps.forEach(s => stepObs.observe(s));
+      }
     })();
   </script>
 
