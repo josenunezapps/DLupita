@@ -1,32 +1,33 @@
 const WHATSAPP_NUMBER = "5492901535229";
-const CART_KEY = "dlupita-cart-v2";
+const CART_KEY = "dlupita-cart-sale-v1";
+const BUSINESS_TIME_ZONE = "America/Argentina/Ushuaia";
 
 const menuData = {
   empanadas: [
-    { name: "Carne cortada a cuchillo", desc: "Una de las variedades más mencionadas por clientes y por la historia de NASA." },
-    { name: "Matambre", desc: "Otro clásico identificado públicamente con la casa." },
-    { name: "Pollo", desc: "Una de las variedades que NASA registró entre sus pedidos." },
-    { name: "Roquefort", desc: "Sabor intenso, también documentado entre las opciones del local." },
-    { name: "Cordero", desc: "Opción fueguina mencionada en reseñas recientes." },
-    { name: "Otros sabores", desc: "Consultá por las variedades disponibles del día." }
+    { name: "Carne cortada a cuchillo", desc: "Una de las variedades más nombradas por clientes y en la historia publicada por NASA.", tag: "Clásico" },
+    { name: "Matambre", desc: "Un sabor muy asociado a la casa y uno de los favoritos mencionados en reseñas.", tag: "Muy pedida" },
+    { name: "Cordero", desc: "Una opción bien fueguina para quienes quieren probar algo distinto.", tag: "Fueguina" },
+    { name: "Pollo", desc: "Una variedad tradicional para sumar al pedido.", tag: "Clásico" },
+    { name: "Roquefort", desc: "Sabor intenso para quienes prefieren quesos con personalidad.", tag: "Intensa" },
+    { name: "Otros sabores", desc: "Consultá por las variedades disponibles del día.", tag: "Consultar" }
   ],
   pizzas: [
-    { name: "Muzzarella", desc: "La clásica para compartir." },
-    { name: "Jamón y huevo", desc: "Variedad mencionada entre las recomendaciones de clientes." },
-    { name: "Cuatro quesos", desc: "Una de las pizzas recomendadas en reseñas recientes." },
-    { name: "Pizza de la casa", desc: "Consultá las especialidades y variedades disponibles." }
+    { name: "Muzzarella", desc: "La clásica para compartir.", tag: "Clásica" },
+    { name: "Jamón y huevo", desc: "Una combinación mencionada entre las recomendaciones de clientes.", tag: "Popular" },
+    { name: "Cuatro quesos", desc: "Una de las pizzas destacadas en reseñas públicas.", tag: "Quesos" },
+    { name: "Pizza de la casa", desc: "Consultá por las especialidades y variedades disponibles.", tag: "Consultar" }
   ],
   cocina: [
-    { name: "Milanesas", desc: "Platos abundantes, uno de los clásicos asociados al local." },
-    { name: "Pastas", desc: "Cocina casera para almuerzo o cena." },
-    { name: "Sándwiches y lomitos", desc: "Opciones contundentes para comer en el local o llevar." },
-    { name: "Hamburguesas", desc: "Consultá disponibilidad y variedades." }
+    { name: "Milanesas", desc: "Platos abundantes, uno de los clásicos asociados al local.", tag: "Abundante" },
+    { name: "Pastas", desc: "Cocina casera para almuerzo o cena.", tag: "Casero" },
+    { name: "Sándwiches y lomitos", desc: "Opciones contundentes para comer en el local o llevar.", tag: "Para llevar" },
+    { name: "Hamburguesas", desc: "Consultá disponibilidad y variedades del día.", tag: "Consultar" }
   ],
   paraCompartir: [
-    { name: "Docena de empanadas", desc: "Elegí sabores y confirmalos por WhatsApp." },
-    { name: "Media docena de empanadas", desc: "Para probar varias opciones." },
-    { name: "Pizza + empanadas", desc: "Armá una combinación y consultá disponibilidad." },
-    { name: "Pedido para grupo", desc: "Consultá opciones para reuniones o pedidos grandes." }
+    { name: "Docena de empanadas", desc: "Elegí sabores y confirmalos por WhatsApp.", tag: "Grupo" },
+    { name: "Media docena de empanadas", desc: "Una buena opción para probar varias variedades.", tag: "Variado" },
+    { name: "Pizza + empanadas", desc: "Armá una combinación y consultá disponibilidad.", tag: "Combo" },
+    { name: "Pedido para grupo", desc: "Consultá opciones para reuniones o pedidos grandes.", tag: "Consultar" }
   ]
 };
 
@@ -51,6 +52,7 @@ const orderMode = document.getElementById("orderMode");
 const orderNotes = document.getElementById("orderNotes");
 const navToggle = document.querySelector(".nav-toggle");
 const mainNav = document.getElementById("mainNav");
+const siteHeader = document.querySelector(".site-header");
 
 let activeCategory = "empanadas";
 let cart = loadCart();
@@ -72,7 +74,10 @@ function loadCart() {
         const [category, index] = String(entry.key || "").split(":");
         return getItem(category, index) && Number(entry.qty) > 0;
       })
-      .map(entry => ({ key: entry.key, qty: Math.min(99, Math.max(1, Number(entry.qty) || 1)) }));
+      .map(entry => ({
+        key: entry.key,
+        qty: Math.min(99, Math.max(1, Number(entry.qty) || 1))
+      }));
   } catch {
     return [];
   }
@@ -88,18 +93,35 @@ function totalQuantity() {
   return cart.reduce((sum, entry) => sum + entry.qty, 0);
 }
 
+function quantityFor(category, index) {
+  return cart.find(entry => entry.key === itemKey(category, index))?.qty || 0;
+}
+
 function renderMenu() {
   if (!menuList) return;
-  const items = menuData[activeCategory];
-  menuList.innerHTML = items.map((item, index) => `
-    <article class="menu-item">
-      <div>
-        <h3>${item.name}</h3>
-        <p>${item.desc}</p>
-      </div>
-      <button class="add-item" type="button" data-add data-category="${activeCategory}" data-index="${index}">Agregar +</button>
-    </article>
-  `).join("");
+  const items = menuData[activeCategory] || [];
+
+  menuList.innerHTML = items.map((item, index) => {
+    const qty = quantityFor(activeCategory, index);
+    return `
+      <article class="menu-item">
+        <div>
+          <span class="menu-item-kicker">${item.tag}</span>
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+        </div>
+        <button
+          class="add-item${qty ? " is-added" : ""}"
+          type="button"
+          data-add
+          data-category="${activeCategory}"
+          data-index="${index}"
+          aria-label="Agregar ${item.name} al pedido">
+          ${qty ? `Agregar otro · ${qty}` : "Agregar +"}
+        </button>
+      </article>
+    `;
+  }).join("");
 }
 
 function cartEntryData(entry) {
@@ -118,10 +140,19 @@ function renderCart() {
   if (sendOrderButton) sendOrderButton.disabled = total === 0;
   if (mobileCart) mobileCart.hidden = total === 0;
 
-  if (!cartList) return;
+  const cartTitle = cartCount?.parentElement;
+  if (cartTitle) {
+    cartTitle.childNodes[cartTitle.childNodes.length - 1].textContent = total === 1 ? " producto" : " productos";
+  }
+
+  if (!cartList) {
+    renderMenu();
+    return;
+  }
 
   if (!cart.length) {
-    cartList.innerHTML = '<div class="cart-empty">Todavía no agregaste productos.</div>';
+    cartList.innerHTML = '<div class="cart-empty">Todavía no agregaste nada.<br>Elegí productos de la carta para armar tu consulta.</div>';
+    renderMenu();
     return;
   }
 
@@ -131,25 +162,30 @@ function renderCart() {
     return `
       <div class="cart-line" data-key="${entry.key}">
         <div>
-          <div class="cart-line-title">${data.item.name}</div>
+          <div class="cart-line-title">${formatOrderItem(data)}</div>
           <div class="cart-line-category">${categoryNames[data.category]}</div>
         </div>
         <div class="cart-controls">
-          <button type="button" data-change="-1" aria-label="Quitar uno">−</button>
+          <button type="button" data-change="-1" aria-label="Quitar uno de ${data.item.name}">−</button>
           <strong>${entry.qty}</strong>
-          <button type="button" data-change="1" aria-label="Agregar uno">+</button>
+          <button type="button" data-change="1" aria-label="Agregar uno de ${data.item.name}">+</button>
         </div>
       </div>
     `;
   }).join("");
+
+  renderMenu();
 }
 
 function addItem(category, index) {
   if (!getItem(category, index)) return;
+
   const key = itemKey(category, index);
   const existing = cart.find(entry => entry.key === key);
+
   if (existing) existing.qty = Math.min(99, existing.qty + 1);
   else cart.push({ key, qty: 1 });
+
   saveCart();
   renderCart();
 }
@@ -157,9 +193,15 @@ function addItem(category, index) {
 function changeQuantity(key, delta) {
   const entry = cart.find(item => item.key === key);
   if (!entry) return;
+
   entry.qty += delta;
-  if (entry.qty <= 0) cart = cart.filter(item => item.key !== key);
-  else entry.qty = Math.min(99, entry.qty);
+
+  if (entry.qty <= 0) {
+    cart = cart.filter(item => item.key !== key);
+  } else {
+    entry.qty = Math.min(99, entry.qty);
+  }
+
   saveCart();
   renderCart();
 }
@@ -172,7 +214,16 @@ function clearCart() {
 
 function formatOrderItem(data) {
   if (!data) return "";
-  if (data.category === "empanadas") return `Empanada de ${data.item.name}`;
+
+  if (data.category === "empanadas") {
+    if (data.item.name === "Otros sabores") return "Empanadas · otros sabores";
+    return `Empanada de ${data.item.name}`;
+  }
+
+  if (data.category === "pizzas") {
+    return /^pizza/i.test(data.item.name) ? data.item.name : `Pizza ${data.item.name}`;
+  }
+
   return data.item.name;
 }
 
@@ -202,30 +253,45 @@ function buildOrderMessage() {
 menuList?.addEventListener("click", event => {
   const button = event.target.closest("[data-add]");
   if (!button) return;
+
   addItem(button.dataset.category, Number(button.dataset.index));
-  const original = button.textContent;
-  button.textContent = "Agregado ✓";
-  setTimeout(() => { button.textContent = original; }, 800);
 });
 
-tabs.forEach(tab => {
+tabs.forEach((tab, index) => {
   tab.setAttribute("role", "tab");
   tab.setAttribute("aria-selected", tab.classList.contains("active") ? "true" : "false");
-  tab.addEventListener("click", () => {
-    activeCategory = tab.dataset.category;
-    tabs.forEach(button => {
-      const active = button === tab;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-selected", String(active));
-    });
-    renderMenu();
+  tab.setAttribute("tabindex", tab.classList.contains("active") ? "0" : "-1");
+
+  tab.addEventListener("click", () => activateTab(tab));
+
+  tab.addEventListener("keydown", event => {
+    if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    event.preventDefault();
+    const direction = event.key === "ArrowRight" ? 1 : -1;
+    const next = tabs[(index + direction + tabs.length) % tabs.length];
+    next.focus();
+    activateTab(next);
   });
 });
+
+function activateTab(tab) {
+  activeCategory = tab.dataset.category;
+
+  tabs.forEach(button => {
+    const active = button === tab;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+    button.setAttribute("tabindex", active ? "0" : "-1");
+  });
+
+  renderMenu();
+}
 
 cartList?.addEventListener("click", event => {
   const button = event.target.closest("[data-change]");
   const line = event.target.closest("[data-key]");
   if (!button || !line) return;
+
   changeQuantity(line.dataset.key, Number(button.dataset.change));
 });
 
@@ -233,42 +299,36 @@ clearCartButton?.addEventListener("click", clearCart);
 
 sendOrderButton?.addEventListener("click", () => {
   if (!cart.length) return;
+
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildOrderMessage())}`;
-  window.open(url, "_blank", "noopener");
+  window.open(url, "_blank", "noopener,noreferrer");
 });
+
+function closeNavigation() {
+  if (!mainNav || !navToggle) return;
+  mainNav.classList.remove("open");
+  navToggle.setAttribute("aria-expanded", "false");
+}
 
 navToggle?.addEventListener("click", () => {
-  const open = mainNav?.classList.toggle("open");
-  navToggle.setAttribute("aria-expanded", String(Boolean(open)));
+  if (!mainNav) return;
+  const open = mainNav.classList.toggle("open");
+  navToggle.setAttribute("aria-expanded", String(open));
 });
 
-mainNav?.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", () => {
-    mainNav.classList.remove("open");
-    navToggle?.setAttribute("aria-expanded", "false");
-  });
-});
+mainNav?.querySelectorAll("a").forEach(link => link.addEventListener("click", closeNavigation));
 
 document.addEventListener("click", event => {
   if (!mainNav?.classList.contains("open")) return;
   if (mainNav.contains(event.target) || navToggle?.contains(event.target)) return;
-  mainNav.classList.remove("open");
-  navToggle?.setAttribute("aria-expanded", "false");
+  closeNavigation();
 });
 
 document.addEventListener("keydown", event => {
   if (event.key !== "Escape" || !mainNav?.classList.contains("open")) return;
-  mainNav.classList.remove("open");
-  navToggle?.setAttribute("aria-expanded", "false");
+  closeNavigation();
   navToggle?.focus();
 });
-
-renderMenu();
-renderCart();
-
-/* Estado abierto/cerrado según el horario publicado de Doña Lupita.
-   Zona horaria fija de Ushuaia para que no dependa del reloj local del visitante. */
-const BUSINESS_TIME_ZONE = "America/Argentina/Ushuaia";
 
 function getUshuaiaTime(date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-US", {
@@ -279,12 +339,12 @@ function getUshuaiaTime(date = new Date()) {
     hourCycle: "h23"
   }).formatToParts(date);
 
-  const getPart = type => parts.find(part => part.type === type)?.value;
+  const value = type => parts.find(part => part.type === type)?.value;
   const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
 
   return {
-    day: days[getPart("weekday")],
-    minutes: Number(getPart("hour")) * 60 + Number(getPart("minute"))
+    day: days[value("weekday")],
+    minutes: Number(value("hour")) * 60 + Number(value("minute"))
   };
 }
 
@@ -294,120 +354,31 @@ function getBusinessStatus(date = new Date()) {
   if (day === 0) {
     return { open: false, short: "Cerrado ahora", detail: "Abre el lunes a las 12:00" };
   }
+
   if (minutes < 12 * 60) {
     return { open: false, short: "Cerrado ahora", detail: "Abre hoy a las 12:00" };
   }
+
   if (minutes < 15 * 60) {
     return { open: true, short: "Abierto ahora", detail: "Hasta las 15:00" };
   }
+
   if (minutes < 20 * 60) {
     return { open: false, short: "Cerrado ahora", detail: "Abre hoy a las 20:00" };
   }
+
   return { open: true, short: "Abierto ahora", detail: "Hasta las 00:00" };
 }
 
-function installBusinessStatusUI() {
-  if (document.getElementById("business-status-style")) return;
-
-  const style = document.createElement("style");
-  style.id = "business-status-style";
-  style.textContent = `
-    .business-status{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      font-weight:800;
-      line-height:1.2;
-    }
-    .business-status::before{
-      content:"";
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      flex:0 0 8px;
-      background:#8b1e2d;
-    }
-    .business-status.is-open::before{
-      background:#28b36a;
-      box-shadow:0 0 0 3px rgba(40,179,106,.13),0 0 12px rgba(40,179,106,.35);
-    }
-    .business-status.is-closed::before{
-      background:#d34d55;
-      box-shadow:0 0 0 3px rgba(211,77,85,.12);
-    }
-    .business-status-nav{
-      font-size:.74rem;
-      white-space:nowrap;
-      padding:8px 11px;
-      border-radius:999px;
-      border:1px solid rgba(29,27,24,.10);
-      background:rgba(29,27,24,.035);
-      color:#625b54;
-    }
-    .business-status-nav.is-open{
-      color:#147848;
-      border-color:rgba(20,120,72,.18);
-      background:rgba(40,179,106,.08);
-    }
-    .business-status-nav.is-closed{
-      color:#a33740;
-      border-color:rgba(163,55,64,.16);
-      background:rgba(211,77,85,.07);
-    }
-    .business-status-hero{color:rgba(255,255,255,.9)}
-    .business-status-visit{margin-top:5px;color:#fff}
-    .business-status-detail{
-      display:block;
-      margin-top:5px;
-      font-size:.72rem;
-      font-weight:600;
-      opacity:.72;
-    }
-    @media (max-width:1120px) and (min-width:821px){
-      .business-status-nav{
-        font-size:.68rem;
-        padding:7px 9px;
-        gap:6px;
-      }
-    }
-    @media (max-width:820px){
-      .business-status-nav{
-        display:flex;
-        margin:7px 14px 5px;
-        padding:10px 12px;
-        border-radius:12px;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-
-  const navOrder = mainNav?.querySelector(".nav-order");
-  if (navOrder && !document.getElementById("businessStatusNav")) {
-    navOrder.insertAdjacentHTML(
-      "beforebegin",
-      '<span class="business-status business-status-nav" id="businessStatusNav" aria-live="polite">Consultando horario…</span>'
-    );
-  }
-
-  const heroMeta = document.querySelector(".hero-meta");
-  if (heroMeta && !document.getElementById("businessStatusHero")) {
-    heroMeta.insertAdjacentHTML(
-      "afterbegin",
-      '<span class="business-status business-status-hero" id="businessStatusHero" aria-live="polite">Consultando horario…</span>'
-    );
-  }
-
-  const visitDetails = document.querySelector(".visit-details");
-  if (visitDetails && !document.getElementById("businessStatusVisit")) {
-    visitDetails.insertAdjacentHTML(
-      "afterbegin",
-      '<div><small>ESTADO SEGÚN HORARIO PUBLICADO</small><strong class="business-status business-status-visit" id="businessStatusVisit" aria-live="polite">Consultando horario…</strong><span id="businessStatusDetail">Horario habitual: Lun–Sáb · 12:00–15:00 · 20:00–00:00</span></div>'
-    );
-  }
-}
-
 function paintBusinessStatus() {
-  const status = getBusinessStatus();
+  let status;
+
+  try {
+    status = getBusinessStatus();
+  } catch {
+    status = { open: false, short: "Consultar horario", detail: "Lun–Sáb · 12:00–15:00 · 20:00–00:00" };
+  }
+
   const targets = [
     document.getElementById("businessStatusNav"),
     document.getElementById("businessStatusHero"),
@@ -423,8 +394,43 @@ function paintBusinessStatus() {
 
   const detail = document.getElementById("businessStatusDetail");
   if (detail) detail.textContent = `${status.detail} · según horario habitual publicado`;
+
+  const heroDetail = document.getElementById("businessStatusHeroDetail");
+  if (heroDetail) heroDetail.textContent = status.detail;
 }
 
-installBusinessStatusUI();
+function setupRevealAnimations() {
+  const elements = [...document.querySelectorAll(".reveal")];
+
+  if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    elements.forEach(element => element.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -30px 0px" });
+
+  elements.forEach(element => observer.observe(element));
+}
+
+function updateHeaderState() {
+  siteHeader?.classList.toggle("is-scrolled", window.scrollY > 20);
+}
+
+window.addEventListener("scroll", updateHeaderState, { passive: true });
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 860) closeNavigation();
+});
+
+renderMenu();
+renderCart();
 paintBusinessStatus();
+setupRevealAnimations();
+updateHeaderState();
+
 setInterval(paintBusinessStatus, 60 * 1000);
