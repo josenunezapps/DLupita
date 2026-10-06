@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="theme-color" content="#6b4dff">
+  <title>Zenix — Diseño web para negocios</title>
+  <meta name="description" content="Páginas web claras, modernas y pensadas para convertir visitas en consultas. Diseño, desarrollo y acompañamiento de Zenix AR.">
+  <style>
+    :root{
+      --bg:#f7f8fc;
+      --surface:#ffffff;
+      --surface-2:#f0f1ff;
+      --ink:#151821;
+      --muted:#687084;
+      --line:#e6e8f0;
+      --violet:#6b4dff;
+      --violet-2:#8d78ff;
+      --dark:#11131b;
+      --soft:#ece9ff;
+      --success:#1f9d72;
+      --shadow:0 24px 70px rgba(31,34,49,.10);
+      --shadow-soft:0 12px 36px rgba(31,34,49,.08);
+      --radius:28px;
+      --radius-sm:18px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    button,input,textarea{font:inherit}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:auto}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--violet);
+    }
+    .eyebrow:before{content:"";width:26px;height:2px;background:var(--violet);border-radius:99px}
+    .section{padding:96px 0}
+    .section-head{max-width:760px;margin-bottom:42px}
+    .section-head h2{
+      margin:10px 0 14px;
+      font-size:clamp(34px,5vw,56px);
+      line-height:1.05;letter-spacing:-.04em;
+    }
+    .section-head p{margin:0;color:var(--muted);font-size:18px}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(247,248,252,.88);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(230,232,240,.85);
+    }
+    .nav{
+      min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em}
+    .brand img{width:42px;height:42px;object-fit:contain}
+    .brand span{font-size:22px}
+    .nav-links{display:flex;gap:28px;align-items:center;color:#4d5362;font-weight:650;font-size:14px}
+    .nav-links a:hover{color:var(--violet)}
+    .cta{
+      display:inline-flex;align-items:center;justify-content:center;gap:9px;
+      border-radius:999px;padding:14px 22px;font-weight:800;
+      background:var(--violet);color:#fff;border:1px solid var(--violet);
+      box-shadow:0 10px 30px rgba(107,77,255,.24);
+      transition:.22s ease;
+    }
+    .cta:hover{transform:translateY(-2px);box-shadow:0 15px 38px rgba(107,77,255,.30)}
+    .cta.secondary{
+      background:#fff;color:var(--ink);border-color:var(--line);box-shadow:none;
+    }
+    .cta.secondary:hover{border-color:#cbc4ff;color:var(--violet)}
+    .menu-btn{display:none;border:0;background:transparent;font-size:26px;padding:8px}
+
+    .hero{padding:82px 0 68px;overflow:hidden;position:relative}
+    .hero:before{
+      content:"";position:absolute;left:-160px;top:-220px;width:520px;height:520px;
+      border-radius:50%;background:radial-gradient(circle,rgba(107,77,255,.15),rgba(107,77,255,0) 68%);
+      pointer-events:none;
+    }
+    .hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:72px;align-items:center}
+    .hero h1{
+      margin:14px 0 20px;
+      font-size:clamp(48px,7vw,82px);line-height:.96;letter-spacing:-.06em;
+    }
+    .hero h1 em{font-style:normal;color:var(--violet)}
+    .hero-copy{max-width:690px;color:var(--muted);font-size:19px;margin:0 0 30px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+    .micro{
+      display:flex;flex-wrap:wrap;gap:18px;margin-top:28px;color:#5f6676;font-size:14px;font-weight:650
+    }
+    .micro span{display:flex;align-items:center;gap:7px}
+    .micro b{
+      width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+      background:#e9fbf5;color:var(--success);font-size:12px;
+    }
+
+    .mock-shell{
+      position:relative;border-radius:34px;padding:18px;background:#1a1d28;
+      box-shadow:0 36px 90px rgba(23,26,38,.24);
+      transform:rotate(1.2deg);
+    }
+    .mock-shell:after{
+      content:"";position:absolute;z-index:-1;inset:auto -36px -38px 70px;height:65%;
+      border-radius:44px;background:linear-gradient(140deg,#dcd5ff,#f0edff);
+    }
+    .mock-window{
+      background:#fff;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.08)
+    }
+    .browser-top{height:44px;background:#f4f5f8;display:flex;align-items:center;gap:6px;padding:0 14px}
+    .dot{width:9px;height:9px;border-radius:50%;background:#cdd1db}
+    .browser-url{
+      margin-left:8px;height:22px;flex:1;max-width:260px;border-radius:99px;background:#e6e8ef
+    }
+    .mock-page{padding:34px}
+    .mock-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+    .mock-logo{width:76px;height:14px;border-radius:99px;background:#242735}
+    .mock-pill{width:86px;height:26px;border-radius:99px;background:var(--violet)}
+    .mock-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center}
+    .mock-lines span{display:block;border-radius:99px;background:#222633;margin-bottom:10px}
+    .mock-lines span:nth-child(1){width:90%;height:17px}
+    .mock-lines span:nth-child(2){width:72%;height:17px}
+    .mock-lines span:nth-child(3){width:93%;height:8px;background:#d9dce5;margin-top:18px}
+    .mock-lines span:nth-child(4){width:68%;height:8px;background:#d9dce5}
+    .mock-card{
+      aspect-ratio:1/1;border-radius:20px;background:
+      linear-gradient(145deg,rgba(255,255,255,.75),rgba(255,255,255,.2)),
+      linear-gradient(135deg,#6b4dff,#b9acff);
+      position:relative;overflow:hidden;
+    }
+    .mock-card:before,.mock-card:after{
+      content:"";position:absolute;border-radius:20px;background:rgba(255,255,255,.24)
+    }
+    .mock-card:before{inset:22px 22px auto;height:32%}
+    .mock-card:after{left:22px;right:48px;bottom:24px;height:12px;border-radius:99px}
+    .mock-features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
+    .mock-feature{height:86px;border-radius:14px;background:#f2f3f8}
+
+    .trust-strip{
+      margin-top:58px;display:grid;grid-template-columns:repeat(4,1fr);
+      border:1px solid var(--line);background:#fff;border-radius:24px;overflow:hidden;
+      box-shadow:var(--shadow-soft);
+    }
+    .trust-item{padding:24px;text-align:center;border-right:1px solid var(--line)}
+    .trust-item:last-child{border-right:0}
+    .trust-item strong{display:block;font-size:15px;margin-bottom:5px}
+    .trust-item span{font-size:13px;color:var(--muted)}
+
+    .benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .benefit{
+      background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;
+      transition:.22s ease;
+    }
+    .benefit:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft)}
+    .icon{
+      width:46px;height:46px;border-radius:14px;background:var(--soft);color:var(--violet);
+      display:grid;place-items:center;font-size:21px;margin-bottom:20px;font-weight:900
+    }
+    .benefit h3{margin:0 0 8px;font-size:18px}
+    .benefit p{margin:0;color:var(--muted);font-size:14px}
+
+    .plans-wrap{background:var(--dark);color:#fff;position:relative;overflow:hidden}
+    .plans-wrap:before{
+      content:"";position:absolute;width:520px;height:520px;border-radius:50%;
+      background:radial-gradient(circle,rgba(107,77,255,.26),transparent 68%);
+      right:-120px;top:-190px
+    }
+    .plans-wrap .section-head p{color:#aeb3c1}
+    .plans-wrap .eyebrow{color:#a998ff}
+    .plans-wrap .eyebrow:before{background:#a998ff}
+    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative}
+    .plan{
+      background:#191c26;border:1px solid #2b2f3c;border-radius:28px;padding:30px;
+      display:flex;flex-direction:column;min-height:510px
+    }
+    .plan.featured{
+      background:#fff;color:var(--ink);transform:translateY(-10px);
+      border-color:#fff;box-shadow:0 30px 70px rgba(0,0,0,.28)
+    }
+    .plan-badge{
+      align-self:flex-start;border-radius:999px;padding:8px 11px;
+      font-size:11px;font-weight:850;letter-spacing:.06em;text-transform:uppercase;
+      background:#2d3140;color:#c4c8d4;margin-bottom:20px
+    }
+    .plan.featured .plan-badge{background:var(--soft);color:var(--violet)}
+    .plan h3{font-size:26px;margin:0 0 8px}
+    .plan .desc{color:#aeb3c1;margin:0 0 20px;min-height:52px}
+    .plan.featured .desc{color:var(--muted)}
+    .price{
+      font-size:22px;font-weight:900;letter-spacing:-.03em;margin:4px 0 22px
+    }
+    .price small{display:block;color:#8f95a6;font-weight:600;font-size:13px;letter-spacing:0;margin-top:2px}
+    .plan.featured .price small{color:var(--muted)}
+    .checklist{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:12px}
+    .checklist li{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+    .checklist li:before{
+      content:"✓";width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+      background:#263128;color:#66d5a6;font-size:12px;flex:0 0 auto;margin-top:1px
+    }
+    .plan.featured .checklist li:before{background:#e9fbf5;color:var(--success)}
+    .plan .cta{margin-top:auto;width:100%}
+    .plan:not(.featured) .cta{background:#fff;color:#151821;border-color:#fff;box-shadow:none}
+
+    .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .project{
+      background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;
+      transition:.23s ease
+    }
+    .project:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+    .project-visual{
+      aspect-ratio:16/10;padding:22px;display:flex;align-items:end;
+      background:linear-gradient(140deg,#272b38,#6b4dff);
+    }
+    .project:nth-child(2) .project-visual{background:linear-gradient(140deg,#fcdfbe,#b9502b)}
+    .project:nth-child(3) .project-visual{background:linear-gradient(140deg,#ecf2ff,#6b7fc8)}
+    .screen{
+      width:100%;height:82%;background:#fff;border-radius:12px 12px 0 0;
+      box-shadow:0 12px 30px rgba(0,0,0,.18);padding:12px
+    }
+    .screen-head{display:flex;gap:4px;margin-bottom:12px}
+    .screen-head i{width:5px;height:5px;border-radius:50%;background:#d6d8df}
+    .screen-line{height:7px;background:#252936;border-radius:99px;margin:8px 0;width:62%}
+    .screen-line.soft{background:#e3e5eb;width:82%;height:5px}
+    .screen-blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:18px}
+    .screen-blocks span{height:36px;background:#f0f1f5;border-radius:6px}
+    .project-body{padding:24px}
+    .project-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet);font-weight:850}
+    .project h3{font-size:21px;margin:8px 0}
+    .project p{color:var(--muted);font-size:14px;margin:0 0 18px}
+    .project a{font-weight:850;color:var(--violet);font-size:14px}
+
+    .why{display:grid;grid-template-columns:.85fr 1.15fr;gap:68px;align-items:start}
+    .why-panel{
+      position:sticky;top:112px;background:linear-gradient(150deg,#151821,#2e245f);
+      color:#fff;border-radius:30px;padding:36px;min-height:440px;
+      display:flex;flex-direction:column;justify-content:space-between;
+      box-shadow:var(--shadow)
+    }
+    .why-panel .big{font-size:42px;font-weight:900;line-height:1.04;letter-spacing:-.05em}
+    .why-panel p{color:#c5c8d3}
+    .why-list{display:grid;gap:14px}
+    .why-row{
+      background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;
+      display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start
+    }
+    .why-row .n{font-size:13px;font-weight:900;color:var(--violet);padding-top:3px}
+    .why-row h3{margin:0 0 6px;font-size:19px}
+    .why-row p{margin:0;color:var(--muted);font-size:14px}
+
+    .process{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+    .step{
+      position:relative;background:#fff;border:1px solid var(--line);
+      border-radius:22px;padding:24px;min-height:210px
+    }
+    .step strong{font-size:13px;color:var(--violet)}
+    .step h3{margin:34px 0 8px;font-size:18px}
+    .step p{margin:0;color:var(--muted);font-size:13px}
+    .step:not(:last-child):after{
+      content:"→";position:absolute;right:-12px;top:48%;z-index:4;
+      width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+      background:var(--violet);color:#fff;font-size:12px
+    }
+
+    .promise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .promise{
+      padding:28px;background:#fff;border:1px solid var(--line);border-radius:22px
+    }
+    .promise q{font-size:18px;font-weight:750;line-height:1.45}
+    .promise p{color:var(--muted);font-size:13px;margin:18px 0 0}
+
+    .contact-box{
+      display:grid;grid-template-columns:.95fr 1.05fr;gap:36px;
+      background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:42px;
+      box-shadow:var(--shadow)
+    }
+    .contact-copy h2{font-size:clamp(34px,5vw,54px);line-height:1.03;letter-spacing:-.045em;margin:10px 0 18px}
+    .contact-copy p{color:var(--muted);font-size:17px}
+    .contact-points{display:grid;gap:10px;margin-top:24px;font-size:14px;font-weight:700}
+    .contact-points span{display:flex;gap:10px;align-items:center}
+    .contact-points i{font-style:normal;color:var(--success)}
+    form{display:grid;gap:14px}
+    .field{display:grid;gap:7px}
+    .field label{font-size:12px;font-weight:850;color:#4d5362;text-transform:uppercase;letter-spacing:.06em}
+    .field input,.field textarea{
+      width:100%;border:1px solid var(--line);background:#fbfbfd;border-radius:14px;
+      padding:14px 15px;outline:none;color:var(--ink)
+    }
+    .field input:focus,.field textarea:focus{border-color:#9a88ff;box-shadow:0 0 0 4px rgba(107,77,255,.08)}
+    textarea{min-height:120px;resize:vertical}
+    .form-note{font-size:12px;color:var(--muted);margin:0}
+
+    footer{padding:38px 0 54px}
+    .footer-grid{display:flex;justify-content:space-between;gap:24px;align-items:center;color:#777e8f;font-size:13px}
+    .footer-brand{display:flex;gap:10px;align-items:center;color:var(--ink);font-weight:900}
+    .footer-brand img{width:30px;height:30px;object-fit:contain}
+
+    .floating{
+      position:fixed;right:20px;bottom:20px;z-index:60;
+      display:flex;align-items:center;gap:10px;background:var(--dark);color:#fff;
+      padding:13px 17px;border-radius:999px;box-shadow:0 18px 42px rgba(17,19,27,.24);
+      font-weight:800;font-size:13px
+    }
+    .floating b{width:28px;height:28px;border-radius:50%;background:var(--violet);display:grid;place-items:center}
+
+    @media(max-width:980px){
+      .nav-links{display:none}
+      .menu-btn{display:block}
+      .hero-grid,.why,.contact-box{grid-template-columns:1fr}
+      .hero-grid{gap:54px}
+      .mock-shell{max-width:720px;margin:auto}
+      .benefits{grid-template-columns:repeat(2,1fr)}
+      .plans,.portfolio-grid,.promise-grid{grid-template-columns:1fr}
+      .plan.featured{transform:none}
+      .process{grid-template-columns:repeat(2,1fr)}
+      .step:not(:last-child):after{display:none}
+      .why-panel{position:relative;top:auto;min-height:auto}
+      .trust-strip{grid-template-columns:repeat(2,1fr)}
+      .trust-item:nth-child(2){border-right:0}
+      .trust-item:nth-child(-n+2){border-bottom:1px solid var(--line)}
+    }
+    @media(max-width:620px){
+      .wrap{width:min(var(--max),calc(100% - 26px))}
+      .section{padding:72px 0}
+      .hero{padding-top:56px}
+      .hero h1{font-size:48px}
+      .hero-copy{font-size:17px}
+      .hero-actions{display:grid}
+      .cta{width:100%}
+      .benefits,.process{grid-template-columns:1fr}
+      .mock-page{padding:22px}
+      .trust-strip{grid-template-columns:1fr}
+      .trust-item{border-right:0;border-bottom:1px solid var(--line)!important}
+      .trust-item:last-child{border-bottom:0!important}
+      .contact-box{padding:26px}
+      .footer-grid{align-items:flex-start;flex-direction:column}
+      .floating{left:14px;right:14px;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#inicio" aria-label="Zenix">
+        <img src="../zenix-logo.png" alt="Logo Zenix">
+        <span>Zenix</span>
+      </a>
+      <nav class="nav-links" aria-label="Navegación">
+        <a href="#servicios">Servicios</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="cta" href="#contacto">Solicitar propuesta</a>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-grid">
+          <div>
+            <span class="eyebrow">Diseño web para negocios</span>
+            <h1>Tu negocio merece una web que <em>trabaje por vos.</em></h1>
+            <p class="hero-copy">
+              Diseñamos páginas claras, modernas y rápidas para presentar mejor lo que hacés,
+              generar confianza y convertir visitas en consultas reales.
+            </p>
+            <div class="hero-actions">
+              <a class="cta" href="#contacto">Quiero mi página web</a>
+              <a class="cta secondary" href="#servicios">Ver opciones</a>
+            </div>
+            <div class="micro">
+              <span><b>✓</b> Responsive</span>
+              <span><b>✓</b> Dominio y publicación</span>
+              <span><b>✓</b> Contacto directo</span>
+            </div>
+          </div>
+
+          <div class="mock-shell" aria-label="Vista ilustrativa de una web desarrollada por Zenix">
+            <div class="mock-window">
+              <div class="browser-top">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <div class="browser-url"></div>
+              </div>
+              <div class="mock-page">
+                <div class="mock-nav">
+                  <div class="mock-logo"></div>
+                  <div class="mock-pill"></div>
+                </div>
+                <div class="mock-hero">
+                  <div class="mock-lines">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <div class="mock-card"></div>
+                </div>
+                <div class="mock-features">
+                  <div class="mock-feature"></div>
+                  <div class="mock-feature"></div>
+                  <div class="mock-feature"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="trust-strip">
+          <div class="trust-item"><strong>Diseño a medida</strong><span>No plantillas genéricas</span></div>
+          <div class="trust-item"><strong>Mobile first</strong><span>Lista para celulares</span></div>
+          <div class="trust-item"><strong>Rápida y clara</strong><span>Menos fricción, más contacto</span></div>
+          <div class="trust-item"><strong>Acompañamiento</strong><span>De la idea a la publicación</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="beneficios">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Una web que cumple una función</span>
+          <h2>No alcanza con estar en internet.</h2>
+          <p>La página tiene que explicar, ordenar, transmitir confianza y hacer fácil el siguiente paso.</p>
+        </div>
+        <div class="benefits">
+          <article class="benefit">
+            <div class="icon">01</div>
+            <h3>Diseño profesional</h3>
+            <p>Una identidad visual coherente con tu negocio y pensada para generar una buena primera impresión.</p>
+          </article>
+          <article class="benefit">
+            <div class="icon">02</div>
+            <h3>Adaptada a cada pantalla</h3>
+            <p>Celular, tablet o computadora: la experiencia se mantiene clara y cómoda.</p>
+          </article>
+          <article class="benefit">
+            <div class="icon">03</div>
+            <h3>Rendimiento cuidado</h3>
+            <p>Estructura liviana y directa para que tu web cargue rápido y no haga esperar a tus visitas.</p>
+          </article>
+          <article class="benefit">
+            <div class="icon">04</div>
+            <h3>Contacto sin vueltas</h3>
+            <p>Formularios y llamadas a la acción colocadas donde realmente ayudan a convertir una visita en consulta.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section plans-wrap" id="servicios">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Elegí el punto de partida</span>
+          <h2>Tres formas de llevar tu negocio a la web.</h2>
+          <p>La propuesta final se adapta a lo que realmente necesitás. No pagás funciones que no aportan valor.</p>
+        </div>
+
+        <div class="plans">
+          <article class="plan">
+            <span class="plan-badge">Esencial</span>
+            <h3>Landing page</h3>
+            <p class="desc">Para presentar un servicio, producto o campaña con un objetivo concreto.</p>
+            <div class="price">Presupuesto a medida<small>según contenido y alcance</small></div>
+            <ul class="checklist">
+              <li>Diseño responsive</li>
+              <li>Secciones comerciales</li>
+              <li>Botones de contacto</li>
+              <li>Formulario de consulta</li>
+              <li>Publicación y configuración</li>
+            </ul>
+            <a class="cta" href="#contacto">Consultar landing</a>
+          </article>
+
+          <article class="plan featured">
+            <span class="plan-badge">Más completo</span>
+            <h3>Web corporativa</h3>
+            <p class="desc">Para empresas y profesionales que necesitan explicar mejor quiénes son y qué ofrecen.</p>
+            <div class="price">Presupuesto a medida<small>estructura pensada para tu negocio</small></div>
+            <ul class="checklist">
+              <li>Todo lo de una landing</li>
+              <li>Varias páginas o secciones</li>
+              <li>Servicios y presentación</li>
+              <li>SEO técnico básico</li>
+              <li>Integraciones necesarias</li>
+              <li>Acompañamiento de publicación</li>
+            </ul>
+            <a class="cta" href="#contacto">Quiero una web completa</a>
+          </article>
+
+          <article class="plan">
+            <span class="plan-badge">Comercio</span>
+            <h3>Catálogo o tienda</h3>
+            <p class="desc">Para mostrar productos, recibir pedidos o construir una experiencia de venta online.</p>
+            <div class="price">Presupuesto a medida<small>según catálogo e integraciones</small></div>
+            <ul class="checklist">
+              <li>Diseño responsive</li>
+              <li>Catálogo organizado</li>
+              <li>Fichas de producto</li>
+              <li>Carrito o pedido por contacto</li>
+              <li>Integraciones según necesidad</li>
+            </ul>
+            <a class="cta" href="#contacto">Consultar tienda</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="proyectos">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Proyectos y demostraciones</span>
+          <h2>La mejor explicación es ver el trabajo.</h2>
+          <p>Ejemplos reales de diseño, desarrollo y producto digital trabajados dentro del ecosistema Zenix.</p>
+        </div>
+
+        <div class="portfolio-grid">
+          <article class="project">
+            <div class="project-visual">
+              <div class="screen">
+                <div class="screen-head"><i></i><i></i><i></i></div>
+                <div class="screen-line"></div>
+                <div class="screen-line soft"></div>
+                <div class="screen-blocks"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-kicker">Marca / Servicios</span>
+              <h3>Zenix AR</h3>
+              <p>Sitio corporativo para presentar servicios digitales, producto y tecnología con una identidad propia.</p>
+              <a href="https://zenix.com.ar" target="_blank" rel="noopener">Ver proyecto →</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual">
+              <div class="screen">
+                <div class="screen-head"><i></i><i></i><i></i></div>
+                <div class="screen-line" style="width:48%"></div>
+                <div class="screen-line soft" style="width:90%"></div>
+                <div class="screen-blocks"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-kicker">Gastronomía</span>
+              <h3>Doña Lupita</h3>
+              <p>Concepto web gastronómico pensado para mostrar propuesta, productos y canales de contacto de forma visual.</p>
+              <a href="../" target="_blank" rel="noopener">Ver proyecto →</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual">
+              <div class="screen">
+                <div class="screen-head"><i></i><i></i><i></i></div>
+                <div class="screen-line" style="width:72%"></div>
+                <div class="screen-line soft"></div>
+                <div class="screen-blocks"><span></span><span></span><span></span></div>
+              </div>
+            </div>
+            <div class="project-body">
+              <span class="project-kicker">Desarrollo</span>
+              <h3>Productos digitales</h3>
+              <p>Aplicaciones, extensiones y herramientas creadas con el mismo criterio: menos ruido, más utilidad.</p>
+              <a href="https://zenix.com.ar/servicios.html" target="_blank" rel="noopener">Conocer servicios →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap why">
+        <div class="why-panel">
+          <div>
+            <span class="eyebrow" style="color:#b9adff">Por qué Zenix</span>
+            <div class="big">Diseño y tecnología sin vueltas.</div>
+          </div>
+          <p>Primero entendemos qué necesitás resolver. Después elegimos la forma más simple de construirlo bien.</p>
+        </div>
+
+        <div class="why-list">
+          <article class="why-row">
+            <div class="n">01</div>
+            <div><h3>Tu negocio primero</h3><p>La tecnología se elige según el problema, no al revés.</p></div>
+          </article>
+          <article class="why-row">
+            <div class="n">02</div>
+            <div><h3>Diseño con intención</h3><p>Cada sección tiene que ayudar a entender, confiar o avanzar.</p></div>
+          </article>
+          <article class="why-row">
+            <div class="n">03</div>
+            <div><h3>Contacto directo</h3><p>Sin capas innecesarias entre tu idea y quien la construye.</p></div>
+          </article>
+          <article class="why-row">
+            <div class="n">04</div>
+            <div><h3>Escalable</h3><p>Podemos empezar por una web clara y después sumar funciones, automatizaciones o herramientas.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="proceso">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Cómo trabajamos</span>
+          <h2>De la idea a una web publicada.</h2>
+          <p>Un proceso simple para que siempre sepas qué estamos construyendo y por qué.</p>
+        </div>
+
+        <div class="process">
+          <article class="step"><strong>01</strong><h3>Entender</h3><p>Vemos tu negocio, objetivo y qué necesita encontrar el cliente.</p></article>
+          <article class="step"><strong>02</strong><h3>Ordenar</h3><p>Definimos contenido, estructura, secciones y recorrido principal.</p></article>
+          <article class="step"><strong>03</strong><h3>Diseñar</h3><p>Creamos una identidad clara, moderna y coherente con tu marca.</p></article>
+          <article class="step"><strong>04</strong><h3>Construir</h3><p>Desarrollamos la web, la adaptamos y probamos sus puntos importantes.</p></article>
+          <article class="step"><strong>05</strong><h3>Publicar</h3><p>La dejamos online y lista para empezar a recibir visitas y consultas.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:18px">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Compromisos de trabajo</span>
+          <h2>Sin promesas infladas.</h2>
+          <p>Preferimos que la confianza se construya con claridad, proceso y resultado.</p>
+        </div>
+        <div class="promise-grid">
+          <article class="promise">
+            <q>Vas a saber qué incluye el proyecto antes de empezar.</q>
+            <p>Alcance claro y prioridades definidas.</p>
+          </article>
+          <article class="promise">
+            <q>La web va a responder a una necesidad concreta de tu negocio.</q>
+            <p>Sin funciones de relleno que compliquen el proyecto.</p>
+          </article>
+          <article class="promise">
+            <q>El resultado se piensa para personas reales, no solo para verse lindo.</q>
+            <p>Claridad, velocidad y contacto como parte del diseño.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contacto">
+      <div class="wrap">
+        <div class="contact-box">
+          <div class="contact-copy">
+            <span class="eyebrow">Hablemos</span>
+            <h2>Tu próxima web puede empezar con una conversación.</h2>
+            <p>Contanos qué hacés y qué te gustaría conseguir con tu página. No hace falta que tengas resuelto lo técnico.</p>
+            <div class="contact-points">
+              <span><i>✓</i> Consulta sin compromiso</span>
+              <span><i>✓</i> Propuesta según tu necesidad</span>
+              <span><i>✓</i> Contacto directo</span>
+            </div>
+          </div>
+
+          <form id="leadForm">
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input id="nombre" name="nombre" autocomplete="name" placeholder="Tu nombre" required>
+            </div>
+            <div class="field">
+              <label for="negocio">Negocio o proyecto</label>
+              <input id="negocio" name="negocio" placeholder="Ej. Rotisería, estudio, servicio profesional">
+            </div>
+            <div class="field">
+              <label for="mensaje">¿Qué necesitás?</label>
+              <textarea id="mensaje" name="mensaje" placeholder="Contanos brevemente qué te gustaría hacer..." required></textarea>
+            </div>
+            <button class="cta" type="submit">Enviar consulta</button>
+            <p class="form-note">Al enviar se abrirá tu aplicación de correo con la consulta preparada.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-grid">
+      <div class="footer-brand">
+        <img src="../zenix-logo.png" alt="">
+        <span>Zenix AR</span>
+      </div>
+      <span>Diseño web · Apps Android · Extensiones · Automatización</span>
+      <a href="https://zenix.com.ar" target="_blank" rel="noopener">zenix.com.ar ↗</a>
+    </div>
+  </footer>
+
+  <a class="floating" href="#contacto" aria-label="Contactar a Zenix">
+    <b>↗</b> Hablemos de tu web
+  </a>
+
+  <script>
+    document.getElementById('leadForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value.trim();
+      const negocio = document.getElementById('negocio').value.trim();
+      const mensaje = document.getElementById('mensaje').value.trim();
+      const subject = encodeURIComponent('Consulta web para Zenix AR');
+      const body = encodeURIComponent(
+        'Hola Zenix,\n\nSoy ' + nombre +
+        (negocio ? ' y mi negocio/proyecto es: ' + negocio : '') +
+        '.\n\nNecesito:\n' + mensaje +
+        '\n\nQuisiera recibir una propuesta.'
+      );
+      window.location.href = 'mailto:josene242@gmail.com?subject=' + subject + '&body=' + body;
+    });
+  </script>
+</body>
+</html>
