@@ -297,19 +297,27 @@
       height:330vh;background:#eadfce;position:relative
     }
     .portfolio-sticky{
-      position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden
+      position:sticky;
+      top:76px;
+      height:calc(100vh - 76px);
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      padding:18px 0 16px;
+      background:#eadfce;
+      z-index:2
     }
     .portfolio-inner{width:100%}
     .portfolio-top{
-      display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:28px
+      display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:18px
     }
-    .portfolio-top h2{font-size:clamp(42px,5.8vw,72px);line-height:.95;letter-spacing:-.055em;margin:8px 0 0;max-width:700px}
+    .portfolio-top h2{font-size:clamp(38px,5vw,62px);line-height:.94;letter-spacing:-.055em;margin:7px 0 0;max-width:700px}
     .portfolio-top p{max-width:360px;color:#69665e;margin:0}
     .rail{
       display:flex;gap:24px;width:max-content;will-change:transform
     }
     .case{
-      width:min(74vw,780px);height:520px;border-radius:32px;overflow:hidden;
+      width:min(74vw,780px);height:clamp(360px,calc(100vh - 330px),470px);border-radius:32px;overflow:hidden;
       background:#fff6ea;border:1px solid rgba(15,63,68,.1);box-shadow:0 28px 70px rgba(50,47,41,.13);
       display:grid;grid-template-columns:1.05fr .95fr
     }
@@ -336,7 +344,7 @@
     .case h3{font-size:34px;letter-spacing:-.045em;margin:11px 0 10px}
     .case p{color:#6b6f70;margin:0 0 24px}
     .case .btn{margin-top:auto;align-self:flex-start}
-    .rail-counter{margin-top:18px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#6d6a62}
+    .rail-counter{margin-top:12px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#6d6a62}
 
     .why{
       background:#132b2e;color:#fff
@@ -456,7 +464,7 @@
       .process-grid:before{display:none}
       .why-sticky{position:relative;top:auto;min-height:auto}
       .portfolio-stage{height:auto;padding:100px 0}
-      .portfolio-sticky{position:relative;height:auto;display:block;overflow:visible}
+      .portfolio-sticky{position:relative;top:auto;height:auto;display:block;overflow:visible;padding:0;background:transparent}
       .portfolio-top{align-items:start;flex-direction:column}
       .rail{width:auto;display:grid;grid-template-columns:1fr;transform:none!important}
       .case{width:100%;height:auto;min-height:520px}
@@ -490,6 +498,29 @@
       *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
       .reveal,.reveal-left,.reveal-right{opacity:1!important;transform:none!important}
     }
+  
+    /* Portfolio viewport fix */
+    @media (min-width:981px) and (max-height:820px){
+      .portfolio-top{margin-bottom:14px}
+      .portfolio-top h2{font-size:clamp(36px,4.4vw,56px)}
+      .portfolio-top p{font-size:14px;max-width:330px}
+      .case{height:clamp(350px,calc(100vh - 300px),440px)}
+      .case-body{padding:28px}
+      .case h3{font-size:30px}
+      .case p{font-size:14px;margin-bottom:18px}
+      .case-visual{padding:22px}
+      .rail-counter{margin-top:10px}
+    }
+    @media (min-width:981px) and (max-height:700px){
+      .portfolio-sticky{padding:10px 0 8px}
+      .portfolio-top h2{font-size:42px}
+      .portfolio-top p{display:none}
+      .case{height:350px}
+      .case-body{padding:24px}
+      .case h3{font-size:28px}
+      .case p{font-size:13px}
+    }
+
   </style>
 </head>
 <body>
@@ -860,9 +891,13 @@
 
       if(!reduced && stage && rail && window.innerWidth > 980){
         const rect = stage.getBoundingClientRect();
-        const travel = stage.offsetHeight - window.innerHeight;
-        const p = Math.min(1,Math.max(0,-rect.top / travel));
-        const maxShift = Math.max(0,rail.scrollWidth - window.innerWidth + 80);
+        const headerOffset = 76;
+        const stickyHeight = window.innerHeight - headerOffset;
+        const travel = Math.max(1, stage.offsetHeight - stickyHeight);
+        const p = Math.min(1,Math.max(0,(headerOffset - rect.top) / travel));
+        const inner = document.querySelector('.portfolio-inner');
+        const visibleWidth = inner ? inner.clientWidth : window.innerWidth;
+        const maxShift = Math.max(0,rail.scrollWidth - visibleWidth);
         rail.style.transform = 'translateX(' + (-maxShift * p) + 'px)';
       }
     }
