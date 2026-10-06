@@ -121,3 +121,159 @@ a{text-decoration:none;color:inherit}
   .pizza-grid-rich .pizza-card,.pizza-grid-rich .pizza-card:nth-child(1),.pizza-grid-rich .pizza-card:nth-child(n+2){min-height:auto}
   .pizza-grid-rich .pizza-card .pizza-image,.pizza-grid-rich .pizza-card:nth-child(1) .pizza-image,.pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image{height:300px}
 }
+
+/* v4 final polish */
+.hero-content>p{
+  max-width:560px;
+  margin:6px 0 30px;
+  line-height:1.68;
+}
+.menu-section{
+  padding-top:92px;
+  padding-bottom:88px;
+}
+.pizza-grid-rich .pizza-card:nth-child(6){
+  grid-column:2/4;
+  min-height:300px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+}
+.pizza-grid-rich .pizza-card:nth-child(6) .pizza-image{
+  height:100%;
+  min-height:300px;
+}
+.pizza-grid-rich .pizza-card:nth-child(6) .pizza-card-body{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:30px;
+}
+.pizza-grid-rich .pizza-card:nth-child(6) h3{
+  font-size:42px;
+}
+.menu-actions{margin-top:28px}
+.menu-categories{margin-top:26px;padding-top:24px}
+.photo-mosaic{padding-top:80px;padding-bottom:80px}
+.order-strip{
+  padding-top:58px;
+  padding-bottom:58px;
+  background:#ead8bf;
+  border-top:2px solid rgba(21,18,15,.12);
+  border-bottom:2px solid rgba(21,18,15,.12);
+}
+.order-title h2{font-size:62px}
+.order-steps{
+  gap:10px;
+  border-left:0;
+}
+.order-step{
+  min-height:132px;
+  padding:20px 22px;
+  border:1px solid rgba(21,18,15,.12);
+  background:rgba(255,250,243,.6);
+}
+.order-step strong{font-size:34px}
+.local-section{padding-top:88px;padding-bottom:88px}
+.local-heading{margin-bottom:38px}
+.brand-break{
+  min-height:220px;
+  grid-template-columns:1fr .95fr;
+}
+.brand-break-word{
+  font-size:clamp(110px,14vw,225px);
+  transform:none;
+  line-height:.82;
+  padding:28px 0;
+}
+.brand-break-copy{
+  position:relative;
+  padding-top:8px;
+  padding-bottom:8px;
+}
+.brand-break-copy:before{
+  content:"";
+  display:block;
+  width:48px;
+  height:3px;
+  background:var(--tomato);
+  margin-bottom:20px;
+}
+.final-cta{min-height:580px}
+.footer-premium{
+  display:block;
+  min-height:0;
+  padding:0;
+  background:#0d0b0a;
+}
+.footer-top{
+  padding:34px clamp(22px,6vw,90px);
+  display:grid;
+  grid-template-columns:1.2fr 1fr auto;
+  gap:34px;
+  align-items:center;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.footer-links{
+  display:flex;
+  gap:24px;
+  justify-content:center;
+}
+.footer-links a{
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#b9aea4;
+}
+.footer-whatsapp{
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:999px;
+  padding:12px 16px;
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:.2s;
+}
+.footer-whatsapp:hover{background:#fff;color:#111}
+.footer-bottom{
+  padding:18px clamp(22px,6vw,90px) 24px;
+  display:grid;
+  grid-template-columns:1.4fr 1fr auto;
+  gap:28px;
+  align-items:center;
+  color:#7f7770;
+  font-size:9px;
+}
+.footer-bottom .footer-note{max-width:520px}
+.footer-bottom>span{text-align:center}
+.footer-bottom>a{
+  font-size:9px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:#c9beb4;
+}
+@media(max-width:900px){
+  .pizza-grid-rich .pizza-card:nth-child(6){
+    grid-column:auto;
+    display:flex;
+    min-height:440px;
+  }
+  .pizza-grid-rich .pizza-card:nth-child(6) .pizza-image{height:335px;min-height:0}
+  .pizza-grid-rich .pizza-card:nth-child(6) .pizza-card-body{padding:20px}
+  .pizza-grid-rich .pizza-card:nth-child(6) h3{font-size:33px}
+  .footer-top,.footer-bottom{grid-template-columns:1fr}
+  .footer-links{justify-content:flex-start}
+  .footer-bottom>span{text-align:left}
+  .footer-whatsapp{justify-self:start}
+}
+@media(max-width:620px){
+  .menu-section{padding-top:70px;padding-bottom:70px}
+  .photo-mosaic{padding-top:64px;padding-bottom:64px}
+  .order-strip{padding-top:48px;padding-bottom:48px}
+  .order-title h2{font-size:52px}
+  .order-step{min-height:auto}
+  .local-section{padding-top:70px;padding-bottom:70px}
+  .brand-break{min-height:0}
+  .brand-break-word{font-size:31vw;padding:10px 0 20px}
+  .footer-links{flex-wrap:wrap}
+  .footer-top{padding-top:28px;padding-bottom:28px}
+}
