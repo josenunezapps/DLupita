@@ -4,27 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
-  <meta name="theme-color" content="#6b4dff">
-  <title>Zenix — Diseño web para negocios</title>
-  <meta name="description" content="Páginas web claras, modernas y pensadas para convertir visitas en consultas. Diseño, desarrollo y acompañamiento de Zenix AR.">
+  <meta name="theme-color" content="#0f3f44">
+  <title>Zenix — Diseño web que mueve negocios</title>
+  <meta name="description" content="Diseño web, automatización y productos digitales para negocios que quieren crecer con una presencia más clara, moderna y útil.">
   <style>
     :root{
-      --bg:#f7f8fc;
-      --surface:#ffffff;
-      --surface-2:#f0f1ff;
-      --ink:#151821;
-      --muted:#687084;
-      --line:#e6e8f0;
-      --violet:#6b4dff;
-      --violet-2:#8d78ff;
-      --dark:#11131b;
-      --soft:#ece9ff;
-      --success:#1f9d72;
-      --shadow:0 24px 70px rgba(31,34,49,.10);
-      --shadow-soft:0 12px 36px rgba(31,34,49,.08);
-      --radius:28px;
-      --radius-sm:18px;
-      --max:1180px;
+      --petrol:#0f3f44;
+      --petrol-deep:#082c30;
+      --petrol-2:#165960;
+      --aqua:#56d6c5;
+      --aqua-2:#9be6da;
+      --sand:#efe3cf;
+      --sand-2:#f8f0e4;
+      --ink:#142024;
+      --cream:#fffaf2;
+      --muted:#6f7777;
+      --line:rgba(15,63,68,.14);
+      --dark-line:rgba(255,255,255,.12);
+      --radius:30px;
+      --shadow:0 28px 80px rgba(4,39,42,.16);
+      --max:1200px;
     }
 
     *{box-sizing:border-box}
@@ -32,1074 +31,618 @@
     body{
       margin:0;
       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:var(--bg);
       color:var(--ink);
-      line-height:1.55;
+      background:var(--sand-2);
+      line-height:1.5;
+      overflow-x:hidden;
       -webkit-font-smoothing:antialiased;
     }
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
     button,input,textarea{font:inherit}
-    .wrap{width:min(var(--max),calc(100% - 40px));margin:auto}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 42px));margin:auto}
     .eyebrow{
-      display:inline-flex;align-items:center;gap:8px;
-      font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
-      color:var(--violet);
+      display:inline-flex;align-items:center;gap:10px;
+      font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase
     }
-    .eyebrow:before{content:"";width:26px;height:2px;background:var(--violet);border-radius:99px}
-    .section{padding:96px 0}
-    .section-head{max-width:760px;margin-bottom:42px}
+    .eyebrow:before{content:"";width:26px;height:2px;background:currentColor;border-radius:99px}
+    .section{padding:105px 0;position:relative}
+    .section-head{max-width:780px;margin-bottom:50px}
     .section-head h2{
       margin:10px 0 14px;
-      font-size:clamp(34px,5vw,56px);
-      line-height:1.05;letter-spacing:-.04em;
+      font-size:clamp(40px,6vw,74px);
+      line-height:.98;letter-spacing:-.055em
     }
-    .section-head p{margin:0;color:var(--muted);font-size:18px}
+    .section-head p{margin:0;font-size:18px;color:var(--muted);max-width:690px}
+
+    .progress{
+      position:fixed;left:0;top:0;height:3px;width:0;z-index:100;
+      background:linear-gradient(90deg,var(--aqua),#ffffff,var(--aqua));
+      box-shadow:0 0 18px rgba(86,214,197,.55)
+    }
 
     header{
-      position:sticky;top:0;z-index:50;
-      background:rgba(247,248,252,.88);
-      backdrop-filter:blur(16px);
-      border-bottom:1px solid rgba(230,232,240,.85);
+      position:fixed;left:0;right:0;top:0;z-index:50;
+      background:rgba(248,240,228,.66);
+      backdrop-filter:blur(18px) saturate(135%);
+      border-bottom:1px solid rgba(15,63,68,.08);
+      transition:.25s ease
+    }
+    header.scrolled{
+      background:rgba(248,240,228,.94);
+      box-shadow:0 12px 34px rgba(11,50,53,.08)
     }
     .nav{
-      min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+      min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px
     }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:950;letter-spacing:-.04em}
     .brand img{width:42px;height:42px;object-fit:contain}
     .brand span{font-size:22px}
-    .nav-links{display:flex;gap:28px;align-items:center;color:#4d5362;font-weight:650;font-size:14px}
-    .nav-links a:hover{color:var(--violet)}
-    .cta{
+    .nav-links{display:flex;align-items:center;gap:28px;font-size:14px;font-weight:760;color:#314448}
+    .nav-links a{position:relative}
+    .nav-links a:after{
+      content:"";position:absolute;left:0;right:100%;bottom:-6px;height:2px;
+      background:var(--petrol);transition:right .25s ease
+    }
+    .nav-links a:hover:after{right:0}
+    .btn{
       display:inline-flex;align-items:center;justify-content:center;gap:9px;
-      border-radius:999px;padding:14px 22px;font-weight:800;
-      background:var(--violet);color:#fff;border:1px solid var(--violet);
-      box-shadow:0 10px 30px rgba(107,77,255,.24);
-      transition:.22s ease;
-    }
-    .cta:hover{transform:translateY(-2px);box-shadow:0 15px 38px rgba(107,77,255,.30)}
-    .cta.secondary{
-      background:#fff;color:var(--ink);border-color:var(--line);box-shadow:none;
-    }
-    .cta.secondary:hover{border-color:#cbc4ff;color:var(--violet)}
-    .menu-btn{display:none;border:0;background:transparent;font-size:26px;padding:8px}
-
-    .hero{padding:82px 0 68px;overflow:hidden;position:relative}
-    .hero:before{
-      content:"";position:absolute;left:-160px;top:-220px;width:520px;height:520px;
-      border-radius:50%;background:radial-gradient(circle,rgba(107,77,255,.15),rgba(107,77,255,0) 68%);
-      pointer-events:none;
-    }
-    .hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:72px;align-items:center}
-    .hero h1{
-      margin:14px 0 20px;
-      font-size:clamp(48px,7vw,82px);line-height:.96;letter-spacing:-.06em;
-    }
-    .hero h1 em{font-style:normal;color:var(--violet)}
-    .hero-copy{max-width:690px;color:var(--muted);font-size:19px;margin:0 0 30px}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px}
-    .micro{
-      display:flex;flex-wrap:wrap;gap:18px;margin-top:28px;color:#5f6676;font-size:14px;font-weight:650
-    }
-    .micro span{display:flex;align-items:center;gap:7px}
-    .micro b{
-      width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
-      background:#e9fbf5;color:var(--success);font-size:12px;
-    }
-
-    .mock-shell{
-      position:relative;border-radius:34px;padding:18px;background:#1a1d28;
-      box-shadow:0 36px 90px rgba(23,26,38,.24);
-      transform:rotate(1.2deg);
-    }
-    .mock-shell:after{
-      content:"";position:absolute;z-index:-1;inset:auto -36px -38px 70px;height:65%;
-      border-radius:44px;background:linear-gradient(140deg,#dcd5ff,#f0edff);
-    }
-    .mock-window{
-      background:#fff;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.08)
-    }
-    .browser-top{height:44px;background:#f4f5f8;display:flex;align-items:center;gap:6px;padding:0 14px}
-    .dot{width:9px;height:9px;border-radius:50%;background:#cdd1db}
-    .browser-url{
-      margin-left:8px;height:22px;flex:1;max-width:260px;border-radius:99px;background:#e6e8ef
-    }
-    .mock-page{padding:34px}
-    .mock-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
-    .mock-logo{width:76px;height:14px;border-radius:99px;background:#242735}
-    .mock-pill{width:86px;height:26px;border-radius:99px;background:var(--violet)}
-    .mock-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center}
-    .mock-lines span{display:block;border-radius:99px;background:#222633;margin-bottom:10px}
-    .mock-lines span:nth-child(1){width:90%;height:17px}
-    .mock-lines span:nth-child(2){width:72%;height:17px}
-    .mock-lines span:nth-child(3){width:93%;height:8px;background:#d9dce5;margin-top:18px}
-    .mock-lines span:nth-child(4){width:68%;height:8px;background:#d9dce5}
-    .mock-card{
-      aspect-ratio:1/1;border-radius:20px;background:
-      linear-gradient(145deg,rgba(255,255,255,.75),rgba(255,255,255,.2)),
-      linear-gradient(135deg,#6b4dff,#b9acff);
-      position:relative;overflow:hidden;
-    }
-    .mock-card:before,.mock-card:after{
-      content:"";position:absolute;border-radius:20px;background:rgba(255,255,255,.24)
-    }
-    .mock-card:before{inset:22px 22px auto;height:32%}
-    .mock-card:after{left:22px;right:48px;bottom:24px;height:12px;border-radius:99px}
-    .mock-features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
-    .mock-feature{height:86px;border-radius:14px;background:#f2f3f8}
-
-    .trust-strip{
-      margin-top:58px;display:grid;grid-template-columns:repeat(4,1fr);
-      border:1px solid var(--line);background:#fff;border-radius:24px;overflow:hidden;
-      box-shadow:var(--shadow-soft);
-    }
-    .trust-item{padding:24px;text-align:center;border-right:1px solid var(--line)}
-    .trust-item:last-child{border-right:0}
-    .trust-item strong{display:block;font-size:15px;margin-bottom:5px}
-    .trust-item span{font-size:13px;color:var(--muted)}
-
-    .benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-    .benefit{
-      background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px;
-      transition:.22s ease;
-    }
-    .benefit:hover{transform:translateY(-4px);box-shadow:var(--shadow-soft)}
-    .icon{
-      width:46px;height:46px;border-radius:14px;background:var(--soft);color:var(--violet);
-      display:grid;place-items:center;font-size:21px;margin-bottom:20px;font-weight:900
-    }
-    .benefit h3{margin:0 0 8px;font-size:18px}
-    .benefit p{margin:0;color:var(--muted);font-size:14px}
-
-    .plans-wrap{background:var(--dark);color:#fff;position:relative;overflow:hidden}
-    .plans-wrap:before{
-      content:"";position:absolute;width:520px;height:520px;border-radius:50%;
-      background:radial-gradient(circle,rgba(107,77,255,.26),transparent 68%);
-      right:-120px;top:-190px
-    }
-    .plans-wrap .section-head p{color:#aeb3c1}
-    .plans-wrap .eyebrow{color:#a998ff}
-    .plans-wrap .eyebrow:before{background:#a998ff}
-    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative}
-    .plan{
-      background:#191c26;border:1px solid #2b2f3c;border-radius:28px;padding:30px;
-      display:flex;flex-direction:column;min-height:510px
-    }
-    .plan.featured{
-      background:#fff;color:var(--ink);transform:translateY(-10px);
-      border-color:#fff;box-shadow:0 30px 70px rgba(0,0,0,.28)
-    }
-    .plan-badge{
-      align-self:flex-start;border-radius:999px;padding:8px 11px;
-      font-size:11px;font-weight:850;letter-spacing:.06em;text-transform:uppercase;
-      background:#2d3140;color:#c4c8d4;margin-bottom:20px
-    }
-    .plan.featured .plan-badge{background:var(--soft);color:var(--violet)}
-    .plan h3{font-size:26px;margin:0 0 8px}
-    .plan .desc{color:#aeb3c1;margin:0 0 20px;min-height:52px}
-    .plan.featured .desc{color:var(--muted)}
-    .price{
-      font-size:22px;font-weight:900;letter-spacing:-.03em;margin:4px 0 22px
-    }
-    .price small{display:block;color:#8f95a6;font-weight:600;font-size:13px;letter-spacing:0;margin-top:2px}
-    .plan.featured .price small{color:var(--muted)}
-    .checklist{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:12px}
-    .checklist li{display:flex;gap:10px;align-items:flex-start;font-size:14px}
-    .checklist li:before{
-      content:"✓";width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
-      background:#263128;color:#66d5a6;font-size:12px;flex:0 0 auto;margin-top:1px
-    }
-    .plan.featured .checklist li:before{background:#e9fbf5;color:var(--success)}
-    .plan .cta{margin-top:auto;width:100%}
-    .plan:not(.featured) .cta{background:#fff;color:#151821;border-color:#fff;box-shadow:none}
-
-    .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-    .project{
-      background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;
-      transition:.23s ease
-    }
-    .project:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
-    .project-visual{
-      aspect-ratio:16/10;padding:22px;display:flex;align-items:end;
-      background:linear-gradient(140deg,#272b38,#6b4dff);
-    }
-    .project:nth-child(2) .project-visual{background:linear-gradient(140deg,#fcdfbe,#b9502b)}
-    .project:nth-child(3) .project-visual{background:linear-gradient(140deg,#ecf2ff,#6b7fc8)}
-    .screen{
-      width:100%;height:82%;background:#fff;border-radius:12px 12px 0 0;
-      box-shadow:0 12px 30px rgba(0,0,0,.18);padding:12px
-    }
-    .screen-head{display:flex;gap:4px;margin-bottom:12px}
-    .screen-head i{width:5px;height:5px;border-radius:50%;background:#d6d8df}
-    .screen-line{height:7px;background:#252936;border-radius:99px;margin:8px 0;width:62%}
-    .screen-line.soft{background:#e3e5eb;width:82%;height:5px}
-    .screen-blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:18px}
-    .screen-blocks span{height:36px;background:#f0f1f5;border-radius:6px}
-    .project-body{padding:24px}
-    .project-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet);font-weight:850}
-    .project h3{font-size:21px;margin:8px 0}
-    .project p{color:var(--muted);font-size:14px;margin:0 0 18px}
-    .project a{font-weight:850;color:var(--violet);font-size:14px}
-
-    .why{display:grid;grid-template-columns:.85fr 1.15fr;gap:68px;align-items:start}
-    .why-panel{
-      position:sticky;top:112px;background:linear-gradient(150deg,#151821,#2e245f);
-      color:#fff;border-radius:30px;padding:36px;min-height:440px;
-      display:flex;flex-direction:column;justify-content:space-between;
-      box-shadow:var(--shadow)
-    }
-    .why-panel .big{font-size:42px;font-weight:900;line-height:1.04;letter-spacing:-.05em}
-    .why-panel p{color:#c5c8d3}
-    .why-list{display:grid;gap:14px}
-    .why-row{
-      background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;
-      display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start
-    }
-    .why-row .n{font-size:13px;font-weight:900;color:var(--violet);padding-top:3px}
-    .why-row h3{margin:0 0 6px;font-size:19px}
-    .why-row p{margin:0;color:var(--muted);font-size:14px}
-
-    .process{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-    .step{
-      position:relative;background:#fff;border:1px solid var(--line);
-      border-radius:22px;padding:24px;min-height:210px
-    }
-    .step strong{font-size:13px;color:var(--violet)}
-    .step h3{margin:34px 0 8px;font-size:18px}
-    .step p{margin:0;color:var(--muted);font-size:13px}
-    .step:not(:last-child):after{
-      content:"→";position:absolute;right:-12px;top:48%;z-index:4;
-      width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
-      background:var(--violet);color:#fff;font-size:12px
-    }
-
-    .promise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .promise{
-      padding:28px;background:#fff;border:1px solid var(--line);border-radius:22px
-    }
-    .promise q{font-size:18px;font-weight:750;line-height:1.45}
-    .promise p{color:var(--muted);font-size:13px;margin:18px 0 0}
-
-    .contact-box{
-      display:grid;grid-template-columns:.95fr 1.05fr;gap:36px;
-      background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:42px;
-      box-shadow:var(--shadow)
-    }
-    .contact-copy h2{font-size:clamp(34px,5vw,54px);line-height:1.03;letter-spacing:-.045em;margin:10px 0 18px}
-    .contact-copy p{color:var(--muted);font-size:17px}
-    .contact-points{display:grid;gap:10px;margin-top:24px;font-size:14px;font-weight:700}
-    .contact-points span{display:flex;gap:10px;align-items:center}
-    .contact-points i{font-style:normal;color:var(--success)}
-    form{display:grid;gap:14px}
-    .field{display:grid;gap:7px}
-    .field label{font-size:12px;font-weight:850;color:#4d5362;text-transform:uppercase;letter-spacing:.06em}
-    .field input,.field textarea{
-      width:100%;border:1px solid var(--line);background:#fbfbfd;border-radius:14px;
-      padding:14px 15px;outline:none;color:var(--ink)
-    }
-    .field input:focus,.field textarea:focus{border-color:#9a88ff;box-shadow:0 0 0 4px rgba(107,77,255,.08)}
-    textarea{min-height:120px;resize:vertical}
-    .form-note{font-size:12px;color:var(--muted);margin:0}
-
-    footer{padding:38px 0 54px}
-    .footer-grid{display:flex;justify-content:space-between;gap:24px;align-items:center;color:#777e8f;font-size:13px}
-    .footer-brand{display:flex;gap:10px;align-items:center;color:var(--ink);font-weight:900}
-    .footer-brand img{width:30px;height:30px;object-fit:contain}
-
-    .floating{
-      position:fixed;right:20px;bottom:20px;z-index:60;
-      display:flex;align-items:center;gap:10px;background:var(--dark);color:#fff;
-      padding:13px 17px;border-radius:999px;box-shadow:0 18px 42px rgba(17,19,27,.24);
-      font-weight:800;font-size:13px
-    }
-    .floating b{width:28px;height:28px;border-radius:50%;background:var(--violet);display:grid;place-items:center}
-
-    @media(max-width:980px){
-      .nav-links{display:none}
-      .menu-btn{display:block}
-      .hero-grid,.why,.contact-box{grid-template-columns:1fr}
-      .hero-grid{gap:54px}
-      .mock-shell{max-width:720px;margin:auto}
-      .benefits{grid-template-columns:repeat(2,1fr)}
-      .plans,.portfolio-grid,.promise-grid{grid-template-columns:1fr}
-      .plan.featured{transform:none}
-      .process{grid-template-columns:repeat(2,1fr)}
-      .step:not(:last-child):after{display:none}
-      .why-panel{position:relative;top:auto;min-height:auto}
-      .trust-strip{grid-template-columns:repeat(2,1fr)}
-      .trust-item:nth-child(2){border-right:0}
-      .trust-item:nth-child(-n+2){border-bottom:1px solid var(--line)}
-    }
-    @media(max-width:620px){
-      .wrap{width:min(var(--max),calc(100% - 26px))}
-      .section{padding:72px 0}
-      .hero{padding-top:56px}
-      .hero h1{font-size:48px}
-      .hero-copy{font-size:17px}
-      .hero-actions{display:grid}
-      .cta{width:100%}
-      .benefits,.process{grid-template-columns:1fr}
-      .mock-page{padding:22px}
-      .trust-strip{grid-template-columns:1fr}
-      .trust-item{border-right:0;border-bottom:1px solid var(--line)!important}
-      .trust-item:last-child{border-bottom:0!important}
-      .contact-box{padding:26px}
-      .footer-grid{align-items:flex-start;flex-direction:column}
-      .floating{left:14px;right:14px;justify-content:center}
-    }
-  
-    /* Motion layer */
-    body{overflow-x:hidden}
-    .scroll-progress{
-      position:fixed;left:0;top:0;height:3px;width:0;z-index:100;
-      background:linear-gradient(90deg,var(--violet),#b49cff);
-      box-shadow:0 0 18px rgba(107,77,255,.5);
-      transition:width .08s linear
-    }
-    .hero:after{
-      content:"";position:absolute;right:-140px;top:40px;width:420px;height:420px;
-      border-radius:50%;pointer-events:none;filter:blur(10px);
-      background:radial-gradient(circle,rgba(141,120,255,.18),rgba(141,120,255,0) 68%);
-      animation:orbDrift 8s ease-in-out infinite alternate
-    }
-    @keyframes orbDrift{
-      from{transform:translate3d(0,0,0) scale(1)}
-      to{transform:translate3d(-80px,70px,0) scale(1.16)}
-    }
-    .hero .eyebrow{animation:heroIn .7s .05s both}
-    .hero h1{animation:heroIn .78s .14s both}
-    .hero-copy{animation:heroIn .78s .24s both}
-    .hero-actions{animation:heroIn .78s .34s both}
-    .hero .micro{animation:heroIn .78s .44s both}
-    .trust-strip{animation:heroIn .82s .58s both}
-    @keyframes heroIn{
-      from{opacity:0;transform:translateY(28px)}
-      to{opacity:1;transform:translateY(0)}
-    }
-    .mock-shell{
-      animation:mockArrive .9s .2s cubic-bezier(.2,.8,.2,1) both,
-                mockFloat 5.5s 1.1s ease-in-out infinite;
-      transform-origin:center center
-    }
-    @keyframes mockArrive{
-      from{opacity:0;transform:translateY(44px) rotate(4deg) scale(.94)}
-      to{opacity:1;transform:translateY(0) rotate(1.2deg) scale(1)}
-    }
-    @keyframes mockFloat{
-      0%,100%{translate:0 0}
-      50%{translate:0 -10px}
-    }
-    .mock-card:before{animation:mockPulse 4s ease-in-out infinite}
-    @keyframes mockPulse{
-      0%,100%{opacity:.55;transform:scale(1)}
-      50%{opacity:.9;transform:scale(1.04)}
-    }
-    .cta{position:relative;overflow:hidden}
-    .cta:after{
-      content:"";position:absolute;inset:-2px auto -2px -45%;
-      width:32%;transform:skewX(-18deg);
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);
-      transition:left .55s ease
-    }
-    .cta:hover:after{left:120%}
-    .reveal{
-      opacity:0;
-      transform:translateY(34px) scale(.985);
-      transition:
-        opacity .72s cubic-bezier(.2,.65,.2,1),
-        transform .72s cubic-bezier(.2,.65,.2,1);
-      will-change:opacity,transform
-    }
-    .reveal.is-visible{opacity:1;transform:translateY(0) scale(1)}
-    .reveal-left{opacity:0;transform:translateX(-36px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.65,.2,1)}
-    .reveal-right{opacity:0;transform:translateX(36px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.65,.2,1)}
-    .reveal-left.is-visible,.reveal-right.is-visible{opacity:1;transform:translateX(0)}
-    .benefit,.plan,.project,.why-row,.step,.promise{
-      transition:
-        transform .28s ease,
-        box-shadow .28s ease,
-        border-color .28s ease,
-        opacity .72s ease
-    }
-    .benefit:hover,.why-row:hover,.step:hover,.promise:hover{
-      transform:translateY(-6px);
-      border-color:#d4ceff;
-      box-shadow:0 20px 46px rgba(31,34,49,.10)
-    }
-    .project .screen{
-      transition:transform .45s cubic-bezier(.2,.7,.2,1)
-    }
-    .project:hover .screen{transform:translateY(-8px) scale(1.02)}
-    .plan:hover{transform:translateY(-8px)}
-    .plan.featured:hover{transform:translateY(-18px)}
-    .why-panel:after{
-      content:"";position:absolute;inset:auto 24px 24px auto;width:96px;height:96px;
-      border-radius:50%;background:radial-gradient(circle,rgba(185,173,255,.32),transparent 68%);
-      animation:orbDrift 5s ease-in-out infinite alternate
-    }
-    .floating{
-      animation:floatingPulse 2.8s ease-in-out infinite
-    }
-    @keyframes floatingPulse{
-      0%,100%{box-shadow:0 18px 42px rgba(17,19,27,.24)}
-      50%{box-shadow:0 20px 52px rgba(107,77,255,.32)}
-    }
-    header{transition:box-shadow .25s ease,background .25s ease}
-    header.scrolled{
-      background:rgba(247,248,252,.95);
-      box-shadow:0 10px 30px rgba(24,27,39,.06)
-    }
-    @media(prefers-reduced-motion:reduce){
-      *,*:before,*:after{
-        animation-duration:.01ms!important;
-        animation-iteration-count:1!important;
-        transition-duration:.01ms!important;
-        scroll-behavior:auto!important
-      }
-      .reveal,.reveal-left,.reveal-right{opacity:1!important;transform:none!important}
-    }
-
-  
-    /* Motion layer v3 — kinetic */
-    .ambient-bg{
-      position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none
-    }
-    .ambient-dot{
-      position:absolute;border-radius:50%;opacity:.18;
-      background:radial-gradient(circle at 30% 30%,#fff,var(--violet) 45%,transparent 72%);
-      filter:blur(2px);
-      animation:particleDrift var(--dur) linear infinite;
-      transform:translate3d(0,110vh,0) scale(var(--scale))
-    }
-    @keyframes particleDrift{
-      0%{transform:translate3d(var(--x),110vh,0) scale(var(--scale));opacity:0}
-      10%{opacity:.16}
-      90%{opacity:.13}
-      100%{transform:translate3d(calc(var(--x) + var(--drift)),-18vh,0) scale(var(--scale));opacity:0}
-    }
-    .cursor-glow{
-      position:fixed;left:0;top:0;width:360px;height:360px;border-radius:50%;
-      pointer-events:none;z-index:-1;opacity:0;
-      background:radial-gradient(circle,rgba(107,77,255,.12),rgba(107,77,255,0) 66%);
-      transform:translate(-50%,-50%);
-      transition:opacity .25s ease
-    }
-    .kinetic-band{
-      overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-      background:#fff;transform:rotate(-1deg) scale(1.02);margin:8px 0 22px
-    }
-    .kinetic-track{
-      width:max-content;display:flex;gap:34px;align-items:center;
-      padding:17px 0;font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
-      animation:marquee 24s linear infinite
-    }
-    .kinetic-track span{display:flex;align-items:center;gap:34px;white-space:nowrap}
-    .kinetic-track span:after{content:"✦";color:var(--violet)}
-    @keyframes marquee{to{transform:translateX(-50%)}}
-
-    #heroWord{
-      display:inline-block;min-width:.1em;
-      transition:opacity .25s ease,transform .25s ease,filter .25s ease
-    }
-    #heroWord.word-out{opacity:0;transform:translateY(12px);filter:blur(5px)}
-    #heroWord.word-in{animation:wordPop .42s cubic-bezier(.2,.75,.2,1)}
-    @keyframes wordPop{
-      from{opacity:0;transform:translateY(-11px);filter:blur(5px)}
-      to{opacity:1;transform:translateY(0);filter:blur(0)}
-    }
-
-    .mock-shell{isolation:isolate}
-    .mock-shell:before{
-      content:"";position:absolute;inset:-2px;border-radius:36px;z-index:-1;
-      background:conic-gradient(from var(--spin,0deg),transparent 0 20%,#9b86ff 32%,transparent 44% 72%,#6b4dff 83%,transparent 95%);
-      filter:blur(9px);opacity:.42;
-      animation:borderSpin 7s linear infinite
-    }
-    @property --spin{syntax:"<angle>";initial-value:0deg;inherits:false}
-    @keyframes borderSpin{to{--spin:360deg}}
-    .mock-cursor{
-      position:absolute;z-index:8;width:18px;height:24px;left:52%;top:43%;
-      clip-path:polygon(0 0,0 100%,28% 70%,48% 100%,62% 92%,42% 64%,78% 64%);
-      background:#11131b;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2));
-      animation:demoCursor 6s ease-in-out infinite
-    }
-    .mock-ripple{
-      position:absolute;z-index:7;width:12px;height:12px;border:2px solid var(--violet);
-      border-radius:50%;left:67%;top:69%;opacity:0;
-      animation:demoClick 6s ease-out infinite
-    }
-    @keyframes demoCursor{
-      0%,8%{transform:translate(0,0) rotate(-8deg)}
-      28%{transform:translate(80px,34px) rotate(-2deg)}
-      45%{transform:translate(52px,105px) rotate(2deg)}
-      62%{transform:translate(-76px,82px) rotate(-5deg)}
-      82%,100%{transform:translate(0,0) rotate(-8deg)}
-    }
-    @keyframes demoClick{
-      0%,42%{opacity:0;transform:scale(.4)}
-      46%{opacity:.9;transform:scale(.5)}
-      56%{opacity:0;transform:scale(4)}
-      100%{opacity:0}
-    }
-    .mock-feature{
+      padding:14px 21px;border-radius:999px;font-weight:900;
+      border:1px solid var(--petrol);background:var(--petrol);color:#fff;
+      box-shadow:0 12px 32px rgba(15,63,68,.18);
+      transition:transform .22s ease,box-shadow .22s ease,background .22s ease;
       position:relative;overflow:hidden
     }
-    .mock-feature:after{
-      content:"";position:absolute;inset:0;
-      background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.85) 48%,transparent 74%);
-      transform:translateX(-130%);animation:skeletonSweep 3.6s ease-in-out infinite
+    .btn:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(15,63,68,.22)}
+    .btn.light{background:transparent;color:var(--petrol);box-shadow:none}
+    .btn.light:hover{background:rgba(15,63,68,.06)}
+    .btn:before{
+      content:"";position:absolute;inset:-4px auto -4px -36%;width:24%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      transform:skewX(-18deg);transition:left .5s ease
     }
-    .mock-feature:nth-child(2):after{animation-delay:.45s}
-    .mock-feature:nth-child(3):after{animation-delay:.9s}
-    @keyframes skeletonSweep{55%,100%{transform:translateX(130%)}}
-
-    .benefit:before,.project:before,.promise:before{
-      content:"";position:absolute;left:0;top:0;width:0;height:2px;
-      background:linear-gradient(90deg,var(--violet),#bcaeff);
-      transition:width .5s cubic-bezier(.2,.7,.2,1)
-    }
-    .benefit,.project,.promise{position:relative}
-    .benefit:hover:before,.project:hover:before,.promise:hover:before{width:100%}
-    .benefit .icon{transition:transform .4s cubic-bezier(.2,.8,.2,1),background .3s ease}
-    .benefit:hover .icon{transform:rotate(-8deg) scale(1.1);background:#dfd9ff}
-
-    .plan.featured{
-      isolation:isolate;
-      animation:featuredBreath 4.2s ease-in-out infinite
-    }
-    .plan.featured:before{
-      content:"";position:absolute;inset:-1px;z-index:-2;border-radius:29px;
-      background:linear-gradient(120deg,#6b4dff,#d5ccff,#6b4dff);
-      background-size:220% 220%;animation:gradientTravel 5s ease infinite
-    }
-    .plan.featured:after{
-      content:"";position:absolute;inset:1px;z-index:-1;background:#fff;border-radius:27px
-    }
-    @keyframes gradientTravel{
-      0%,100%{background-position:0 50%}
-      50%{background-position:100% 50%}
-    }
-    @keyframes featuredBreath{
-      0%,100%{box-shadow:0 30px 70px rgba(0,0,0,.28),0 0 0 rgba(107,77,255,0)}
-      50%{box-shadow:0 32px 78px rgba(0,0,0,.30),0 0 34px rgba(107,77,255,.22)}
-    }
-
-    .project-visual{position:relative;overflow:hidden}
-    .project-visual:after{
-      content:"";position:absolute;inset:-40%;
-      background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.18) 50%,transparent 58%);
-      transform:translateX(-70%) rotate(8deg);
-      animation:projectShine 5.5s ease-in-out infinite
-    }
-    @keyframes projectShine{
-      0%,58%{transform:translateX(-70%) rotate(8deg)}
-      82%,100%{transform:translateX(70%) rotate(8deg)}
-    }
-    .screen-blocks span{
-      animation:blockPulse 3s ease-in-out infinite
-    }
-    .screen-blocks span:nth-child(2){animation-delay:.3s}
-    .screen-blocks span:nth-child(3){animation-delay:.6s}
-    @keyframes blockPulse{50%{transform:translateY(-4px);background:#e5e1ff}}
-
-    .why-panel{
-      overflow:hidden
-    }
-    .why-panel .big{
-      background:linear-gradient(90deg,#fff,#bfb3ff,#fff);
-      background-size:220% auto;
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      animation:textShimmer 6s linear infinite
-    }
-    @keyframes textShimmer{to{background-position:220% center}}
-    .why-row{overflow:hidden}
-    .why-row:after{
-      content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
-      background:var(--violet);transform:scaleY(0);transform-origin:center;
-      transition:transform .35s ease
-    }
-    .why-row{position:relative}
-    .why-row:hover:after{transform:scaleY(1)}
-
-    .process{position:relative}
-    .process:before{
-      content:"";position:absolute;left:8%;right:8%;top:50%;
-      height:1px;background:linear-gradient(90deg,transparent,#c5bbff 20% 80%,transparent);
-      z-index:0
-    }
-    .step{z-index:1;overflow:hidden}
-    .step:before{
-      content:"";position:absolute;width:80px;height:80px;border-radius:50%;
-      right:-24px;top:-24px;background:rgba(107,77,255,.08);
-      transition:transform .45s ease
-    }
-    .step:hover:before{transform:scale(1.8)}
-    .step strong{
-      display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;
-      background:var(--soft);animation:stepPulse 3.4s ease-in-out infinite
-    }
-    .step:nth-child(2) strong{animation-delay:.3s}
-    .step:nth-child(3) strong{animation-delay:.6s}
-    .step:nth-child(4) strong{animation-delay:.9s}
-    .step:nth-child(5) strong{animation-delay:1.2s}
-    @keyframes stepPulse{50%{box-shadow:0 0 0 9px rgba(107,77,255,.07)}}
-
-    .contact-box{position:relative;overflow:hidden}
-    .contact-box:before{
-      content:"";position:absolute;width:280px;height:280px;border-radius:50%;
-      right:-120px;bottom:-140px;
-      background:radial-gradient(circle,rgba(107,77,255,.16),transparent 68%);
-      animation:contactOrb 6s ease-in-out infinite alternate
-    }
-    @keyframes contactOrb{to{transform:translate(-80px,-44px) scale(1.2)}}
-    .field input,.field textarea{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
-    .field input:focus,.field textarea:focus{transform:translateY(-2px)}
-
-    .section-head h2{
-      background:linear-gradient(currentColor,currentColor) no-repeat;
-      background-size:0 2px;background-position:0 100%;
-      transition:background-size 1s cubic-bezier(.2,.7,.2,1)
-    }
-    .section-head.is-visible h2{background-size:78px 2px}
-
-    .magnetic{will-change:transform}
-    .scroll-hint{
-      position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
-      display:grid;place-items:center;gap:5px;color:#8990a0;font-size:10px;
-      letter-spacing:.1em;text-transform:uppercase;font-weight:800
-    }
-    .scroll-hint i{
-      width:22px;height:34px;border:1px solid #cfd2dd;border-radius:99px;position:relative
-    }
-    .scroll-hint i:after{
-      content:"";position:absolute;left:50%;top:7px;width:3px;height:6px;border-radius:99px;
-      background:var(--violet);transform:translateX(-50%);
-      animation:scrollDot 1.7s ease-in-out infinite
-    }
-    @keyframes scrollDot{
-      0%{opacity:0;transform:translate(-50%,0)}
-      35%{opacity:1}
-      100%{opacity:0;transform:translate(-50%,13px)}
-    }
-
-    @media(max-width:980px){
-      .process:before{display:none}
-      .scroll-hint{display:none}
-    }
-    @media(max-width:620px){
-      .kinetic-band{transform:rotate(-1.5deg) scale(1.04)}
-      .kinetic-track{font-size:11px;gap:24px;padding:14px 0}
-      .cursor-glow{display:none}
-      .mock-cursor,.mock-ripple{display:none}
-    }
-
-  
-    /* ===== ZENIX V5 — EDITORIAL / PREMIUM BALANCED ===== */
-    :root{
-      --bg:#f1eee8;
-      --surface:#f8f5ef;
-      --surface-2:#e9e4dc;
-      --ink:#191b22;
-      --muted:#666b78;
-      --line:#d8d1c8;
-      --violet:#6f55e9;
-      --violet-2:#927df0;
-      --dark:#171820;
-      --soft:#e8e1ff;
-      --success:#1e946d;
-      --shadow:0 24px 70px rgba(24,25,31,.12);
-      --shadow-soft:0 12px 34px rgba(24,25,31,.09);
-    }
-
-    body{
-      background:#f1eee8;
-      color:var(--ink);
-    }
-    body:before{
-      content:"";position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.42;
-      background-image:
-        linear-gradient(rgba(36,38,46,.028) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(36,38,46,.028) 1px,transparent 1px);
-      background-size:46px 46px;
-      mask-image:linear-gradient(to bottom,black,transparent 82%)
-    }
-    header{
-      background:rgba(241,238,232,.88)!important;
-      border-bottom:1px solid rgba(74,68,61,.10)!important;
-      backdrop-filter:blur(18px)
-    }
-    header.scrolled{
-      background:rgba(241,238,232,.96)!important;
-      box-shadow:0 10px 28px rgba(35,33,30,.08)!important
-    }
-    .brand,.nav-links a{color:#22242b}
-    .nav-links{color:#626773}
+    .btn:hover:before{left:120%}
 
     .hero{
+      min-height:100svh;padding:140px 0 90px;display:flex;align-items:center;
       background:
-        radial-gradient(circle at 78% 25%,rgba(111,85,233,.15),transparent 26%),
-        linear-gradient(180deg,#f3efe8,#ece6de);
-      border-bottom:1px solid #d9d1c7;
-      min-height:calc(100vh - 76px);
-      display:flex;align-items:center
+        radial-gradient(circle at 80% 16%,rgba(86,214,197,.28),transparent 25%),
+        linear-gradient(145deg,var(--sand-2) 0 56%,#d7ece5 56% 100%);
+      position:relative;overflow:hidden
     }
     .hero:before{
-      background:radial-gradient(circle,rgba(111,85,233,.18),rgba(111,85,233,0) 68%)
+      content:"";position:absolute;left:-9vw;bottom:-30vw;width:58vw;height:58vw;border-radius:50%;
+      border:1px solid rgba(15,63,68,.09);box-shadow:0 0 0 60px rgba(15,63,68,.025),0 0 0 120px rgba(15,63,68,.018);
+      animation:ringBreath 7s ease-in-out infinite
     }
-    .hero h1{color:#191b22}
-    .hero h1 em{
-      background:linear-gradient(90deg,#6247e3,#8f78ef,#6247e3);
-      background-size:200% auto;
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      animation:softTextFlow 6s linear infinite
+    @keyframes ringBreath{50%{transform:scale(1.04);opacity:.78}}
+    .hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:70px;align-items:center;position:relative;z-index:1}
+    .hero-copy .eyebrow{color:var(--petrol)}
+    .hero h1{
+      margin:16px 0 22px;font-size:clamp(58px,8vw,98px);line-height:.88;letter-spacing:-.07em;
+      max-width:760px
     }
-    @keyframes softTextFlow{to{background-position:200% center}}
-    .hero-copy{color:#5f6570}
-    .micro{color:#5f6570}
-    .trust-strip{
-      background:rgba(248,245,239,.84)!important;
-      border-color:#d9d2c9!important;
-      backdrop-filter:blur(12px);
-      box-shadow:0 16px 42px rgba(48,43,38,.08)!important
+    .hero h1 .line2{display:block;color:var(--petrol)}
+    .hero h1 .swap{
+      display:inline-block;min-width:.1em;color:transparent;
+      background:linear-gradient(90deg,var(--petrol),var(--aqua),var(--petrol));
+      background-size:220% auto;-webkit-background-clip:text;background-clip:text;
+      animation:gradientText 5s linear infinite
     }
-    .trust-item{border-color:#ddd5cc!important}
-    .trust-item:hover{background:#efe9e2}
-    .trust-item strong{color:#20232a}
-    .trust-item span{color:#6b707c}
+    @keyframes gradientText{to{background-position:220% center}}
+    .hero p{
+      color:#586568;font-size:19px;max-width:660px;margin:0 0 30px
+    }
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .hero-mini{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;color:#3f5052;font-size:13px;font-weight:760}
+    .hero-mini span{display:flex;align-items:center;gap:7px}
+    .hero-mini i{
+      width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-style:normal;
+      background:#d9f3ed;color:#157865;font-size:11px
+    }
 
-    .kinetic-band{
-      background:#191b22!important;color:#fff;
-      border-color:#191b22!important;
-      transform:rotate(-.6deg) scale(1.015)!important;
-      box-shadow:0 14px 30px rgba(24,25,31,.13)
+    .visual-wrap{position:relative;min-height:560px}
+    .screen-main{
+      position:absolute;left:6%;right:2%;top:8%;bottom:10%;
+      border-radius:30px;background:#0f3337;padding:16px;
+      box-shadow:0 38px 95px rgba(6,45,49,.28);
+      transform:rotate(1deg);
+      animation:floatMain 6s ease-in-out infinite
     }
-    .kinetic-track{color:#d8d5e1}
-    .kinetic-track span:after{color:#9d89ff}
+    @keyframes floatMain{50%{transform:translateY(-12px) rotate(.4deg)}}
+    .browser{
+      height:100%;border-radius:20px;overflow:hidden;background:#f9f4ec;border:1px solid rgba(255,255,255,.12)
+    }
+    .browser-top{height:44px;background:#e8e2d9;display:flex;align-items:center;gap:6px;padding:0 14px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#9da2a2}
+    .urlbar{height:22px;border-radius:99px;background:#d4cec5;flex:1;max-width:260px;margin-left:7px}
+    .site{padding:28px;display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:center}
+    .site-lines span{display:block;border-radius:99px;background:#173f43;margin:9px 0}
+    .site-lines span:nth-child(1){width:94%;height:18px}
+    .site-lines span:nth-child(2){width:72%;height:18px}
+    .site-lines span:nth-child(3){width:88%;height:7px;background:#c8c1b8;margin-top:18px}
+    .site-lines span:nth-child(4){width:62%;height:7px;background:#c8c1b8}
+    .site-card{
+      aspect-ratio:1/1;border-radius:22px;background:
+        linear-gradient(145deg,rgba(255,255,255,.32),transparent),
+        linear-gradient(135deg,#0f3f44,#56d6c5);
+      position:relative;overflow:hidden
+    }
+    .site-card:after{
+      content:"";position:absolute;inset:18% 16%;border-radius:18px;
+      border:1px solid rgba(255,255,255,.45);animation:cardPulse 3.8s ease-in-out infinite
+    }
+    @keyframes cardPulse{50%{transform:scale(.92);opacity:.55}}
+    .site-feats{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}
+    .site-feats div{height:92px;border-radius:14px;background:#e6e0d7;position:relative;overflow:hidden}
+    .site-feats div:after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(105deg,transparent 25%,rgba(255,255,255,.78) 48%,transparent 70%);
+      transform:translateX(-120%);animation:shine 3.7s ease-in-out infinite
+    }
+    .site-feats div:nth-child(2):after{animation-delay:.45s}
+    .site-feats div:nth-child(3):after{animation-delay:.9s}
+    @keyframes shine{60%,100%{transform:translateX(120%)}}
 
-    #beneficios{
-      background:
-        radial-gradient(circle at 8% 30%,rgba(111,85,233,.08),transparent 22%),
-        #ded9d0;
-      border-bottom:1px solid #cec7bd
+    .floating-card{
+      position:absolute;border-radius:22px;box-shadow:var(--shadow);backdrop-filter:blur(18px);
+      animation:floatCard 5.4s ease-in-out infinite
     }
-    #beneficios .section-head{max-width:800px}
-    .benefit{
-      background:#f4f0e9!important;
-      border-color:#cec7bd!important;
-      box-shadow:0 14px 36px rgba(51,47,42,.07)!important
+    @keyframes floatCard{50%{transform:translateY(-10px) rotate(-1deg)}}
+    .metric{
+      left:-3%;bottom:3%;width:210px;padding:20px;background:rgba(255,250,242,.86);
+      border:1px solid rgba(15,63,68,.11)
     }
-    .benefit:nth-child(2),.benefit:nth-child(4){
-      background:#e9e4dc!important
+    .metric small{font-size:11px;text-transform:uppercase;letter-spacing:.11em;font-weight:900;color:#697476}
+    .metric strong{display:block;font-size:32px;letter-spacing:-.05em;margin-top:7px;color:var(--petrol)}
+    .metric span{font-size:12px;color:#5f696b}
+    .mini-panel{
+      right:-3%;top:3%;width:180px;padding:18px;background:rgba(15,63,68,.94);color:#fff;
+      border:1px solid rgba(255,255,255,.12);animation-delay:-1.5s
     }
-    .benefit:hover{
-      box-shadow:0 22px 50px rgba(51,47,42,.12)!important;
-      border-color:#bdb3a8!important
+    .mini-panel b{display:block;font-size:12px;margin-bottom:8px}
+    .mini-bars{display:grid;gap:7px}
+    .mini-bars i{display:block;height:7px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+    .mini-bars i:after{content:"";display:block;height:100%;width:var(--w);background:var(--aqua);animation:barGrow 3s ease-in-out infinite alternate}
+    @keyframes barGrow{from{width:18%}to{width:var(--w)}}
+
+    .ticker{
+      background:var(--petrol);color:#dff8f2;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);
+      overflow:hidden;transform:rotate(-.5deg) scale(1.01);box-shadow:0 18px 42px rgba(4,40,44,.14)
     }
+    .ticker-track{
+      width:max-content;display:flex;gap:30px;padding:17px 0;
+      font-weight:900;text-transform:uppercase;letter-spacing:.11em;font-size:12px;
+      animation:marquee 24s linear infinite
+    }
+    .ticker-track span{display:flex;gap:30px;align-items:center;white-space:nowrap}
+    .ticker-track span:after{content:"✦";color:var(--aqua)}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+
+    .intro{
+      background:#dfe5df;
+      border-bottom:1px solid rgba(15,63,68,.1)
+    }
+    .intro-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:30px}
+    .big-statement{
+      padding:38px;border-radius:var(--radius);background:var(--petrol);color:#fff;min-height:420px;
+      display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden
+    }
+    .big-statement:after{
+      content:"";position:absolute;width:250px;height:250px;border-radius:50%;
+      right:-90px;bottom:-90px;background:radial-gradient(circle,var(--aqua),transparent 68%);opacity:.26;
+      animation:orbShift 6s ease-in-out infinite alternate
+    }
+    @keyframes orbShift{to{transform:translate(-65px,-45px) scale(1.15)}}
+    .big-statement h2{font-size:clamp(42px,5vw,68px);line-height:.95;letter-spacing:-.055em;margin:0}
+    .big-statement p{color:#cbe3de;max-width:420px}
+    .service-stack{display:grid;gap:16px}
+    .service-row{
+      background:rgba(255,250,242,.74);border:1px solid rgba(15,63,68,.11);
+      border-radius:24px;padding:24px 26px;display:grid;grid-template-columns:64px 1fr auto;gap:18px;align-items:center;
+      transition:.3s ease;box-shadow:0 10px 25px rgba(15,63,68,.04)
+    }
+    .service-row:hover{transform:translateX(8px);background:#fffaf2;box-shadow:0 18px 42px rgba(15,63,68,.09)}
+    .service-num{font-size:13px;font-weight:950;color:var(--petrol)}
+    .service-row h3{margin:0 0 4px;font-size:21px}
+    .service-row p{margin:0;color:#6a7475;font-size:14px}
+    .service-arrow{
+      width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+      border:1px solid rgba(15,63,68,.14);transition:.25s ease
+    }
+    .service-row:hover .service-arrow{background:var(--petrol);color:#fff;transform:rotate(-20deg)}
 
     .plans-wrap{
       background:
-        radial-gradient(circle at 85% 15%,rgba(116,89,234,.24),transparent 26%),
-        linear-gradient(155deg,#15161d,#20212b 55%,#171820)!important;
-      color:#fff;
-      border-top:1px solid rgba(255,255,255,.04);
-      border-bottom:1px solid rgba(255,255,255,.06)
-    }
-    .plan{
-      background:rgba(255,255,255,.055)!important;
-      border-color:rgba(255,255,255,.10)!important;
-      box-shadow:0 20px 50px rgba(0,0,0,.18)!important;
-      backdrop-filter:blur(10px)
-    }
-    .plan.featured{
-      background:#f5f1eb!important;color:#191b22!important;
-      border-color:#f5f1eb!important;
-      box-shadow:0 26px 65px rgba(0,0,0,.28)!important
-    }
-    .plan.featured:after{background:#f5f1eb!important}
-    .plan.featured .desc{color:#6b707c!important}
-    .plan.featured .price small{color:#777c87!important}
-    .plan.featured .checklist li{color:#31343c}
-    .plan:not(.featured) .cta{
-      background:#ece8e1!important;color:#1b1d24!important;border-color:#ece8e1!important
-    }
-
-    #proyectos{
-      background:
-        radial-gradient(circle at 85% 20%,rgba(111,85,233,.08),transparent 23%),
-        #ece7df;
-      border-bottom:1px solid #d5cec4
-    }
-    .project{
-      background:#d9d2c8!important;
-      border-color:#c9c0b5!important;
-      box-shadow:0 16px 40px rgba(48,43,38,.08)!important
-    }
-    .project-body{background:#f3efe8}
-    .project:nth-child(2) .project-body{background:#e8e1d8}
-    .project:hover{box-shadow:0 24px 58px rgba(48,43,38,.14)!important}
-
-    .section:not(#beneficios):not(.plans-wrap):not(#proyectos):not(#proceso):not(#contacto){
-      background:#f3efe8
-    }
-    .why-panel{
-      background:linear-gradient(155deg,#1b1c24,#2d2747)!important;
-      box-shadow:0 24px 65px rgba(25,25,32,.22)!important
-    }
-    .why-row{
-      background:#e5dfd6!important;
-      border-color:#cdc4b9!important;
-      box-shadow:none!important
-    }
-    .why-row:nth-child(even){background:#f4f0e9!important}
-    .why-row:hover{border-color:#b7ab9f!important}
-
-    #proceso{
-      background:
-        linear-gradient(180deg,rgba(111,85,233,.045),rgba(111,85,233,0)),
-        #dcd7cf;
-      border-top:1px solid #cbc3b8;
-      border-bottom:1px solid #cbc3b8
-    }
-    .step{
-      background:#f3efe8!important;
-      border-color:#cfc6bb!important;
-      box-shadow:0 12px 30px rgba(45,42,38,.06)!important
-    }
-    .step:nth-child(2),.step:nth-child(4){background:#e7e0d7!important}
-
-    .promise{
-      background:#e7e0d7!important;
-      border-color:#cbc2b7!important;
-      box-shadow:none!important
-    }
-    .promise:nth-child(2){background:#f5f1eb!important}
-
-    #contacto{
-      background:
-        radial-gradient(circle at 15% 75%,rgba(111,85,233,.16),transparent 25%),
-        #191a22;
+        radial-gradient(circle at 85% 15%,rgba(86,214,197,.18),transparent 24%),
+        linear-gradient(145deg,#082c30,#10484e);
       color:#fff
     }
-    #contacto .contact-box{
-      background:
-        linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.025))!important;
-      border-color:rgba(255,255,255,.10)!important;
-      box-shadow:0 28px 70px rgba(0,0,0,.24)!important;
-      backdrop-filter:blur(12px)
+    .plans-wrap .section-head p{color:#b8d0ce}
+    .plans-wrap .eyebrow{color:var(--aqua)}
+    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .plan{
+      min-height:520px;padding:30px;border-radius:28px;
+      background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);
+      display:flex;flex-direction:column;backdrop-filter:blur(12px);transition:.3s ease
     }
-    #contacto .contact-copy h2{color:#fff}
-    #contacto .contact-copy p{color:#bbc0cd}
-    #contacto .contact-points span{color:#e6e8ef}
-    #contacto .field label{color:#c8ccd7}
-    #contacto .field input,#contacto .field textarea{
-      background:rgba(255,255,255,.06)!important;
-      color:#fff!important;
-      border-color:rgba(255,255,255,.12)!important
+    .plan:hover{transform:translateY(-8px);background:rgba(255,255,255,.075)}
+    .plan.featured{
+      background:var(--sand);color:var(--ink);transform:translateY(-14px);
+      border-color:var(--sand);box-shadow:0 30px 70px rgba(0,0,0,.24)
     }
-    #contacto .field input::placeholder,#contacto .field textarea::placeholder{color:#7f8797}
-    #contacto .form-note{color:#858c9a}
+    .plan.featured:hover{transform:translateY(-20px)}
+    .badge{
+      align-self:flex-start;padding:8px 11px;border-radius:999px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;
+      background:rgba(255,255,255,.09);color:#cfe6e3;margin-bottom:22px
+    }
+    .featured .badge{background:#d8c7ad;color:#4d473e}
+    .plan h3{font-size:28px;margin:0 0 9px}
+    .plan .desc{color:#bfd0cf;min-height:54px}
+    .featured .desc{color:#6d6a62}
+    .price{font-size:22px;font-weight:950;margin:7px 0 22px}
+    .price small{display:block;font-size:12px;font-weight:650;color:#9db6b3;margin-top:4px}
+    .featured .price small{color:#7a746a}
+    .checks{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:12px}
+    .checks li{display:flex;gap:9px;font-size:14px}
+    .checks li:before{
+      content:"✓";width:20px;height:20px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+      background:rgba(86,214,197,.14);color:var(--aqua);font-size:12px;margin-top:1px
+    }
+    .featured .checks li:before{background:#d4ede6;color:#157563}
+    .plan .btn{margin-top:auto;width:100%;background:#fff;color:var(--petrol);border-color:#fff;box-shadow:none}
+    .featured .btn{background:var(--petrol);color:#fff;border-color:var(--petrol)}
+
+    .portfolio-stage{
+      height:330vh;background:#eadfce;position:relative
+    }
+    .portfolio-sticky{
+      position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden
+    }
+    .portfolio-inner{width:100%}
+    .portfolio-top{
+      display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:28px
+    }
+    .portfolio-top h2{font-size:clamp(42px,5.8vw,72px);line-height:.95;letter-spacing:-.055em;margin:8px 0 0;max-width:700px}
+    .portfolio-top p{max-width:360px;color:#69665e;margin:0}
+    .rail{
+      display:flex;gap:24px;width:max-content;will-change:transform
+    }
+    .case{
+      width:min(74vw,780px);height:520px;border-radius:32px;overflow:hidden;
+      background:#fff6ea;border:1px solid rgba(15,63,68,.1);box-shadow:0 28px 70px rgba(50,47,41,.13);
+      display:grid;grid-template-columns:1.05fr .95fr
+    }
+    .case-visual{
+      position:relative;padding:28px;background:linear-gradient(145deg,var(--petrol),#226d72);
+      display:flex;align-items:flex-end;overflow:hidden
+    }
+    .case:nth-child(2) .case-visual{background:linear-gradient(145deg,#8b4932,#e0ad80)}
+    .case:nth-child(3) .case-visual{background:linear-gradient(145deg,#273a63,#79a5c7)}
+    .case:nth-child(4) .case-visual{background:linear-gradient(145deg,#2f4b3d,#8bb49b)}
+    .case-browser{
+      width:100%;height:78%;border-radius:18px 18px 0 0;background:#fbf6ef;padding:14px;
+      box-shadow:0 18px 44px rgba(0,0,0,.22);transition:transform .4s ease
+    }
+    .case:hover .case-browser{transform:translateY(-10px) scale(1.015)}
+    .mini-dots{display:flex;gap:5px;margin-bottom:18px}
+    .mini-dots i{width:6px;height:6px;border-radius:50%;background:#c7c0b6}
+    .mini-line{height:8px;border-radius:99px;background:#25383c;margin:8px 0;width:68%}
+    .mini-line.soft{height:5px;background:#ded8cf;width:85%}
+    .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:22px}
+    .mini-grid span{height:64px;background:#ece6de;border-radius:8px}
+    .case-body{padding:34px;display:flex;flex-direction:column}
+    .case-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:var(--petrol)}
+    .case h3{font-size:34px;letter-spacing:-.045em;margin:11px 0 10px}
+    .case p{color:#6b6f70;margin:0 0 24px}
+    .case .btn{margin-top:auto;align-self:flex-start}
+    .rail-counter{margin-top:18px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#6d6a62}
+
+    .why{
+      background:#132b2e;color:#fff
+    }
+    .why .section-head p{color:#b8c8c6}
+    .why .eyebrow{color:var(--aqua)}
+    .why-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:30px}
+    .why-sticky{
+      position:sticky;top:115px;align-self:start;border-radius:30px;padding:36px;min-height:440px;
+      background:linear-gradient(145deg,#1a4f54,#0d292c);border:1px solid rgba(255,255,255,.08);
+      display:flex;flex-direction:column;justify-content:space-between;overflow:hidden
+    }
+    .why-sticky:after{
+      content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-110px;bottom:-100px;
+      background:radial-gradient(circle,rgba(86,214,197,.36),transparent 68%);animation:orbShift 6s ease-in-out infinite alternate
+    }
+    .why-sticky strong{font-size:48px;line-height:.96;letter-spacing:-.055em;max-width:400px}
+    .why-sticky p{color:#b9cbca;max-width:430px}
+    .why-list{display:grid;gap:16px}
+    .why-item{
+      padding:26px;border-radius:22px;border:1px solid rgba(255,255,255,.09);
+      background:rgba(255,255,255,.045);display:grid;grid-template-columns:48px 1fr;gap:16px;transition:.3s ease
+    }
+    .why-item:hover{transform:translateX(7px);background:rgba(255,255,255,.07)}
+    .why-item b{color:var(--aqua);font-size:13px}
+    .why-item h3{margin:0 0 6px}
+    .why-item p{margin:0;color:#aebdbc;font-size:14px}
+
+    .process{
+      background:#d6e1dc
+    }
+    .process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative}
+    .process-grid:before{
+      content:"";position:absolute;left:7%;right:7%;top:28px;height:1px;
+      background:linear-gradient(90deg,transparent,var(--petrol),transparent);opacity:.22
+    }
+    .step{
+      position:relative;z-index:1;padding:24px;border-radius:22px;background:#f9f2e7;border:1px solid rgba(15,63,68,.11);
+      min-height:230px;transition:.3s ease;box-shadow:0 12px 28px rgba(15,63,68,.04)
+    }
+    .step:hover{transform:translateY(-6px);box-shadow:0 20px 42px rgba(15,63,68,.09)}
+    .step b{
+      width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+      background:var(--petrol);color:#fff;font-size:12px;box-shadow:0 0 0 8px rgba(15,63,68,.06)
+    }
+    .step h3{margin:42px 0 8px;font-size:19px}
+    .step p{margin:0;color:#697274;font-size:13px}
+
+    .contact{
+      background:linear-gradient(145deg,#f5ecdf,#e5d5bf)
+    }
+    .contact-box{
+      border-radius:34px;background:#0f3f44;color:#fff;padding:44px;
+      display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;box-shadow:var(--shadow);position:relative;overflow:hidden
+    }
+    .contact-box:after{
+      content:"";position:absolute;width:360px;height:360px;border-radius:50%;right:-140px;top:-160px;
+      background:radial-gradient(circle,rgba(86,214,197,.28),transparent 70%);
+      animation:orbShift 7s ease-in-out infinite alternate
+    }
+    .contact-copy{position:relative;z-index:1}
+    .contact-copy h2{font-size:clamp(40px,5vw,64px);line-height:.98;letter-spacing:-.055em;margin:10px 0 18px}
+    .contact-copy p{color:#c1d4d1;font-size:17px}
+    .contact-points{display:grid;gap:10px;margin-top:24px;font-size:14px;font-weight:760}
+    .contact-points span{display:flex;gap:9px;align-items:center}
+    .contact-points i{font-style:normal;color:var(--aqua)}
+    form{display:grid;gap:14px;position:relative;z-index:1}
+    .field{display:grid;gap:7px}
+    .field label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:#c8dbd8}
+    .field input,.field textarea{
+      width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.13);
+      background:rgba(255,255,255,.06);color:#fff;padding:14px 15px;outline:none
+    }
+    .field input::placeholder,.field textarea::placeholder{color:#7fa09d}
+    .field input:focus,.field textarea:focus{border-color:rgba(86,214,197,.7);box-shadow:0 0 0 4px rgba(86,214,197,.1)}
+    textarea{min-height:122px;resize:vertical}
+    .contact .btn{background:var(--aqua);color:#0d373b;border-color:var(--aqua)}
+    .note{font-size:12px;color:#8dacaa;margin:0}
 
     footer{
-      background:#12131a;
-      color:#8d94a2;
-      border-top:1px solid rgba(255,255,255,.06)
+      background:#0a292c;color:#9fb4b2;padding:38px 0 50px;border-top:1px solid rgba(255,255,255,.06)
     }
-    .footer-brand{color:#f2f3f7!important}
-    footer a{color:#a894ff}
+    .footer-grid{display:flex;align-items:center;justify-content:space-between;gap:22px;font-size:13px}
+    .footer-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:900}
+    .footer-brand img{width:30px;height:30px;object-fit:contain}
+    footer a{color:#ccebe6}
 
     .floating{
-      background:#1c1d25!important;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 16px 40px rgba(0,0,0,.25)!important
+      position:fixed;right:20px;bottom:20px;z-index:60;border-radius:999px;
+      background:#0f3f44;color:#fff;padding:13px 17px;display:flex;align-items:center;gap:9px;
+      font-weight:900;font-size:13px;box-shadow:0 16px 38px rgba(7,45,49,.24);border:1px solid rgba(255,255,255,.08);
+      animation:floatCTA 3s ease-in-out infinite
     }
+    .floating b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--aqua);color:#0f3f44}
+    @keyframes floatCTA{50%{transform:translateY(-4px)}}
 
-    .ambient-dot{
-      opacity:.07!important;
-      filter:blur(12px)!important
-    }
+    .reveal{opacity:0;transform:translateY(34px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.7,.2,1)}
+    .reveal.visible{opacity:1;transform:none}
+    .reveal-left{opacity:0;transform:translateX(-34px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.7,.2,1)}
+    .reveal-right{opacity:0;transform:translateX(34px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.7,.2,1)}
+    .reveal-left.visible,.reveal-right.visible{opacity:1;transform:none}
+
     .cursor-glow{
-      width:420px;height:420px;
-      background:radial-gradient(circle,rgba(111,85,233,.08),rgba(111,85,233,0) 70%)!important
+      position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:-1;
+      background:radial-gradient(circle,rgba(86,214,197,.11),rgba(86,214,197,0) 70%);
+      transform:translate(-50%,-50%);opacity:0;transition:opacity .2s ease
     }
 
-    .mock-shell:before{
-      opacity:.20!important;
-      filter:blur(12px)!important
+    @media(max-width:980px){
+      .nav-links{display:none}
+      .hero-grid,.intro-grid,.why-grid,.contact-box{grid-template-columns:1fr}
+      .visual-wrap{min-height:500px;max-width:760px;margin:auto}
+      .plans{grid-template-columns:1fr}
+      .plan.featured{transform:none}
+      .plan.featured:hover{transform:translateY(-8px)}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .process-grid:before{display:none}
+      .why-sticky{position:relative;top:auto;min-height:auto}
+      .portfolio-stage{height:auto;padding:100px 0}
+      .portfolio-sticky{position:relative;height:auto;display:block;overflow:visible}
+      .portfolio-top{align-items:start;flex-direction:column}
+      .rail{width:auto;display:grid;grid-template-columns:1fr;transform:none!important}
+      .case{width:100%;height:auto;min-height:520px}
     }
-    .plan.featured{
-      animation:featuredBreath 5.5s ease-in-out infinite!important
+    @media(max-width:650px){
+      .wrap{width:min(var(--max),calc(100% - 26px))}
+      .section{padding:76px 0}
+      .hero{padding-top:116px;min-height:auto;background:linear-gradient(180deg,#f7efe4,#dcebe5)}
+      .hero h1{font-size:50px}
+      .hero-actions{display:grid}
+      .btn{width:100%}
+      .visual-wrap{min-height:420px;margin-top:18px}
+      .screen-main{left:0;right:0;top:4%;bottom:12%;padding:10px}
+      .site{padding:18px;grid-template-columns:1fr 1fr}
+      .metric{width:170px;left:0}
+      .mini-panel{width:150px;right:0}
+      .intro-grid{gap:18px}
+      .big-statement{min-height:360px;padding:28px}
+      .service-row{grid-template-columns:46px 1fr auto;padding:20px}
+      .plans{gap:14px}
+      .case{grid-template-columns:1fr;min-height:0}
+      .case-visual{min-height:300px}
+      .case-body{padding:26px}
+      .process-grid{grid-template-columns:1fr}
+      .contact-box{padding:28px}
+      .footer-grid{flex-direction:column;align-items:flex-start}
+      .floating{left:14px;right:14px;justify-content:center}
+      .cursor-glow{display:none}
     }
-    @keyframes featuredBreath{
-      0%,100%{box-shadow:0 26px 65px rgba(0,0,0,.26)}
-      50%{box-shadow:0 30px 72px rgba(0,0,0,.32),0 0 24px rgba(111,85,233,.14)}
+    @media(prefers-reduced-motion:reduce){
+      *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+      .reveal,.reveal-left,.reveal-right{opacity:1!important;transform:none!important}
     }
-
-    .section-head h2{letter-spacing:-.045em}
-    .section-head p{max-width:720px}
-    .cta{box-shadow:0 10px 24px rgba(111,85,233,.18)}
-    .cta:hover{box-shadow:0 14px 30px rgba(111,85,233,.24)}
-
-    @media(max-width:620px){
-      .hero{min-height:auto}
-      .kinetic-band{transform:rotate(-.8deg) scale(1.02)!important}
-      .benefit:nth-child(2),.benefit:nth-child(4),
-      .project:nth-child(2) .project-body,
-      .step:nth-child(2),.step:nth-child(4),
-      .promise:nth-child(2){background:#f1ece5!important}
-    }
-
   </style>
 </head>
 <body>
-  <div class="ambient-bg" id="ambientBg" aria-hidden="true"></div>
+  <div class="progress" id="progress"></div>
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-  <header>
+
+  <header id="siteHeader">
     <div class="wrap nav">
-      <a class="brand" href="#inicio" aria-label="Zenix">
-        <img src="../zenix-logo.png" alt="Logo Zenix">
-        <span>Zenix</span>
+      <a class="brand" href="#inicio">
+        <img src="../zenix-logo.png" alt="Zenix">
+        <span>Zenix AR</span>
       </a>
-      <nav class="nav-links" aria-label="Navegación">
+      <nav class="nav-links">
         <a href="#servicios">Servicios</a>
         <a href="#proyectos">Proyectos</a>
         <a href="#proceso">Proceso</a>
         <a href="#contacto">Contacto</a>
       </nav>
-      <a class="cta" href="#contacto">Solicitar propuesta</a>
+      <a class="btn" href="#contacto">Solicitar propuesta</a>
     </div>
   </header>
 
   <main id="inicio">
     <section class="hero">
-      <div class="wrap">
-        <div class="hero-grid">
-          <div>
-            <span class="eyebrow">Diseño web para negocios</span>
-            <h1>Tu negocio merece una web que <em><span id="heroWord">trabaje por vos.</span></em></h1>
-            <p class="hero-copy">
-              Diseñamos páginas claras, modernas y rápidas para presentar mejor lo que hacés,
-              generar confianza y convertir visitas en consultas reales.
-            </p>
-            <div class="hero-actions">
-              <a class="cta" href="#contacto">Quiero mi página web</a>
-              <a class="cta secondary" href="#servicios">Ver opciones</a>
-            </div>
-            <div class="micro">
-              <span><b>✓</b> Responsive</span>
-              <span><b>✓</b> Dominio y publicación</span>
-              <span><b>✓</b> Contacto directo</span>
-            </div>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Diseño web · Automatización · Producto</span>
+          <h1>
+            Tu negocio merece
+            <span class="line2">una web que <span class="swap" id="swapWord">venda mejor.</span></span>
+          </h1>
+          <p>
+            Diseñamos experiencias digitales claras, modernas y útiles para que tu negocio se vea mejor,
+            explique mejor lo que hace y convierta visitas en oportunidades reales.
+          </p>
+          <div class="hero-actions">
+            <a class="btn magnetic" href="#contacto">Quiero mi página web</a>
+            <a class="btn light magnetic" href="#servicios">Ver opciones</a>
           </div>
+          <div class="hero-mini">
+            <span><i>✓</i> Diseño a medida</span>
+            <span><i>✓</i> Responsive</span>
+            <span><i>✓</i> Publicación incluida</span>
+          </div>
+        </div>
 
-          <div class="mock-shell" aria-label="Vista ilustrativa de una web desarrollada por Zenix">
-            <div class="mock-window">
-              <span class="mock-cursor" aria-hidden="true"></span>
-              <span class="mock-ripple" aria-hidden="true"></span>
+        <div class="visual-wrap">
+          <div class="screen-main">
+            <div class="browser">
               <div class="browser-top">
                 <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                <div class="browser-url"></div>
+                <div class="urlbar"></div>
               </div>
-              <div class="mock-page">
-                <div class="mock-nav">
-                  <div class="mock-logo"></div>
-                  <div class="mock-pill"></div>
+              <div class="site">
+                <div class="site-lines">
+                  <span></span><span></span><span></span><span></span>
                 </div>
-                <div class="mock-hero">
-                  <div class="mock-lines">
-                    <span></span><span></span><span></span><span></span>
-                  </div>
-                  <div class="mock-card"></div>
-                </div>
-                <div class="mock-features">
-                  <div class="mock-feature"></div>
-                  <div class="mock-feature"></div>
-                  <div class="mock-feature"></div>
+                <div class="site-card"></div>
+                <div class="site-feats">
+                  <div></div><div></div><div></div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="trust-strip">
-          <div class="trust-item"><strong>Diseño a medida</strong><span>No plantillas genéricas</span></div>
-          <div class="trust-item"><strong>Mobile first</strong><span>Lista para celulares</span></div>
-          <div class="trust-item"><strong>Rápida y clara</strong><span>Menos fricción, más contacto</span></div>
-          <div class="trust-item"><strong>Acompañamiento</strong><span>De la idea a la publicación</span></div>
+          <div class="floating-card metric">
+            <small>Experiencia</small>
+            <strong>100%</strong>
+            <span>adaptada a celular</span>
+          </div>
+
+          <div class="floating-card mini-panel">
+            <b>Rendimiento visual</b>
+            <div class="mini-bars">
+              <i style="--w:92%"></i>
+              <i style="--w:78%"></i>
+              <i style="--w:88%"></i>
+            </div>
+          </div>
         </div>
-              <div class="scroll-hint" aria-hidden="true"><i></i><span>Explorá</span></div>
       </div>
     </section>
 
-    <div class="kinetic-band" aria-hidden="true">
-      <div class="kinetic-track">
-        <span>Diseño web</span><span>Landing pages</span><span>Experiencias móviles</span><span>Automatización</span><span>Tiendas online</span><span>Diseño que convierte</span>
-        <span>Diseño web</span><span>Landing pages</span><span>Experiencias móviles</span><span>Automatización</span><span>Tiendas online</span><span>Diseño que convierte</span>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Diseño web</span><span>Landing pages</span><span>Automatización</span><span>Apps</span><span>Tiendas online</span><span>Experiencias digitales</span>
+        <span>Diseño web</span><span>Landing pages</span><span>Automatización</span><span>Apps</span><span>Tiendas online</span><span>Experiencias digitales</span>
       </div>
     </div>
 
-    <section class="section" id="beneficios">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="eyebrow">Una web que cumple una función</span>
-          <h2>No alcanza con estar en internet.</h2>
-          <p>La página tiene que explicar, ordenar, transmitir confianza y hacer fácil el siguiente paso.</p>
+    <section class="section intro" id="servicios">
+      <div class="wrap intro-grid">
+        <div class="big-statement reveal-left">
+          <span class="eyebrow" style="color:var(--aqua)">Menos ruido. Más claridad.</span>
+          <h2>Una web no debería existir solo para “estar online”.</h2>
+          <p>Tiene que ordenar tu propuesta, generar confianza y facilitar que la persona haga algo después de entrar.</p>
         </div>
-        <div class="benefits">
-          <article class="benefit">
-            <div class="icon">01</div>
-            <h3>Diseño profesional</h3>
-            <p>Una identidad visual coherente con tu negocio y pensada para generar una buena primera impresión.</p>
+
+        <div class="service-stack">
+          <article class="service-row reveal">
+            <div class="service-num">01</div>
+            <div><h3>Landing pages</h3><p>Una página enfocada en presentar y convertir.</p></div>
+            <div class="service-arrow">↗</div>
           </article>
-          <article class="benefit">
-            <div class="icon">02</div>
-            <h3>Adaptada a cada pantalla</h3>
-            <p>Celular, tablet o computadora: la experiencia se mantiene clara y cómoda.</p>
+          <article class="service-row reveal">
+            <div class="service-num">02</div>
+            <div><h3>Web corporativa</h3><p>Más estructura, más profundidad y una presencia profesional completa.</p></div>
+            <div class="service-arrow">↗</div>
           </article>
-          <article class="benefit">
-            <div class="icon">03</div>
-            <h3>Rendimiento cuidado</h3>
-            <p>Estructura liviana y directa para que tu web cargue rápido y no haga esperar a tus visitas.</p>
+          <article class="service-row reveal">
+            <div class="service-num">03</div>
+            <div><h3>Catálogo o tienda</h3><p>Productos, pedidos e integraciones pensadas para vender mejor.</p></div>
+            <div class="service-arrow">↗</div>
           </article>
-          <article class="benefit">
-            <div class="icon">04</div>
-            <h3>Contacto sin vueltas</h3>
-            <p>Formularios y llamadas a la acción colocadas donde realmente ayudan a convertir una visita en consulta.</p>
+          <article class="service-row reveal">
+            <div class="service-num">04</div>
+            <div><h3>Automatización</h3><p>Flujos, formularios y procesos que reducen trabajo manual.</p></div>
+            <div class="service-arrow">↗</div>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section plans-wrap" id="servicios">
+    <section class="section plans-wrap">
       <div class="wrap">
-        <div class="section-head">
+        <div class="section-head reveal">
           <span class="eyebrow">Elegí el punto de partida</span>
           <h2>Tres formas de llevar tu negocio a la web.</h2>
-          <p>La propuesta final se adapta a lo que realmente necesitás. No pagás funciones que no aportan valor.</p>
+          <p>La propuesta final se adapta a lo que realmente necesitás. Sin venderte funciones de relleno.</p>
         </div>
 
         <div class="plans">
-          <article class="plan">
-            <span class="plan-badge">Esencial</span>
+          <article class="plan reveal">
+            <span class="badge">Esencial</span>
             <h3>Landing page</h3>
-            <p class="desc">Para presentar un servicio, producto o campaña con un objetivo concreto.</p>
+            <p class="desc">Para un servicio, producto o campaña con un objetivo concreto.</p>
             <div class="price">Presupuesto a medida<small>según contenido y alcance</small></div>
-            <ul class="checklist">
+            <ul class="checks">
               <li>Diseño responsive</li>
               <li>Secciones comerciales</li>
               <li>Botones de contacto</li>
               <li>Formulario de consulta</li>
               <li>Publicación y configuración</li>
             </ul>
-            <a class="cta" href="#contacto">Consultar landing</a>
+            <a class="btn magnetic" href="#contacto">Consultar landing</a>
           </article>
 
-          <article class="plan featured">
-            <span class="plan-badge">Más completo</span>
+          <article class="plan featured reveal">
+            <span class="badge">Más completo</span>
             <h3>Web corporativa</h3>
             <p class="desc">Para empresas y profesionales que necesitan explicar mejor quiénes son y qué ofrecen.</p>
             <div class="price">Presupuesto a medida<small>estructura pensada para tu negocio</small></div>
-            <ul class="checklist">
+            <ul class="checks">
               <li>Todo lo de una landing</li>
               <li>Varias páginas o secciones</li>
               <li>Servicios y presentación</li>
@@ -1107,170 +650,158 @@
               <li>Integraciones necesarias</li>
               <li>Acompañamiento de publicación</li>
             </ul>
-            <a class="cta" href="#contacto">Quiero una web completa</a>
+            <a class="btn magnetic" href="#contacto">Quiero una web completa</a>
           </article>
 
-          <article class="plan">
-            <span class="plan-badge">Comercio</span>
+          <article class="plan reveal">
+            <span class="badge">Comercio</span>
             <h3>Catálogo o tienda</h3>
             <p class="desc">Para mostrar productos, recibir pedidos o construir una experiencia de venta online.</p>
             <div class="price">Presupuesto a medida<small>según catálogo e integraciones</small></div>
-            <ul class="checklist">
+            <ul class="checks">
               <li>Diseño responsive</li>
               <li>Catálogo organizado</li>
               <li>Fichas de producto</li>
               <li>Carrito o pedido por contacto</li>
               <li>Integraciones según necesidad</li>
             </ul>
-            <a class="cta" href="#contacto">Consultar tienda</a>
+            <a class="btn magnetic" href="#contacto">Consultar tienda</a>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section" id="proyectos">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="eyebrow">Proyectos y demostraciones</span>
-          <h2>La mejor explicación es ver el trabajo.</h2>
-          <p>Ejemplos reales de diseño, desarrollo y producto digital trabajados dentro del ecosistema Zenix.</p>
-        </div>
-
-        <div class="portfolio-grid">
-          <article class="project">
-            <div class="project-visual">
-              <div class="screen">
-                <div class="screen-head"><i></i><i></i><i></i></div>
-                <div class="screen-line"></div>
-                <div class="screen-line soft"></div>
-                <div class="screen-blocks"><span></span><span></span><span></span></div>
-              </div>
+    <section class="portfolio-stage" id="proyectos">
+      <div class="portfolio-sticky">
+        <div class="wrap portfolio-inner">
+          <div class="portfolio-top">
+            <div>
+              <span class="eyebrow" style="color:var(--petrol)">Proyectos y conceptos</span>
+              <h2>El trabajo se entiende mejor cuando se ve.</h2>
             </div>
-            <div class="project-body">
-              <span class="project-kicker">Marca / Servicios</span>
-              <h3>Zenix AR</h3>
-              <p>Sitio corporativo para presentar servicios digitales, producto y tecnología con una identidad propia.</p>
-              <a href="https://zenix.com.ar" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-          </article>
-
-          <article class="project">
-            <div class="project-visual">
-              <div class="screen">
-                <div class="screen-head"><i></i><i></i><i></i></div>
-                <div class="screen-line" style="width:48%"></div>
-                <div class="screen-line soft" style="width:90%"></div>
-                <div class="screen-blocks"><span></span><span></span><span></span></div>
-              </div>
-            </div>
-            <div class="project-body">
-              <span class="project-kicker">Gastronomía</span>
-              <h3>Doña Lupita</h3>
-              <p>Concepto web gastronómico pensado para mostrar propuesta, productos y canales de contacto de forma visual.</p>
-              <a href="../" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-          </article>
-
-          <article class="project">
-            <div class="project-visual">
-              <div class="screen">
-                <div class="screen-head"><i></i><i></i><i></i></div>
-                <div class="screen-line" style="width:72%"></div>
-                <div class="screen-line soft"></div>
-                <div class="screen-blocks"><span></span><span></span><span></span></div>
-              </div>
-            </div>
-            <div class="project-body">
-              <span class="project-kicker">Desarrollo</span>
-              <h3>Productos digitales</h3>
-              <p>Aplicaciones, extensiones y herramientas creadas con el mismo criterio: menos ruido, más utilidad.</p>
-              <a href="https://zenix.com.ar/servicios.html" target="_blank" rel="noopener">Conocer servicios →</a>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="wrap why">
-        <div class="why-panel">
-          <div>
-            <span class="eyebrow" style="color:#b9adff">Por qué Zenix</span>
-            <div class="big">Diseño y tecnología sin vueltas.</div>
+            <p>Deslizá con el scroll: los proyectos avanzan de forma horizontal mientras vos seguís bajando.</p>
           </div>
+
+          <div class="rail" id="projectRail">
+            <article class="case">
+              <div class="case-visual">
+                <div class="case-browser">
+                  <div class="mini-dots"><i></i><i></i><i></i></div>
+                  <div class="mini-line"></div><div class="mini-line soft"></div>
+                  <div class="mini-grid"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+              <div class="case-body">
+                <span class="case-kicker">Marca / Servicios</span>
+                <h3>Zenix AR</h3>
+                <p>Sitio corporativo para presentar servicios digitales, desarrollo y tecnología con una identidad propia.</p>
+                <a class="btn" href="https://zenix.com.ar" target="_blank" rel="noopener">Ver proyecto</a>
+              </div>
+            </article>
+
+            <article class="case">
+              <div class="case-visual">
+                <div class="case-browser">
+                  <div class="mini-dots"><i></i><i></i><i></i></div>
+                  <div class="mini-line" style="width:50%"></div><div class="mini-line soft" style="width:92%"></div>
+                  <div class="mini-grid"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+              <div class="case-body">
+                <span class="case-kicker">Gastronomía</span>
+                <h3>Doña Lupita</h3>
+                <p>Concepto gastronómico pensado para mostrar productos, propuesta visual y canales de contacto de forma clara.</p>
+                <a class="btn" href="../" target="_blank" rel="noopener">Ver proyecto</a>
+              </div>
+            </article>
+
+            <article class="case">
+              <div class="case-visual">
+                <div class="case-browser">
+                  <div class="mini-dots"><i></i><i></i><i></i></div>
+                  <div class="mini-line" style="width:76%"></div><div class="mini-line soft"></div>
+                  <div class="mini-grid"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+              <div class="case-body">
+                <span class="case-kicker">Producto digital</span>
+                <h3>Apps y herramientas</h3>
+                <p>Aplicaciones y extensiones pensadas para resolver necesidades concretas sin agregar complejidad innecesaria.</p>
+                <a class="btn" href="https://zenix.com.ar/servicios.html" target="_blank" rel="noopener">Conocer servicios</a>
+              </div>
+            </article>
+
+            <article class="case">
+              <div class="case-visual">
+                <div class="case-browser">
+                  <div class="mini-dots"><i></i><i></i><i></i></div>
+                  <div class="mini-line" style="width:58%"></div><div class="mini-line soft" style="width:76%"></div>
+                  <div class="mini-grid"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+              <div class="case-body">
+                <span class="case-kicker">Automatización</span>
+                <h3>Flujos más simples</h3>
+                <p>Formularios, automatizaciones y recorridos digitales para reducir pasos y mejorar la experiencia del cliente.</p>
+                <a class="btn" href="#contacto">Quiero algo así</a>
+              </div>
+            </article>
+          </div>
+
+          <div class="rail-counter">01 — 04 · Scroll para recorrer</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section why">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Por qué Zenix</span>
+          <h2>Diseño y tecnología sin vueltas.</h2>
           <p>Primero entendemos qué necesitás resolver. Después elegimos la forma más simple de construirlo bien.</p>
         </div>
 
-        <div class="why-list">
-          <article class="why-row">
-            <div class="n">01</div>
-            <div><h3>Tu negocio primero</h3><p>La tecnología se elige según el problema, no al revés.</p></div>
-          </article>
-          <article class="why-row">
-            <div class="n">02</div>
-            <div><h3>Diseño con intención</h3><p>Cada sección tiene que ayudar a entender, confiar o avanzar.</p></div>
-          </article>
-          <article class="why-row">
-            <div class="n">03</div>
-            <div><h3>Contacto directo</h3><p>Sin capas innecesarias entre tu idea y quien la construye.</p></div>
-          </article>
-          <article class="why-row">
-            <div class="n">04</div>
-            <div><h3>Escalable</h3><p>Podemos empezar por una web clara y después sumar funciones, automatizaciones o herramientas.</p></div>
-          </article>
+        <div class="why-grid">
+          <div class="why-sticky reveal-left">
+            <strong>Tu negocio primero. La tecnología después.</strong>
+            <p>La herramienta correcta es la que hace que el problema sea más chico, no la que hace el proyecto más complicado.</p>
+          </div>
+
+          <div class="why-list">
+            <article class="why-item reveal"><b>01</b><div><h3>Diseño con intención</h3><p>Cada bloque tiene que ayudar a entender, confiar o avanzar.</p></div></article>
+            <article class="why-item reveal"><b>02</b><div><h3>Contacto directo</h3><p>Sin capas innecesarias entre tu idea y quien la construye.</p></div></article>
+            <article class="why-item reveal"><b>03</b><div><h3>Escalable</h3><p>Podemos empezar por una web y después sumar automatizaciones, apps o nuevas herramientas.</p></div></article>
+            <article class="why-item reveal"><b>04</b><div><h3>Sin humo</h3><p>Alcance claro, prioridades claras y funciones que tengan una razón real para estar.</p></div></article>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="proceso">
+    <section class="section process" id="proceso">
       <div class="wrap">
-        <div class="section-head">
-          <span class="eyebrow">Cómo trabajamos</span>
+        <div class="section-head reveal">
+          <span class="eyebrow" style="color:var(--petrol)">Cómo trabajamos</span>
           <h2>De la idea a una web publicada.</h2>
           <p>Un proceso simple para que siempre sepas qué estamos construyendo y por qué.</p>
         </div>
 
-        <div class="process">
-          <article class="step"><strong>01</strong><h3>Entender</h3><p>Vemos tu negocio, objetivo y qué necesita encontrar el cliente.</p></article>
-          <article class="step"><strong>02</strong><h3>Ordenar</h3><p>Definimos contenido, estructura, secciones y recorrido principal.</p></article>
-          <article class="step"><strong>03</strong><h3>Diseñar</h3><p>Creamos una identidad clara, moderna y coherente con tu marca.</p></article>
-          <article class="step"><strong>04</strong><h3>Construir</h3><p>Desarrollamos la web, la adaptamos y probamos sus puntos importantes.</p></article>
-          <article class="step"><strong>05</strong><h3>Publicar</h3><p>La dejamos online y lista para empezar a recibir visitas y consultas.</p></article>
+        <div class="process-grid">
+          <article class="step reveal"><b>01</b><h3>Entender</h3><p>Vemos tu negocio, objetivo y qué necesita encontrar el cliente.</p></article>
+          <article class="step reveal"><b>02</b><h3>Ordenar</h3><p>Definimos contenido, estructura, secciones y recorrido principal.</p></article>
+          <article class="step reveal"><b>03</b><h3>Diseñar</h3><p>Creamos una identidad clara, moderna y coherente con tu marca.</p></article>
+          <article class="step reveal"><b>04</b><h3>Construir</h3><p>Desarrollamos, adaptamos y probamos los puntos importantes.</p></article>
+          <article class="step reveal"><b>05</b><h3>Publicar</h3><p>La dejamos online y lista para empezar a recibir visitas y consultas.</p></article>
         </div>
       </div>
     </section>
 
-    <section class="section" style="padding-top:18px">
-      <div class="wrap">
-        <div class="section-head">
-          <span class="eyebrow">Compromisos de trabajo</span>
-          <h2>Sin promesas infladas.</h2>
-          <p>Preferimos que la confianza se construya con claridad, proceso y resultado.</p>
-        </div>
-        <div class="promise-grid">
-          <article class="promise">
-            <q>Vas a saber qué incluye el proyecto antes de empezar.</q>
-            <p>Alcance claro y prioridades definidas.</p>
-          </article>
-          <article class="promise">
-            <q>La web va a responder a una necesidad concreta de tu negocio.</q>
-            <p>Sin funciones de relleno que compliquen el proyecto.</p>
-          </article>
-          <article class="promise">
-            <q>El resultado se piensa para personas reales, no solo para verse lindo.</q>
-            <p>Claridad, velocidad y contacto como parte del diseño.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contacto">
+    <section class="section contact" id="contacto">
       <div class="wrap">
         <div class="contact-box">
-          <div class="contact-copy">
-            <span class="eyebrow">Hablemos</span>
+          <div class="contact-copy reveal-left">
+            <span class="eyebrow" style="color:var(--aqua)">Hablemos</span>
             <h2>Tu próxima web puede empezar con una conversación.</h2>
-            <p>Contanos qué hacés y qué te gustaría conseguir con tu página. No hace falta que tengas resuelto lo técnico.</p>
+            <p>Contanos qué hacés y qué te gustaría conseguir. No hace falta que tengas resuelto lo técnico.</p>
             <div class="contact-points">
               <span><i>✓</i> Consulta sin compromiso</span>
               <span><i>✓</i> Propuesta según tu necesidad</span>
@@ -1278,7 +809,7 @@
             </div>
           </div>
 
-          <form id="leadForm">
+          <form id="leadForm" class="reveal-right">
             <div class="field">
               <label for="nombre">Nombre</label>
               <input id="nombre" name="nombre" autocomplete="name" placeholder="Tu nombre" required>
@@ -1291,8 +822,8 @@
               <label for="mensaje">¿Qué necesitás?</label>
               <textarea id="mensaje" name="mensaje" placeholder="Contanos brevemente qué te gustaría hacer..." required></textarea>
             </div>
-            <button class="cta" type="submit">Enviar consulta</button>
-            <p class="form-note">Al enviar se abrirá tu aplicación de correo con la consulta preparada.</p>
+            <button class="btn magnetic" type="submit">Enviar consulta</button>
+            <p class="note">Al enviar se abrirá tu aplicación de correo con la consulta preparada.</p>
           </form>
         </div>
       </div>
@@ -1310,206 +841,98 @@
     </div>
   </footer>
 
-  <a class="floating" href="#contacto" aria-label="Contactar a Zenix">
+  <a class="floating" href="#contacto">
     <b>↗</b> Hablemos de tu web
   </a>
 
   <script>
-    document.getElementById('leadForm').addEventListener('submit', function (e) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const progress = document.getElementById('progress');
+    const header = document.getElementById('siteHeader');
+    const rail = document.getElementById('projectRail');
+    const stage = document.querySelector('.portfolio-stage');
+
+    function updateScroll(){
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      progress.style.width = (max > 0 ? (doc.scrollTop/max)*100 : 0) + '%';
+      header.classList.toggle('scrolled', window.scrollY > 18);
+
+      if(!reduced && stage && rail && window.innerWidth > 980){
+        const rect = stage.getBoundingClientRect();
+        const travel = stage.offsetHeight - window.innerHeight;
+        const p = Math.min(1,Math.max(0,-rect.top / travel));
+        const maxShift = Math.max(0,rail.scrollWidth - window.innerWidth + 80);
+        rail.style.transform = 'translateX(' + (-maxShift * p) + 'px)';
+      }
+    }
+    window.addEventListener('scroll',updateScroll,{passive:true});
+    window.addEventListener('resize',updateScroll);
+    updateScroll();
+
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      })
+    },{threshold:.14,rootMargin:'0px 0px -5% 0px'});
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach((el,i)=>{
+      el.style.transitionDelay=((i%4)*80)+'ms';
+      obs.observe(el);
+    });
+
+    const swap = document.getElementById('swapWord');
+    if(swap && !reduced){
+      const words=['venda mejor.','genere confianza.','explique mejor.','trabaje por vos.'];
+      let i=0;
+      setInterval(()=>{
+        swap.style.opacity='0';
+        swap.style.transform='translateY(10px)';
+        setTimeout(()=>{
+          i=(i+1)%words.length;
+          swap.textContent=words[i];
+          swap.style.opacity='1';
+          swap.style.transform='translateY(0)';
+        },220);
+      },2600);
+      swap.style.transition='opacity .22s ease,transform .22s ease';
+    }
+
+    if(window.matchMedia('(pointer:fine)').matches && !reduced){
+      const glow=document.getElementById('cursorGlow');
+      window.addEventListener('mousemove',e=>{
+        glow.style.left=e.clientX+'px';
+        glow.style.top=e.clientY+'px';
+        glow.style.opacity='1';
+      },{passive:true});
+
+      document.querySelectorAll('.magnetic').forEach(btn=>{
+        btn.addEventListener('mousemove',e=>{
+          const r=btn.getBoundingClientRect();
+          const x=e.clientX-(r.left+r.width/2);
+          const y=e.clientY-(r.top+r.height/2);
+          btn.style.transform='translate('+x*.08+'px,'+y*.10+'px) translateY(-2px)';
+        });
+        btn.addEventListener('mouseleave',()=>btn.style.transform='');
+      });
+    }
+
+    document.getElementById('leadForm').addEventListener('submit',function(e){
       e.preventDefault();
-      const nombre = document.getElementById('nombre').value.trim();
-      const negocio = document.getElementById('negocio').value.trim();
-      const mensaje = document.getElementById('mensaje').value.trim();
-      const subject = encodeURIComponent('Consulta web para Zenix AR');
-      const body = encodeURIComponent(
-        'Hola Zenix,\n\nSoy ' + nombre +
-        (negocio ? ' y mi negocio/proyecto es: ' + negocio : '') +
-        '.\n\nNecesito:\n' + mensaje +
+      const nombre=document.getElementById('nombre').value.trim();
+      const negocio=document.getElementById('negocio').value.trim();
+      const mensaje=document.getElementById('mensaje').value.trim();
+      const subject=encodeURIComponent('Consulta web para Zenix AR');
+      const body=encodeURIComponent(
+        'Hola Zenix,\n\nSoy '+nombre+
+        (negocio?' y mi negocio/proyecto es: '+negocio:'')+
+        '.\n\nNecesito:\n'+mensaje+
         '\n\nQuisiera recibir una propuesta.'
       );
-      window.location.href = 'mailto:josene242@gmail.com?subject=' + subject + '&body=' + body;
+      window.location.href='mailto:josene242@gmail.com?subject='+subject+'&body='+body;
     });
   </script>
-
-  <script>
-    (function () {
-      const progress = document.getElementById('scrollProgress');
-      const header = document.querySelector('header');
-
-      function onScroll() {
-        const doc = document.documentElement;
-        const max = doc.scrollHeight - doc.clientHeight;
-        const pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
-        progress.style.width = pct + '%';
-        header.classList.toggle('scrolled', window.scrollY > 18);
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-
-      const selectors = [
-        '.section-head',
-        '.benefit',
-        '.plan',
-        '.project',
-        '.why-row',
-        '.step',
-        '.promise',
-        '.contact-box'
-      ];
-      const targets = document.querySelectorAll(selectors.join(','));
-      targets.forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = ((i % 4) * 90) + 'ms';
-      });
-
-      const whyPanel = document.querySelector('.why-panel');
-      if (whyPanel) whyPanel.classList.add('reveal-left');
-
-      const contactCopy = document.querySelector('.contact-copy');
-      const form = document.querySelector('#leadForm');
-      if (contactCopy) contactCopy.classList.add('reveal-left');
-      if (form) form.classList.add('reveal-right');
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
-
-      document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => observer.observe(el));
-
-      if (window.matchMedia('(pointer:fine)').matches) {
-        document.querySelectorAll('.project,.benefit,.plan').forEach(card => {
-          card.addEventListener('mousemove', e => {
-            const r = card.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width - .5;
-            const y = (e.clientY - r.top) / r.height - .5;
-            card.style.transform =
-              'perspective(900px) rotateX(' + (-y * 2.3) + 'deg) rotateY(' + (x * 2.3) + 'deg) translateY(-4px)';
-          });
-          card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-          });
-        });
-      }
-
-      const mock = document.querySelector('.mock-window');
-      window.addEventListener('scroll', () => {
-        if (!mock || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const rect = mock.getBoundingClientRect();
-        if (rect.bottom > 0 && rect.top < window.innerHeight) {
-          const offset = (window.innerHeight / 2 - (rect.top + rect.height / 2)) * .025;
-          mock.style.transform = 'translateY(' + offset + 'px)';
-        }
-      }, { passive:true });
-    })();
-  </script>
-
-
-  <script>
-    (function(){
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // Ambient particles
-      const ambient = document.getElementById('ambientBg');
-      if (ambient && !reduced) {
-        const count = window.innerWidth < 700 ? 8 : 15;
-        for (let i = 0; i < count; i++) {
-          const d = document.createElement('span');
-          d.className = 'ambient-dot';
-          const size = 18 + Math.random() * 58;
-          d.style.width = size + 'px';
-          d.style.height = size + 'px';
-          d.style.setProperty('--x', (Math.random() * 100) + 'vw');
-          d.style.setProperty('--drift', ((Math.random() - .5) * 34) + 'vw');
-          d.style.setProperty('--scale', (.55 + Math.random() * 1.1).toFixed(2));
-          d.style.setProperty('--dur', (13 + Math.random() * 16).toFixed(1) + 's');
-          d.style.animationDelay = (-Math.random() * 18).toFixed(1) + 's';
-          ambient.appendChild(d);
-        }
-      }
-
-      // Rotating hero phrase
-      const heroWord = document.getElementById('heroWord');
-      if (heroWord && !reduced) {
-        const words = ['trabaje por vos.','genere confianza.','explique lo que hacés.','convierta visitas.','venda mejor tu idea.'];
-        let wi = 0;
-        setInterval(() => {
-          heroWord.classList.add('word-out');
-          setTimeout(() => {
-            wi = (wi + 1) % words.length;
-            heroWord.textContent = words[wi];
-            heroWord.classList.remove('word-out');
-            heroWord.classList.remove('word-in');
-            void heroWord.offsetWidth;
-            heroWord.classList.add('word-in');
-          }, 250);
-        }, 2600);
-      }
-
-      // Cursor glow + magnetic CTA
-      const glow = document.getElementById('cursorGlow');
-      if (glow && window.matchMedia('(pointer:fine)').matches && !reduced) {
-        window.addEventListener('mousemove', e => {
-          glow.style.left = e.clientX + 'px';
-          glow.style.top = e.clientY + 'px';
-          glow.style.opacity = '1';
-        }, {passive:true});
-        document.documentElement.addEventListener('mouseleave', () => glow.style.opacity = '0');
-
-        document.querySelectorAll('.cta').forEach(btn => {
-          btn.classList.add('magnetic');
-          btn.addEventListener('mousemove', e => {
-            const r = btn.getBoundingClientRect();
-            const x = e.clientX - (r.left + r.width / 2);
-            const y = e.clientY - (r.top + r.height / 2);
-            btn.style.transform = 'translate(' + (x * .08) + 'px,' + (y * .12) + 'px) translateY(-2px)';
-          });
-          btn.addEventListener('mouseleave', () => btn.style.transform = '');
-        });
-      }
-
-      // Scroll-reactive hero depth and alternating section drift
-      if (!reduced) {
-        const hero = document.querySelector('.hero-grid');
-        const band = document.querySelector('.kinetic-band');
-        let ticking = false;
-        const parallax = () => {
-          const y = window.scrollY;
-          if (hero && y < 900) {
-            hero.style.transform = 'translateY(' + Math.min(y * .055, 30) + 'px)';
-          }
-          if (band) {
-            band.style.translate = ((y % 80) * -.035) + 'px 0';
-          }
-          ticking = false;
-        };
-        window.addEventListener('scroll', () => {
-          if (!ticking) {
-            requestAnimationFrame(parallax);
-            ticking = true;
-          }
-        }, {passive:true});
-      }
-
-      // Active process focus while scrolling
-      const steps = [...document.querySelectorAll('.step')];
-      if (steps.length && 'IntersectionObserver' in window) {
-        const stepObs = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              steps.forEach(s => s.style.borderColor = '');
-              entry.target.style.borderColor = '#9d8cff';
-            }
-          });
-        }, {threshold:.65});
-        steps.forEach(s => stepObs.observe(s));
-      }
-    })();
-  </script>
-
 </body>
 </html>
