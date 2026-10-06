@@ -119,10 +119,24 @@ function renderMenu() {
 
   menuList.innerHTML = items.map((item, index) => {
     const qty = quantityFor(activeCategory, index);
+    const hasPhoto = activeCategory === "empanadas" || activeCategory === "pizzas";
+    const photoLabel = activeCategory === "empanadas"
+      ? (item.name === "Otros sabores" ? "Empanadas surtidas" : `Empanada de ${item.name}`)
+      : activeCategory === "pizzas"
+        ? (/^pizza/i.test(item.name) ? item.name : `Pizza ${item.name}`)
+        : item.name;
 
     return `
-      <article class="menu-item">
-        <div>
+      <article class="menu-item${hasPhoto ? " menu-item-with-photo" : ""}">
+        ${hasPhoto ? `
+          <div
+            class="menu-item-photo menu-photo-${activeCategory}-${index}"
+            role="img"
+            aria-label="${photoLabel}">
+            <span>Imagen ilustrativa</span>
+          </div>
+        ` : ""}
+        <div class="menu-item-copy">
           <span class="menu-item-kicker">${item.tag}</span>
           <h3>${item.name}</h3>
           <p>${item.desc}</p>
