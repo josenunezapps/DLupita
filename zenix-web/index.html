@@ -976,6 +976,174 @@
       .scene-indicator{left:22px;right:22px;bottom:18px}
     }
 
+  
+    /* ===== ZENIX V9 — DENSITY PASS ===== */
+    .section{padding:92px 0}
+    .section-head{margin-bottom:42px}
+    .hero{
+      min-height:auto;
+      padding:132px 0 72px
+    }
+    .hero-grid{gap:64px}
+    .visual-wrap{min-height:520px}
+    .ticker{margin-top:-2px}
+
+    .capabilities{
+      position:relative;
+      padding:72px 0 78px;
+      background:
+        linear-gradient(180deg,#ebe6dd,#e4e1d8);
+      border-bottom:1px solid rgba(15,63,68,.09);
+      overflow:hidden
+    }
+    .capabilities:before{
+      content:"";position:absolute;right:-160px;top:-180px;width:430px;height:430px;border-radius:50%;
+      background:radial-gradient(circle,rgba(86,214,197,.14),transparent 68%);
+      pointer-events:none
+    }
+    .cap-head{
+      display:grid;grid-template-columns:.92fr 1.08fr;gap:36px;align-items:end;margin-bottom:26px
+    }
+    .cap-head h2{
+      margin:8px 0 0;font-size:clamp(34px,4.2vw,56px);line-height:.98;letter-spacing:-.055em
+    }
+    .cap-head p{
+      margin:0;color:#667173;font-size:15px;line-height:1.7;max-width:560px;justify-self:end
+    }
+    .bento{
+      display:grid;
+      grid-template-columns:1.25fr .75fr .75fr 1.25fr;
+      grid-template-rows:220px 190px;
+      gap:14px
+    }
+    .bento-card{
+      position:relative;overflow:hidden;border-radius:24px;padding:24px;
+      border:1px solid rgba(15,63,68,.10);
+      background:#f7f1e7;
+      box-shadow:0 12px 30px rgba(15,63,68,.05);
+      transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease
+    }
+    .bento-card:hover{
+      transform:translateY(-5px);
+      box-shadow:0 22px 46px rgba(15,63,68,.10);
+      border-color:rgba(15,63,68,.18)
+    }
+    .bento-card.dark{
+      background:
+        radial-gradient(circle at 90% 0%,rgba(86,214,197,.16),transparent 30%),
+        linear-gradient(145deg,#103f44,#0c3034);
+      color:#fff;border-color:rgba(255,255,255,.08)
+    }
+    .bento-card.aqua{
+      background:linear-gradient(145deg,#cfece6,#b9e5dc)
+    }
+    .bento-card.sand{
+      background:linear-gradient(145deg,#f2e3ce,#e5d0b3)
+    }
+    .bento-card.wide{grid-column:span 2}
+    .bento-card.tall{grid-row:span 2}
+    .bento-kicker{
+      display:block;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;
+      color:#627073;margin-bottom:12px
+    }
+    .dark .bento-kicker{color:#98c9c2}
+    .bento-card h3{
+      margin:0 0 8px;font-size:24px;line-height:1;letter-spacing:-.04em
+    }
+    .bento-card p{
+      margin:0;color:#6b7476;font-size:13px;max-width:330px
+    }
+    .dark p{color:#b5cdca}
+    .bento-icon{
+      position:absolute;right:20px;bottom:18px;
+      width:48px;height:48px;border-radius:16px;display:grid;place-items:center;
+      background:rgba(15,63,68,.08);color:var(--petrol);font-size:20px;font-weight:900;
+      border:1px solid rgba(15,63,68,.08)
+    }
+    .dark .bento-icon{
+      background:rgba(255,255,255,.07);color:var(--aqua);border-color:rgba(255,255,255,.08)
+    }
+    .mini-phone-ui{
+      position:absolute;right:22px;bottom:-28px;width:120px;height:190px;border-radius:24px 24px 0 0;
+      background:#123b3f;padding:8px;box-shadow:0 18px 40px rgba(7,45,49,.18);
+      transform:rotate(5deg);transition:transform .35s ease
+    }
+    .bento-card:hover .mini-phone-ui{transform:rotate(2deg) translateY(-4px)}
+    .mini-phone-screen{
+      height:100%;border-radius:17px 17px 0 0;background:#f7efe4;padding:10px
+    }
+    .mini-phone-screen span{
+      display:block;height:6px;border-radius:99px;background:#c8c1b7;margin:8px 0
+    }
+    .mini-phone-screen span:nth-child(1){width:62%;background:#183e42;height:8px}
+    .mini-phone-screen span:nth-child(2){width:84%}
+    .mini-phone-screen span:nth-child(3){width:72%}
+    .mini-phone-screen b{
+      display:block;height:56px;border-radius:10px;background:#cdeae4;margin-top:16px
+    }
+    .automation-chain{
+      position:absolute;left:24px;right:24px;bottom:22px;display:flex;align-items:center;gap:7px
+    }
+    .automation-chain span{
+      flex:1;padding:9px 7px;border-radius:10px;background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);font-size:9px;font-weight:850;text-align:center;color:#d8ece9
+    }
+    .automation-chain i{font-style:normal;color:var(--aqua)}
+    .seo-lines{position:absolute;left:24px;right:24px;bottom:22px;display:grid;gap:8px}
+    .seo-lines span{
+      height:8px;border-radius:99px;background:rgba(15,63,68,.12);overflow:hidden
+    }
+    .seo-lines span:after{
+      content:"";display:block;height:100%;width:var(--w);background:var(--petrol);
+      animation:seoPulse 3s ease-in-out infinite alternate
+    }
+    @keyframes seoPulse{from{width:22%}to{width:var(--w)}}
+
+    .include-strip{
+      margin-top:24px;
+      display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+      border:1px solid rgba(15,63,68,.10);border-radius:20px;overflow:hidden;
+      background:rgba(15,63,68,.08)
+    }
+    .include-item{
+      padding:18px 20px;background:rgba(255,250,242,.84);
+      display:flex;align-items:center;gap:12px
+    }
+    .include-item b{
+      width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+      background:var(--petrol);color:#fff;font-size:10px;flex:0 0 auto
+    }
+    .include-item span{font-size:12px;font-weight:800;color:#35484a}
+
+    .intro{padding-top:84px}
+    .plans-wrap{padding-top:94px;padding-bottom:94px}
+    .experience-lab{padding-top:96px;padding-bottom:96px}
+    .story-list{gap:14px;padding-bottom:80px}
+    .story-step{min-height:38vh}
+    .why{padding-top:92px;padding-bottom:92px}
+    .process{padding-top:88px;padding-bottom:88px}
+    .contact{padding-top:88px;padding-bottom:88px}
+
+    @media(max-width:980px){
+      .cap-head{grid-template-columns:1fr}
+      .cap-head p{justify-self:start}
+      .bento{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+      .bento-card,.bento-card.tall{min-height:190px;grid-row:auto}
+      .bento-card.wide{grid-column:span 2}
+      .include-strip{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:650px){
+      .section{padding:74px 0}
+      .hero{padding:118px 0 58px}
+      .capabilities{padding:58px 0 62px}
+      .bento{grid-template-columns:1fr}
+      .bento-card.wide{grid-column:auto}
+      .bento-card{min-height:180px}
+      .include-strip{grid-template-columns:1fr}
+      .visual-wrap{min-height:430px}
+      .story-step{min-height:0}
+    }
+
   </style>
 </head>
 <body>
@@ -1067,6 +1235,75 @@
         <span>Diseño web</span><span>Landing pages</span><span>Automatización</span><span>Apps</span><span>Tiendas online</span><span>Experiencias digitales</span>
       </div>
     </div>
+
+    <section class="capabilities" id="capacidades">
+      <div class="wrap">
+        <div class="cap-head reveal">
+          <div>
+            <span class="eyebrow" style="color:var(--petrol)">Más que una página linda</span>
+            <h2>Una web puede hacer mucho más por tu negocio.</h2>
+          </div>
+          <p>No todo proyecto necesita lo mismo. Estas son piezas que podemos combinar según el objetivo real de tu negocio.</p>
+        </div>
+
+        <div class="bento">
+          <article class="bento-card dark tall reveal">
+            <span class="bento-kicker">Mobile first</span>
+            <h3>Diseñada para el lugar donde más se navega.</h3>
+            <p>La experiencia se piensa primero para celular y después se adapta al resto de las pantallas.</p>
+            <div class="mini-phone-ui">
+              <div class="mini-phone-screen"><span></span><span></span><span></span><b></b></div>
+            </div>
+          </article>
+
+          <article class="bento-card aqua reveal">
+            <span class="bento-kicker">Contacto</span>
+            <h3>WhatsApp directo.</h3>
+            <p>Menos pasos entre una visita y una consulta real.</p>
+            <div class="bento-icon">↗</div>
+          </article>
+
+          <article class="bento-card sand reveal">
+            <span class="bento-kicker">Conversión</span>
+            <h3>Formularios útiles.</h3>
+            <p>Pedí solo los datos que realmente necesitás.</p>
+            <div class="bento-icon">✎</div>
+          </article>
+
+          <article class="bento-card dark wide reveal">
+            <span class="bento-kicker">Automatización</span>
+            <h3>Después del clic, el flujo puede seguir solo.</h3>
+            <p>Captura de datos, avisos, organización y respuestas conectadas cuando el proyecto lo necesita.</p>
+            <div class="automation-chain">
+              <span>Consulta</span><i>→</i><span>Datos</span><i>→</i><span>Aviso</span><i>→</i><span>Seguimiento</span>
+            </div>
+          </article>
+
+          <article class="bento-card reveal">
+            <span class="bento-kicker">Visibilidad</span>
+            <h3>SEO técnico básico.</h3>
+            <p>Estructura, títulos y metadatos preparados correctamente.</p>
+            <div class="seo-lines">
+              <span style="--w:88%"></span><span style="--w:72%"></span><span style="--w:94%"></span>
+            </div>
+          </article>
+
+          <article class="bento-card reveal">
+            <span class="bento-kicker">Comercio</span>
+            <h3>Catálogo y pedidos.</h3>
+            <p>Mostrá productos y hacé más simple el siguiente paso.</p>
+            <div class="bento-icon">＋</div>
+          </article>
+        </div>
+
+        <div class="include-strip reveal">
+          <div class="include-item"><b>01</b><span>Diseño</span></div>
+          <div class="include-item"><b>02</b><span>Desarrollo</span></div>
+          <div class="include-item"><b>03</b><span>Publicación</span></div>
+          <div class="include-item"><b>04</b><span>Evolución</span></div>
+        </div>
+      </div>
+    </section>
 
     <section class="section intro" id="servicios">
       <div class="wrap intro-grid">
