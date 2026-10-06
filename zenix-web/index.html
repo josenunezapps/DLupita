@@ -293,59 +293,6 @@
     .plan .btn{margin-top:auto;width:100%;background:#fff;color:var(--petrol);border-color:#fff;box-shadow:none}
     .featured .btn{background:var(--petrol);color:#fff;border-color:var(--petrol)}
 
-    .portfolio-stage{
-      height:330vh;background:#eadfce;position:relative
-    }
-    .portfolio-sticky{
-      position:sticky;
-      top:76px;
-      height:calc(100vh - 76px);
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-      padding:18px 0 16px;
-      background:#eadfce;
-      z-index:2
-    }
-    .portfolio-inner{width:100%}
-    .portfolio-top{
-      display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:18px
-    }
-    .portfolio-top h2{font-size:clamp(38px,5vw,62px);line-height:.94;letter-spacing:-.055em;margin:7px 0 0;max-width:700px}
-    .portfolio-top p{max-width:360px;color:#69665e;margin:0}
-    .rail{
-      display:flex;gap:24px;width:max-content;will-change:transform
-    }
-    .case{
-      width:min(74vw,780px);height:clamp(360px,calc(100vh - 330px),470px);border-radius:32px;overflow:hidden;
-      background:#fff6ea;border:1px solid rgba(15,63,68,.1);box-shadow:0 28px 70px rgba(50,47,41,.13);
-      display:grid;grid-template-columns:1.05fr .95fr
-    }
-    .case-visual{
-      position:relative;padding:28px;background:linear-gradient(145deg,var(--petrol),#226d72);
-      display:flex;align-items:flex-end;overflow:hidden
-    }
-    .case:nth-child(2) .case-visual{background:linear-gradient(145deg,#8b4932,#e0ad80)}
-    .case:nth-child(3) .case-visual{background:linear-gradient(145deg,#273a63,#79a5c7)}
-    .case:nth-child(4) .case-visual{background:linear-gradient(145deg,#2f4b3d,#8bb49b)}
-    .case-browser{
-      width:100%;height:78%;border-radius:18px 18px 0 0;background:#fbf6ef;padding:14px;
-      box-shadow:0 18px 44px rgba(0,0,0,.22);transition:transform .4s ease
-    }
-    .case:hover .case-browser{transform:translateY(-10px) scale(1.015)}
-    .mini-dots{display:flex;gap:5px;margin-bottom:18px}
-    .mini-dots i{width:6px;height:6px;border-radius:50%;background:#c7c0b6}
-    .mini-line{height:8px;border-radius:99px;background:#25383c;margin:8px 0;width:68%}
-    .mini-line.soft{height:5px;background:#ded8cf;width:85%}
-    .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:22px}
-    .mini-grid span{height:64px;background:#ece6de;border-radius:8px}
-    .case-body{padding:34px;display:flex;flex-direction:column}
-    .case-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:var(--petrol)}
-    .case h3{font-size:34px;letter-spacing:-.045em;margin:11px 0 10px}
-    .case p{color:#6b6f70;margin:0 0 24px}
-    .case .btn{margin-top:auto;align-self:flex-start}
-    .rail-counter{margin-top:12px;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#6d6a62}
-
     .why{
       background:#132b2e;color:#fff
     }
@@ -463,11 +410,6 @@
       .process-grid{grid-template-columns:repeat(2,1fr)}
       .process-grid:before{display:none}
       .why-sticky{position:relative;top:auto;min-height:auto}
-      .portfolio-stage{height:auto;padding:100px 0}
-      .portfolio-sticky{position:relative;top:auto;height:auto;display:block;overflow:visible;padding:0;background:transparent}
-      .portfolio-top{align-items:start;flex-direction:column}
-      .rail{width:auto;display:grid;grid-template-columns:1fr;transform:none!important}
-      .case{width:100%;height:auto;min-height:520px}
     }
     @media(max-width:650px){
       .wrap{width:min(var(--max),calc(100% - 26px))}
@@ -485,9 +427,6 @@
       .big-statement{min-height:360px;padding:28px}
       .service-row{grid-template-columns:46px 1fr auto;padding:20px}
       .plans{gap:14px}
-      .case{grid-template-columns:1fr;min-height:0}
-      .case-visual{min-height:300px}
-      .case-body{padding:26px}
       .process-grid{grid-template-columns:1fr}
       .contact-box{padding:28px}
       .footer-grid{flex-direction:column;align-items:flex-start}
@@ -499,26 +438,222 @@
       .reveal,.reveal-left,.reveal-right{opacity:1!important;transform:none!important}
     }
   
-    /* Portfolio viewport fix */
-    @media (min-width:981px) and (max-height:820px){
-      .portfolio-top{margin-bottom:14px}
-      .portfolio-top h2{font-size:clamp(36px,4.4vw,56px)}
-      .portfolio-top p{font-size:14px;max-width:330px}
-      .case{height:clamp(350px,calc(100vh - 300px),440px)}
-      .case-body{padding:28px}
-      .case h3{font-size:30px}
-      .case p{font-size:14px;margin-bottom:18px}
-      .case-visual{padding:22px}
-      .rail-counter{margin-top:10px}
+  
+    /* ===== Experience Lab ===== */
+    .experience-lab{
+      background:
+        radial-gradient(circle at 8% 18%,rgba(86,214,197,.16),transparent 24%),
+        linear-gradient(180deg,#0b3539,#0d2d31 58%,#10272a);
+      color:#fff;
+      overflow:clip
     }
-    @media (min-width:981px) and (max-height:700px){
-      .portfolio-sticky{padding:10px 0 8px}
-      .portfolio-top h2{font-size:42px}
-      .portfolio-top p{display:none}
-      .case{height:350px}
-      .case-body{padding:24px}
-      .case h3{font-size:28px}
-      .case p{font-size:13px}
+    .experience-lab .section-head{max-width:920px}
+    .experience-lab .section-head .eyebrow{color:var(--aqua)}
+    .experience-lab .section-head p{color:#aec3c1}
+    .experience-lab .section-head h2{max-width:860px}
+    .lab-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);
+      gap:70px;
+      align-items:start
+    }
+    .lab-stage{
+      position:sticky;
+      top:118px;
+      min-height:610px;
+      border-radius:34px;
+      padding:18px;
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.11);
+      box-shadow:0 34px 90px rgba(0,0,0,.27);
+      overflow:hidden;
+      isolation:isolate
+    }
+    .lab-stage:before{
+      content:"";position:absolute;width:380px;height:380px;border-radius:50%;
+      left:-170px;top:-150px;
+      background:radial-gradient(circle,rgba(86,214,197,.28),transparent 68%);
+      filter:blur(8px);
+      animation:labOrb 7s ease-in-out infinite alternate;
+      z-index:-1
+    }
+    .lab-stage:after{
+      content:"";position:absolute;inset:0;z-index:-2;opacity:.22;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(to bottom,black,transparent 92%)
+    }
+    @keyframes labOrb{to{transform:translate(90px,70px) scale(1.18)}}
+    .lab-window{
+      height:574px;
+      border-radius:24px;
+      overflow:hidden;
+      background:#f7efe4;
+      color:var(--ink);
+      box-shadow:0 22px 65px rgba(0,0,0,.22)
+    }
+    .lab-top{
+      height:46px;background:#e3dbd0;display:flex;align-items:center;gap:6px;padding:0 14px;
+      border-bottom:1px solid rgba(15,63,68,.08)
+    }
+    .lab-top i{width:8px;height:8px;border-radius:50%;background:#9ea4a3}
+    .lab-url{height:22px;max-width:245px;flex:1;margin-left:8px;border-radius:99px;background:#cec6bb}
+    .lab-canvas{position:relative;height:calc(100% - 46px);overflow:hidden}
+    .lab-scene{
+      position:absolute;inset:0;padding:34px;
+      opacity:0;transform:translateY(24px) scale(.985);
+      transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1);
+      pointer-events:none
+    }
+    .lab-stage[data-scene="0"] .lab-scene[data-scene="0"],
+    .lab-stage[data-scene="1"] .lab-scene[data-scene="1"],
+    .lab-stage[data-scene="2"] .lab-scene[data-scene="2"],
+    .lab-stage[data-scene="3"] .lab-scene[data-scene="3"]{
+      opacity:1;transform:none
+    }
+
+    .scene-hero{
+      height:100%;
+      display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:center
+    }
+    .scene-copy small,.trust-title,.convert-title,.flow-title{
+      text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:950;color:var(--petrol)
+    }
+    .scene-copy h3{
+      font-size:48px;line-height:.93;letter-spacing:-.06em;margin:10px 0 14px;max-width:360px
+    }
+    .scene-copy p{font-size:14px;color:#6d7576;max-width:340px}
+    .scene-btn{
+      display:inline-flex;margin-top:12px;padding:12px 18px;border-radius:999px;background:var(--petrol);color:#fff;
+      font-size:12px;font-weight:900;box-shadow:0 10px 25px rgba(15,63,68,.18)
+    }
+    .scene-art{
+      aspect-ratio:1/1;border-radius:26px;position:relative;
+      background:linear-gradient(145deg,#0f3f44,#64d7c7);overflow:hidden
+    }
+    .scene-art:before,.scene-art:after{
+      content:"";position:absolute;border-radius:999px;border:1px solid rgba(255,255,255,.5)
+    }
+    .scene-art:before{width:72%;height:72%;left:14%;top:14%;animation:orbitOne 8s linear infinite}
+    .scene-art:after{width:38%;height:38%;left:31%;top:31%;animation:orbitOne 5s linear infinite reverse}
+    @keyframes orbitOne{to{transform:rotate(360deg)}}
+    .scene-dot{
+      position:absolute;width:20px;height:20px;border-radius:50%;background:#fff7ed;left:calc(50% - 10px);top:calc(50% - 10px);
+      box-shadow:0 0 0 12px rgba(255,255,255,.11),0 0 34px rgba(255,255,255,.5);
+      animation:dotPulse 2.2s ease-in-out infinite
+    }
+    @keyframes dotPulse{50%{transform:scale(1.15)}}
+
+    .trust-scene{height:100%;display:flex;flex-direction:column;justify-content:center}
+    .trust-scene h3,.convert-scene h3,.flow-scene h3{
+      font-size:42px;line-height:.96;letter-spacing:-.055em;margin:9px 0 24px;max-width:460px
+    }
+    .trust-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .trust-card{
+      min-height:170px;padding:18px;border-radius:20px;background:#fffaf3;border:1px solid rgba(15,63,68,.1);
+      box-shadow:0 12px 30px rgba(15,63,68,.07);position:relative;overflow:hidden
+    }
+    .trust-card:after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(110deg,transparent 25%,rgba(86,214,197,.18) 48%,transparent 70%);
+      transform:translateX(-120%);animation:trustSweep 3.8s ease-in-out infinite
+    }
+    .trust-card:nth-child(2):after{animation-delay:.5s}
+    .trust-card:nth-child(3):after{animation-delay:1s}
+    @keyframes trustSweep{65%,100%{transform:translateX(120%)}}
+    .trust-card b{display:block;font-size:12px;color:var(--petrol);margin-bottom:34px}
+    .trust-card strong{font-size:17px}
+    .trust-card p{font-size:12px;color:#707879;margin:8px 0 0}
+
+    .convert-scene{height:100%;display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;align-items:center}
+    .phone{
+      width:190px;height:360px;margin:auto;border-radius:34px;background:#173d41;padding:10px;
+      box-shadow:0 22px 50px rgba(10,45,48,.24);animation:phoneFloat 4.8s ease-in-out infinite
+    }
+    @keyframes phoneFloat{50%{transform:translateY(-8px) rotate(.5deg)}}
+    .phone-screen{height:100%;border-radius:26px;background:#f7efe4;padding:18px;display:flex;flex-direction:column}
+    .phone-pill{width:48px;height:6px;background:#c8c0b6;border-radius:99px;margin:0 auto 24px}
+    .chat{padding:10px 12px;border-radius:14px;background:#e7dfd4;font-size:11px;margin-bottom:10px;max-width:88%}
+    .chat.user{background:#bfeee5;align-self:flex-end}
+    .phone-cta{
+      margin-top:auto;padding:11px;border-radius:12px;background:var(--petrol);color:#fff;text-align:center;font-size:11px;font-weight:900
+    }
+    .convert-copy p{color:#687273;font-size:14px}
+    .convert-metric{
+      display:flex;align-items:center;gap:12px;margin-top:22px;padding:14px 16px;border-radius:16px;background:#fffaf3;
+      border:1px solid rgba(15,63,68,.1)
+    }
+    .convert-metric b{font-size:26px;color:var(--petrol)}
+    .convert-metric span{font-size:12px;color:#697172}
+
+    .flow-scene{height:100%;display:flex;flex-direction:column;justify-content:center}
+    .flow-board{
+      position:relative;height:260px;border-radius:24px;background:#143b3f;overflow:hidden;padding:24px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)
+    }
+    .flow-line{
+      position:absolute;height:2px;background:linear-gradient(90deg,var(--aqua),rgba(86,214,197,.15));transform-origin:left center
+    }
+    .flow-line.l1{width:145px;left:130px;top:78px;transform:rotate(10deg)}
+    .flow-line.l2{width:170px;left:265px;top:103px;transform:rotate(-12deg)}
+    .flow-line.l3{width:150px;left:248px;top:178px;transform:rotate(10deg)}
+    .flow-line:after{
+      content:"";display:block;width:32px;height:100%;background:#d7fff8;box-shadow:0 0 18px var(--aqua);
+      animation:flowTravel 2.2s linear infinite
+    }
+    .flow-line.l2:after{animation-delay:.45s}.flow-line.l3:after{animation-delay:.9s}
+    @keyframes flowTravel{from{transform:translateX(-35px)}to{transform:translateX(175px)}}
+    .node{
+      position:absolute;min-width:110px;padding:14px 16px;border-radius:16px;background:#f7efe4;color:var(--ink);
+      box-shadow:0 12px 25px rgba(0,0,0,.18);font-size:11px;font-weight:900;text-align:center
+    }
+    .node.n1{left:24px;top:52px}.node.n2{left:270px;top:42px}.node.n3{right:24px;top:82px}.node.n4{left:250px;bottom:34px}
+    .node small{display:block;font-size:9px;font-weight:800;color:#758080;margin-top:4px}
+
+    .story-list{display:grid;gap:18px;padding:8px 0 120px}
+    .story-step{
+      min-height:46vh;padding:30px 30px 34px;border-radius:28px;
+      background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);
+      display:flex;flex-direction:column;justify-content:center;
+      transition:.35s ease;opacity:.56
+    }
+    .story-step.active{
+      background:rgba(255,255,255,.085);border-color:rgba(86,214,197,.42);
+      box-shadow:0 22px 60px rgba(0,0,0,.16);opacity:1;transform:translateX(-8px)
+    }
+    .story-step .story-num{
+      font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--aqua);font-weight:950
+    }
+    .story-step h3{font-size:34px;line-height:1;letter-spacing:-.045em;margin:12px 0 12px}
+    .story-step p{margin:0;color:#aec0be;font-size:15px;max-width:420px}
+    .story-step ul{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:8px;color:#d4dfdd;font-size:13px}
+    .story-step li:before{content:"↳";color:var(--aqua);margin-right:8px}
+
+    @media(max-width:980px){
+      .lab-grid{grid-template-columns:1fr;gap:28px}
+      .lab-stage{position:relative;top:auto;min-height:auto}
+      .lab-window{height:540px}
+      .story-list{padding-bottom:0}
+      .story-step{min-height:0}
+    }
+    @media(max-width:650px){
+      .lab-stage{padding:10px;border-radius:24px}
+      .lab-window{height:470px}
+      .lab-scene{padding:22px}
+      .scene-hero{grid-template-columns:1fr}
+      .scene-art{display:none}
+      .scene-copy h3,.trust-scene h3,.convert-scene h3,.flow-scene h3{font-size:34px}
+      .trust-cards{grid-template-columns:1fr}
+      .trust-card{min-height:105px}
+      .convert-scene{grid-template-columns:1fr}
+      .phone{width:155px;height:280px}
+      .convert-copy{display:none}
+      .flow-board{height:300px;transform:scale(.84);transform-origin:center}
+      .story-step{padding:24px}
+      .story-step h3{font-size:28px}
     }
 
   </style>
@@ -535,7 +670,7 @@
       </a>
       <nav class="nav-links">
         <a href="#servicios">Servicios</a>
-        <a href="#proyectos">Proyectos</a>
+        <a href="#experiencia">Experiencia</a>
         <a href="#proceso">Proceso</a>
         <a href="#contacto">Contacto</a>
       </nav>
@@ -702,84 +837,114 @@
       </div>
     </section>
 
-    <section class="portfolio-stage" id="proyectos">
-      <div class="portfolio-sticky">
-        <div class="wrap portfolio-inner">
-          <div class="portfolio-top">
-            <div>
-              <span class="eyebrow" style="color:var(--petrol)">Proyectos y conceptos</span>
-              <h2>El trabajo se entiende mejor cuando se ve.</h2>
+    <section class="section experience-lab" id="experiencia">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">No te muestro plantillas</span>
+          <h2>Te muestro qué debería hacer tu web.</h2>
+          <p>Una buena página no es una foto linda en internet. Es una secuencia: captar atención, generar confianza, convertir y automatizar.</p>
+        </div>
+
+        <div class="lab-grid">
+          <div class="lab-stage" id="labStage" data-scene="0">
+            <div class="lab-window">
+              <div class="lab-top">
+                <i></i><i></i><i></i>
+                <div class="lab-url"></div>
+              </div>
+              <div class="lab-canvas">
+
+                <div class="lab-scene" data-scene="0">
+                  <div class="scene-hero">
+                    <div class="scene-copy">
+                      <small>01 · Atención</small>
+                      <h3>Entrá y entendé en segundos.</h3>
+                      <p>Un mensaje claro, una jerarquía visual fuerte y una acción evidente desde el primer vistazo.</p>
+                      <span class="scene-btn">Quiero saber más ↗</span>
+                    </div>
+                    <div class="scene-art"><span class="scene-dot"></span></div>
+                  </div>
+                </div>
+
+                <div class="lab-scene" data-scene="1">
+                  <div class="trust-scene">
+                    <span class="trust-title">02 · Confianza</span>
+                    <h3>Después del impacto, hay que dar motivos para quedarse.</h3>
+                    <div class="trust-cards">
+                      <article class="trust-card"><b>01</b><strong>Qué hacés</strong><p>Explicado sin vueltas ni textos genéricos.</p></article>
+                      <article class="trust-card"><b>02</b><strong>Por qué elegirte</strong><p>Beneficios y diferenciales visibles.</p></article>
+                      <article class="trust-card"><b>03</b><strong>Qué sigue</strong><p>Un camino claro hacia el contacto.</p></article>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lab-scene" data-scene="2">
+                  <div class="convert-scene">
+                    <div class="phone">
+                      <div class="phone-screen">
+                        <div class="phone-pill"></div>
+                        <div class="chat">Hola, quería consultar por el servicio.</div>
+                        <div class="chat user">Perfecto. ¿Qué necesitás resolver?</div>
+                        <div class="chat">Quiero una página para mi negocio.</div>
+                        <div class="phone-cta">Enviar consulta</div>
+                      </div>
+                    </div>
+                    <div class="convert-copy">
+                      <span class="convert-title">03 · Conversión</span>
+                      <h3>La visita tiene que terminar en una acción.</h3>
+                      <p>WhatsApp, formulario, reserva, pedido o llamada. La experiencia se diseña para que contactar sea fácil.</p>
+                      <div class="convert-metric"><b>1</b><span>objetivo principal por recorrido. Menos distracciones, más claridad.</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lab-scene" data-scene="3">
+                  <div class="flow-scene">
+                    <span class="flow-title">04 · Automatización</span>
+                    <h3>Y después, que la web siga trabajando.</h3>
+                    <div class="flow-board">
+                      <div class="flow-line l1"></div><div class="flow-line l2"></div><div class="flow-line l3"></div>
+                      <div class="node n1">Consulta<small>Formulario / WhatsApp</small></div>
+                      <div class="node n2">Clasificación<small>Datos ordenados</small></div>
+                      <div class="node n3">Acción<small>Aviso / respuesta</small></div>
+                      <div class="node n4">Seguimiento<small>Menos trabajo manual</small></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
-            <p>Deslizá con el scroll: los proyectos avanzan de forma horizontal mientras vos seguís bajando.</p>
           </div>
 
-          <div class="rail" id="projectRail">
-            <article class="case">
-              <div class="case-visual">
-                <div class="case-browser">
-                  <div class="mini-dots"><i></i><i></i><i></i></div>
-                  <div class="mini-line"></div><div class="mini-line soft"></div>
-                  <div class="mini-grid"><span></span><span></span><span></span></div>
-                </div>
-              </div>
-              <div class="case-body">
-                <span class="case-kicker">Marca / Servicios</span>
-                <h3>Zenix AR</h3>
-                <p>Sitio corporativo para presentar servicios digitales, desarrollo y tecnología con una identidad propia.</p>
-                <a class="btn" href="https://zenix.com.ar" target="_blank" rel="noopener">Ver proyecto</a>
-              </div>
+          <div class="story-list">
+            <article class="story-step active" data-scene="0">
+              <span class="story-num">01 · Captar</span>
+              <h3>Primero: que te entiendan.</h3>
+              <p>La primera pantalla tiene que responder rápido qué ofrecés, para quién y qué puede hacer la persona.</p>
+              <ul><li>Mensaje directo</li><li>Diseño con jerarquía</li><li>CTA visible</li></ul>
             </article>
 
-            <article class="case">
-              <div class="case-visual">
-                <div class="case-browser">
-                  <div class="mini-dots"><i></i><i></i><i></i></div>
-                  <div class="mini-line" style="width:50%"></div><div class="mini-line soft" style="width:92%"></div>
-                  <div class="mini-grid"><span></span><span></span><span></span></div>
-                </div>
-              </div>
-              <div class="case-body">
-                <span class="case-kicker">Gastronomía</span>
-                <h3>Doña Lupita</h3>
-                <p>Concepto gastronómico pensado para mostrar productos, propuesta visual y canales de contacto de forma clara.</p>
-                <a class="btn" href="../" target="_blank" rel="noopener">Ver proyecto</a>
-              </div>
+            <article class="story-step" data-scene="1">
+              <span class="story-num">02 · Convencer</span>
+              <h3>Después: que confíen.</h3>
+              <p>La página ordena la información para que el visitante encuentre razones concretas para seguir avanzando.</p>
+              <ul><li>Beneficios claros</li><li>Información útil</li><li>Menos fricción</li></ul>
             </article>
 
-            <article class="case">
-              <div class="case-visual">
-                <div class="case-browser">
-                  <div class="mini-dots"><i></i><i></i><i></i></div>
-                  <div class="mini-line" style="width:76%"></div><div class="mini-line soft"></div>
-                  <div class="mini-grid"><span></span><span></span><span></span></div>
-                </div>
-              </div>
-              <div class="case-body">
-                <span class="case-kicker">Producto digital</span>
-                <h3>Apps y herramientas</h3>
-                <p>Aplicaciones y extensiones pensadas para resolver necesidades concretas sin agregar complejidad innecesaria.</p>
-                <a class="btn" href="https://zenix.com.ar/servicios.html" target="_blank" rel="noopener">Conocer servicios</a>
-              </div>
+            <article class="story-step" data-scene="2">
+              <span class="story-num">03 · Convertir</span>
+              <h3>Hacer fácil el contacto.</h3>
+              <p>La interfaz no termina en “se ve linda”. Termina cuando la persona puede escribir, reservar, pedir o comprar sin esfuerzo.</p>
+              <ul><li>WhatsApp</li><li>Formularios</li><li>Pedidos o reservas</li></ul>
             </article>
 
-            <article class="case">
-              <div class="case-visual">
-                <div class="case-browser">
-                  <div class="mini-dots"><i></i><i></i><i></i></div>
-                  <div class="mini-line" style="width:58%"></div><div class="mini-line soft" style="width:76%"></div>
-                  <div class="mini-grid"><span></span><span></span><span></span></div>
-                </div>
-              </div>
-              <div class="case-body">
-                <span class="case-kicker">Automatización</span>
-                <h3>Flujos más simples</h3>
-                <p>Formularios, automatizaciones y recorridos digitales para reducir pasos y mejorar la experiencia del cliente.</p>
-                <a class="btn" href="#contacto">Quiero algo así</a>
-              </div>
+            <article class="story-step" data-scene="3">
+              <span class="story-num">04 · Automatizar</span>
+              <h3>Que siga trabajando después del clic.</h3>
+              <p>Cuando tiene sentido, conectamos procesos para que la web también ahorre tiempo y ordene tareas.</p>
+              <ul><li>Captura de datos</li><li>Respuestas y avisos</li><li>Flujos automáticos</li></ul>
             </article>
           </div>
-
-          <div class="rail-counter">01 — 04 · Scroll para recorrer</div>
         </div>
       </div>
     </section>
@@ -880,8 +1045,6 @@
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const progress = document.getElementById('progress');
     const header = document.getElementById('siteHeader');
-    const rail = document.getElementById('projectRail');
-    const stage = document.querySelector('.portfolio-stage');
 
     function updateScroll(){
       const doc = document.documentElement;
@@ -889,17 +1052,6 @@
       progress.style.width = (max > 0 ? (doc.scrollTop/max)*100 : 0) + '%';
       header.classList.toggle('scrolled', window.scrollY > 18);
 
-      if(!reduced && stage && rail && window.innerWidth > 980){
-        const rect = stage.getBoundingClientRect();
-        const headerOffset = 76;
-        const stickyHeight = window.innerHeight - headerOffset;
-        const travel = Math.max(1, stage.offsetHeight - stickyHeight);
-        const p = Math.min(1,Math.max(0,(headerOffset - rect.top) / travel));
-        const inner = document.querySelector('.portfolio-inner');
-        const visibleWidth = inner ? inner.clientWidth : window.innerWidth;
-        const maxShift = Math.max(0,rail.scrollWidth - visibleWidth);
-        rail.style.transform = 'translateX(' + (-maxShift * p) + 'px)';
-      }
     }
     window.addEventListener('scroll',updateScroll,{passive:true});
     window.addEventListener('resize',updateScroll);
@@ -952,6 +1104,22 @@
         });
         btn.addEventListener('mouseleave',()=>btn.style.transform='');
       });
+    }
+
+
+    const labStage=document.getElementById('labStage');
+    const storySteps=[...document.querySelectorAll('.story-step')];
+    if(labStage && storySteps.length){
+      const sceneObs=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            const scene=entry.target.dataset.scene || '0';
+            labStage.dataset.scene=scene;
+            storySteps.forEach(step=>step.classList.toggle('active',step===entry.target));
+          }
+        });
+      },{threshold:.58,rootMargin:'-10% 0px -18% 0px'});
+      storySteps.forEach(step=>sceneObs.observe(step));
     }
 
     document.getElementById('leadForm').addEventListener('submit',function(e){
