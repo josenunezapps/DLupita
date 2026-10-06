@@ -4,513 +4,389 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
-  <meta name="theme-color" content="#0a1020">
-  <title>Zenix — Diseño digital con intención</title>
-  <meta name="description" content="Diseño web, automatización y producto digital para negocios que quieren verse mejor, explicar mejor y convertir mejor.">
+  <meta name="theme-color" content="#0b0b0d">
+  <title>Zenix — Webs que hacen algo</title>
+  <meta name="description" content="Diseño web, automatización y producto digital para negocios que quieren una presencia con intención.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --ink:#102126;
-      --petrol:#0f3f44;
-      --petrol-deep:#082c30;
-      --petrol-black:#061d20;
-      --mint:#63d8c8;
-      --mint-soft:#bcece4;
-      --cream:#f6efe4;
-      --sand:#e5d3bb;
-      --sand-2:#d9c3a6;
-      --paper:#fbf6ee;
-      --line:rgba(16,33,38,.12);
-      --line-dark:rgba(255,255,255,.10);
-      --muted:#697577;
-      --white:#fffdf8;
-      --max:1240px;
-      --shadow:0 32px 90px rgba(4,35,38,.16);
-      --ease:cubic-bezier(.2,.72,.2,1);
+      --black:#0b0b0d;
+      --black-2:#141417;
+      --black-3:#1e1e22;
+      --paper:#f4f0e8;
+      --paper-2:#ebe5db;
+      --orange:#ff5a36;
+      --orange-2:#ff7659;
+      --ink:#111114;
+      --muted:#77736d;
+      --line:rgba(17,17,20,.14);
+      --line-dark:rgba(255,255,255,.12);
+      --max:1280px;
+      --ease:cubic-bezier(.2,.75,.2,1);
     }
+
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth;background:var(--cream)}
+    html{scroll-behavior:smooth;background:var(--black)}
     body{
       margin:0;
       color:var(--ink);
-      background:var(--cream);
-      font-family:"Manrope",system-ui,sans-serif;
+      background:var(--paper);
+      font-family:"Space Grotesk",system-ui,sans-serif;
       overflow-x:hidden;
       -webkit-font-smoothing:antialiased;
     }
     body:before{
       content:"";
-      position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.026;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      mix-blend-mode:multiply
+      position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.028;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode:multiply;
     }
     a{color:inherit;text-decoration:none}
     button,input,textarea{font:inherit}
-    .wrap{width:min(var(--max),calc(100% - 44px));margin:auto}
-    .serif{font-family:"Playfair Display",serif;font-style:italic;font-weight:600}
-    .eyebrow{
-      display:flex;align-items:center;gap:10px;
-      font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:800
-    }
-    .eyebrow:before{content:"";width:30px;height:1px;background:currentColor}
+    .wrap{width:min(var(--max),calc(100% - 48px));margin:auto}
+    .serif{font-family:"DM Serif Display",serif;font-weight:400}
     .progress{
-      position:fixed;left:0;top:0;height:3px;width:0;z-index:120;
-      background:linear-gradient(90deg,var(--mint),#fff,var(--mint));
-      box-shadow:0 0 20px rgba(99,216,200,.45)
+      position:fixed;left:0;top:0;height:3px;width:0;background:var(--orange);
+      z-index:120;box-shadow:0 0 18px rgba(255,90,54,.5)
     }
 
     header{
-      position:fixed;left:0;right:0;top:0;z-index:80;
-      transition:.3s var(--ease);
-      border-bottom:1px solid transparent
+      position:fixed;left:0;right:0;top:0;z-index:80;color:#fff;
+      transition:.3s var(--ease)
     }
     header.scrolled{
-      background:rgba(246,239,228,.82);
-      backdrop-filter:blur(20px) saturate(140%);
-      border-bottom-color:rgba(36,87,255,.08);
-      box-shadow:0 12px 34px rgba(8,44,48,.06)
+      background:rgba(11,11,13,.88);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(255,255,255,.07)
     }
     .nav{
-      min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:26px
+      min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:28px
     }
-    .brand{
-      display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.04em;font-size:21px
-    }
-    .brand img{width:42px;height:42px;object-fit:contain}
-    .nav-links{display:flex;gap:28px;font-size:12px;font-weight:700;color:#304548}
-    .nav-links a{position:relative}
-    .nav-links a:after{
-      content:"";position:absolute;left:0;bottom:-7px;height:1px;width:0;background:var(--petrol);
-      transition:width .25s ease
-    }
-    .nav-links a:hover:after{width:100%}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.04em;font-size:20px}
+    .brand img{width:38px;height:38px;object-fit:contain;filter:brightness(10)}
+    .nav-mid{display:flex;gap:24px;font-size:12px;color:#c9c7c3;font-weight:600}
+    .nav-mid a{position:relative}
+    .nav-mid a:after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--orange);transition:.25s}
+    .nav-mid a:hover:after{width:100%}
     .nav-cta{
-      padding:12px 18px;border-radius:999px;background:var(--petrol);color:#fff;
-      font-size:12px;font-weight:800;box-shadow:0 12px 28px rgba(36,87,255,.18)
+      padding:11px 16px;border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;font-size:11px;font-weight:700;
+      transition:.25s
     }
+    .nav-cta:hover{background:var(--orange);border-color:var(--orange)}
 
     /* HERO */
     .hero{
       min-height:100svh;
-      position:relative;overflow:hidden;
       background:
-        radial-gradient(circle at 78% 18%,rgba(99,216,200,.22),transparent 24%),
-        radial-gradient(circle at 78% 58%,rgba(36,87,255,.10),transparent 26%),
-        linear-gradient(135deg,#faf4eb 0 55%,#d8ebe5 55% 100%);
-      padding:138px 0 86px;
-      display:flex;align-items:center
+        radial-gradient(circle at 82% 18%,rgba(255,90,54,.15),transparent 24%),
+        var(--black);
+      color:#fff;
+      display:flex;align-items:flex-end;
+      padding:138px 0 92px;
+      position:relative;overflow:hidden
     }
     .hero-grid{
-      display:grid;grid-template-columns:1.08fr .92fr;gap:70px;align-items:center;position:relative;z-index:2
+      display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:end;position:relative;z-index:2
     }
-    .hero-copy{position:relative}
     .hero-kicker{
-      display:flex;align-items:center;gap:14px;margin-bottom:26px;
-      color:#3a5053;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase
+      display:flex;align-items:center;gap:12px;
+      color:#aaa8a3;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:24px
     }
-    .hero-kicker i{width:36px;height:1px;background:rgba(36,87,255,.28)}
+    .hero-kicker i{width:34px;height:1px;background:rgba(255,255,255,.28)}
     .hero h1{
-      margin:0;
-      font-size:clamp(68px,8.8vw,118px);
-      line-height:.84;letter-spacing:-.075em;font-weight:800;
-      max-width:760px
+      margin:0;font-size:clamp(74px,9.6vw,136px);line-height:.79;letter-spacing:-.078em;font-weight:700
     }
-    .hero h1 .serif{
-      color:var(--petrol);font-size:.92em;display:inline-block;
-      transform:translateY(-.03em)
+    .hero h1 .accent{color:var(--orange);display:block}
+    .hero h1 .serif{font-style:italic;font-size:.9em;letter-spacing:-.055em}
+    .hero-sub{
+      margin-top:30px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end
     }
-    .hero-bottom{
-      margin-top:34px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end
-    }
-    .hero-text{
-      margin:0;max-width:590px;color:#59696c;font-size:17px;line-height:1.72
-    }
-    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .hero-sub p{margin:0;color:#aaa8a3;font-size:16px;line-height:1.7;max-width:610px}
+    .hero-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:9px;
-      border-radius:999px;padding:14px 21px;font-size:12px;font-weight:800;
-      border:1px solid var(--petrol);background:var(--petrol);color:#fff;
-      position:relative;overflow:hidden;
-      transition:transform .25s var(--ease),box-shadow .25s var(--ease)
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:13px 19px;border-radius:999px;border:1px solid transparent;
+      background:var(--orange);color:#fff;font-size:11px;font-weight:700;
+      position:relative;overflow:hidden;transition:.25s var(--ease)
     }
-    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(36,87,255,.18)}
-    .btn.ghost{background:transparent;color:var(--petrol)}
-    .btn:after{
-      content:"";position:absolute;top:-20%;bottom:-20%;left:-40%;width:22%;
-      background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);
-      transform:skewX(-18deg);transition:left .55s ease
-    }
-    .btn:hover:after{left:120%}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(255,90,54,.20)}
+    .btn.ghost{background:transparent;border-color:rgba(255,255,255,.18);color:#fff}
+    .btn.ghost:hover{background:#fff;color:#111}
     .hero-index{
-      display:grid;place-items:center;width:74px;height:74px;border-radius:50%;
-      border:1px solid rgba(36,87,255,.16);font-size:11px;font-weight:800;color:var(--petrol);
-      position:relative
+      font-size:11px;color:#8c8984;border-left:1px solid rgba(255,255,255,.12);padding-left:20px;white-space:nowrap
     }
-    .hero-index:before{
-      content:"";position:absolute;inset:7px;border-radius:50%;border:1px dashed rgba(36,87,255,.18);
-      animation:spin 14s linear infinite
+
+    .hero-visual{
+      min-height:560px;position:relative;
+      display:flex;align-items:flex-end;justify-content:center
+    }
+    .poster{
+      width:min(92%,520px);aspect-ratio:.78;
+      background:var(--paper);color:var(--ink);
+      transform:rotate(4deg);position:relative;overflow:hidden;
+      box-shadow:0 38px 110px rgba(0,0,0,.42)
+    }
+    .poster:before{
+      content:"";position:absolute;inset:18px;border:1px solid rgba(17,17,20,.12)
+    }
+    .poster-top{
+      position:absolute;left:28px;right:28px;top:28px;display:flex;justify-content:space-between;
+      font-size:9px;text-transform:uppercase;letter-spacing:.15em;font-weight:700
+    }
+    .poster-word{
+      position:absolute;left:-18px;right:-18px;top:50%;transform:translateY(-52%);
+      font-size:clamp(82px,9vw,132px);font-weight:700;letter-spacing:-.08em;line-height:.78;text-align:center
+    }
+    .poster-word span{display:block}
+    .poster-word .orange{color:var(--orange)}
+    .poster-foot{
+      position:absolute;left:28px;right:28px;bottom:28px;
+      display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end
+    }
+    .poster-foot p{margin:0;font-size:12px;line-height:1.55;color:#5f5a54;max-width:250px}
+    .poster-mark{
+      width:64px;height:64px;border-radius:50%;background:var(--black);color:#fff;
+      display:grid;place-items:center;font-size:10px;font-weight:700;
+      animation:spin 15s linear infinite
     }
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    .hero-art{position:relative;min-height:600px;perspective:1400px}
-    #ambientCanvas{position:absolute;inset:-90px;pointer-events:none;opacity:.7}
-    .orb{
-      position:absolute;right:3%;top:8%;width:420px;height:420px;border-radius:50%;
-      background:
-        radial-gradient(circle at 30% 26%,rgba(255,255,255,.92),rgba(255,255,255,.12) 23%,transparent 24%),
-        radial-gradient(circle at 66% 72%,rgba(99,216,200,.75),transparent 28%),
-        radial-gradient(circle at 42% 40%,#255e63,#0a3438 66%);
-      box-shadow:
-        inset -40px -44px 70px rgba(0,0,0,.24),
-        inset 24px 20px 42px rgba(255,255,255,.12),
-        0 40px 90px rgba(7,45,49,.25);
-      animation:orbFloat 7s ease-in-out infinite
+    .float-tag{
+      position:absolute;padding:14px 16px;background:var(--orange);color:#fff;
+      box-shadow:0 18px 42px rgba(0,0,0,.25);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase
     }
-    .orb:after{
-      content:"";position:absolute;inset:28px;border-radius:50%;
-      border:1px solid rgba(255,255,255,.18)
+    .tag-a{left:0;top:18%;transform:rotate(-7deg)}
+    .tag-b{right:-1%;bottom:14%;background:#fff;color:#111;transform:rotate(7deg)}
+    .cross{
+      position:absolute;width:48px;height:48px;right:8%;top:7%;
     }
-    @keyframes orbFloat{50%{transform:translateY(-14px) rotate(4deg)}}
-    .glass-card{
-      position:absolute;border:1px solid rgba(255,255,255,.20);
-      background:rgba(255,255,255,.16);backdrop-filter:blur(18px);
-      box-shadow:0 28px 70px rgba(8,44,48,.15)
+    .cross:before,.cross:after{content:"";position:absolute;left:50%;top:0;width:1px;height:100%;background:rgba(255,255,255,.20)}
+    .cross:after{transform:rotate(90deg)}
+    .hero-marquee{
+      position:absolute;left:-2%;right:-2%;bottom:0;height:46px;background:var(--orange);color:#fff;
+      display:flex;align-items:center;overflow:hidden;transform:rotate(-1deg)
     }
-    .glass-card.one{
-      left:3%;top:18%;width:230px;padding:20px;border-radius:24px;transform:rotate(-7deg)
+    .marquee-track{
+      display:flex;gap:28px;width:max-content;animation:marquee 18s linear infinite;
+      font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase
     }
-    .glass-card.two{
-      right:-2%;bottom:12%;width:250px;padding:20px;border-radius:24px;transform:rotate(6deg)
-    }
-    .glass-card small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:#5b7173;font-weight:800}
-    .glass-card strong{display:block;font-size:26px;letter-spacing:-.04em;margin-top:6px;color:var(--petrol)}
-    .glass-card p{font-size:12px;color:#5e6c6e;margin:8px 0 0}
-    .glass-bars{display:grid;gap:7px;margin-top:12px}
-    .glass-bars i{height:6px;border-radius:99px;background:rgba(36,87,255,.10);overflow:hidden}
-    .glass-bars i:after{content:"";display:block;height:100%;width:var(--w);background:var(--petrol);animation:bar 3s ease-in-out infinite alternate}
-    @keyframes bar{from{width:14%}to{width:var(--w)}}
-    .hero-mark{
-      position:absolute;left:22%;bottom:3%;width:180px;height:180px;border-radius:50%;
-      border:1px solid rgba(36,87,255,.16);
-      display:grid;place-items:center;color:var(--petrol);font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-      animation:spin 18s linear infinite reverse
-    }
-    .hero-mark:before{content:"Zenix · Digital Studio · Zenix · Digital Studio ·";position:absolute;width:140%;text-align:center;color:rgba(36,87,255,.24)}
-
-    .hero-rail{
-      position:absolute;left:0;right:0;bottom:0;height:56px;background:var(--petrol-deep);color:#c9ebe5;
-      display:flex;align-items:center;overflow:hidden;border-top:1px solid rgba(255,255,255,.08)
-    }
-    .rail-track{
-      width:max-content;display:flex;gap:34px;animation:marquee 24s linear infinite;
-      font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase
-    }
-    .rail-track span{display:flex;align-items:center;gap:34px;white-space:nowrap}
-    .rail-track span:after{content:"✦";color:var(--mint)}
+    .marquee-track span{display:flex;gap:28px;white-space:nowrap}
+    .marquee-track span:after{content:"✳"}
     @keyframes marquee{to{transform:translateX(-50%)}}
 
-    /* STATEMENT */
-    .statement{
-      padding:86px 0;
-      background:var(--paper);
-      border-bottom:1px solid var(--line)
+    /* MANIFESTO */
+    .manifesto{
+      background:var(--paper);padding:104px 0 110px;border-bottom:1px solid var(--line)
     }
-    .statement-grid{
-      display:grid;grid-template-columns:.72fr 1.28fr;gap:70px;align-items:start
+    .manifesto-grid{display:grid;grid-template-columns:.68fr 1.32fr;gap:72px}
+    .manifesto-side{position:sticky;top:108px;align-self:start}
+    .label{
+      font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#67625b
     }
-    .statement-side{position:sticky;top:110px}
-    .statement-side .eyebrow{color:var(--petrol)}
-    .statement-side p{color:#647174;font-size:14px;line-height:1.7;max-width:330px;margin-top:20px}
-    .statement-main{
-      font-size:clamp(44px,5.8vw,78px);line-height:.98;letter-spacing:-.058em;font-weight:700
+    .manifesto-side p{font-size:13px;line-height:1.7;color:#716c65;max-width:300px;margin:18px 0 0}
+    .manifesto-main{
+      font-size:clamp(48px,6.4vw,86px);line-height:.94;letter-spacing:-.062em;font-weight:600
     }
-    .statement-main .serif{color:var(--petrol)}
-    .statement-rule{
-      margin-top:38px;height:1px;background:linear-gradient(90deg,var(--petrol),transparent)
-    }
+    .manifesto-main .serif{font-style:italic;color:var(--orange)}
+    .manifesto-rule{height:1px;background:linear-gradient(90deg,var(--orange),transparent);margin-top:36px}
 
-    /* SERVICES EDITORIAL */
+    /* SERVICES */
     .services{
-      padding:104px 0 110px;
-      background:linear-gradient(180deg,#dedfd7,#d6ddd7)
+      padding:96px 0 104px;background:#e7e1d7
     }
-    .services-head{
+    .section-head{
       display:flex;justify-content:space-between;gap:40px;align-items:end;margin-bottom:34px
     }
-    .services-head h2{
-      margin:8px 0 0;font-size:clamp(44px,6vw,78px);line-height:.95;letter-spacing:-.06em
+    .section-head h2{
+      margin:7px 0 0;font-size:clamp(48px,6vw,80px);line-height:.93;letter-spacing:-.062em
     }
-    .services-head p{max-width:380px;margin:0;color:#647174;line-height:1.7;font-size:14px}
-    .service-list{border-top:1px solid rgba(36,87,255,.14)}
-    .service-line{
-      position:relative;display:grid;grid-template-columns:90px 1fr 330px 56px;gap:20px;align-items:center;
-      min-height:150px;border-bottom:1px solid rgba(36,87,255,.14);
-      transition:padding .3s var(--ease),background .3s ease;
-      overflow:hidden
+    .section-head p{margin:0;max-width:390px;color:#6d6861;font-size:13px;line-height:1.7}
+    .service-list{border-top:1px solid rgba(17,17,20,.14)}
+    .service{
+      position:relative;display:grid;grid-template-columns:76px 1fr 320px 48px;gap:20px;align-items:center;
+      min-height:142px;border-bottom:1px solid rgba(17,17,20,.14);overflow:hidden
     }
-    .service-line:before{
-      content:"";position:absolute;inset:0;background:var(--petrol);transform:translateY(101%);
-      transition:transform .42s var(--ease);z-index:0
+    .service:before{
+      content:"";position:absolute;inset:0;background:var(--black);transform:translateX(-101%);transition:.42s var(--ease)
     }
-    .service-line:hover:before{transform:translateY(0)}
-    .service-line>*{position:relative;z-index:1}
-    .service-line .n{font-size:11px;font-weight:800;color:var(--petrol)}
-    .service-line h3{
-      margin:0;font-size:clamp(28px,3.6vw,48px);letter-spacing:-.045em;line-height:1
+    .service:hover:before{transform:none}
+    .service>*{position:relative;z-index:1}
+    .service .num{font-size:10px;font-weight:700;color:var(--orange)}
+    .service h3{margin:0;font-size:clamp(28px,3.7vw,50px);letter-spacing:-.045em;line-height:1}
+    .service p{margin:0;color:#6e6962;font-size:12px;line-height:1.65}
+    .service .arr{
+      width:42px;height:42px;border-radius:50%;border:1px solid rgba(17,17,20,.14);
+      display:grid;place-items:center;transition:.25s
     }
-    .service-line p{margin:0;color:#687577;font-size:13px;line-height:1.65}
-    .service-arrow{
-      width:44px;height:44px;border:1px solid rgba(36,87,255,.16);border-radius:50%;display:grid;place-items:center;
-      transition:.3s ease
+    .service:hover{color:#fff}
+    .service:hover p{color:#aaa8a4}
+    .service:hover .arr{background:var(--orange);border-color:var(--orange);transform:rotate(-20deg)}
+    
+    /* INTERACTIVE SIGNAL */
+    .signal{
+      padding:110px 0 120px;background:var(--black);color:#fff;position:relative;overflow:hidden
     }
-    .service-line:hover{color:#fff}
-    .service-line:hover .n,.service-line:hover p{color:#bcd3d0}
-    .service-line:hover .service-arrow{border-color:rgba(255,255,255,.18);background:var(--mint);color:var(--petrol);transform:rotate(-18deg)}
+    .signal:before{
+      content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,.06)
+    }
+    .signal-head{
+      display:grid;grid-template-columns:1fr .72fr;gap:60px;align-items:end;margin-bottom:78px
+    }
+    .signal-head h2{
+      margin:7px 0 0;font-size:clamp(56px,7vw,96px);line-height:.88;letter-spacing:-.07em
+    }
+    .signal-head p{margin:0;color:#9a9894;font-size:13px;line-height:1.7}
+    .signal-grid{display:grid;grid-template-columns:1fr 460px;gap:78px;align-items:start}
+    .signal-stage{
+      position:sticky;top:110px;min-height:580px;display:flex;align-items:center;justify-content:center
+    }
+    .signal-word{
+      position:absolute;font-size:clamp(92px,11vw,170px);font-weight:700;letter-spacing:-.09em;
+      opacity:0;transform:scale(.9) translateY(30px);transition:.5s var(--ease);text-align:center;line-height:.78
+    }
+    .signal-stage[data-step="0"] .w0,
+    .signal-stage[data-step="1"] .w1,
+    .signal-stage[data-step="2"] .w2,
+    .signal-stage[data-step="3"] .w3{
+      opacity:1;transform:none
+    }
+    .signal-word span{display:block;color:var(--orange)}
+    .signal-ring{
+      width:420px;height:420px;border-radius:50%;border:1px solid rgba(255,255,255,.12);
+      position:absolute;animation:spin 22s linear infinite
+    }
+    .signal-ring:after{
+      content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:var(--orange);
+      left:50%;top:-6px;box-shadow:0 0 24px rgba(255,90,54,.7)
+    }
+    .signal-steps{display:grid;gap:14px;padding-bottom:100px}
+    .signal-step{
+      min-height:43vh;padding:28px;border-top:1px solid rgba(255,255,255,.09);
+      opacity:.34;transition:.35s var(--ease)
+    }
+    .signal-step.active{opacity:1;padding-left:38px}
+    .signal-step .n{font-size:10px;color:var(--orange);font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+    .signal-step h3{font-size:32px;line-height:1;letter-spacing:-.04em;margin:13px 0}
+    .signal-step p{margin:0;color:#9d9a95;font-size:13px;line-height:1.65;max-width:400px}
 
-    /* EXPERIENCE */
-    .experience{
-      padding:110px 0 120px;
-      color:#fff;
-      background:
-        radial-gradient(circle at 14% 18%,rgba(99,216,200,.14),transparent 22%),
-        linear-gradient(180deg,#0a3034,#0b2629);
-      position:relative;overflow:hidden
-    }
-    .experience .eyebrow{color:var(--mint)}
-    .experience-title{
-      display:grid;grid-template-columns:1fr .7fr;gap:50px;align-items:end;margin-bottom:70px
-    }
-    .experience-title h2{
-      margin:8px 0 0;font-size:clamp(52px,6.7vw,90px);line-height:.9;letter-spacing:-.065em
-    }
-    .experience-title p{margin:0;color:#adc3c0;line-height:1.7;font-size:14px}
-    .experience-grid{display:grid;grid-template-columns:1fr 440px;gap:72px;align-items:start}
-    .lab-stage{
-      position:sticky;top:110px;border-radius:30px;padding:12px;
-      background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
-      border:1px solid rgba(255,255,255,.11);
-      box-shadow:0 36px 90px rgba(0,0,0,.28)
-    }
-    .lab-window{height:590px;border-radius:22px;background:#f7efe4;color:var(--ink);overflow:hidden}
-    .lab-top{height:46px;background:#e4ddd3;display:flex;align-items:center;gap:6px;padding:0 14px}
-    .lab-top i{width:8px;height:8px;border-radius:50%;background:#9fa4a2}
-    .lab-url{height:22px;border-radius:99px;background:#cfc8bd;max-width:250px;flex:1;margin-left:8px}
-    .lab-canvas{height:calc(100% - 46px);position:relative;overflow:hidden}
-    .scene{
-      position:absolute;inset:0;padding:34px;opacity:0;transform:translateY(22px) scale(.985);
-      transition:opacity .55s ease,transform .55s var(--ease);pointer-events:none
-    }
-    .lab-stage[data-scene="0"] .scene[data-scene="0"],
-    .lab-stage[data-scene="1"] .scene[data-scene="1"],
-    .lab-stage[data-scene="2"] .scene[data-scene="2"],
-    .lab-stage[data-scene="3"] .scene[data-scene="3"]{opacity:1;transform:none}
-    .scene-progress{
-      position:absolute;left:28px;right:28px;bottom:22px;z-index:8;
-      display:grid;grid-template-columns:repeat(4,1fr);gap:8px
-    }
-    .scene-progress span{
-      position:relative;padding-top:10px;font-size:9px;font-weight:800;color:rgba(255,255,255,.3)
-    }
-    .scene-progress span:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(255,255,255,.10)}
-    .scene-progress span:after{content:"";position:absolute;left:0;top:0;height:2px;width:0;background:var(--mint);transition:width .4s ease}
-    .scene-progress span.active{color:#fff}.scene-progress span.active:after{width:100%}
-    .scene-hero{height:100%;display:grid;grid-template-columns:1fr .9fr;gap:22px;align-items:center}
-    .scene-copy small,.scene-label{font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:var(--petrol)}
-    .scene-copy h3,.scene-block h3{
-      font-size:44px;line-height:.95;letter-spacing:-.055em;margin:9px 0 14px
-    }
-    .scene-copy p,.scene-block p{color:#697577;font-size:13px;line-height:1.65}
-    .scene-btn{display:inline-flex;margin-top:10px;padding:11px 16px;border-radius:999px;background:var(--petrol);color:#fff;font-size:11px;font-weight:800}
-    .scene-art{
-      aspect-ratio:1/1;border-radius:26px;background:linear-gradient(145deg,var(--petrol),var(--mint));
-      position:relative;overflow:hidden
-    }
-    .scene-art:before,.scene-art:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.46)}
-    .scene-art:before{inset:14%;animation:spin 10s linear infinite}
-    .scene-art:after{inset:31%;animation:spin 6s linear infinite reverse}
-    .scene-art i{position:absolute;width:18px;height:18px;border-radius:50%;background:#fffaf2;left:calc(50% - 9px);top:calc(50% - 9px);box-shadow:0 0 0 12px rgba(255,255,255,.10)}
-    .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
-    .trust-tile{padding:18px;border-radius:18px;background:#fffaf3;border:1px solid rgba(36,87,255,.08)}
-    .trust-tile b{display:block;color:var(--petrol);font-size:11px;margin-bottom:32px}
-    .trust-tile strong{font-size:16px}.trust-tile p{font-size:11px;margin:6px 0 0}
-    .convert{height:100%;display:grid;grid-template-columns:.8fr 1.2fr;gap:28px;align-items:center}
-    .phone{width:180px;height:350px;margin:auto;border-radius:34px;background:#173d41;padding:10px;box-shadow:0 22px 50px rgba(10,45,48,.22)}
-    .phone-in{height:100%;border-radius:26px;background:#f7efe4;padding:18px;display:flex;flex-direction:column}
-    .phone-notch{width:46px;height:6px;border-radius:99px;background:#c8c1b7;margin:0 auto 20px}
-    .bubble{padding:9px 10px;border-radius:13px;background:#e5ded4;font-size:10px;margin-bottom:9px;max-width:88%}
-    .bubble.me{background:#bfeee5;align-self:flex-end}
-    .phone-cta{margin-top:auto;padding:10px;border-radius:11px;background:var(--petrol);color:#fff;font-size:10px;font-weight:800;text-align:center}
-    .flow-board{height:260px;border-radius:22px;background:#143b3f;position:relative;margin-top:22px;overflow:hidden}
-    .node{position:absolute;min-width:108px;padding:12px;border-radius:14px;background:#f7efe4;color:var(--ink);font-size:10px;font-weight:800;text-align:center;box-shadow:0 12px 24px rgba(0,0,0,.17)}
-    .node small{display:block;font-size:8px;color:#7c8585;margin-top:4px}
-    .n1{left:20px;top:48px}.n2{left:250px;top:38px}.n3{right:20px;top:82px}.n4{left:230px;bottom:30px}
-    .flow-line{position:absolute;height:2px;background:linear-gradient(90deg,var(--mint),rgba(99,216,200,.15))}
-    .f1{left:125px;top:76px;width:150px;transform:rotate(8deg)}.f2{left:340px;top:86px;width:155px;transform:rotate(-10deg)}.f3{left:320px;top:168px;width:145px;transform:rotate(11deg)}
-    .flow-line:after{content:"";display:block;width:28px;height:2px;background:#eafffb;box-shadow:0 0 16px var(--mint);animation:flow 2s linear infinite}
-    .f2:after{animation-delay:.4s}.f3:after{animation-delay:.8s}
-    @keyframes flow{from{transform:translateX(-30px)}to{transform:translateX(160px)}}
-    .story{display:grid;gap:14px;padding-bottom:80px}
-    .story-step{
-      min-height:42vh;padding:28px;border-radius:26px;
-      border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.025));
-      opacity:.45;transition:.35s var(--ease)
-    }
-    .story-step.active{
-      opacity:1;transform:translateX(-8px);border-color:rgba(99,216,200,.36);
-      box-shadow:0 24px 60px rgba(0,0,0,.15)
-    }
-    .story-step span{font-size:10px;color:var(--mint);letter-spacing:.12em;text-transform:uppercase;font-weight:800}
-    .story-step h3{font-size:30px;letter-spacing:-.04em;line-height:1;margin:12px 0}
-    .story-step p{margin:0;color:#aec1bf;font-size:13px;line-height:1.65}
-
-    /* OFFERS AS EDITORIAL STRIP */
-    .offers{
-      padding:98px 0 102px;background:#eee3d3
-    }
-    .offers-head{
-      display:grid;grid-template-columns:1fr .7fr;gap:50px;align-items:end;margin-bottom:36px
-    }
-    .offers-head h2{font-size:clamp(48px,6vw,76px);letter-spacing:-.06em;line-height:.94;margin:8px 0 0}
-    .offers-head p{margin:0;color:#6f746f;line-height:1.7;font-size:14px}
-    .offer-list{border-top:1px solid rgba(16,33,38,.14)}
+    /* OFFERS */
+    .offers{padding:100px 0;background:var(--paper)}
+    .offer-table{border-top:1px solid var(--line)}
     .offer{
-      display:grid;grid-template-columns:110px 1fr 1.1fr auto;gap:26px;align-items:center;
-      min-height:170px;border-bottom:1px solid rgba(16,33,38,.14);
-      transition:.3s ease
+      display:grid;grid-template-columns:100px 1fr 1.1fr auto;gap:24px;align-items:center;
+      min-height:160px;border-bottom:1px solid var(--line);transition:.25s
     }
-    .offer:hover{padding:0 14px;background:rgba(255,255,255,.26)}
-    .offer .tag{font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:#687071}
-    .offer h3{font-size:34px;letter-spacing:-.045em;margin:0}
-    .offer p{margin:0;color:#6b7272;font-size:13px;line-height:1.65}
-    .offer .arrow{width:46px;height:46px;border-radius:50%;border:1px solid rgba(36,87,255,.16);display:grid;place-items:center;color:var(--petrol)}
-    .offer:hover .arrow{background:var(--petrol);color:#fff}
+    .offer:hover{background:var(--orange);color:#fff;padding:0 16px}
+    .offer .tag{font-size:10px;text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:#766f68}
+    .offer h3{margin:0;font-size:34px;letter-spacing:-.045em}
+    .offer p{margin:0;color:#716c66;font-size:12px;line-height:1.65}
+    .offer .arrow{
+      width:44px;height:44px;border-radius:50%;border:1px solid rgba(17,17,20,.15);display:grid;place-items:center
+    }
+    .offer:hover .tag,.offer:hover p{color:#fff}
+    .offer:hover .arrow{background:#fff;color:#111;border-color:#fff}
 
-    /* WHY / PROCESS */
-    .why{
-      padding:104px 0;background:#132b2e;color:#fff
+    /* PROCESS */
+    .process{padding:104px 0;background:#d8d0c4}
+    .process-grid{display:grid;grid-template-columns:.78fr 1.22fr;gap:70px}
+    .process-left{position:sticky;top:110px;align-self:start}
+    .process-left h2{
+      margin:8px 0 16px;font-size:clamp(48px,6vw,78px);line-height:.92;letter-spacing:-.06em
     }
-    .why-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px}
-    .why-left{position:sticky;top:112px;align-self:start}
-    .why-left .eyebrow{color:var(--mint)}
-    .why-left h2{font-size:clamp(48px,6vw,76px);line-height:.92;letter-spacing:-.06em;margin:10px 0 18px}
-    .why-left p{color:#aebfbd;font-size:14px;line-height:1.7;max-width:390px}
-    .principles{border-top:1px solid rgba(255,255,255,.09)}
-    .principle{
-      display:grid;grid-template-columns:58px 1fr;gap:18px;padding:26px 0;border-bottom:1px solid rgba(255,255,255,.09)
+    .process-left p{color:#6f6962;font-size:13px;line-height:1.7;max-width:350px}
+    .process-list{border-top:1px solid rgba(17,17,20,.14)}
+    .process-item{
+      display:grid;grid-template-columns:58px 1fr;gap:18px;padding:26px 0;border-bottom:1px solid rgba(17,17,20,.14)
     }
-    .principle b{font-size:11px;color:var(--mint)}
-    .principle h3{margin:0 0 6px;font-size:23px}.principle p{margin:0;color:#a8b9b7;font-size:13px;line-height:1.6}
-
-    .process{
-      padding:100px 0;background:#d9dfda
-    }
-    .process-head{
-      display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:end;margin-bottom:44px
-    }
-    .process-head h2{font-size:clamp(48px,6vw,76px);line-height:.94;letter-spacing:-.06em;margin:8px 0 0}
-    .process-head p{margin:0;color:#697476;max-width:440px;line-height:1.7;font-size:14px}
-    .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(36,87,255,.12);border:1px solid rgba(36,87,255,.12)}
-    .step{background:#f7f1e8;padding:26px;min-height:240px;position:relative;overflow:hidden}
-    .step:before{content:"";position:absolute;left:0;top:0;width:100%;height:3px;background:var(--petrol);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
-    .step:hover:before{transform:scaleX(1)}
-    .step b{font-size:11px;color:var(--petrol)}
-    .step h3{margin:54px 0 8px;font-size:20px}
-    .step p{margin:0;color:#6d7677;font-size:12px;line-height:1.6}
+    .process-item b{font-size:10px;color:var(--orange)}
+    .process-item h3{margin:0 0 5px;font-size:24px}
+    .process-item p{margin:0;color:#6f6a63;font-size:12px}
 
     /* CONTACT */
-    .contact{
-      padding:110px 0;background:linear-gradient(145deg,#f0e2cf,#d9c1a3)
+    .contact{padding:0;background:var(--orange)}
+    .contact-wrap{
+      min-height:760px;display:grid;grid-template-columns:1.1fr .9fr
     }
-    .contact-box{
-      border-radius:34px;overflow:hidden;
-      display:grid;grid-template-columns:1fr .95fr;
-      background:var(--petrol-deep);color:#fff;
-      box-shadow:0 40px 100px rgba(7,45,49,.20)
+    .contact-copy{
+      padding:88px max(54px,calc((100vw - var(--max))/2 + 24px));
+      padding-right:56px;
+      display:flex;flex-direction:column;justify-content:space-between;color:#fff
     }
-    .contact-copy{padding:54px;position:relative;overflow:hidden}
-    .contact-copy:after{
-      content:"";position:absolute;width:360px;height:360px;border-radius:50%;right:-160px;bottom:-180px;
-      background:radial-gradient(circle,rgba(99,216,200,.24),transparent 70%)
+    .contact-copy h2{
+      margin:10px 0 0;font-size:clamp(64px,8vw,110px);line-height:.82;letter-spacing:-.075em
     }
-    .contact-copy .eyebrow{color:var(--mint)}
-    .contact-copy h2{font-size:clamp(48px,5.6vw,74px);line-height:.92;letter-spacing:-.06em;margin:12px 0 18px}
-    .contact-copy p{color:#b9cecb;line-height:1.7;font-size:14px;max-width:470px}
-    .contact-copy .meta{margin-top:36px;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#82a9a4}
-    form{padding:54px;background:rgba(255,255,255,.04);display:grid;gap:14px}
-    label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:#bcd2cf}
-    .field{display:grid;gap:7px}
+    .contact-copy h2 .serif{font-style:italic}
+    .contact-meta{font-size:10px;text-transform:uppercase;letter-spacing:.14em;opacity:.78}
+    form{
+      background:var(--black);color:#fff;padding:88px 56px;
+      display:flex;flex-direction:column;justify-content:center;gap:18px
+    }
+    .field{display:grid;gap:8px}
+    label{font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:#9f9c98;font-weight:700}
     input,textarea{
-      border:0;border-bottom:1px solid rgba(255,255,255,.16);background:transparent;color:#fff;
-      padding:13px 0;outline:none
+      background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.14);
+      color:#fff;padding:14px 0;outline:none
     }
-    input::placeholder,textarea::placeholder{color:#75918e}
-    input:focus,textarea:focus{border-bottom-color:var(--mint)}
+    input::placeholder,textarea::placeholder{color:#65625f}
+    input:focus,textarea:focus{border-bottom-color:var(--orange)}
     textarea{min-height:110px;resize:vertical}
-    form .btn{margin-top:8px;background:var(--mint);border-color:var(--mint);color:var(--petrol);justify-self:start}
-    .note{font-size:10px;color:#789794;margin:0}
+    form .btn{align-self:flex-start;margin-top:8px}
+    .note{font-size:10px;color:#6f6c68;margin:0}
 
-    footer{
-      padding:34px 0 48px;background:#061f22;color:#8fa8a5;border-top:1px solid rgba(255,255,255,.05)
-    }
-    .footer-grid{display:flex;align-items:center;justify-content:space-between;gap:22px;font-size:11px}
-    .footer-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800}
-    .footer-brand img{width:30px;height:30px}
+    footer{background:#070708;color:#8f8b86;padding:32px 0 44px}
+    .footer-grid{display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:11px}
+    .footer-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700}
+    .footer-brand img{width:28px;height:28px;filter:brightness(10)}
 
     .floating{
       position:fixed;right:18px;bottom:18px;z-index:70;
-      display:flex;align-items:center;gap:9px;padding:12px 16px;border-radius:999px;
-      background:#0b3438;color:#fff;border:1px solid rgba(255,255,255,.08);
-      box-shadow:0 18px 42px rgba(5,43,46,.24);font-size:11px;font-weight:800
+      display:flex;align-items:center;gap:8px;padding:11px 15px;border-radius:999px;
+      background:#fff;color:#111;font-size:11px;font-weight:700;box-shadow:0 16px 40px rgba(0,0,0,.18)
     }
-    .floating b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--mint);color:var(--petrol)}
+    .floating b{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff}
 
-    .reveal{opacity:0;transform:translateY(34px);transition:opacity .75s ease,transform .75s var(--ease)}
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .72s ease,transform .72s var(--ease)}
     .reveal.visible{opacity:1;transform:none}
-    .reveal-left{opacity:0;transform:translateX(-34px);transition:opacity .75s ease,transform .75s var(--ease)}
+    .reveal-left{opacity:0;transform:translateX(-34px);transition:opacity .72s ease,transform .72s var(--ease)}
     .reveal-left.visible{opacity:1;transform:none}
 
     @media(max-width:980px){
-      .nav-links{display:none}
-      .hero-grid,.statement-grid,.experience-title,.experience-grid,.offers-head,.why-grid,.process-head,.contact-box{grid-template-columns:1fr}
-      .hero-art{min-height:520px}
-      .statement-side,.why-left,.lab-stage{position:relative;top:auto}
-      .service-line{grid-template-columns:60px 1fr 220px 50px}
-      .timeline{grid-template-columns:1fr 1fr}
-      .story{padding-bottom:0}
+      .nav-mid{display:none}
+      .hero-grid,.manifesto-grid,.signal-head,.signal-grid,.process-grid,.contact-wrap{grid-template-columns:1fr}
+      .hero-visual{min-height:500px}
+      .manifesto-side,.signal-stage,.process-left{position:relative;top:auto}
+      .service{grid-template-columns:56px 1fr 220px 44px}
+      .signal:before{display:none}
+      .signal-stage{min-height:420px}
+      .contact-copy{min-height:520px;padding:70px 28px}
+      form{padding:64px 28px}
     }
     @media(max-width:650px){
       .wrap{width:min(var(--max),calc(100% - 26px))}
-      .hero{padding:118px 0 78px}
+      .hero{padding:116px 0 78px}
       .hero h1{font-size:52px}
-      .hero-bottom{grid-template-columns:1fr}
+      .hero-sub{grid-template-columns:1fr}
       .hero-index{display:none}
-      .hero-art{min-height:400px}
-      .orb{width:300px;height:300px;right:4%;top:8%}
-      .glass-card.one{left:0;top:14%;width:170px}.glass-card.two{right:0;bottom:9%;width:180px}
-      .hero-mark{display:none}
-      .statement,.services,.experience,.offers,.why,.process,.contact{padding:74px 0}
-      .statement-main,.services-head h2,.experience-title h2,.offers-head h2,.why-left h2,.process-head h2,.contact-copy h2{font-size:42px}
-      .services-head{align-items:start;flex-direction:column}
-      .service-line{grid-template-columns:44px 1fr 44px;min-height:128px}
-      .service-line p{display:none}.service-arrow{grid-column:3}
-      .experience-grid{gap:30px}
-      .lab-window{height:500px}
-      .scene{padding:22px}
-      .scene-hero,.convert{grid-template-columns:1fr}
-      .scene-art,.convert .scene-block{display:none}
-      .trust-grid{grid-template-columns:1fr}
-      .trust-tile{padding:14px}.trust-tile b{margin-bottom:12px}
-      .phone{width:150px;height:280px}
-      .flow-board{transform:scale(.82);transform-origin:center}
-      .story-step{min-height:0}
+      .hero-visual{min-height:380px}
+      .poster{width:82%}
+      .poster-word{font-size:70px}
+      .float-tag{font-size:8px;padding:10px 12px}
+      .manifesto,.services,.signal,.offers,.process{padding:72px 0}
+      .manifesto-main,.section-head h2,.signal-head h2,.process-left h2{font-size:42px}
+      .section-head{align-items:flex-start;flex-direction:column}
+      .service{grid-template-columns:42px 1fr 42px;min-height:122px}
+      .service p{display:none}.service .arr{grid-column:3}
+      .signal-ring{width:280px;height:280px}
+      .signal-word{font-size:74px}
+      .signal-step{min-height:0}
       .offer{grid-template-columns:1fr auto;gap:10px;padding:24px 0}
       .offer .tag,.offer p{grid-column:1/-1}
       .offer h3{font-size:28px}
-      .timeline{grid-template-columns:1fr}
-      .contact-copy,form{padding:30px}
+      .contact-wrap{min-height:0}
+      .contact-copy{min-height:460px}
+      .contact-copy h2{font-size:58px}
       .footer-grid{flex-direction:column;align-items:flex-start}
       .floating{left:14px;right:14px;justify-content:center}
     }
@@ -518,220 +394,6 @@
       *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
       .reveal,.reveal-left{opacity:1!important;transform:none!important}
     }
-  
-    /* ===== ZENIX V11 — COBALT / GRAPHITE / ICE ===== */
-    :root{
-      --ink:#0a1020;
-      --petrol:#2457ff;
-      --petrol-deep:#0a1020;
-      --petrol-black:#060914;
-      --mint:#67dcff;
-      --mint-soft:#c9f3ff;
-      --cream:#f4f7fb;
-      --sand:#dce4ef;
-      --sand-2:#c7d0de;
-      --paper:#ffffff;
-      --line:rgba(10,16,32,.10);
-      --line-dark:rgba(255,255,255,.10);
-      --muted:#697386;
-      --white:#ffffff;
-      --shadow:0 32px 90px rgba(18,37,86,.16);
-    }
-
-    html,body{background:#f4f7fb}
-    body{color:#0a1020}
-    body:before{mix-blend-mode:multiply;opacity:.018}
-
-    header.scrolled{
-      background:rgba(244,247,251,.84);
-      border-bottom-color:rgba(36,87,255,.08);
-      box-shadow:0 12px 34px rgba(18,37,86,.07)
-    }
-    .nav-links{color:#39445a}
-    .nav-links a:after{background:#2457ff}
-    .nav-cta{
-      background:#2457ff;
-      box-shadow:0 12px 28px rgba(36,87,255,.20)
-    }
-
-    .hero{
-      background:
-        radial-gradient(circle at 80% 18%,rgba(103,220,255,.30),transparent 24%),
-        radial-gradient(circle at 72% 62%,rgba(36,87,255,.14),transparent 26%),
-        linear-gradient(135deg,#f8faff 0 55%,#e5efff 55% 100%);
-    }
-    .hero-kicker{color:#47536b}
-    .hero-kicker i{background:rgba(36,87,255,.28)}
-    .hero h1 .serif{
-      font-family:"Manrope",sans-serif;
-      font-style:italic;
-      font-weight:700;
-      color:#2457ff
-    }
-    .hero-text{color:#5f6b80}
-    .btn{
-      border-color:#2457ff;
-      background:#2457ff;
-      box-shadow:0 14px 30px rgba(36,87,255,.18)
-    }
-    .btn.ghost{color:#2457ff;border-color:#2457ff}
-    .hero-index{border-color:rgba(36,87,255,.18);color:#2457ff}
-    .hero-index:before{border-color:rgba(36,87,255,.18)}
-
-    .orb{
-      background:
-        radial-gradient(circle at 30% 26%,rgba(255,255,255,.96),rgba(255,255,255,.13) 23%,transparent 24%),
-        radial-gradient(circle at 68% 72%,rgba(103,220,255,.92),transparent 29%),
-        radial-gradient(circle at 42% 40%,#426cff,#101a40 68%);
-      box-shadow:
-        inset -42px -46px 74px rgba(4,10,34,.35),
-        inset 24px 20px 44px rgba(255,255,255,.16),
-        0 42px 100px rgba(31,61,150,.28)
-    }
-    .glass-card{
-      border-color:rgba(255,255,255,.34);
-      background:rgba(255,255,255,.28);
-      box-shadow:0 28px 70px rgba(29,54,122,.16)
-    }
-    .glass-card small{color:#68748d}
-    .glass-card strong{color:#1737a8}
-    .glass-card p{color:#657087}
-    .glass-bars i{background:rgba(36,87,255,.12)}
-    .glass-bars i:after{background:#2457ff}
-    .hero-mark{border-color:rgba(36,87,255,.16);color:#2457ff}
-    .hero-mark:before{color:rgba(36,87,255,.23)}
-    .hero-rail{background:#0a1020;color:#d9e4ff}
-    .rail-track span:after{color:#67dcff}
-
-    .statement{
-      background:#ffffff;
-      border-bottom-color:rgba(10,16,32,.08)
-    }
-    .statement-side .eyebrow{color:#2457ff}
-    .statement-side p{color:#697386}
-    .statement-main .serif{
-      font-family:"Manrope",sans-serif;
-      font-style:italic;
-      font-weight:700;
-      color:#2457ff
-    }
-    .statement-rule{background:linear-gradient(90deg,#2457ff,transparent)}
-
-    .services{
-      background:
-        radial-gradient(circle at 84% 10%,rgba(103,220,255,.11),transparent 22%),
-        linear-gradient(180deg,#e9eef6,#e2e8f1)
-    }
-    .services-head p{color:#697386}
-    .service-list,.service-line{border-color:rgba(10,16,32,.10)}
-    .service-line:before{background:#111a31}
-    .service-line .n{color:#2457ff}
-    .service-line p{color:#667085}
-    .service-arrow{border-color:rgba(36,87,255,.16)}
-    .service-line:hover .n,.service-line:hover p{color:#c9d8ff}
-    .service-line:hover .service-arrow{background:#67dcff;color:#0a1020}
-
-    .experience{
-      background:
-        radial-gradient(circle at 14% 18%,rgba(36,87,255,.18),transparent 22%),
-        radial-gradient(circle at 84% 72%,rgba(103,220,255,.07),transparent 28%),
-        linear-gradient(180deg,#0a1020,#0b1224);
-    }
-    .experience .eyebrow{color:#67dcff}
-    .experience-title p{color:#aab5ca}
-    .lab-stage{
-      background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.028));
-      border-color:rgba(255,255,255,.11);
-      box-shadow:0 40px 100px rgba(1,5,18,.38)
-    }
-    .lab-window{background:#f6f8fc;color:#0a1020}
-    .lab-top{background:#e8edf5}
-    .lab-top i{background:#9aa5b9}
-    .lab-url{background:#d4dbe7}
-    .scene-progress span.active:after{background:#67dcff}
-    .scene-copy small,.scene-label{color:#2457ff}
-    .scene-copy p,.scene-block p{color:#667085}
-    .scene-btn{background:#2457ff}
-    .scene-art{background:linear-gradient(145deg,#2457ff,#67dcff)}
-    .scene-art i{background:#fff}
-    .trust-tile{background:#fff;border-color:rgba(36,87,255,.08)}
-    .trust-tile b{color:#2457ff}
-    .phone{background:#111a31;box-shadow:0 22px 50px rgba(17,26,49,.22)}
-    .phone-in{background:#f5f7fb}
-    .phone-notch{background:#c7cfdd}
-    .bubble{background:#e5eaf2}
-    .bubble.me{background:#d6f4ff}
-    .phone-cta{background:#2457ff}
-    .flow-board{background:#111a31}
-    .node{background:#f8faff}
-    .flow-line{background:linear-gradient(90deg,#67dcff,rgba(103,220,255,.14))}
-    .flow-line:after{background:#e5fbff;box-shadow:0 0 16px #67dcff}
-    .story-step.active{border-color:rgba(103,220,255,.38)}
-    .story-step span{color:#67dcff}
-    .story-step p{color:#aab5c9}
-
-    .offers{
-      background:
-        radial-gradient(circle at 90% 12%,rgba(36,87,255,.08),transparent 24%),
-        #edf2f8
-    }
-    .offers-head p,.offer p,.offer .tag{color:#6b7487}
-    .offer-list,.offer{border-color:rgba(10,16,32,.10)}
-    .offer:hover{background:rgba(255,255,255,.52)}
-    .offer .arrow{border-color:rgba(36,87,255,.17);color:#2457ff}
-    .offer:hover .arrow{background:#2457ff;color:#fff}
-
-    .why{
-      background:
-        radial-gradient(circle at 12% 18%,rgba(36,87,255,.16),transparent 24%),
-        #0a1020
-    }
-    .why-left .eyebrow,.principle b{color:#67dcff}
-    .why-left p,.principle p{color:#aab4c7}
-    .principles,.principle{border-color:rgba(255,255,255,.09)}
-
-    .process{
-      background:
-        radial-gradient(circle at 84% 0%,rgba(103,220,255,.12),transparent 23%),
-        #e5eaf2
-    }
-    .process-head p{color:#687386}
-    .timeline{background:rgba(36,87,255,.11);border-color:rgba(36,87,255,.10)}
-    .step{background:#f8faff}
-    .step:before{background:#2457ff}
-    .step b{color:#2457ff}
-    .step p{color:#6a7487}
-
-    .contact{
-      background:
-        radial-gradient(circle at 18% 86%,rgba(36,87,255,.08),transparent 24%),
-        linear-gradient(145deg,#eef3f9,#dfe7f2)
-    }
-    .contact-box{
-      background:
-        radial-gradient(circle at 90% 8%,rgba(36,87,255,.18),transparent 25%),
-        #0a1020;
-      box-shadow:0 42px 100px rgba(18,37,86,.20)
-    }
-    .contact-copy:after{
-      background:radial-gradient(circle,rgba(103,220,255,.20),transparent 70%)
-    }
-    .contact-copy .eyebrow{color:#67dcff}
-    .contact-copy p{color:#b2bdd1}
-    .contact-copy .meta{color:#7f8ba4}
-    label{color:#bac5da}
-    input,textarea{border-bottom-color:rgba(255,255,255,.16)}
-    input::placeholder,textarea::placeholder{color:#72809a}
-    input:focus,textarea:focus{border-bottom-color:#67dcff}
-    form .btn{background:#67dcff;border-color:#67dcff;color:#0a1020}
-
-    footer{background:#050914;color:#8e9ab1}
-    .floating{
-      background:#111a31;
-      box-shadow:0 18px 44px rgba(17,26,49,.30)
-    }
-    .floating b{background:#67dcff;color:#0a1020}
-
   </style>
 </head>
 <body>
@@ -743,13 +405,13 @@
         <img src="../zenix-logo.png" alt="Zenix">
         <span>Zenix AR</span>
       </a>
-      <nav class="nav-links">
+      <nav class="nav-mid">
         <a href="#servicios">Servicios</a>
-        <a href="#experiencia">Experiencia</a>
-        <a href="#planes">Opciones</a>
+        <a href="#senal">Método</a>
+        <a href="#opciones">Opciones</a>
         <a href="#proceso">Proceso</a>
       </nav>
-      <a class="nav-cta" href="#contacto">Solicitar propuesta</a>
+      <a class="nav-cta" href="#contacto">Hablemos</a>
     </div>
   </header>
 
@@ -759,308 +421,227 @@
         <div class="hero-copy">
           <div class="hero-kicker"><span>Zenix Digital Studio</span><i></i><span>Argentina · 2026</span></div>
           <h1>
-            Hacemos que tu negocio
-            <span class="serif">se sienta elegido.</span>
+            No necesitás otra web.
+            <span class="accent">Necesitás una que <span class="serif">haga algo.</span></span>
           </h1>
-          <div class="hero-bottom">
+
+          <div class="hero-sub">
             <div>
-              <p class="hero-text">Diseñamos webs, automatizaciones y productos digitales con una idea simple: que se vean bien, se entiendan rápido y ayuden a mover el negocio.</p>
+              <p>Diseñamos webs, automatizaciones y productos digitales para que tu negocio se vea mejor, se entienda rápido y convierta con menos fricción.</p>
               <div class="hero-actions">
                 <a class="btn magnetic" href="#contacto">Quiero una propuesta</a>
-                <a class="btn ghost magnetic" href="#servicios">Ver qué hacemos</a>
+                <a class="btn ghost magnetic" href="#servicios">Ver servicios</a>
               </div>
             </div>
-            <div class="hero-index">01 / 06</div>
+            <div class="hero-index">01 / ZENIX</div>
           </div>
         </div>
 
-        <div class="hero-art">
-          <canvas id="ambientCanvas"></canvas>
-          <div class="orb"></div>
-
-          <div class="glass-card one">
-            <small>Experiencia</small>
-            <strong>Mobile first</strong>
-            <p>Pensada para celular desde el inicio.</p>
-          </div>
-
-          <div class="glass-card two">
-            <small>Recorrido</small>
-            <strong>Claro → útil</strong>
-            <div class="glass-bars">
-              <i style="--w:92%"></i><i style="--w:76%"></i><i style="--w:86%"></i>
+        <div class="hero-visual">
+          <div class="cross"></div>
+          <div class="poster">
+            <div class="poster-top"><span>Digital Studio</span><span>Est. 2026</span></div>
+            <div class="poster-word">
+              <span>MAKE</span>
+              <span class="orange">IT</span>
+              <span>USEFUL</span>
+            </div>
+            <div class="poster-foot">
+              <p>Diseño con intención. Tecnología con una razón para estar.</p>
+              <div class="poster-mark">ZENIX</div>
             </div>
           </div>
-
-          <div class="hero-mark">Zenix</div>
+          <div class="float-tag tag-a">Web / Product / AI</div>
+          <div class="float-tag tag-b">Mobile first</div>
         </div>
       </div>
 
-      <div class="hero-rail" aria-hidden="true">
-        <div class="rail-track">
-          <span>Diseño web</span><span>Automatización</span><span>Producto digital</span><span>Landing pages</span><span>Apps</span><span>Tiendas online</span>
-          <span>Diseño web</span><span>Automatización</span><span>Producto digital</span><span>Landing pages</span><span>Apps</span><span>Tiendas online</span>
+      <div class="hero-marquee">
+        <div class="marquee-track">
+          <span>Diseño web</span><span>Landing pages</span><span>Automatización</span><span>Apps</span><span>Tiendas online</span><span>Producto digital</span>
+          <span>Diseño web</span><span>Landing pages</span><span>Automatización</span><span>Apps</span><span>Tiendas online</span><span>Producto digital</span>
         </div>
       </div>
     </section>
 
-    <section class="statement">
-      <div class="wrap statement-grid">
-        <div class="statement-side reveal-left">
-          <span class="eyebrow">La diferencia</span>
-          <p>No diseñamos una página para “tener presencia”. Diseñamos una experiencia que ayude a que la persona entienda, confíe y avance.</p>
+    <section class="manifesto">
+      <div class="wrap manifesto-grid">
+        <div class="manifesto-side reveal-left">
+          <div class="label">No hacemos decoración digital</div>
+          <p>Una web no tiene que impresionar por cinco segundos. Tiene que lograr que una persona entienda tu propuesta y sepa qué hacer después.</p>
         </div>
+
         <div class="reveal">
-          <div class="statement-main">
-            Una web premium no es la que tiene más efectos.
-            Es la que hace que tu negocio <span class="serif">parezca más serio, más claro y más valioso.</span>
+          <div class="manifesto-main">
+            Una buena web ordena tu negocio para que desde afuera se vea
+            <span class="serif">más claro, más confiable y más fácil de elegir.</span>
           </div>
-          <div class="statement-rule"></div>
+          <div class="manifesto-rule"></div>
         </div>
       </div>
     </section>
 
     <section class="services" id="servicios">
       <div class="wrap">
-        <div class="services-head reveal">
+        <div class="section-head reveal">
           <div>
-            <span class="eyebrow" style="color:var(--petrol)">Qué construimos</span>
-            <h2>Digital que sirve.</h2>
+            <div class="label">Qué hacemos</div>
+            <h2>Digital sin relleno.</h2>
           </div>
-          <p>Elegimos herramientas y funciones según el objetivo. No agregamos tecnología solo para que parezca más complejo.</p>
+          <p>Diseñamos y construimos solo lo que tiene sentido para el objetivo real del negocio.</p>
         </div>
 
         <div class="service-list">
-          <article class="service-line reveal">
-            <div class="n">01</div>
+          <article class="service reveal">
+            <div class="num">01</div>
             <h3>Landing pages</h3>
-            <p>Campañas, servicios o productos con un objetivo claro y una acción principal.</p>
-            <div class="service-arrow">↗</div>
+            <p>Una propuesta, un objetivo y una acción clara.</p>
+            <div class="arr">↗</div>
           </article>
-          <article class="service-line reveal">
-            <div class="n">02</div>
+          <article class="service reveal">
+            <div class="num">02</div>
             <h3>Web corporativa</h3>
-            <p>Una presencia completa para explicar quién sos, qué hacés y por qué elegirte.</p>
-            <div class="service-arrow">↗</div>
+            <p>Más estructura para explicar quién sos, qué hacés y por qué elegirte.</p>
+            <div class="arr">↗</div>
           </article>
-          <article class="service-line reveal">
-            <div class="n">03</div>
-            <h3>Catálogo & tienda</h3>
-            <p>Productos, pedidos e integraciones pensadas para hacer más simple la venta.</p>
-            <div class="service-arrow">↗</div>
+          <article class="service reveal">
+            <div class="num">03</div>
+            <h3>Catálogo / tienda</h3>
+            <p>Productos, pedidos e integraciones adaptadas a tu forma de vender.</p>
+            <div class="arr">↗</div>
           </article>
-          <article class="service-line reveal">
-            <div class="n">04</div>
+          <article class="service reveal">
+            <div class="num">04</div>
             <h3>Automatización</h3>
             <p>Formularios, avisos, datos y procesos que reducen trabajo manual.</p>
-            <div class="service-arrow">↗</div>
+            <div class="arr">↗</div>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="experience" id="experiencia">
+    <section class="signal" id="senal">
       <div class="wrap">
-        <div class="experience-title reveal">
+        <div class="signal-head reveal">
           <div>
-            <span class="eyebrow">No te muestro plantillas</span>
-            <h2>Te muestro qué debería hacer tu web.</h2>
+            <div class="label" style="color:var(--orange)">Cómo funciona una buena web</div>
+            <h2>No es una página. Es un recorrido.</h2>
           </div>
-          <p>Una buena página no se limita a verse bien. Tiene un recorrido: captar atención, generar confianza, convertir y seguir trabajando después del clic.</p>
+          <p>Mientras bajás, cambia la idea central. Son cuatro trabajos distintos que la web debería hacer por vos.</p>
         </div>
 
-        <div class="experience-grid">
-          <div class="lab-stage" id="labStage" data-scene="0">
-            <div class="scene-progress" id="sceneProgress">
-              <span class="active">01</span><span>02</span><span>03</span><span>04</span>
-            </div>
-
-            <div class="lab-window">
-              <div class="lab-top"><i></i><i></i><i></i><div class="lab-url"></div></div>
-              <div class="lab-canvas">
-
-                <div class="scene" data-scene="0">
-                  <div class="scene-hero">
-                    <div class="scene-copy">
-                      <small>01 · Atención</small>
-                      <h3>Entrá y entendé en segundos.</h3>
-                      <p>Un mensaje claro, una jerarquía visual fuerte y una acción evidente desde el primer vistazo.</p>
-                      <span class="scene-btn">Quiero saber más ↗</span>
-                    </div>
-                    <div class="scene-art"><i></i></div>
-                  </div>
-                </div>
-
-                <div class="scene" data-scene="1">
-                  <div class="scene-block">
-                    <span class="scene-label">02 · Confianza</span>
-                    <h3>Después del impacto, hay que dar motivos para quedarse.</h3>
-                    <div class="trust-grid">
-                      <article class="trust-tile"><b>01</b><strong>Qué hacés</strong><p>Explicado sin vueltas.</p></article>
-                      <article class="trust-tile"><b>02</b><strong>Por qué elegirte</strong><p>Beneficios visibles.</p></article>
-                      <article class="trust-tile"><b>03</b><strong>Qué sigue</strong><p>Camino claro al contacto.</p></article>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="scene" data-scene="2">
-                  <div class="convert">
-                    <div class="phone">
-                      <div class="phone-in">
-                        <div class="phone-notch"></div>
-                        <div class="bubble">Hola, quería consultar por el servicio.</div>
-                        <div class="bubble me">Perfecto. ¿Qué necesitás resolver?</div>
-                        <div class="bubble">Quiero una página para mi negocio.</div>
-                        <div class="phone-cta">Enviar consulta</div>
-                      </div>
-                    </div>
-                    <div class="scene-block">
-                      <span class="scene-label">03 · Conversión</span>
-                      <h3>La visita tiene que terminar en una acción.</h3>
-                      <p>WhatsApp, formulario, reserva, pedido o llamada. El recorrido se diseña para que contactar sea fácil.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="scene" data-scene="3">
-                  <div class="scene-block">
-                    <span class="scene-label">04 · Automatización</span>
-                    <h3>Y después, que la web siga trabajando.</h3>
-                    <div class="flow-board">
-                      <div class="flow-line f1"></div><div class="flow-line f2"></div><div class="flow-line f3"></div>
-                      <div class="node n1">Consulta<small>Formulario / WhatsApp</small></div>
-                      <div class="node n2">Datos<small>Información ordenada</small></div>
-                      <div class="node n3">Acción<small>Aviso / respuesta</small></div>
-                      <div class="node n4">Seguimiento<small>Menos trabajo manual</small></div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
+        <div class="signal-grid">
+          <div class="signal-stage" id="signalStage" data-step="0">
+            <div class="signal-ring"></div>
+            <div class="signal-word w0">MIRAR<span>↓</span></div>
+            <div class="signal-word w1">CONFIAR<span>↓</span></div>
+            <div class="signal-word w2">ACTUAR<span>↓</span></div>
+            <div class="signal-word w3">SEGUIR<span>↗</span></div>
           </div>
 
-          <div class="story">
-            <article class="story-step active" data-scene="0">
-              <span>01 · Captar</span>
-              <h3>Primero: que te entiendan.</h3>
-              <p>La primera pantalla tiene que explicar qué ofrecés, para quién y qué puede hacer la persona después.</p>
+          <div class="signal-steps">
+            <article class="signal-step active" data-step="0">
+              <div class="n">01 · Captar</div>
+              <h3>Primero, detener el scroll.</h3>
+              <p>Una idea visual fuerte y un mensaje que se entienda en segundos. Sin obligar al visitante a descifrar qué vendés.</p>
             </article>
-            <article class="story-step" data-scene="1">
-              <span>02 · Convencer</span>
-              <h3>Después: que confíen.</h3>
-              <p>La página ordena la información para que el visitante encuentre razones concretas para seguir avanzando.</p>
+            <article class="signal-step" data-step="1">
+              <div class="n">02 · Convencer</div>
+              <h3>Después, dar razones para quedarse.</h3>
+              <p>Beneficios, información útil y una jerarquía que haga fácil comparar, entender y confiar.</p>
             </article>
-            <article class="story-step" data-scene="2">
-              <span>03 · Convertir</span>
-              <h3>Hacer fácil el contacto.</h3>
-              <p>La experiencia termina cuando la persona puede escribir, reservar, pedir o comprar sin esfuerzo.</p>
+            <article class="signal-step" data-step="2">
+              <div class="n">03 · Convertir</div>
+              <h3>Convertir interés en una acción.</h3>
+              <p>WhatsApp, formulario, reserva, pedido o compra. El contacto tiene que ser obvio y simple.</p>
             </article>
-            <article class="story-step" data-scene="3">
-              <span>04 · Automatizar</span>
-              <h3>Que siga trabajando después.</h3>
-              <p>Cuando tiene sentido, conectamos procesos para ahorrar tiempo y ordenar tareas.</p>
+            <article class="signal-step" data-step="3">
+              <div class="n">04 · Automatizar</div>
+              <h3>Que el trabajo siga después del clic.</h3>
+              <p>Cuando tiene sentido, conectamos datos, avisos y respuestas para reducir pasos manuales.</p>
             </article>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="offers" id="planes">
+    <section class="offers" id="opciones">
       <div class="wrap">
-        <div class="offers-head reveal">
+        <div class="section-head reveal">
           <div>
-            <span class="eyebrow" style="color:var(--petrol)">Puntos de partida</span>
-            <h2>No vendemos paquetes cerrados.</h2>
+            <div class="label">Cómo podés empezar</div>
+            <h2>Sin paquetes de mentira.</h2>
           </div>
-          <p>Partimos de una necesidad real y ajustamos alcance, contenido e integraciones. Estas son tres formas habituales de empezar.</p>
+          <p>El alcance se arma según tu necesidad. Estas son formas comunes de empezar, no cajas cerradas.</p>
         </div>
 
-        <div class="offer-list">
+        <div class="offer-table">
           <article class="offer reveal">
             <div class="tag">Esencial</div>
             <h3>Landing page</h3>
-            <p>Una página enfocada en presentar un servicio o campaña con un objetivo concreto.</p>
+            <p>Ideal para un servicio, campaña o producto con un objetivo concreto.</p>
             <a class="arrow" href="#contacto">↗</a>
           </article>
           <article class="offer reveal">
             <div class="tag">Completo</div>
             <h3>Web corporativa</h3>
-            <p>Más estructura, más profundidad, varias secciones e integraciones según el negocio.</p>
+            <p>Más profundidad, secciones e integraciones para presentar un negocio completo.</p>
             <a class="arrow" href="#contacto">↗</a>
           </article>
           <article class="offer reveal">
             <div class="tag">Comercio</div>
             <h3>Catálogo o tienda</h3>
-            <p>Productos, fichas, pedidos o carrito, con la experiencia adaptada a tu forma de vender.</p>
+            <p>Productos, fichas, pedidos o carrito, según cómo vendas hoy.</p>
             <a class="arrow" href="#contacto">↗</a>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="why">
-      <div class="wrap why-grid">
-        <div class="why-left reveal-left">
-          <span class="eyebrow">Por qué Zenix</span>
-          <h2>Menos humo. Más criterio.</h2>
-          <p>La tecnología tiene que resolver algo. Si no suma claridad, confianza, velocidad o conversión, probablemente no hace falta.</p>
-        </div>
-        <div class="principles">
-          <article class="principle reveal"><b>01</b><div><h3>Tu negocio primero</h3><p>La herramienta se elige según el problema, no al revés.</p></div></article>
-          <article class="principle reveal"><b>02</b><div><h3>Diseño con intención</h3><p>Cada bloque tiene que ayudar a entender, confiar o avanzar.</p></div></article>
-          <article class="principle reveal"><b>03</b><div><h3>Contacto directo</h3><p>Sin capas innecesarias entre tu idea y quien la construye.</p></div></article>
-          <article class="principle reveal"><b>04</b><div><h3>Escalable</h3><p>Podemos empezar simple y sumar automatizaciones, apps o nuevas funciones después.</p></div></article>
-        </div>
-      </div>
-    </section>
-
     <section class="process" id="proceso">
-      <div class="wrap">
-        <div class="process-head reveal">
-          <div>
-            <span class="eyebrow" style="color:var(--petrol)">Cómo trabajamos</span>
-            <h2>De la idea a online.</h2>
-          </div>
-          <p>Un proceso corto y claro para que siempre sepas qué estamos haciendo y por qué.</p>
+      <div class="wrap process-grid">
+        <div class="process-left reveal-left">
+          <div class="label">Proceso</div>
+          <h2>Menos reuniones. Más avance.</h2>
+          <p>Un proceso simple para que siempre sepas qué se está construyendo y qué viene después.</p>
         </div>
-        <div class="timeline">
-          <article class="step reveal"><b>01</b><h3>Entender</h3><p>Negocio, objetivo y necesidad.</p></article>
-          <article class="step reveal"><b>02</b><h3>Ordenar</h3><p>Contenido, estructura y recorrido.</p></article>
-          <article class="step reveal"><b>03</b><h3>Diseñar</h3><p>Identidad, jerarquía y experiencia.</p></article>
-          <article class="step reveal"><b>04</b><h3>Construir</h3><p>Desarrollo, adaptación y pruebas.</p></article>
-          <article class="step reveal"><b>05</b><h3>Publicar</h3><p>Online, listo para recibir visitas.</p></article>
+
+        <div class="process-list">
+          <article class="process-item reveal"><b>01</b><div><h3>Entender</h3><p>Negocio, objetivo y necesidad.</p></div></article>
+          <article class="process-item reveal"><b>02</b><div><h3>Ordenar</h3><p>Contenido, estructura y recorrido.</p></div></article>
+          <article class="process-item reveal"><b>03</b><div><h3>Diseñar</h3><p>Identidad, jerarquía y experiencia.</p></div></article>
+          <article class="process-item reveal"><b>04</b><div><h3>Construir</h3><p>Desarrollo, adaptación y pruebas.</p></div></article>
+          <article class="process-item reveal"><b>05</b><div><h3>Publicar</h3><p>Online y listo para recibir visitas.</p></div></article>
         </div>
       </div>
     </section>
 
     <section class="contact" id="contacto">
-      <div class="wrap">
-        <div class="contact-box">
-          <div class="contact-copy reveal-left">
-            <span class="eyebrow">Hablemos</span>
-            <h2>Tu próxima web puede empezar con una conversación.</h2>
-            <p>Contanos qué hacés y qué te gustaría conseguir. No hace falta que tengas resuelto lo técnico.</p>
-            <div class="meta">Consulta sin compromiso · propuesta a medida · contacto directo</div>
+      <div class="contact-wrap">
+        <div class="contact-copy">
+          <div>
+            <div class="label" style="color:#fff">Hablemos</div>
+            <h2>Tu próxima web puede empezar <span class="serif">acá.</span></h2>
           </div>
-
-          <form id="leadForm" class="reveal">
-            <div class="field">
-              <label for="nombre">Nombre</label>
-              <input id="nombre" name="nombre" autocomplete="name" placeholder="Tu nombre" required>
-            </div>
-            <div class="field">
-              <label for="negocio">Negocio o proyecto</label>
-              <input id="negocio" name="negocio" placeholder="Ej. Rotisería, estudio, servicio profesional">
-            </div>
-            <div class="field">
-              <label for="mensaje">¿Qué necesitás?</label>
-              <textarea id="mensaje" name="mensaje" placeholder="Contanos brevemente qué te gustaría hacer..." required></textarea>
-            </div>
-            <button class="btn magnetic" type="submit">Enviar consulta</button>
-            <p class="note">Al enviar se abrirá tu aplicación de correo con la consulta preparada.</p>
-          </form>
+          <div class="contact-meta">Consulta sin compromiso · propuesta a medida · contacto directo</div>
         </div>
+
+        <form id="leadForm">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" autocomplete="name" placeholder="Tu nombre" required>
+          </div>
+          <div class="field">
+            <label for="negocio">Negocio o proyecto</label>
+            <input id="negocio" placeholder="Ej. Rotisería, estudio, servicio profesional">
+          </div>
+          <div class="field">
+            <label for="mensaje">¿Qué necesitás?</label>
+            <textarea id="mensaje" placeholder="Contanos brevemente qué te gustaría hacer..." required></textarea>
+          </div>
+          <button class="btn magnetic" type="submit">Enviar consulta</button>
+          <p class="note">Al enviar se abrirá tu aplicación de correo con la consulta preparada.</p>
+        </form>
       </div>
     </section>
   </main>
@@ -1080,39 +661,38 @@
     const progress=document.getElementById('progress');
     const header=document.getElementById('siteHeader');
 
-    function scrollUpdate(){
+    function onScroll(){
       const d=document.documentElement;
       const max=d.scrollHeight-d.clientHeight;
       progress.style.width=(max>0?(d.scrollTop/max)*100:0)+'%';
       header.classList.toggle('scrolled',window.scrollY>18);
     }
-    window.addEventListener('scroll',scrollUpdate,{passive:true});
-    scrollUpdate();
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
 
-    const revealObs=new IntersectionObserver(entries=>{
+    const obs=new IntersectionObserver(entries=>{
       entries.forEach(e=>{
-        if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}
+        if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
       });
-    },{threshold:.13,rootMargin:'0px 0px -6% 0px'});
+    },{threshold:.14,rootMargin:'0px 0px -6% 0px'});
     document.querySelectorAll('.reveal,.reveal-left').forEach((el,i)=>{
       el.style.transitionDelay=((i%4)*70)+'ms';
-      revealObs.observe(el);
+      obs.observe(el);
     });
 
-    const lab=document.getElementById('labStage');
-    const stories=[...document.querySelectorAll('.story-step')];
-    if(lab&&stories.length){
-      const sceneObs=new IntersectionObserver(entries=>{
+    const signalStage=document.getElementById('signalStage');
+    const signalSteps=[...document.querySelectorAll('.signal-step')];
+    if(signalStage&&signalSteps.length){
+      const signalObs=new IntersectionObserver(entries=>{
         entries.forEach(entry=>{
           if(entry.isIntersecting){
-            const s=entry.target.dataset.scene||'0';
-            lab.dataset.scene=s;
-            stories.forEach(x=>x.classList.toggle('active',x===entry.target));
-            document.querySelectorAll('#sceneProgress span').forEach((dot,i)=>dot.classList.toggle('active',String(i)===s));
+            const step=entry.target.dataset.step||'0';
+            signalStage.dataset.step=step;
+            signalSteps.forEach(x=>x.classList.toggle('active',x===entry.target));
           }
         });
       },{threshold:.56,rootMargin:'-12% 0px -18% 0px'});
-      stories.forEach(x=>sceneObs.observe(x));
+      signalSteps.forEach(x=>signalObs.observe(x));
     }
 
     if(window.matchMedia('(pointer:fine)').matches&&!reduced){
@@ -1125,45 +705,18 @@
         });
         btn.addEventListener('mouseleave',()=>btn.style.transform='');
       });
-    }
 
-    if(!reduced){
-      const canvas=document.getElementById('ambientCanvas');
-      const ctx=canvas.getContext('2d');
-      let points=[];
-      function setup(){
-        const r=canvas.parentElement.getBoundingClientRect();
-        canvas.width=Math.max(1,Math.floor(r.width*devicePixelRatio));
-        canvas.height=Math.max(1,Math.floor(r.height*devicePixelRatio));
-        canvas.style.width=r.width+'px';
-        canvas.style.height=r.height+'px';
-        ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-        points=Array.from({length:26},()=>({
-          x:Math.random()*r.width,y:Math.random()*r.height,
-          vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,
-          s:1+Math.random()*1.7
-        }));
-      }
-      function draw(){
-        const w=canvas.clientWidth,h=canvas.clientHeight;
-        ctx.clearRect(0,0,w,h);
-        points.forEach(p=>{
-          p.x+=p.vx;p.y+=p.vy;
-          if(p.x<0||p.x>w)p.vx*=-1;
-          if(p.y<0||p.y>h)p.vy*=-1;
-          ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
-          ctx.fillStyle='rgba(36,87,255,.18)';ctx.fill();
+      const poster=document.querySelector('.poster');
+      const heroVisual=document.querySelector('.hero-visual');
+      if(poster&&heroVisual){
+        heroVisual.addEventListener('mousemove',e=>{
+          const r=heroVisual.getBoundingClientRect();
+          const px=(e.clientX-r.left)/r.width-.5;
+          const py=(e.clientY-r.top)/r.height-.5;
+          poster.style.transform='rotate('+(4+px*3)+'deg) rotateX('+(-py*4)+'deg) rotateY('+(px*5)+'deg)';
         });
-        for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++){
-          const a=points[i],b=points[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);
-          if(dist<110){
-            ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-            ctx.strokeStyle='rgba(36,87,255,'+(0.08*(1-dist/110))+')';ctx.stroke();
-          }
-        }
-        requestAnimationFrame(draw);
+        heroVisual.addEventListener('mouseleave',()=>poster.style.transform='rotate(4deg)');
       }
-      setup();draw();window.addEventListener('resize',setup);
     }
 
     document.getElementById('leadForm').addEventListener('submit',function(e){
