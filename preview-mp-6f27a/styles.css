@@ -65,3 +65,59 @@ a{text-decoration:none;color:inherit}
   .order-step{border-right:0;border-bottom:1px solid rgba(21,18,15,.15);padding:18px 0;min-height:auto}
   .brand-break-word{font-size:38vw}
 }
+.hero{align-items:center}
+.hero-layout{position:relative;z-index:2;width:100%;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:48px;align-items:center}
+.hero-content{max-width:none}
+.hero-stack{justify-self:end;width:min(100%,430px);display:flex;flex-direction:column;gap:14px}
+.hero-card{background:rgba(21,18,15,.76);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.18);box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.hero-card-main{padding:12px}
+.hero-card-label{display:inline-block;font-size:9px;letter-spacing:.2em;font-weight:800;color:#ffd1c3;margin:4px 0 10px 4px}
+.hero-card-photo{height:285px;background:url('https://image.arrivalguides.com/x/11/78147ac43b74eb8c53665d12261c7100.jpg') center/cover}
+.hero-card-copy{padding:18px 8px 10px;display:flex;flex-direction:column}
+.hero-card-copy small{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#f49a7c}
+.hero-card-copy strong{font-family:'Bebas Neue';font-size:44px;font-weight:400;line-height:1;margin-top:6px}
+.hero-card-copy span{font-size:12px;color:#c8beb4;margin-top:5px}
+.hero-card-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hero-mini{background:#f1e5d5;color:#17130f;padding:18px 18px 20px;min-height:105px;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-mini.accent{background:var(--tomato);color:#fff}
+.hero-mini b{font-family:'Bebas Neue';font-size:34px;font-weight:400;line-height:1}
+.hero-mini span{font-size:10px;line-height:1.5;margin-top:6px;opacity:.75}
+.menu-section{background:linear-gradient(180deg,#fbf6ec 0%,#f6ead9 100%)}
+.menu-intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:-10px 0 28px}
+.menu-stat{background:#17130f;color:#fff;padding:22px 24px;display:flex;align-items:baseline;gap:12px}
+.menu-stat:nth-child(2){background:var(--tomato)}
+.menu-stat:nth-child(3){background:#efe0cc;color:#17130f;border:1px solid #ddcbb5}
+.menu-stat b{font-family:'Bebas Neue';font-size:38px;font-weight:400;line-height:1}
+.menu-stat span{font-size:10px;line-height:1.35;text-transform:uppercase;letter-spacing:.1em;opacity:.75}
+.pizza-grid-rich{grid-template-columns:1.2fr .8fr 1fr}
+.pizza-grid-rich .pizza-card:nth-child(1){grid-row:span 2}
+.pizza-grid-rich .pizza-card:nth-child(1) .pizza-image{height:100%}
+.pizza-grid-rich .pizza-card:nth-child(1){min-height:610px}
+.pizza-grid-rich .pizza-card:nth-child(n+2){min-height:295px}
+.pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image{height:190px}
+.pizza-grid-rich .pizza-card-body{background:#fff}
+@media(max-width:1100px){
+  .hero-layout{grid-template-columns:1fr}
+  .hero-stack{justify-self:start;width:min(100%,700px);display:grid;grid-template-columns:1fr .75fr}
+  .hero-card-row{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .pizza-grid-rich{grid-template-columns:repeat(2,1fr)}
+  .pizza-grid-rich .pizza-card:nth-child(1){grid-row:auto;min-height:440px}
+  .pizza-grid-rich .pizza-card:nth-child(1) .pizza-image{height:335px}
+  .pizza-grid-rich .pizza-card:nth-child(n+2){min-height:440px}
+  .pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image{height:335px}
+}
+@media(max-width:620px){
+  .hero{height:auto;min-height:0;padding-top:120px;padding-bottom:36px}
+  .hero-layout{gap:28px}
+  .hero-stack{display:block;width:100%}
+  .hero-card-main{margin-top:4px}
+  .hero-card-photo{height:220px}
+  .hero-card-row{display:grid;grid-template-columns:1fr 1fr;margin-top:10px}
+  .hero-mini{min-height:92px;padding:14px}
+  .menu-intro-grid{grid-template-columns:1fr}
+  .pizza-grid-rich{grid-template-columns:1fr}
+  .pizza-grid-rich .pizza-card,.pizza-grid-rich .pizza-card:nth-child(1),.pizza-grid-rich .pizza-card:nth-child(n+2){min-height:auto}
+  .pizza-grid-rich .pizza-card .pizza-image,.pizza-grid-rich .pizza-card:nth-child(1) .pizza-image,.pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image{height:300px}
+}
