@@ -553,3 +553,90 @@ a{text-decoration:none;color:inherit}
   }
   .floating-whatsapp-text{display:none}
 }
+
+
+/* v10 premium floating WhatsApp */
+.premium-wa{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:172px;
+  min-height:62px;
+  padding:9px 16px 9px 9px;
+  border-radius:999px;
+  background:rgba(18,16,14,.88);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:
+    0 18px 50px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  transition:transform .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease;
+}
+.premium-wa:hover{
+  transform:translateY(-3px);
+  background:rgba(26,23,20,.96);
+  border-color:rgba(255,255,255,.23);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.42),
+    0 0 0 1px rgba(37,211,102,.08);
+}
+.premium-wa-icon{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  flex:0 0 44px;
+  background:#25D366;
+  box-shadow:
+    0 8px 18px rgba(37,211,102,.22),
+    inset 0 1px 0 rgba(255,255,255,.28);
+}
+.premium-wa-icon svg{
+  width:24px;
+  height:24px;
+  fill:#fff;
+}
+.premium-wa-copy{
+  display:flex;
+  flex-direction:column;
+  line-height:1.04;
+}
+.premium-wa-copy small{
+  font-size:8px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#a79f97;
+  margin-bottom:4px;
+}
+.premium-wa-copy strong{
+  font-family:'Bebas Neue';
+  font-size:24px;
+  font-weight:400;
+  letter-spacing:.02em;
+}
+@media(max-width:620px){
+  .premium-wa{
+    right:14px;
+    bottom:14px;
+    min-width:0;
+    min-height:0;
+    width:58px;
+    height:58px;
+    padding:7px;
+    border-radius:50%;
+    justify-content:center;
+  }
+  .premium-wa-icon{
+    width:44px;
+    height:44px;
+    flex-basis:44px;
+  }
+  .premium-wa-copy{display:none}
+}
