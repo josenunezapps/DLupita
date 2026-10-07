@@ -418,3 +418,82 @@ a{text-decoration:none;color:inherit}
   .full-menu-cta{flex-direction:column;align-items:flex-start}
   .full-menu-cta .btn{width:100%}
 }
+
+
+/* v8 visual menu: photo cards for every product */
+.visual-category{padding:46px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.visual-category:last-of-type{border-bottom:0}
+.visual-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.visual-product-grid.large{grid-template-columns:repeat(3,minmax(0,1fr))}
+.visual-product-card{background:#201b17;border:1px solid rgba(255,255,255,.09);overflow:hidden;display:flex;flex-direction:column;min-height:320px;transition:.25s}
+.visual-product-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.18)}
+.visual-product-photo{height:205px;background-size:cover;background-position:center;position:relative}
+.compact-card{min-height:245px}
+.compact-card .visual-product-photo{height:150px}
+.visual-product-copy{padding:16px 16px 18px;display:flex;flex-direction:column;flex:1}
+.visual-product-copy h4{font-family:'Bebas Neue';font-size:28px;font-weight:400;line-height:1;margin:0}
+.visual-product-copy p{font-size:10px;line-height:1.55;color:#998f87;margin:8px 0 0}
+.visual-product-copy strong{font-family:'Bebas Neue';font-size:24px;font-weight:400;color:#ff9b79;margin-top:auto;padding-top:14px}
+.promos-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.promos-visual .visual-product-card{background:#281b16;border-color:rgba(213,73,47,.25)}
+.drinks-small{grid-template-columns:repeat(2,minmax(0,1fr));max-width:720px}
+
+/* Reuse the real-looking pizza imagery for size variants */
+.visual-product-photo.pizza-1{background-image:url('https://image.arrivalguides.com/x/11/78147ac43b74eb8c53665d12261c7100.jpg')}
+.visual-product-photo.pizza-2{background-image:url('https://www.pizzarica.com.ar/images/menu-pizza-napolitana.jpg')}
+.visual-product-photo.pizza-3{background-image:url('https://media-cdn.tripadvisor.com/media/photo-s/19/a2/79/19/fugazzeta-pizza-de-cebolla.jpg')}
+.visual-product-photo.pizza-4{background-image:url('https://cdn.blog.paulinacocina.net/wp-content/uploads/2022/01/como-hacer-pizza-calabresa.jpg')}
+.visual-product-photo.pizza-5{background-image:url('https://tofuu.getjusto.com/orioneat-local/resized2/F8jKyrX9D79NuMkjp-2400-x.webp')}
+.visual-product-photo.pizza-6{background-image:url('https://www.guiapetfriendly.com/img_fotos/foto0034513.jpg')}
+.visual-product-photo.pizza-7{background-image:url('https://media.dib.com.ar/p/76adf3fc2b99bc836a5ceafcd24393b7/adjuntos/377/imagenes/100/050/0100050088/1000x0/smart/pizza-jamon-y-morrones-01-rs.jpg')}
+.visual-product-photo.pizza-8{background-image:url('https://www.novachef.es/media/recetas/pizza-jamon-queso.jpg'),url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=85')}
+.visual-product-photo.pizza-9{background-image:url('https://media.mdzol.com/p/ff2f47dad6f99518cf03987ff975c982/adjuntos/373/imagenes/001/832/0001832064/760x0/smart/el-huevo-lo-podes-picar-o-cortarlo-rodajas.png')}
+.visual-product-photo.pizza-10{background-image:url('https://cdn01.s4shops.com/skytabweb/uploads/3a89c449-35af-ee11-8925-6045bdb6dc78/f98d3390-46b2-ee11-bea0-6045bdb6dc78.jpg')}
+.visual-product-photo.pizza-11{background-image:url('https://www.argentinaenladehesa.cl/cdn/shop/files/pizza-muzza-roquefort.jpg'),url('https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=900&q=85')}
+.visual-product-photo.pizza-12{background-image:url('https://www.interpatagonia.com/plantillas/grandes/33684-00Gr.jpg')}
+.visual-product-photo.pizza-13{background-image:url('https://www.mallsyoutletsvivo.cl/wp-content/uploads/2024/02/la-argentina-pizzeria.jpg'),url('https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=85')}
+
+/* Promo imagery */
+.visual-product-photo.promo-muzza{background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1000&q=86')}
+.visual-product-photo.promo-jamon{background-image:url('https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=1000&q=86')}
+.visual-product-photo.promo-napo{background-image:url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1000&q=86')}
+.visual-product-photo.promo-extra{background-image:url('https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=1000&q=86')}
+
+/* Beverage product photography. Size/flavour variants reuse the matching brand photo. */
+.visual-product-photo.drink-heineken-330,
+.visual-product-photo.drink-heineken-1l{
+  background-image:url('https://images.unsplash.com/photo-1618885472179-5e474019f2a9?auto=format&fit=crop&w=900&q=85');
+  background-position:center 58%;
+}
+.visual-product-photo.drink-coke,
+.visual-product-photo.drink-coke-zero,
+.visual-product-photo.drink-coke-can{
+  background-image:url('https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=900&q=85');
+}
+.visual-product-photo.drink-sprite,
+.visual-product-photo.drink-sprite-can{
+  background-image:url('https://images.unsplash.com/photo-1625740822008-e45abf9ca849?auto=format&fit=crop&w=900&q=85');
+}
+.visual-product-photo.drink-fanta,
+.visual-product-photo.drink-fanta-can{
+  background-image:url('https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&w=900&q=85');
+}
+.visual-product-photo.drink-aquarius{
+  background-image:url('https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=900&q=85');
+}
+.visual-product-photo.drink-bonaqua{
+  background-image:url('https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=85');
+}
+
+/* Remove the old dry menu-grid look if any legacy nodes remain */
+.visual-menu .price-grid,.visual-menu .price-item{display:none!important}
+
+@media(max-width:1050px){
+  .visual-product-grid,.visual-product-grid.large,.promos-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .visual-product-grid,.visual-product-grid.large,.promos-grid,.drinks-small{grid-template-columns:1fr}
+  .visual-product-card{min-height:0}
+  .visual-product-photo,.compact-card .visual-product-photo{height:220px}
+  .visual-product-copy h4{font-size:30px}
+}
