@@ -376,3 +376,45 @@ a{text-decoration:none;color:inherit}
 @media(max-width:620px){
   .pizza-grid-rich .pizza-card.featured .pizza-image{height:280px;min-height:280px}
 }
+
+
+/* v7 full public menu */
+.pizza-price{font-family:'Bebas Neue';font-size:26px;color:var(--tomato);margin:6px 0 4px}
+.full-menu{background:#15120f;color:#fff;padding:100px clamp(20px,6vw,90px)}
+.full-menu-head{display:flex;justify-content:space-between;gap:40px;align-items:end;padding-bottom:38px;border-bottom:1px solid rgba(255,255,255,.14)}
+.full-menu-head h2{font-family:'Bebas Neue';font-size:clamp(64px,7vw,112px);font-weight:400;line-height:.88;text-transform:uppercase;margin:16px 0 0}
+.full-menu-meta{display:flex;flex-direction:column;align-items:flex-end;gap:12px;font-size:10px;color:#a99f95;letter-spacing:.08em;text-transform:uppercase}
+.full-menu-meta a{color:#ff9b79;font-weight:800}
+.menu-block{padding:42px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.menu-block-title{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.menu-block-title span{font-size:9px;letter-spacing:.17em;color:#f28b69}
+.menu-block-title h3{font-family:'Bebas Neue';font-size:40px;font-weight:400;margin:0;text-transform:uppercase}
+.price-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.price-grid.compact{grid-template-columns:repeat(4,minmax(0,1fr))}
+.price-grid.one{grid-template-columns:repeat(2,minmax(0,1fr))}
+.price-item{position:relative;background:#201b17;border:1px solid rgba(255,255,255,.08);padding:18px 18px 20px;min-height:115px;display:flex;flex-direction:column}
+.price-item strong{font-size:13px;line-height:1.35;padding-right:80px}
+.price-item small{font-size:9px;line-height:1.55;color:#968c83;margin-top:8px;max-width:86%}
+.price-item b{margin-top:auto;padding-top:16px;font-family:'Bebas Neue';font-size:25px;font-weight:400;color:#ff9b79}
+.promos .price-item{background:#271b16;border-color:rgba(213,73,47,.26)}
+.drinks-grid{display:grid;grid-template-columns:.65fr 1.35fr;gap:34px}
+.drinks-grid .menu-block{border-bottom:0}
+.full-menu-cta{margin-top:24px;background:var(--tomato);padding:28px 30px;display:flex;justify-content:space-between;gap:30px;align-items:center}
+.full-menu-cta div{display:flex;flex-direction:column}
+.full-menu-cta span{font-size:9px;letter-spacing:.18em;text-transform:uppercase;opacity:.75}
+.full-menu-cta strong{font-family:'Bebas Neue';font-size:32px;font-weight:400;margin-top:5px}
+.full-menu-cta .btn-primary{background:#fff;color:#17130f;box-shadow:none}
+.final-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+@media(max-width:1000px){
+  .price-grid,.price-grid.compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .drinks-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .full-menu{padding:72px 16px}
+  .full-menu-head{flex-direction:column;align-items:flex-start}
+  .full-menu-meta{align-items:flex-start}
+  .price-grid,.price-grid.compact,.price-grid.one{grid-template-columns:1fr}
+  .price-item{min-height:96px}
+  .full-menu-cta{flex-direction:column;align-items:flex-start}
+  .full-menu-cta .btn{width:100%}
+}
