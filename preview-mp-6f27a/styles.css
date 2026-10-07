@@ -277,3 +277,79 @@ a{text-decoration:none;color:inherit}
   .footer-links{flex-wrap:wrap}
   .footer-top{padding-top:28px;padding-bottom:28px}
 }
+
+
+/* v5 pizza grid rebalance */
+.pizza-grid-rich{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-auto-rows:auto;
+  align-items:stretch;
+}
+.pizza-grid-rich .pizza-card,
+.pizza-grid-rich .pizza-card:nth-child(1),
+.pizza-grid-rich .pizza-card:nth-child(n+2),
+.pizza-grid-rich .pizza-card:nth-child(6){
+  grid-column:auto;
+  grid-row:auto;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+.pizza-grid-rich .pizza-card .pizza-image,
+.pizza-grid-rich .pizza-card:nth-child(1) .pizza-image,
+.pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image,
+.pizza-grid-rich .pizza-card:nth-child(6) .pizza-image{
+  height:245px;
+  min-height:245px;
+}
+.pizza-grid-rich .pizza-card-body,
+.pizza-grid-rich .pizza-card:nth-child(6) .pizza-card-body{
+  padding:18px 18px 20px;
+  display:block;
+}
+.pizza-grid-rich .pizza-card h3,
+.pizza-grid-rich .pizza-card:nth-child(6) h3{
+  font-size:31px;
+}
+.pizza-grid-rich .pizza-card.featured{
+  position:relative;
+}
+.pizza-grid-rich .pizza-card.featured .pizza-image{
+  height:275px;
+  min-height:275px;
+}
+.pizza-grid-rich .pizza-card.featured:before{
+  content:"DESTACADA";
+  position:absolute;
+  top:14px;
+  right:14px;
+  z-index:3;
+  background:var(--tomato);
+  color:#fff;
+  padding:7px 9px;
+  font-size:8px;
+  letter-spacing:.14em;
+  font-weight:800;
+}
+@media(max-width:900px){
+  .pizza-grid-rich{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pizza-grid-rich .pizza-card .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(1) .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(6) .pizza-image,
+  .pizza-grid-rich .pizza-card.featured .pizza-image{
+    height:285px;
+    min-height:285px;
+  }
+}
+@media(max-width:620px){
+  .pizza-grid-rich{grid-template-columns:1fr}
+  .pizza-grid-rich .pizza-card .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(1) .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(n+2) .pizza-image,
+  .pizza-grid-rich .pizza-card:nth-child(6) .pizza-image,
+  .pizza-grid-rich .pizza-card.featured .pizza-image{
+    height:280px;
+    min-height:280px;
+  }
+}
