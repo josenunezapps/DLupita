@@ -353,3 +353,26 @@ a{text-decoration:none;color:inherit}
     min-height:280px;
   }
 }
+
+
+/* v6 expanded pizza menu */
+.pizza-7{background-image:url('https://media.dib.com.ar/p/76adf3fc2b99bc836a5ceafcd24393b7/adjuntos/377/imagenes/100/050/0100050088/1000x0/smart/pizza-jamon-y-morrones-01-rs.jpg')}
+.pizza-8{background-image:url('https://www.novachef.es/media/recetas/pizza-jamon-queso.jpg'),url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=85')}
+.pizza-9{background-image:url('https://media.mdzol.com/p/ff2f47dad6f99518cf03987ff975c982/adjuntos/373/imagenes/001/832/0001832064/760x0/smart/el-huevo-lo-podes-picar-o-cortarlo-rodajas.png')}
+.pizza-10{background-image:url('https://cdn01.s4shops.com/skytabweb/uploads/3a89c449-35af-ee11-8925-6045bdb6dc78/f98d3390-46b2-ee11-bea0-6045bdb6dc78.jpg')}
+.pizza-11{background-image:url('https://www.argentinaenladehesa.cl/cdn/shop/files/pizza-muzza-roquefort.jpg'),url('https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=900&q=85')}
+.pizza-12{background-image:url('https://www.interpatagonia.com/plantillas/grandes/33684-00Gr.jpg')}
+.pizza-13{background-image:url('https://www.mallsyoutletsvivo.cl/wp-content/uploads/2024/02/la-argentina-pizzeria.jpg'),url('https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=85')}
+.pizza-14{background-image:url('https://image.arrivalguides.com/x/11/78147ac43b74eb8c53665d12261c7100.jpg')}
+.pizza-15{background-image:url('https://www.pizzarica.com.ar/images/menu-pizza-napolitana.jpg')}
+.pizza-grid-rich{gap:16px}
+.pizza-grid-rich .pizza-card.featured .pizza-image{height:245px;min-height:245px}
+.pizza-grid-rich .pizza-card.featured:before{display:none}
+.menu-format{border-style:dashed;background:#fff9f0}
+.menu-format .pizza-card-body{background:#fff9f0}
+@media(max-width:900px){
+  .pizza-grid-rich .pizza-card.featured .pizza-image{height:285px;min-height:285px}
+}
+@media(max-width:620px){
+  .pizza-grid-rich .pizza-card.featured .pizza-image{height:280px;min-height:280px}
+}
