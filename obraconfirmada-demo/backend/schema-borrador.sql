@@ -35,7 +35,7 @@ create table if not exists public.oc_changes (
   created_at timestamptz not null default now(),
   decided_at timestamptz,
   decision_notes text not null default '',
-  foreign key(project_id, owner_id) references public.oc_projects(id, owner_id) on delete cascade
+  foreign key(project_id, owner_id) references public.oc_projects(id, owner_id) on delete restrict
 );
 
 create index if not exists oc_projects_owner_idx on public.oc_projects(owner_id);
@@ -46,7 +46,7 @@ alter table public.oc_changes enable row level security;
 
 revoke all on public.oc_projects, public.oc_changes from anon;
 revoke all on public.oc_changes from authenticated;
-grant select, insert, update, delete on public.oc_projects to authenticated;
+grant select, insert, update on public.oc_projects to authenticated;
 -- Las modificaciones sólo se pueden crear y consultar desde el cliente.
 -- Las decisiones futuras deberán pasar por una operación de servidor auditada.
 grant select, insert on public.oc_changes to authenticated;
@@ -57,8 +57,6 @@ create policy oc_projects_insert on public.oc_projects for insert to authenticat
 with check ((select auth.uid()) = owner_id);
 create policy oc_projects_update on public.oc_projects for update to authenticated
 using ((select auth.uid()) = owner_id) with check ((select auth.uid()) = owner_id);
-create policy oc_projects_delete on public.oc_projects for delete to authenticated
-using ((select auth.uid()) = owner_id);
 
 create policy oc_changes_select on public.oc_changes for select to authenticated
 using ((select auth.uid()) = owner_id);
