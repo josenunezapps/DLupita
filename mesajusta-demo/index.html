@@ -141,7 +141,7 @@ var count=0;c.persons.filter(function(p){return p.id!==state.payer&&p.total>0}).
 lines.push("","Importes redondeados al peso. Estado de pago anotado localmente; no implica transferencia real.","Demo de MesaJusta · Zenix AR");
 return lines.join("\n")}
 function drawPNG(){
-var c=calc(),num=c.persons.length,width=1000,rows=num*68,height=Math.max(1120,680+rows+num*24),canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;var ctx=canvas.getContext("2d");
+var c=calc(),num=c.persons.length,width=1000,height=Math.max(1450,1100+num*67+Math.max(0,num-1)*65),canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;var ctx=canvas.getContext("2d");
 function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
 function txt(s,x,y,size,color,bold){ctx.fillStyle=color;ctx.font=(bold?"800 ":"500 ")+size+"px Arial,sans-serif";ctx.textBaseline="top";ctx.fillText(String(s),x,y)}
 rect(0,0,width,height,"#f7f5ed");rect(0,0,width,220,"#173f38");txt("MESAJUSTA",65,60,36,"#d4f5d8",true);txt("LA CUENTA, SIN DISCUSIONES",65,117,17,"#aad8b8",false);
