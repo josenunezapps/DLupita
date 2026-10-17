@@ -92,10 +92,15 @@ div.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{if(!confirm("¿Quit
 function renderProject(p){
 if(!p)return;
 const expenses=p.expenses||[],payments=p.payments||[];
-const cost=expenses.reduce((s,e)=>s+Number(e.amount),0),paid=payments.reduce((s,e)=>s+Number(e.amount),0),price=Number(p.original||0)+(p.changes||[]).filter(x=>x.status==="Aprobado").reduce((s,x)=>s+Number(x.delta),0);
-$("ocJobCost").textContent=cash(cost);$("ocJobPaid").textContent=cash(paid);$("ocJobPending").textContent=cash(price-paid);$("ocJobProfit").textContent=cash(price-cost);
-$("ocExpenses").innerHTML=expenses.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Fecha</th><th>Gasto</th><th>Categoría</th><th>Importe</th></tr></thead><tbody>'+expenses.slice().reverse().map(x=>'<tr><td>'+safe(x.date)+'</td><td>'+safe(x.concept)+'</td><td>'+safe(x.category)+'</td><td>'+cash(x.amount)+'</td></tr>').join("")+'</tbody></table></div>':'<p class="subtle">Sin gastos registrados.</p>';
-$("ocPayments").innerHTML=payments.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Fecha</th><th>Detalle</th><th>Importe</th></tr></thead><tbody>'+payments.slice().reverse().map(x=>'<tr><td>'+safe(x.date)+'</td><td>'+safe(x.concept)+'</td><td>'+cash(x.amount)+'</td></tr>').join("")+'</tbody></table></div>':'<p class="subtle">Sin cobros registrados.</p>';
+const cost=expenses.reduce((s,e)=>s+Number(e.amount),0),paid=payments.reduce((s,e)=>s+Number(e.amount),0);
+const price=Number(p.original||0)+(p.changes||[]).filter(x=>x.status==="Aprobado").reduce((s,x)=>s+Number(x.delta),0);
+$("ocJobCost").textContent=cash(cost);$("ocJobPaid").textContent=cash(paid);
+$("ocJobPending").textContent=cash(price-paid);$("ocJobProfit").textContent=cash(price-cost);
+const expenseTable=expenses.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Fecha</th><th>Gasto</th><th>Categoría</th><th>Importe</th><th></th></tr></thead><tbody>'+expenses.slice().reverse().map(x=>'<tr><td>'+safe(x.date)+'</td><td>'+safe(x.concept)+'</td><td>'+safe(x.category)+'</td><td>'+cash(x.amount)+'</td><td><button type="button" class="btn btn-danger btn-sm" data-exp="'+safe(x.id)+'">Quitar</button></td></tr>').join("")+'</tbody></table></div>':'<p class="subtle">Sin gastos registrados.</p>';
+const paymentTable=payments.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Fecha</th><th>Detalle</th><th>Importe</th><th></th></tr></thead><tbody>'+payments.slice().reverse().map(x=>'<tr><td>'+safe(x.date)+'</td><td>'+safe(x.concept)+'</td><td>'+cash(x.amount)+'</td><td><button type="button" class="btn btn-danger btn-sm" data-pay="'+safe(x.id)+'">Quitar</button></td></tr>').join("")+'</tbody></table></div>':'<p class="subtle">Sin cobros registrados.</p>';
+$("ocExpenses").innerHTML=expenseTable;$("ocPayments").innerHTML=paymentTable;
+$("ocExpenses").querySelectorAll("[data-exp]").forEach(b=>b.onclick=()=>{if(!confirm("¿Quitar este gasto registrado?"))return;const i=expenses.findIndex(x=>x.id===b.dataset.exp);if(i<0)return;expenses.splice(i,1);api.save();renderProject(p);renderFinance()});
+$("ocPayments").querySelectorAll("[data-pay]").forEach(b=>b.onclick=()=>{if(!confirm("¿Quitar este cobro registrado?"))return;const i=payments.findIndex(x=>x.id===b.dataset.pay);if(i<0)return;payments.splice(i,1);api.save();renderProject(p);renderFinance()});
 }
 function renderFinance(){
 const rows=pro().map(p=>{const cost=(p.expenses||[]).reduce((s,x)=>s+Number(x.amount),0),paid=(p.payments||[]).reduce((s,x)=>s+Number(x.amount),0);
