@@ -1,6 +1,6 @@
 (function(){
 "use strict";
-let api=null,editing=null,lines=[];
+let api=null,editing=null,lines=[],editingCatalog=null;
 const $=id=>document.getElementById(id);
 const safe=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const cash=x=>Number(x||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0});
@@ -85,7 +85,8 @@ div.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>loadQuote(b.dataset.q)
 function renderCatalog(){
 const items=cat();$("ocCatalogSelect").innerHTML='<option value="">Seleccionar precio guardado...</option>'+items.map(x=>'<option value="'+safe(x.id)+'">'+safe(x.name)+' · '+cash(x.price)+'</option>').join("");
 const div=$("ocCatalog");
-div.innerHTML=items.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Concepto</th><th>Unidad</th><th>Costo</th><th>Venta</th><th>Fecha</th><th></th></tr></thead><tbody>'+items.map(x=>'<tr><td><b>'+safe(x.name)+'</b><small>'+safe(x.category||"General")+'</small></td><td>'+safe(x.unit)+'</td><td>'+cash(x.cost)+'</td><td>'+cash(x.price)+'</td><td>'+safe(x.updated)+'</td><td><button class="btn btn-danger btn-sm" data-del="'+safe(x.id)+'">Quitar</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">Todavía no hay conceptos en el catálogo.</div>';
+div.innerHTML=items.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Concepto</th><th>Unidad</th><th>Costo</th><th>Venta</th><th>Fecha</th><th></th></tr></thead><tbody>'+items.map(x=>'<tr><td><b>'+safe(x.name)+'</b><small>'+safe(x.category||"General")+'</small></td><td>'+safe(x.unit)+'</td><td>'+cash(x.cost)+'</td><td>'+cash(x.price)+'</td><td>'+safe(x.updated)+'</td><td><button class="btn btn-secondary btn-sm" data-edit="'+safe(x.id)+'">Editar</button> <button class="btn btn-danger btn-sm" data-del="'+safe(x.id)+'">Quitar</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">Todavía no hay conceptos en el catálogo.</div>';
+div.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{const c=items.find(x=>x.id===b.dataset.edit);if(!c)return;editingCatalog=c.id;$("ocConcept").value=c.name;$("ocUnit").value=c.unit;$("ocCategory").value=c.category||"";$("ocUnitCost").value=c.cost;$("ocUnitPrice").value=c.price;api.show("catalogo");$("ocConcept").focus();info("Editando "+c.name+". Guardá para actualizar el precio.");});
 div.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{if(!confirm("¿Quitar este concepto? No modifica presupuestos ya guardados."))return;const i=items.findIndex(x=>x.id===b.dataset.del);if(i>=0){items.splice(i,1);api.save();renderCatalog()}});
 }
 function renderProject(p){
@@ -146,7 +147,9 @@ $("ocPrintQuote").onclick=()=>{const q=qs().find(x=>x.id===editing);if(!q)return
 $("ocConvert").onclick=convert;
 $("ocCatalogForm").onsubmit=e=>{e.preventDefault();const name=get("ocConcept"),unit=get("ocUnit"),cost=+$("ocUnitCost").value,price=+$("ocUnitPrice").value;
 if(!name||!unit||!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<0){info("Revisá los datos del catálogo.");return}
-cat().unshift({id:id(),name,unit,cost,price,category:get("ocCategory"),updated:today()});api.save();e.target.reset();render();info("Precio guardado.")};
+const previous=editingCatalog&&cat().find(x=>x.id===editingCatalog);
+if(previous){Object.assign(previous,{name,unit,cost,price,category:get("ocCategory"),updated:today()})}else cat().unshift({id:id(),name,unit,cost,price,category:get("ocCategory"),updated:today()});
+editingCatalog=null;api.save();e.target.reset();render();info("Precio guardado.")};
 $("ocExpenseForm").onsubmit=e=>{e.preventDefault();const p=api.currentProject(),v=+$("ocExpenseAmount").value,concept=get("ocExpenseConcept");if(!p||!concept||!Number.isFinite(v)||v<=0)return;
 (p.expenses||(p.expenses=[])).push({id:id(),date:$("ocExpenseDate").value||today(),concept,category:$("ocExpenseCategory").value,amount:v});api.save();e.target.reset();$("ocExpenseDate").value=today();renderProject(p);renderFinance();info("Gasto registrado.")};
 $("ocPaymentForm").onsubmit=e=>{e.preventDefault();const p=api.currentProject(),v=+$("ocPaymentAmount").value,concept=get("ocPaymentConcept");if(!p||!concept||!Number.isFinite(v)||v<=0)return;
