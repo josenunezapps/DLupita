@@ -31,6 +31,7 @@ create table if not exists public.oc_changes (
   days_delta integer not null default 0 check (days_delta between -3650 and 3650),
   reason text not null default '',
   status text not null default 'Pendiente' check (status in ('Pendiente','Aprobado','Rechazado')),
+  -- El estado real requiere decisión vía backend y nunca una actualización directa.
   created_at timestamptz not null default now(),
   decided_at timestamptz,
   decision_notes text not null default '',
@@ -44,7 +45,11 @@ alter table public.oc_projects enable row level security;
 alter table public.oc_changes enable row level security;
 
 revoke all on public.oc_projects, public.oc_changes from anon;
-grant select, insert, update, delete on public.oc_projects, public.oc_changes to authenticated;
+revoke all on public.oc_changes from authenticated;
+grant select, insert, update, delete on public.oc_projects to authenticated;
+-- Las modificaciones sólo se pueden crear y consultar desde el cliente.
+-- Las decisiones futuras deberán pasar por una operación de servidor auditada.
+grant select, insert on public.oc_changes to authenticated;
 
 create policy oc_projects_select on public.oc_projects for select to authenticated
 using ((select auth.uid()) = owner_id);
@@ -58,11 +63,7 @@ using ((select auth.uid()) = owner_id);
 create policy oc_changes_select on public.oc_changes for select to authenticated
 using ((select auth.uid()) = owner_id);
 create policy oc_changes_insert on public.oc_changes for insert to authenticated
-with check ((select auth.uid()) = owner_id);
-create policy oc_changes_update on public.oc_changes for update to authenticated
-using ((select auth.uid()) = owner_id) with check ((select auth.uid()) = owner_id);
-create policy oc_changes_delete on public.oc_changes for delete to authenticated
-using ((select auth.uid()) = owner_id);
+with check ((select auth.uid()) = owner_id and status = 'Pendiente' and decided_at is null);
 
 -- Pendiente ANTES de desplegar:
 -- 1) Reglas para prohibir cambios silenciosos en decisiones ya registradas.
