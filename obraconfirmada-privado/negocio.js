@@ -259,9 +259,9 @@ $("ocRemoveExamples").onclick=removeExamples;
 $("ocNewQuote").onclick=()=>{newQuote();api.show("presupuestos")};
 $("ocAddLine").onclick=()=>{lines.push({id:id(),name:"",unit:"u",qty:1,cost:0,price:0});renderLines()};
 $("ocAddCatalog").onclick=()=>{const c=cat().find(x=>x.id===$("ocCatalogSelect").value);if(c){lines.push({id:id(),name:c.name,unit:c.unit,qty:1,cost:c.cost,price:c.price});renderLines()}};
-$("ocTax").oninput=renderSummary;
+$("ocTax").oninput=renderSummary;$("ocDiscount").oninput=renderSummary;
 $("ocSaveQuote").onclick=saveQuote;
-$("ocPrintQuote").onclick=()=>{const q=qs().find(x=>x.id===editing);if(!q)return info("Guardá el presupuesto primero.");pdf(q)};
+$("ocPrintQuote").onclick=()=>{const q=saveQuote();if(q)pdf({...q,version:q.history.length,issuedAt:q.history[q.history.length-1]?.at})};
 $("ocConvert").onclick=convert;
 $("ocCatalogForm").onsubmit=e=>{e.preventDefault();const name=get("ocConcept"),unit=get("ocUnit"),cost=+$("ocUnitCost").value,price=+$("ocUnitPrice").value;
 if(!name||!unit||!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<0){info("Revisá los datos del catálogo.");return}
@@ -272,7 +272,47 @@ $("ocExpenseForm").onsubmit=e=>{e.preventDefault();const p=api.currentProject(),
 (p.expenses||(p.expenses=[])).push({id:id(),date:$("ocExpenseDate").value||today(),concept,category:$("ocExpenseCategory").value,amount:v});api.save();e.target.reset();$("ocExpenseDate").value=today();renderProject(p);renderFinance();info("Gasto registrado.")};
 $("ocPaymentForm").onsubmit=e=>{e.preventDefault();const p=api.currentProject(),v=+$("ocPaymentAmount").value,concept=get("ocPaymentConcept");if(!p||!concept||!Number.isFinite(v)||v<=0)return;
 (p.payments||(p.payments=[])).push({id:id(),date:$("ocPaymentDate").value||today(),concept,amount:v});api.save();e.target.reset();$("ocPaymentDate").value=today();renderProject(p);renderFinance();info("Cobro registrado.")};
-$("ocCompanyForm").onsubmit=e=>{e.preventDefault();company().name=get("ocCompanyName");company().phone=get("ocCompanyPhone");api.save();info("Datos del negocio guardados.")};
+$("ocCompanyForm").onsubmit=e=>{
+ e.preventDefault();
+ const email=get("ocCompanyEmail");
+ if(email&&(!$("ocCompanyEmail").checkValidity()))return info("Revisá el correo comercial.");
+ const previous={...company()};
+ Object.assign(company(),{name:get("ocCompanyName"),phone:get("ocCompanyPhone"),email,address:get("ocCompanyAddress")});
+ if(!api.save()){Object.assign(company(),previous);return info("No se pudieron guardar los datos del negocio.")}
+ info("Datos del negocio actualizados para los próximos presupuestos.");
+};
+$("ocCompanyLogo").onchange=function(){
+ const file=this.files&&this.files[0];this.value="";
+ if(!file)return;
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>2*1024*1024)return info("Usá un logo JPG, PNG o WEBP de hasta 2 MB.");
+ const image=new Image(),url=URL.createObjectURL(file);
+ image.onerror=function(){URL.revokeObjectURL(url);info("No pudimos leer el logo.")};
+ image.onload=function(){
+  URL.revokeObjectURL(url);
+  try{
+   const scale=Math.min(1,220/Math.max(image.naturalWidth,image.naturalHeight));
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));
+   canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+   const ctx=canvas.getContext("2d");if(!ctx)throw Error("No se pudo procesar la imagen.");
+   ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);
+   const b64=canvas.toDataURL("image/jpeg",.78);
+   if(!/^data:image\/jpeg;base64,/.test(b64)||b64.length>165000)throw Error("El archivo de logo es demasiado grande.");
+   const before={logo:company().logo,logoW:company().logoW,logoH:company().logoH};
+   company().logo=b64;company().logoW=canvas.width;company().logoH=canvas.height;
+   if(!api.save()){Object.assign(company(),before);throw Error("No pudimos preparar el guardado del logo.")}
+   render();info("Logo guardado. Aparecerá en los próximos presupuestos PDF.");
+  }catch(e){info("Error al cargar el logo: "+e.message)}
+ };
+ image.src=url;
+};
+$("ocRemoveLogo").onclick=function(){
+ if(!company().logo)return info("No hay un logo guardado.");
+ const previous={logo:company().logo,logoW:company().logoW,logoH:company().logoH};
+ delete company().logo;delete company().logoW;delete company().logoH;
+ if(!api.save()){Object.assign(company(),previous);return info("No se pudo quitar el logo.")}
+ render();info("Se quitó el logo comercial.");
+};
 $("ocExpenseDate").value=today();$("ocPaymentDate").value=today();
 newQuote();render();
 }
