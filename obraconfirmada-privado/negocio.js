@@ -92,10 +92,29 @@ const t=totals(q.lines||[],q.taxRate||0,q.discountRate||0);const name=api.nextId
 pro().unshift({id:name,title:q.title,client:q.client,phone:(q.phone||"00000000").replace(/\D/g,"")||"00000000",scope:q.scope||"Según el presupuesto "+q.id,original:t.price,start:today(),duration:30,payment:q.payment,validity:q.validity??15,delivery:q.delivery||"",budgetNotes:(q.notes?q.notes+"\n":"")+"Origen: "+q.id,created:new Date().toISOString(),status:"Activa",changes:[],expenses:[],payments:[],lines:JSON.parse(JSON.stringify(q.lines)),taxRate:q.taxRate,discountRate:q.discountRate||0,discountTotal:t.discount,taxTotal:t.tax,demo:!!q.demo,events:[{text:"Obra creada desde el presupuesto "+q.id,at:new Date().toISOString()}]});
 q.projectId=name;q.status="Convertido";api.save();render();api.openProject(name);
 }
+function cloneQuote(q){
+ if(!q)return;
+ const original={title:q.title,client:q.client,phone:q.phone||"",scope:q.scope||"",payment:q.payment||"",taxRate:q.taxRate||0,discountRate:q.discountRate||0,validity:q.validity??15,delivery:q.delivery||"",notes:q.notes||"",status:"Borrador",lines:JSON.parse(JSON.stringify(q.lines||[]))};
+ const now=new Date().toISOString();let quoteId="PRE-"+Date.now();while(qs().some(x=>x.id===quoteId))quoteId+="A";
+ const fresh={...original,title:original.title+" (copia)",id:quoteId,created:now,updated:now,projectId:null,demo:false,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...original,company:company()}))}]};
+ qs().unshift(fresh);
+ if(!api.save()){qs().shift();return info("No se pudo duplicar el presupuesto.")}
+ render();loadQuote(fresh.id);info("Se creó una copia independiente del presupuesto.");
+}
+function removeQuote(q){
+ if(!q)return;
+ if(q.projectId)return info("Este presupuesto está asociado a una obra y debe conservarse como referencia.");
+ if(!confirm("¿Eliminar el presupuesto "+q.id+" y todas sus versiones? Esta acción no se puede deshacer."))return;
+ const i=qs().findIndex(x=>x.id===q.id);if(i<0)return;const old=qs()[i];
+ qs().splice(i,1);if(!api.save()){qs().splice(i,0,old);return info("No se pudo eliminar.")}
+ if(editing===q.id)newQuote();render();info("Presupuesto eliminado.");
+}
 function renderQuotes(){
-const div=$("ocQuotes");const all=qs();
-div.innerHTML=all.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Presupuesto</th><th>Cliente</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody>'+all.map(q=>'<tr><td><b>'+safe(q.title)+'</b><small>'+safe(q.id)+(q.demo?" · EJEMPLO":"")+'</small></td><td>'+safe(q.client)+'</td><td>'+cash(totals(q.lines||[],q.taxRate,q.discountRate).price)+'</td><td>'+safe(q.status)+'</td><td><button data-q="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Abrir</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">No hay presupuestos todavía.</div>';
-div.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>loadQuote(b.dataset.q));
+ const div=$("ocQuotes"),all=qs();
+ div.innerHTML=all.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Presupuesto</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>'+all.map(q=>'<tr><td><b>'+safe(q.title)+'</b><small>'+safe(q.id)+(q.demo?" · EJEMPLO":"")+'</small></td><td>'+safe(q.client)+'</td><td>'+cash(totals(q.lines||[],q.taxRate,q.discountRate).price)+'</td><td>'+safe(q.status)+'</td><td><div class="oc-tools"><button type="button" data-q="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Editar</button><button type="button" data-clone="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Duplicar</button><button type="button" data-delete="'+safe(q.id)+'" class="btn btn-danger btn-sm">Eliminar</button></div></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">No hay presupuestos todavía.</div>';
+ div.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>loadQuote(b.dataset.q));
+ div.querySelectorAll("[data-clone]").forEach(b=>b.onclick=()=>cloneQuote(qs().find(q=>q.id===b.dataset.clone)));
+ div.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>removeQuote(qs().find(q=>q.id===b.dataset.delete)));
 }
 function renderCatalog(){
 const items=cat();$("ocCatalogSelect").innerHTML='<option value="">Seleccionar precio guardado...</option>'+items.map(x=>'<option value="'+safe(x.id)+'">'+safe(x.name)+' · '+cash(x.price)+'</option>').join("");
