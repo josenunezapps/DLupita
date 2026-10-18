@@ -21,6 +21,9 @@ function build(data,business,environment){
  if(!data||!Array.isArray(data.lines)||!data.lines.length)throw Error("El presupuesto necesita al menos un concepto.");
  business=business||{};
  const pdfTotal=totals(data);
+ const extras=(data.changes||[]).filter(x=>x.status==="Aprobado");
+ const extrasTotal=normal(extras.reduce((sum,x)=>sum+Number(x.delta||0),0));
+ const payable=normal(pdfTotal.total+extrasTotal);
  let jpg=null;
  if(typeof business.logo==="string"&&/^data:image\/jpeg;base64,[a-zA-Z0-9+/=]+$/.test(business.logo)&&business.logo.length<170000&&Number.isInteger(business.logoW)&&Number.isInteger(business.logoH)&&business.logoW>0&&business.logoW<=500&&business.logoH>0&&business.logoH<=500){
   try{jpg=(environment&&environment.atob||atob)(business.logo.slice(business.logo.indexOf(",")+1))}catch(e){jpg=null}
@@ -72,12 +75,14 @@ function build(data,business,environment){
  if(data.scope){heading("Descripción del trabajo");paragraph(data.scope,9.4)}
  heading("Detalle de materiales y trabajos");tableHeader();
  data.lines.forEach(tableLine);
+ if(extras.length){heading("Trabajos adicionales incorporados");extras.forEach(function(x,i){tableLine({name:x.title||"Trabajo adicional",qty:1,unit:"gl",price:Number(x.delta)||0},i)});}
  next(23);line(y+3);y+=20;
  summaryRow("Subtotal",pdfTotal.subtotal);
  if(pdfTotal.discountRate>0)summaryRow("Descuento ("+pdfTotal.discountRate+" %)",-pdfTotal.discount);
  if(pdfTotal.taxRate>0)summaryRow("Impuestos ("+pdfTotal.taxRate+" %)",pdfTotal.tax);
+ if(extras.length)summaryRow("Adicionales incorporados",extrasTotal);
  next(69);rect(LEFT+260,y-12,RIGHT-LEFT-260,57,[.98,.94,.9]);
- text(LEFT+273,y+10,"TOTAL FINAL",10,true,C.ink);right(RIGHT-12,y+14,peso(pdfTotal.total),15,true,C.ink);y+=65;
+ text(LEFT+273,y+10,"TOTAL FINAL",10,true,C.ink);right(RIGHT-12,y+14,peso(payable),15,true,C.ink);y+=65;
  heading("Condiciones comerciales");
  if(data.payment)pair("Forma de pago",data.payment);
  if(data.validity!=null)pair("Validez",String(data.validity)+" días desde la emisión");
