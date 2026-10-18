@@ -71,7 +71,7 @@ function restoreLegacyQuestions(draft){
   }
  }
  draft.fixedQuestionsVersion=1;
- return true;
+ return changed;
 }
 
 function say(role,text){if(!current)return;current.log.push({role,text:String(text),at:new Date().toISOString()});if(current.log.length>180)current.log.splice(0,current.log.length-180)}
@@ -166,7 +166,9 @@ function createQuote(){
 }
 function render(){
  const list=history();
- if(list.some(restoreLegacyQuestions))api.save();
+ let corrected=false;
+ for(const draft of list){if(restoreLegacyQuestions(draft))corrected=true}
+ if(corrected)api.save();
  if(current&&!list.includes(current))current=null;
  if(!current&&list.length)current=list[0];
  const shelf=$("ocAssistantSavedSection"),draftList=$("ocAssistantDraftList");
