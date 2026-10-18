@@ -79,13 +79,13 @@ q.projectId=name;q.status="Convertido";api.save();render();api.openProject(name)
 }
 function renderQuotes(){
 const div=$("ocQuotes");const all=qs();
-div.innerHTML=all.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Presupuesto</th><th>Cliente</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody>'+all.map(q=>'<tr><td><b>'+safe(q.title)+'</b><small>'+safe(q.id)+'</small></td><td>'+safe(q.client)+'</td><td>'+cash(totals(q.lines||[],q.taxRate).price)+'</td><td>'+safe(q.status)+'</td><td><button data-q="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Abrir</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">No hay presupuestos todavía.</div>';
+div.innerHTML=all.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Presupuesto</th><th>Cliente</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody>'+all.map(q=>'<tr><td><b>'+safe(q.title)+'</b><small>'+safe(q.id)+(q.demo?" · EJEMPLO":"")+'</small></td><td>'+safe(q.client)+'</td><td>'+cash(totals(q.lines||[],q.taxRate).price)+'</td><td>'+safe(q.status)+'</td><td><button data-q="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Abrir</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">No hay presupuestos todavía.</div>';
 div.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>loadQuote(b.dataset.q));
 }
 function renderCatalog(){
 const items=cat();$("ocCatalogSelect").innerHTML='<option value="">Seleccionar precio guardado...</option>'+items.map(x=>'<option value="'+safe(x.id)+'">'+safe(x.name)+' · '+cash(x.price)+'</option>').join("");
 const div=$("ocCatalog");
-div.innerHTML=items.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Concepto</th><th>Unidad</th><th>Costo</th><th>Venta</th><th>Fecha</th><th></th></tr></thead><tbody>'+items.map(x=>'<tr><td><b>'+safe(x.name)+'</b><small>'+safe(x.category||"General")+'</small></td><td>'+safe(x.unit)+'</td><td>'+cash(x.cost)+'</td><td>'+cash(x.price)+'</td><td>'+safe(x.updated)+'</td><td><button class="btn btn-secondary btn-sm" data-edit="'+safe(x.id)+'">Editar</button> <button class="btn btn-danger btn-sm" data-del="'+safe(x.id)+'">Quitar</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">Todavía no hay conceptos en el catálogo.</div>';
+div.innerHTML=items.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Concepto</th><th>Unidad</th><th>Costo</th><th>Venta</th><th>Fecha</th><th></th></tr></thead><tbody>'+items.map(x=>'<tr><td><b>'+safe(x.name)+'</b><small>'+safe(x.category||"General")+(x.demo?" · EJEMPLO":"")+'</small></td><td>'+safe(x.unit)+'</td><td>'+cash(x.cost)+'</td><td>'+cash(x.price)+'</td><td>'+safe(x.updated)+'</td><td><button class="btn btn-secondary btn-sm" data-edit="'+safe(x.id)+'">Editar</button> <button class="btn btn-danger btn-sm" data-del="'+safe(x.id)+'">Quitar</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">Todavía no hay conceptos en el catálogo.</div>';
 div.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{const c=items.find(x=>x.id===b.dataset.edit);if(!c)return;editingCatalog=c.id;$("ocConcept").value=c.name;$("ocUnit").value=c.unit;$("ocCategory").value=c.category||"";$("ocUnitCost").value=c.cost;$("ocUnitPrice").value=c.price;api.show("catalogo");$("ocConcept").focus();info("Editando "+c.name+". Guardá para actualizar el precio.");});
 div.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{if(!confirm("¿Quitar este concepto? No modifica presupuestos ya guardados."))return;const i=items.findIndex(x=>x.id===b.dataset.del);if(i>=0){items.splice(i,1);api.save();renderCatalog()}});
 }
@@ -110,13 +110,80 @@ $("ocTotalCosts").textContent=cash(rows.reduce((s,x)=>s+x.cost,0));
 $("ocTotalPaid").textContent=cash(rows.reduce((s,x)=>s+x.paid,0));
 $("ocTotalPending").textContent=cash(rows.reduce((s,x)=>s+x.price-x.paid,0));
 const div=$("ocFinance");
-div.innerHTML=rows.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Obra</th><th>Presupuesto</th><th>Gastos</th><th>Cobrado</th><th>Pendiente</th><th></th></tr></thead><tbody>'+rows.map(x=>'<tr><td><b>'+safe(x.p.title)+'</b></td><td>'+cash(x.price)+'</td><td>'+cash(x.cost)+'</td><td>'+cash(x.paid)+'</td><td>'+cash(x.price-x.paid)+'</td><td><button data-p="'+safe(x.p.id)+'" class="btn btn-secondary btn-sm">Abrir</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">Todavía no hay obras registradas.</div>';
+div.innerHTML=rows.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Obra</th><th>Presupuesto</th><th>Gastos</th><th>Cobrado</th><th>Pendiente</th><th></th></tr></thead><tbody>'+rows.map(x=>'<tr><td><b>'+safe(x.p.title)+'</b>'+(x.p.demo?'<small>EJEMPLO FICTICIO</small>':'')+'</td><td>'+cash(x.price)+'</td><td>'+cash(x.cost)+'</td><td>'+cash(x.paid)+'</td><td>'+cash(x.price-x.paid)+'</td><td><button data-p="'+safe(x.p.id)+'" class="btn btn-secondary btn-sm">Abrir</button></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">Todavía no hay obras registradas.</div>';
 div.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>api.openProject(b.dataset.p));
 }
-function render(){renderQuotes();renderCatalog();renderFinance();
+
+/* Datos de demostración: nunca reemplazar obras reales ni duplicar ejemplos. */
+function hasExamples(){return pro().some(p=>p.demo===true)||qs().some(q=>q.demo===true)||cat().some(c=>c.demo===true)}
+function renderExampleControls(){
+ const count=pro().filter(p=>p.demo===true).length,has=hasExamples();
+ $("ocExampleCount").textContent=has?"Tenés "+count+" obras de ejemplo. Los clientes, importes, gastos y cobros son ficticios.":"Podés cargar seis obras ficticias completas para probar presupuestos, gastos y cobros.";
+ $("ocImportExamples").classList.toggle("hidden",has);
+ $("ocRemoveExamples").classList.toggle("hidden",!has);
+ $("ocExampleBanner").classList.toggle("hidden",!has);
+}
+function refreshSamples(){api.redraw();render();}
+async function importExamples(){
+ if(hasExamples())return info("Ya hay ejemplos cargados. Podés quitarlos y volver a cargarlos.");
+ const button=$("ocImportExamples");button.disabled=true;button.textContent="Cargando ejemplos...";
+ try{
+  const resp=await fetch("./ejemplos.json",{cache:"no-store"});
+  if(!resp.ok)throw Error("No se pudo descargar la colección de ejemplos.");
+  const data=await resp.json();
+  if(data.version!==1||!Array.isArray(data.projects)||data.projects.length!==6||!Array.isArray(data.quotes)||!Array.isArray(data.catalog))throw Error("El archivo de ejemplos no es válido.");
+  const clone=x=>JSON.parse(JSON.stringify(x));
+  const ids=pro().map(x=>x.id),usedChanges=pro().flatMap(p=>(p.changes||[]).map(c=>c.id));
+  const mapping=new Map();
+  const works=data.projects.map(p=>{
+   if(!p.demo||!Array.isArray(p.lines)||!Array.isArray(p.changes)||!Array.isArray(p.expenses)||!Array.isArray(p.payments))throw Error("Ejemplo incompleto.");
+   const item=clone(p),old=item.id;
+   if(ids.includes(item.id)){item.id=api.nextId("OC",ids,100)}
+   ids.push(item.id);mapping.set(old,item.id);
+   item.changes.forEach(c=>{if(usedChanges.includes(c.id)){c.id=api.nextId("CM",usedChanges,200)}usedChanges.push(c.id)});
+   return item;
+  });
+  const quoteIds=qs().map(q=>q.id);
+  const quotes=data.quotes.map(q=>{const x=clone(q);if(!x.demo||!Array.isArray(x.lines))throw Error("Presupuesto de ejemplo inválido.");
+   if(quoteIds.includes(x.id))x.id="PRE-DEMO-"+Date.now()+"-"+quoteIds.length;
+   quoteIds.push(x.id);if(x.projectId)x.projectId=mapping.get(x.projectId)||null;return x});
+  const catalogIds=cat().map(c=>c.id);
+  const sampleCatalog=data.catalog.map(c=>{const x=clone(c);if(!x.demo)throw Error("Catálogo de ejemplo inválido.");if(catalogIds.includes(x.id))x.id="CAT-DEMO-"+Date.now()+"-"+catalogIds.length;catalogIds.push(x.id);return x});
+  pro().push(...works);qs().push(...quotes);cat().push(...sampleCatalog);
+  if(!api.save()){
+    pro().splice(pro().length-works.length,works.length);
+    qs().splice(qs().length-quotes.length,quotes.length);
+    cat().splice(cat().length-sampleCatalog.length,sampleCatalog.length);
+    throw Error("No se pudieron guardar los ejemplos.");
+  }
+  refreshSamples();info("Agregamos 6 obras, 5 presupuestos y 14 precios ficticios. Podés quitarlos desde Obras.");
+ }catch(error){info("No se pudieron cargar los ejemplos: "+error.message)}
+ finally{button.disabled=false;button.textContent="Cargar 6 obras de ejemplo"}
+}
+function removeExamples(){
+ if(!hasExamples())return;
+ if(!confirm("¿Quitar todos los ejemplos ficticios? Se eliminarán las obras, presupuestos y precios de ejemplo, con sus gastos y cobros. Tus datos reales se conservarán."))return;
+ const oldP=pro().slice(),oldQ=qs().slice(),oldC=cat().slice();
+ const remove=items=>{for(let i=items.length-1;i>=0;i--)if(items[i].demo===true)items.splice(i,1)};
+ remove(pro());remove(qs());remove(cat());
+ if(!api.save()){pro().splice(0,pro().length,...oldP);qs().splice(0,qs().length,...oldQ);cat().splice(0,cat().length,...oldC);return info("No se pudieron quitar los ejemplos. Intentá nuevamente.")}
+ editing=null;newQuote();api.show("obras");refreshSamples();
+ info("Ejemplos retirados. Tus obras, presupuestos y precios reales siguen en la cuenta.");
+}
+
+function render(){renderQuotes();renderCatalog();renderFinance();renderExampleControls();
 $("ocCompanyName").value=company().name||"";$("ocCompanyPhone").value=company().phone||"";}
 function installUI(){
  const style=document.createElement("style");style.textContent=".oc-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}.oc-stats .card{padding:16px}.oc-stats b{display:block;font-size:18px;margin-top:8px}.oc-stats small{color:#8390a0}.oc-split{display:grid;grid-template-columns:1fr 1fr;gap:17px}.oc-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.oc-tools select{padding:10px;border:1px solid #dce4ec;background:white;border-radius:8px}.oc-lines{min-width:650px}.oc-lines input{font-size:12px;border:1px solid #dce3ea;border-radius:8px;width:100%;min-width:65px;padding:8px}.oc-lines td:first-child input{min-width:150px}@media(max-width:850px){.oc-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-split{grid-template-columns:1fr}}@media(max-width:550px){.oc-stats .card{padding:10px}.oc-stats b{font-size:15px}}";document.head.append(style);
+
+ const bar=document.createElement("section");
+ bar.className="card panel";bar.style.marginBottom="16px";bar.id="ocExamplesBox";
+ bar.innerHTML='<div class="sectionhead"><h2>Obras de demostración</h2></div><p id="ocExampleCount" class="subtle"></p><div class="oc-tools"><button type="button" id="ocImportExamples" class="btn btn-primary">Cargar 6 obras de ejemplo</button><button type="button" id="ocRemoveExamples" class="btn btn-secondary">Quitar los ejemplos</button></div>';
+ const worksSection=document.getElementById("page-obras");
+ worksSection.insertBefore(bar,worksSection.firstChild);
+ const banner=document.createElement("div");banner.id="ocExampleBanner";banner.className="card panel hidden";banner.style.marginBottom="16px";
+ banner.innerHTML='<strong style="color:#995e32">Datos de demostración</strong><p class="subtle" style="margin:7px 0">Los importes, gastos, cobros y clientes de ejemplo son ficticios. Para empezar con tus datos reales, entrá en Obras y tocá «Quitar los ejemplos».</p>';
+ document.getElementById("page-inicio").insertBefore(banner,document.getElementById("page-inicio").firstChild);
  const menu=document.querySelector(".sidenav");
  const old=menu.querySelector('[data-nav="cliente"]');if(old)old.remove();
  [["presupuestos","Presupuestos"],["finanzas","Gastos y cobros"],["catalogo","Catálogo de precios"]].forEach(([page,label])=>{
@@ -143,6 +210,8 @@ function installUI(){
 }
 function init(bridge){
 api=bridge;installUI();
+$("ocImportExamples").onclick=importExamples;
+$("ocRemoveExamples").onclick=removeExamples;
 $("ocNewQuote").onclick=()=>{newQuote();api.show("presupuestos")};
 $("ocAddLine").onclick=()=>{lines.push({id:id(),name:"",unit:"u",qty:1,cost:0,price:0});renderLines()};
 $("ocAddCatalog").onclick=()=>{const c=cat().find(x=>x.id===$("ocCatalogSelect").value);if(c){lines.push({id:id(),name:c.name,unit:c.unit,qty:1,cost:c.cost,price:c.price});renderLines()}};
