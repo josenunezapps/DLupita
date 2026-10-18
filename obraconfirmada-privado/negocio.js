@@ -30,11 +30,11 @@ tbody.append(tr);
 });renderSummary();
 }
 function renderSummary(){
-const t=totals(lines,$("ocTax").value,$("ocDiscount").value);
+const t=totals(lines,$("ocTax").value,$("ocDiscount").value);const unknownCost=lines.some(l=>l.missingCost===true);
 $("ocCost").textContent=cash(t.cost);
 $("ocPrice").textContent=cash(t.price);$("ocSubtotal").textContent=cash(t.subtotal);
-$("ocProfit").textContent=cash(t.profit);
-$("ocMargin").textContent=(t.taxable>0?(100*t.profit/t.taxable).toFixed(1):"0")+" %";
+$("ocProfit").textContent=unknownCost?"Pendiente":cash(t.profit);
+$("ocMargin").textContent=unknownCost?"Pendiente":(t.taxable>0?(100*t.profit/t.taxable).toFixed(1):"0")+" %";
 $("ocDiscountTotal").textContent=cash(t.discount);$("ocTaxTotal").textContent=cash(t.tax);
 }
 function newQuote(){
@@ -90,7 +90,7 @@ const q=qs().find(x=>x.id===editing);if(!q)return info("Guardá el presupuesto a
 if(q.projectId)return info("El presupuesto ya fue convertido.");
 if(!confirm("¿Convertir el presupuesto en una obra?"))return;
 const t=totals(q.lines||[],q.taxRate||0,q.discountRate||0);const name=api.nextId("OC",pro().map(p=>p.id),100);
-pro().unshift({id:name,title:q.title,client:q.client,phone:(q.phone||"00000000").replace(/\D/g,"")||"00000000",scope:q.scope||"Según el presupuesto "+q.id,original:t.price,start:today(),duration:30,payment:q.payment,validity:q.validity??15,delivery:q.delivery||"",budgetNotes:(q.notes?q.notes+"\n":"")+"Origen: "+q.id,created:new Date().toISOString(),status:"Activa",changes:[],expenses:[],payments:[],lines:JSON.parse(JSON.stringify(q.lines)),taxRate:q.taxRate,discountRate:q.discountRate||0,discountTotal:t.discount,taxTotal:t.tax,demo:!!q.demo,events:[{text:"Obra creada desde el presupuesto "+q.id,at:new Date().toISOString()}]});
+pro().unshift({id:name,title:q.title,client:q.client,phone:String(q.phone||"").replace(/\D/g,""),scope:q.scope||"Según el presupuesto "+q.id,original:t.price,start:today(),duration:30,payment:q.payment,validity:q.validity??15,delivery:q.delivery||"",budgetNotes:(q.notes?q.notes+"\n":"")+"Origen: "+q.id,created:new Date().toISOString(),status:"Activa",changes:[],expenses:[],payments:[],lines:JSON.parse(JSON.stringify(q.lines)),taxRate:q.taxRate,discountRate:q.discountRate||0,discountTotal:t.discount,taxTotal:t.tax,demo:!!q.demo,events:[{text:"Obra creada desde el presupuesto "+q.id,at:new Date().toISOString()}]});
 q.projectId=name;q.status="Convertido";api.save();render();api.openProject(name);
 }
 function cloneQuote(q){
