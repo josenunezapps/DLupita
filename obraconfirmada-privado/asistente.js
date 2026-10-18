@@ -125,7 +125,7 @@ function createQuote(){
 }
 function render(){
  const list=history(),selection=$("ocAssistantDrafts");if(!selection)return;
- if(!current&&list.length)current=list[0];
+ if(current&&!list.includes(current))current=null; if(!current&&list.length)current=list[0];
  selection.innerHTML='<option value="">Elegir entrevista guardada...</option>'+list.map(x=>'<option value="'+escape(x.id)+'">'+escape((x.answers?.description||"Entrevista iniciada").slice(0,60))+(x.savedQuoteId?" · Guardado":" · En progreso")+'</option>').join("");
  selection.value=current?.id||"";
  const panel=$("ocAssistantConversation"),form=$("ocAssistantForm"),review=$("ocAssistantReview");
