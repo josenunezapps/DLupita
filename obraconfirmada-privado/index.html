@@ -39,7 +39,7 @@ dialog{border:0;padding:0;background:white;color:var(--ink);border-radius:20px;b
  <section id="ocConfirmationView" class="oc-confirmation-view hidden" aria-labelledby="ocConfirmHeading">
   <div class="oc-confirmation-icon" aria-hidden="true">✉</div>
   <h1 id="ocConfirmHeading">¡Revisá tu correo!</h1>
-  <p>Solicitamos un correo de confirmación para:</p>
+  <p>Se solicitó el envío de un correo de confirmación a:</p>
   <p class="oc-confirm-email" id="ocConfirmationEmail"></p>
   <p>Abrí el mensaje, tocá el enlace para confirmar tu cuenta y después ingresá con tu correo y contraseña.</p>
   <p class="oc-confirm-tip">Si no aparece, revisá la carpeta de Spam o Correo no deseado.</p>
@@ -234,6 +234,9 @@ function ocFriendly(e){var s=String(e&&e.message||e),t=s.toLowerCase();
  if(t.includes("email rate limit"))return "El envío de correos llegó a su límite temporal. Probá más tarde con «Reenviar confirmación».";
  if(t.includes("email not confirmed"))return "Tu cuenta todavía necesita confirmar el correo. Revisá tu bandeja de entrada o solicitá un nuevo enlace.";
  if(t.includes("invalid login credentials"))return "El correo o la contraseña no son correctos.";
+ if(t.includes("user already registered"))return "Este correo ya tiene una cuenta. Tocá «Ingresar» para acceder.";
+ if(t.includes("password")&&t.includes("weak"))return "Elegí una contraseña más segura, con al menos 8 caracteres.";
+ if(t.includes("signup is disabled"))return "La creación de cuentas está deshabilitada temporalmente. Intentá más tarde.";
  return s}
 async function ocFetch(path,method,body,authenticated,extra,retry){
  var headers={apikey:ocPublishable,"Content-Type":"application/json"};
@@ -335,6 +338,7 @@ function ocAuthSetMode(mode){
  var registering=mode==="register";
  $("ocConfirmationView").classList.add("hidden");
  $("ocAuthFields").classList.remove("hidden");
+ $("ocAuthGate").setAttribute("aria-labelledby","ocAuthHeading");
  $("ocAuthHeading").textContent=registering?"Crear una cuenta":"Ingresá a tu cuenta";
  $("ocAuthSubtitle").textContent=registering?"Registrate para gestionar tus obras y presupuestos de forma privada.":"Administrá tus obras y presupuestos desde un solo lugar.";
  $("ocConfirmField").classList.toggle("hidden",!registering);
@@ -350,6 +354,7 @@ function ocAuthSetMode(mode){
 function ocAuthConfirmEmail(email){
  $("ocAuthFields").classList.add("hidden");
  $("ocConfirmationView").classList.remove("hidden");
+ $("ocAuthGate").setAttribute("aria-labelledby","ocConfirmHeading");
  $("ocConfirmationEmail").textContent=email;
  $("ocConfirmMessage").textContent="";
  $("ocPassword").value="";
