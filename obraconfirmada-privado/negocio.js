@@ -31,7 +31,7 @@ tbody.append(tr);
 function renderSummary(){
 const t=totals(lines,$("ocTax").value,$("ocDiscount").value);
 $("ocCost").textContent=cash(t.cost);
-$("ocPrice").textContent=cash(t.price);
+$("ocPrice").textContent=cash(t.price);$("ocSubtotal").textContent=cash(t.subtotal);
 $("ocProfit").textContent=cash(t.profit);
 $("ocMargin").textContent=(t.taxable>0?(100*t.profit/t.taxable).toFixed(1):"0")+" %";
 $("ocDiscountTotal").textContent=cash(t.discount);$("ocTaxTotal").textContent=cash(t.tax);
@@ -49,7 +49,7 @@ renderLines();renderVersions(q);api.show("presupuestos");$("ocQuoteEditor").scro
 }
 function validate(){
  if(!get("ocJob")||!get("ocClient")){info("Completá el trabajo y el cliente.");return null}
- if(!lines.length||lines.some(x=>!String(x.name).trim()||!String(x.unit).trim()||![x.qty,x.cost,x.price].every(v=>Number.isFinite(+v))||+x.qty<=0||+x.cost<0||+x.price<0)){info("Revisá la descripción, cantidades y precios de todos los conceptos.");return null}
+ if(!lines.length||lines.some(x=>!String(x.name).trim()||!String(x.unit).trim()||![x.qty,x.cost,x.price].every(v=>Number.isFinite(+v)&&+v<=999999999)||+x.qty<=0||+x.cost<0||+x.price<0)){info("Revisá la descripción, cantidades y precios de todos los conceptos.");return null}
  const tax=Number($("ocTax").value),discount=Number($("ocDiscount").value),validity=Number($("ocValidity").value);
  if(!Number.isFinite(tax)||tax<0||tax>100||!Number.isFinite(discount)||discount<0||discount>100){info("Descuento e impuestos deben estar entre 0 y 100 %.");return null}
  if(!Number.isInteger(validity)||validity<1||validity>365){info("La validez del presupuesto debe estar entre 1 y 365 días.");return null}
@@ -233,7 +233,7 @@ function installUI(){
 
  const extras='<div class="fields"><label class="field"><span>Descuento (%)</span><input id="ocDiscount" type="number" min="0" max="100" step="0.01" value="0"></label><label class="field"><span>Validez del presupuesto (días)</span><input id="ocValidity" type="number" min="1" max="365" step="1" value="15"></label></div><div class="fields"><label class="field"><span>Plazo estimado de ejecución</span><input id="ocDelivery" maxlength="120" placeholder="Ej.: 20 días desde el inicio"></label></div><label class="field"><span>Observaciones para el PDF</span><textarea id="ocNotes" rows="3" maxlength="1200" placeholder="Exclusiones, materiales, condiciones adicionales..."></textarea></label>';
  document.getElementById("ocTax").closest("label").insertAdjacentHTML("beforebegin",extras);
- document.getElementById("ocPrice").closest(".oc-stats").insertAdjacentHTML("afterend",'<p class="subtle">Descuento: <strong id="ocDiscountTotal">$0</strong> · Impuestos: <strong id="ocTaxTotal">$0</strong></p>');
+ document.getElementById("ocPrice").closest(".oc-stats").insertAdjacentHTML("afterend",'<p class="subtle">Subtotal: <strong id="ocSubtotal">$0</strong> · Descuento: <strong id="ocDiscountTotal">$0</strong> · Impuestos: <strong id="ocTaxTotal">$0</strong></p>');
  const businessForm=document.getElementById("ocCompanyForm");
  businessForm.querySelector("button").insertAdjacentHTML("beforebegin",'<label class="field"><span>Correo comercial</span><input id="ocCompanyEmail" type="email" maxlength="100" placeholder="contacto@tuempresa.com"></label><label class="field"><span>Dirección o localidad</span><input id="ocCompanyAddress" maxlength="115" placeholder="Ciudad, provincia"></label><label class="field"><span>Logo del negocio (JPG, PNG o WEBP, hasta 2 MB)</span><input id="ocCompanyLogo" type="file" accept="image/jpeg,image/png,image/webp"></label><div class="oc-logo-preview"><img id="ocLogoPreview" alt="Logo del negocio" class="hidden" style="max-width:115px;max-height:85px;object-fit:contain"><button type="button" id="ocRemoveLogo" class="btn btn-secondary btn-sm">Quitar logo</button></div><p class="subtle">El logo se adapta al PDF y queda guardado en tu cuenta.</p>');
  const config=document.getElementById("page-config");
@@ -301,7 +301,7 @@ $("ocCompanyLogo").onchange=function(){
    const before={logo:company().logo,logoW:company().logoW,logoH:company().logoH};
    company().logo=b64;company().logoW=canvas.width;company().logoH=canvas.height;
    if(!api.save()){Object.assign(company(),before);throw Error("No pudimos preparar el guardado del logo.")}
-   render();info("Logo guardado. Aparecerá en los próximos presupuestos PDF.");
+   const preview=$("ocLogoPreview");preview.src=b64;preview.classList.remove("hidden");info("Logo guardado. Aparecerá en los próximos presupuestos PDF.");
   }catch(e){info("Error al cargar el logo: "+e.message)}
  };
  image.src=url;
@@ -311,7 +311,7 @@ $("ocRemoveLogo").onclick=function(){
  const previous={logo:company().logo,logoW:company().logoW,logoH:company().logoH};
  delete company().logo;delete company().logoW;delete company().logoH;
  if(!api.save()){Object.assign(company(),previous);return info("No se pudo quitar el logo.")}
- render();info("Se quitó el logo comercial.");
+ $("ocLogoPreview").removeAttribute("src");$("ocLogoPreview").classList.add("hidden");info("Se quitó el logo comercial.");
 };
 $("ocExpenseDate").value=today();$("ocPaymentDate").value=today();
 newQuote();render();
