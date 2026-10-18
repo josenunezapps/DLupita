@@ -39,6 +39,41 @@ function num(s){let str=trim(s).replace(/\$/g,"").replace(/\s/g,"");if(!str)retu
 function history(){return api.business().assistantDrafts||(api.business().assistantDrafts=[])}
 function newDraft(){return {id:"AS-"+uid(),step:0,answers:{},lines:[],log:[],pendingLine:{},savedQuoteId:null,created:new Date().toISOString(),updated:new Date().toISOString()}}
 function getStep(){return steps[current?.step]||null}
+
+/* A saved conversation could contain questions rewritten by the old AI behavior.
+   Recover the fixed question for each known interview step without modifying
+   user responses, numeric fields, quote lines, or previously saved estimates. */
+function restoreLegacyQuestions(draft){
+ if(!draft||draft.fixedQuestionsVersion===1||!Array.isArray(draft.log))return false;
+ let pos=0,fromCatalog=false,changed=false;
+ const shortHistory=draft.log.length<=155;
+ for(const entry of draft.log){
+  if(!entry||typeof entry.text!=="string")continue;
+  if(entry.role==="user"){
+   const response=entry.text.trim();
+   if(response.startsWith("Utilizar del catálogo:")){pos=stepKeys.indexOf("quantity");fromCatalog=true;continue}
+   if(pos===stepKeys.indexOf("quantity")&&fromCatalog){pos=stepKeys.indexOf("another");fromCatalog=false;continue}
+   if(pos===stepKeys.indexOf("another")&&/^(sí|si|otro|agregar)/i.test(response)){pos=stepKeys.indexOf("concept");continue}
+   pos=Math.min(steps.length,pos+1);
+  }else if(entry.role==="assistant"&&shortHistory&&pos<steps.length){
+   // The catalog quantity question and confirmation messages have special,
+   // intentionally authored text and must be preserved.
+   if(/^(Elegiste «|Agregué «|¡Presupuesto guardado!)/.test(entry.text))continue;
+   if(entry.text!==steps[pos].q){entry.text=steps[pos].q;changed=true}
+  }
+ }
+ // The stored step is authoritative for the question still awaiting an answer.
+ if(draft.step>=0&&draft.step<steps.length&&draft.log.length){
+  const last=draft.log[draft.log.length-1];
+  if(last?.role==="assistant"&&!/^(Elegiste «|Agregué «|¡Presupuesto guardado!)/.test(last.text)){
+   const fixed=steps[draft.step].q;
+   if(last.text!==fixed){last.text=fixed;changed=true}
+  }
+ }
+ draft.fixedQuestionsVersion=1;
+ return true;
+}
+
 function say(role,text){if(!current)return;current.log.push({role,text:String(text),at:new Date().toISOString()});if(current.log.length>180)current.log.splice(0,current.log.length-180)}
 function save(){if(!current)return;current.updated=new Date().toISOString();api.save()}
 function ask(){const s=getStep();if(s)say("assistant",s.q)}
@@ -131,6 +166,7 @@ function createQuote(){
 }
 function render(){
  const list=history();
+ if(list.some(restoreLegacyQuestions))api.save();
  if(current&&!list.includes(current))current=null;
  if(!current&&list.length)current=list[0];
  const shelf=$("ocAssistantSavedSection"),draftList=$("ocAssistantDraftList");
