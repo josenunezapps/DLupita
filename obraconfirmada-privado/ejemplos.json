@@ -1,0 +1,1331 @@
+{
+  "version": 1,
+  "description": "Ejemplos ficticios de ObraConfirmada. Ningún cliente, número telefónico ni importe corresponde a una operación real.",
+  "projects": [
+    {
+      "id": "OC-101",
+      "title": "Reforma integral de baño",
+      "client": "Cliente ejemplo · Familia López",
+      "phone": "1100000000",
+      "original": 2247000,
+      "start": "2026-10-07",
+      "duration": 25,
+      "scope": "Demolición y retiro de revestimientos existentes, renovación sanitaria, impermeabilización, colocación de cerámicos y artefactos. Terminaciones según presupuesto.",
+      "payment": "40% de anticipo y pagos por avance",
+      "validity": 15,
+      "budgetNotes": "EJEMPLO FICTICIO · Importes ilustrativos en ARS. No utilizar como cotización comercial real.",
+      "status": "Activa",
+      "created": "2026-10-07T13:00:00.000Z",
+      "events": [
+        {
+          "text": "Obra de ejemplo cargada para explorar el sistema.",
+          "at": "2026-10-07T13:00:00.000Z"
+        },
+        {
+          "text": "Presupuesto de ejemplo inicial generado.",
+          "at": "2026-10-07T13:00:00.000Z"
+        }
+      ],
+      "changes": [
+        {
+          "id": "CM-701",
+          "title": "Agregar nicho revestido",
+          "description": "Nicho de guardado con terminación cerámica",
+          "delta": 98000,
+          "days": 1,
+          "reason": "Trabajo adicional",
+          "status": "Pendiente",
+          "created": "2026-10-14T13:00:00.000Z",
+          "decidedAt": "",
+          "decidedBy": "",
+          "decisionNotes": "",
+          "photos": [],
+          "demo": true
+        }
+      ],
+      "expenses": [
+        {
+          "id": "DEM-EXP-101-1",
+          "date": "2026-10-08",
+          "concept": "Compra de cerámicos",
+          "category": "Materiales",
+          "amount": 350000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-101-2",
+          "date": "2026-10-09",
+          "concept": "Jornales demolición",
+          "category": "Mano de obra",
+          "amount": 140000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-101-3",
+          "date": "2026-10-12",
+          "concept": "Caños y accesorios",
+          "category": "Materiales",
+          "amount": 165000,
+          "demo": true
+        }
+      ],
+      "payments": [
+        {
+          "id": "DEM-PAY-101-1",
+          "date": "2026-10-07",
+          "concept": "Anticipo para materiales",
+          "amount": 800000,
+          "demo": true
+        },
+        {
+          "id": "DEM-PAY-101-2",
+          "date": "2026-10-12",
+          "concept": "Segundo pago",
+          "amount": 350000,
+          "demo": true
+        }
+      ],
+      "lines": [
+        {
+          "id": "L-j7juo5",
+          "name": "Demolición y retiro de escombros",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 170000,
+          "price": 270000
+        },
+        {
+          "id": "L-jvsqec",
+          "name": "Impermeabilización",
+          "unit": "m²",
+          "qty": 18,
+          "cost": 12500,
+          "price": 20500
+        },
+        {
+          "id": "L-07zfca",
+          "name": "Revestimiento cerámico",
+          "unit": "m²",
+          "qty": 26,
+          "cost": 17500,
+          "price": 28000
+        },
+        {
+          "id": "L-ytlkso",
+          "name": "Instalación sanitaria",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 260000,
+          "price": 415000
+        },
+        {
+          "id": "L-nrmfla",
+          "name": "Grifería y artefactos",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 290000,
+          "price": 465000
+        }
+      ],
+      "taxRate": 0,
+      "taxTotal": 0,
+      "demo": true
+    },
+    {
+      "id": "OC-102",
+      "title": "Construcción de quincho de 28 m²",
+      "client": "Cliente ejemplo · Martín Pérez",
+      "phone": "1100000000",
+      "original": 7189000,
+      "start": "2026-09-22",
+      "duration": 65,
+      "scope": "Preparación de terreno, bases, paredes de ladrillo, cubierta de chapa, electricidad y terminación con pintura. Superficie cubierta estimada: 28 m².",
+      "payment": "40% de anticipo y pagos por avance",
+      "validity": 15,
+      "budgetNotes": "EJEMPLO FICTICIO · Importes ilustrativos en ARS. No utilizar como cotización comercial real.",
+      "status": "Activa",
+      "created": "2026-09-22T13:00:00.000Z",
+      "events": [
+        {
+          "text": "Obra de ejemplo cargada para explorar el sistema.",
+          "at": "2026-09-22T13:00:00.000Z"
+        },
+        {
+          "text": "Presupuesto de ejemplo inicial generado.",
+          "at": "2026-09-22T13:00:00.000Z"
+        }
+      ],
+      "changes": [
+        {
+          "id": "CM-711",
+          "title": "Canaleta pluvial adicional",
+          "description": "Incorporar canaletas y bajadas en cubierta",
+          "delta": 175000,
+          "days": 2,
+          "reason": "Trabajo adicional",
+          "status": "Aprobado",
+          "created": "2026-10-14T13:00:00.000Z",
+          "decidedAt": "2026-10-15T13:00:00.000Z",
+          "decidedBy": "Registro interno del profesional",
+          "decisionNotes": "Adicional incorporado para seguimiento interno.",
+          "photos": [],
+          "demo": true
+        }
+      ],
+      "expenses": [
+        {
+          "id": "DEM-EXP-102-1",
+          "date": "2026-09-24",
+          "concept": "Hierros y cemento",
+          "category": "Materiales",
+          "amount": 980000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-102-2",
+          "date": "2026-09-30",
+          "concept": "Jornales cuadrilla",
+          "category": "Mano de obra",
+          "amount": 850000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-102-3",
+          "date": "2026-10-09",
+          "concept": "Chapas y tirantes",
+          "category": "Materiales",
+          "amount": 1130000,
+          "demo": true
+        }
+      ],
+      "payments": [
+        {
+          "id": "DEM-PAY-102-1",
+          "date": "2026-09-22",
+          "concept": "Anticipo inicial",
+          "amount": 2200000,
+          "demo": true
+        },
+        {
+          "id": "DEM-PAY-102-2",
+          "date": "2026-10-05",
+          "concept": "Pago por avance",
+          "amount": 1800000,
+          "demo": true
+        }
+      ],
+      "lines": [
+        {
+          "id": "L-bj6wm3",
+          "name": "Movimiento de suelo",
+          "unit": "m²",
+          "qty": 28,
+          "cost": 14000,
+          "price": 21500
+        },
+        {
+          "id": "L-6d6mpw",
+          "name": "Bases y encadenados",
+          "unit": "m²",
+          "qty": 28,
+          "cost": 32000,
+          "price": 49000
+        },
+        {
+          "id": "L-8gs4xa",
+          "name": "Mampostería",
+          "unit": "m²",
+          "qty": 54,
+          "cost": 29500,
+          "price": 44000
+        },
+        {
+          "id": "L-hlv6wb",
+          "name": "Cubierta de chapa",
+          "unit": "m²",
+          "qty": 36,
+          "cost": 24500,
+          "price": 37500
+        },
+        {
+          "id": "L-6euhi9",
+          "name": "Instalación eléctrica",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 420000,
+          "price": 670000
+        },
+        {
+          "id": "L-j17ekn",
+          "name": "Pintura y terminaciones",
+          "unit": "m²",
+          "qty": 78,
+          "cost": 6200,
+          "price": 10500
+        }
+      ],
+      "taxRate": 0,
+      "taxTotal": 0,
+      "demo": true
+    },
+    {
+      "id": "OC-103",
+      "title": "Aberturas de aluminio con DVH",
+      "client": "Cliente ejemplo · Andrea Díaz",
+      "phone": "1100000000",
+      "original": 3030000,
+      "start": "2026-08-25",
+      "duration": 16,
+      "scope": "Provisión y colocación de ventanas de aluminio con doble vidriado hermético y puerta de acceso. Sellado perimetral y limpieza final.",
+      "payment": "40% de anticipo y pagos por avance",
+      "validity": 15,
+      "budgetNotes": "EJEMPLO FICTICIO · Importes ilustrativos en ARS. No utilizar como cotización comercial real.",
+      "status": "Finalizada",
+      "created": "2026-08-25T13:00:00.000Z",
+      "events": [
+        {
+          "text": "Obra de ejemplo cargada para explorar el sistema.",
+          "at": "2026-08-25T13:00:00.000Z"
+        },
+        {
+          "text": "Presupuesto de ejemplo inicial generado.",
+          "at": "2026-08-25T13:00:00.000Z"
+        }
+      ],
+      "changes": [],
+      "expenses": [
+        {
+          "id": "DEM-EXP-103-1",
+          "date": "2026-08-28",
+          "concept": "Ventanas DVH proveedor",
+          "category": "Materiales",
+          "amount": 1420000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-103-2",
+          "date": "2026-09-01",
+          "concept": "Puerta de acceso",
+          "category": "Materiales",
+          "amount": 400000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-103-3",
+          "date": "2026-09-05",
+          "concept": "Equipo de instalación",
+          "category": "Mano de obra",
+          "amount": 195000,
+          "demo": true
+        }
+      ],
+      "payments": [
+        {
+          "id": "DEM-PAY-103-1",
+          "date": "2026-08-25",
+          "concept": "Reserva",
+          "amount": 1000000,
+          "demo": true
+        },
+        {
+          "id": "DEM-PAY-103-2",
+          "date": "2026-09-06",
+          "concept": "Pago al finalizar",
+          "amount": 2030000,
+          "demo": true
+        }
+      ],
+      "lines": [
+        {
+          "id": "L-zmi5fb",
+          "name": "Ventanas de aluminio DVH",
+          "unit": "u",
+          "qty": 4,
+          "cost": 360000,
+          "price": 505000
+        },
+        {
+          "id": "L-eyo8ye",
+          "name": "Puerta de aluminio reforzada",
+          "unit": "u",
+          "qty": 1,
+          "cost": 420000,
+          "price": 620000
+        },
+        {
+          "id": "L-7wuf8i",
+          "name": "Colocación y sellado",
+          "unit": "u",
+          "qty": 5,
+          "cost": 48000,
+          "price": 78000
+        }
+      ],
+      "taxRate": 0,
+      "taxTotal": 0,
+      "demo": true
+    },
+    {
+      "id": "OC-104",
+      "title": "Pintura de local comercial",
+      "client": "Cliente ejemplo · Comercio Centro",
+      "phone": "1100000000",
+      "original": 4697000,
+      "start": "2026-10-02",
+      "duration": 20,
+      "scope": "Preparación de superficies, enduido, lijado, dos manos de pintura lavable, retoques de carpinterías y limpieza del local.",
+      "payment": "40% de anticipo y pagos por avance",
+      "validity": 15,
+      "budgetNotes": "EJEMPLO FICTICIO · Importes ilustrativos en ARS. No utilizar como cotización comercial real.",
+      "status": "Pausada",
+      "created": "2026-10-02T13:00:00.000Z",
+      "events": [
+        {
+          "text": "Obra de ejemplo cargada para explorar el sistema.",
+          "at": "2026-10-02T13:00:00.000Z"
+        },
+        {
+          "text": "Presupuesto de ejemplo inicial generado.",
+          "at": "2026-10-02T13:00:00.000Z"
+        }
+      ],
+      "changes": [
+        {
+          "id": "CM-731",
+          "title": "Pintar depósito adicional",
+          "description": "Incluir 38 m² del depósito",
+          "delta": 290000,
+          "days": 3,
+          "reason": "Trabajo adicional",
+          "status": "Pendiente",
+          "created": "2026-10-14T13:00:00.000Z",
+          "decidedAt": "",
+          "decidedBy": "",
+          "decisionNotes": "",
+          "photos": [],
+          "demo": true
+        }
+      ],
+      "expenses": [
+        {
+          "id": "DEM-EXP-104-1",
+          "date": "2026-10-03",
+          "concept": "Pinturas y enduido",
+          "category": "Materiales",
+          "amount": 460000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-104-2",
+          "date": "2026-10-04",
+          "concept": "Andamios y herramientas",
+          "category": "Equipos",
+          "amount": 125000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-104-3",
+          "date": "2026-10-06",
+          "concept": "Jornales",
+          "category": "Mano de obra",
+          "amount": 230000,
+          "demo": true
+        }
+      ],
+      "payments": [
+        {
+          "id": "DEM-PAY-104-1",
+          "date": "2026-10-02",
+          "concept": "Anticipo",
+          "amount": 1100000,
+          "demo": true
+        }
+      ],
+      "lines": [
+        {
+          "id": "L-mlq3vn",
+          "name": "Preparación y enduido",
+          "unit": "m²",
+          "qty": 180,
+          "cost": 6800,
+          "price": 11000
+        },
+        {
+          "id": "L-t1nbhe",
+          "name": "Pintura interior",
+          "unit": "m²",
+          "qty": 180,
+          "cost": 7200,
+          "price": 12800
+        },
+        {
+          "id": "L-eszt8q",
+          "name": "Esmalte de carpinterías",
+          "unit": "u",
+          "qty": 7,
+          "cost": 34000,
+          "price": 59000
+        }
+      ],
+      "taxRate": 0,
+      "taxTotal": 0,
+      "demo": true
+    },
+    {
+      "id": "OC-105",
+      "title": "Renovación eléctrica de vivienda",
+      "client": "Cliente ejemplo · Valeria Gómez",
+      "phone": "1100000000",
+      "original": 1915000,
+      "start": "2026-09-10",
+      "duration": 14,
+      "scope": "Cambio de tablero, nuevos circuitos para cocina y dormitorios, tomacorrientes, protecciones térmicas y pruebas de funcionamiento.",
+      "payment": "40% de anticipo y pagos por avance",
+      "validity": 15,
+      "budgetNotes": "EJEMPLO FICTICIO · Importes ilustrativos en ARS. No utilizar como cotización comercial real.",
+      "status": "Finalizada",
+      "created": "2026-09-10T13:00:00.000Z",
+      "events": [
+        {
+          "text": "Obra de ejemplo cargada para explorar el sistema.",
+          "at": "2026-09-10T13:00:00.000Z"
+        },
+        {
+          "text": "Presupuesto de ejemplo inicial generado.",
+          "at": "2026-09-10T13:00:00.000Z"
+        }
+      ],
+      "changes": [],
+      "expenses": [
+        {
+          "id": "DEM-EXP-105-1",
+          "date": "2026-09-10",
+          "concept": "Cableado",
+          "category": "Materiales",
+          "amount": 320000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-105-2",
+          "date": "2026-09-11",
+          "concept": "Térmicas y disyuntor",
+          "category": "Materiales",
+          "amount": 205000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-105-3",
+          "date": "2026-09-19",
+          "concept": "Electricista",
+          "category": "Mano de obra",
+          "amount": 480000,
+          "demo": true
+        }
+      ],
+      "payments": [
+        {
+          "id": "DEM-PAY-105-1",
+          "date": "2026-09-10",
+          "concept": "Anticipo",
+          "amount": 700000,
+          "demo": true
+        },
+        {
+          "id": "DEM-PAY-105-2",
+          "date": "2026-09-23",
+          "concept": "Cancelación final",
+          "amount": 1215000,
+          "demo": true
+        }
+      ],
+      "lines": [
+        {
+          "id": "L-q3i4fe",
+          "name": "Tablero con protecciones",
+          "unit": "u",
+          "qty": 1,
+          "cost": 210000,
+          "price": 340000
+        },
+        {
+          "id": "L-9uvsj5",
+          "name": "Circuitos y cableado",
+          "unit": "circuito",
+          "qty": 6,
+          "cost": 95000,
+          "price": 165000
+        },
+        {
+          "id": "L-foavss",
+          "name": "Tomacorrientes y llaves",
+          "unit": "u",
+          "qty": 22,
+          "cost": 12000,
+          "price": 20000
+        },
+        {
+          "id": "L-368j5w",
+          "name": "Pruebas y puesta en marcha",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 90000,
+          "price": 145000
+        }
+      ],
+      "taxRate": 0,
+      "taxTotal": 0,
+      "demo": true
+    },
+    {
+      "id": "OC-106",
+      "title": "Impermeabilización de terraza",
+      "client": "Cliente ejemplo · Edificio Norte",
+      "phone": "1100000000",
+      "original": 3754400,
+      "start": "2026-10-12",
+      "duration": 18,
+      "scope": "Limpieza, reparación de fisuras, preparación de superficie, impermeabilización elastomérica de terraza y sellado de encuentros con paredes.",
+      "payment": "40% de anticipo y pagos por avance",
+      "validity": 15,
+      "budgetNotes": "EJEMPLO FICTICIO · Importes ilustrativos en ARS. No utilizar como cotización comercial real.",
+      "status": "Activa",
+      "created": "2026-10-12T13:00:00.000Z",
+      "events": [
+        {
+          "text": "Obra de ejemplo cargada para explorar el sistema.",
+          "at": "2026-10-12T13:00:00.000Z"
+        },
+        {
+          "text": "Presupuesto de ejemplo inicial generado.",
+          "at": "2026-10-12T13:00:00.000Z"
+        }
+      ],
+      "changes": [
+        {
+          "id": "CM-751",
+          "title": "Reparación de desagüe pluvial",
+          "description": "Reemplazo de sumidero deteriorado",
+          "delta": 140000,
+          "days": 1,
+          "reason": "Trabajo adicional",
+          "status": "Pendiente",
+          "created": "2026-10-14T13:00:00.000Z",
+          "decidedAt": "",
+          "decidedBy": "",
+          "decisionNotes": "",
+          "photos": [],
+          "demo": true
+        }
+      ],
+      "expenses": [
+        {
+          "id": "DEM-EXP-106-1",
+          "date": "2026-10-12",
+          "concept": "Membrana y selladores",
+          "category": "Materiales",
+          "amount": 690000,
+          "demo": true
+        },
+        {
+          "id": "DEM-EXP-106-2",
+          "date": "2026-10-14",
+          "concept": "Preparación de superficie",
+          "category": "Mano de obra",
+          "amount": 260000,
+          "demo": true
+        }
+      ],
+      "payments": [
+        {
+          "id": "DEM-PAY-106-1",
+          "date": "2026-10-12",
+          "concept": "Anticipo",
+          "amount": 950000,
+          "demo": true
+        }
+      ],
+      "lines": [
+        {
+          "id": "L-zybpby",
+          "name": "Limpieza y preparación",
+          "unit": "m²",
+          "qty": 105,
+          "cost": 3800,
+          "price": 6300
+        },
+        {
+          "id": "L-08kuez",
+          "name": "Reparación de fisuras",
+          "unit": "ml",
+          "qty": 36,
+          "cost": 8500,
+          "price": 13900
+        },
+        {
+          "id": "L-36ipyo",
+          "name": "Membrana líquida elastomérica",
+          "unit": "m²",
+          "qty": 105,
+          "cost": 12800,
+          "price": 22500
+        },
+        {
+          "id": "L-g6ujhu",
+          "name": "Sellos y terminaciones",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 140000,
+          "price": 230000
+        }
+      ],
+      "taxRate": 0,
+      "taxTotal": 0,
+      "demo": true
+    }
+  ],
+  "quotes": [
+    {
+      "id": "PRE-DEMO-001",
+      "title": "Reforma integral de baño",
+      "client": "Cliente ejemplo · Familia López",
+      "phone": "1100000000",
+      "scope": "Demolición y retiro de revestimientos existentes, renovación sanitaria, impermeabilización, colocación de cerámicos y artefactos. Terminaciones según presupuesto.",
+      "payment": "40% de anticipo y pagos por avance",
+      "taxRate": 0,
+      "status": "Convertido",
+      "lines": [
+        {
+          "id": "L-j7juo5",
+          "name": "Demolición y retiro de escombros",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 170000,
+          "price": 270000
+        },
+        {
+          "id": "L-jvsqec",
+          "name": "Impermeabilización",
+          "unit": "m²",
+          "qty": 18,
+          "cost": 12500,
+          "price": 20500
+        },
+        {
+          "id": "L-07zfca",
+          "name": "Revestimiento cerámico",
+          "unit": "m²",
+          "qty": 26,
+          "cost": 17500,
+          "price": 28000
+        },
+        {
+          "id": "L-ytlkso",
+          "name": "Instalación sanitaria",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 260000,
+          "price": 415000
+        },
+        {
+          "id": "L-nrmfla",
+          "name": "Grifería y artefactos",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 290000,
+          "price": 465000
+        }
+      ],
+      "created": "2026-10-07T13:00:00.000Z",
+      "updated": "2026-10-16T13:00:00.000Z",
+      "projectId": "OC-101",
+      "history": [
+        {
+          "number": 1,
+          "at": "2026-10-07T13:00:00.000Z",
+          "snapshot": {
+            "title": "Reforma integral de baño",
+            "client": "Cliente ejemplo · Familia López",
+            "phone": "1100000000",
+            "scope": "Demolición y retiro de revestimientos existentes, renovación sanitaria, impermeabilización, colocación de cerámicos y artefactos. Terminaciones según presupuesto.",
+            "payment": "40% de anticipo y pagos por avance",
+            "taxRate": 0,
+            "status": "Convertido",
+            "lines": [
+              {
+                "id": "L-j7juo5",
+                "name": "Demolición y retiro de escombros",
+                "unit": "gl",
+                "qty": 1,
+                "cost": 170000,
+                "price": 270000
+              },
+              {
+                "id": "L-jvsqec",
+                "name": "Impermeabilización",
+                "unit": "m²",
+                "qty": 18,
+                "cost": 12500,
+                "price": 20500
+              },
+              {
+                "id": "L-07zfca",
+                "name": "Revestimiento cerámico",
+                "unit": "m²",
+                "qty": 26,
+                "cost": 17500,
+                "price": 28000
+              },
+              {
+                "id": "L-ytlkso",
+                "name": "Instalación sanitaria",
+                "unit": "gl",
+                "qty": 1,
+                "cost": 260000,
+                "price": 415000
+              },
+              {
+                "id": "L-nrmfla",
+                "name": "Grifería y artefactos",
+                "unit": "gl",
+                "qty": 1,
+                "cost": 290000,
+                "price": 465000
+              }
+            ]
+          }
+        }
+      ],
+      "demo": true
+    },
+    {
+      "id": "PRE-DEMO-002",
+      "title": "Construcción de quincho de 28 m²",
+      "client": "Cliente ejemplo · Martín Pérez",
+      "phone": "1100000000",
+      "scope": "Preparación de terreno, bases, paredes de ladrillo, cubierta de chapa, electricidad y terminación con pintura. Superficie cubierta estimada: 28 m².",
+      "payment": "40% de anticipo y pagos por avance",
+      "taxRate": 0,
+      "status": "Convertido",
+      "lines": [
+        {
+          "id": "L-bj6wm3",
+          "name": "Movimiento de suelo",
+          "unit": "m²",
+          "qty": 28,
+          "cost": 14000,
+          "price": 21500
+        },
+        {
+          "id": "L-6d6mpw",
+          "name": "Bases y encadenados",
+          "unit": "m²",
+          "qty": 28,
+          "cost": 32000,
+          "price": 49000
+        },
+        {
+          "id": "L-8gs4xa",
+          "name": "Mampostería",
+          "unit": "m²",
+          "qty": 54,
+          "cost": 29500,
+          "price": 44000
+        },
+        {
+          "id": "L-hlv6wb",
+          "name": "Cubierta de chapa",
+          "unit": "m²",
+          "qty": 36,
+          "cost": 24500,
+          "price": 37500
+        },
+        {
+          "id": "L-6euhi9",
+          "name": "Instalación eléctrica",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 420000,
+          "price": 670000
+        },
+        {
+          "id": "L-j17ekn",
+          "name": "Pintura y terminaciones",
+          "unit": "m²",
+          "qty": 78,
+          "cost": 6200,
+          "price": 10500
+        }
+      ],
+      "created": "2026-09-22T13:00:00.000Z",
+      "updated": "2026-10-16T13:00:00.000Z",
+      "projectId": "OC-102",
+      "history": [
+        {
+          "number": 1,
+          "at": "2026-09-22T13:00:00.000Z",
+          "snapshot": {
+            "title": "Construcción de quincho de 28 m²",
+            "client": "Cliente ejemplo · Martín Pérez",
+            "phone": "1100000000",
+            "scope": "Preparación de terreno, bases, paredes de ladrillo, cubierta de chapa, electricidad y terminación con pintura. Superficie cubierta estimada: 28 m².",
+            "payment": "40% de anticipo y pagos por avance",
+            "taxRate": 0,
+            "status": "Convertido",
+            "lines": [
+              {
+                "id": "L-bj6wm3",
+                "name": "Movimiento de suelo",
+                "unit": "m²",
+                "qty": 28,
+                "cost": 14000,
+                "price": 21500
+              },
+              {
+                "id": "L-6d6mpw",
+                "name": "Bases y encadenados",
+                "unit": "m²",
+                "qty": 28,
+                "cost": 32000,
+                "price": 49000
+              },
+              {
+                "id": "L-8gs4xa",
+                "name": "Mampostería",
+                "unit": "m²",
+                "qty": 54,
+                "cost": 29500,
+                "price": 44000
+              },
+              {
+                "id": "L-hlv6wb",
+                "name": "Cubierta de chapa",
+                "unit": "m²",
+                "qty": 36,
+                "cost": 24500,
+                "price": 37500
+              },
+              {
+                "id": "L-6euhi9",
+                "name": "Instalación eléctrica",
+                "unit": "gl",
+                "qty": 1,
+                "cost": 420000,
+                "price": 670000
+              },
+              {
+                "id": "L-j17ekn",
+                "name": "Pintura y terminaciones",
+                "unit": "m²",
+                "qty": 78,
+                "cost": 6200,
+                "price": 10500
+              }
+            ]
+          }
+        }
+      ],
+      "demo": true
+    },
+    {
+      "id": "PRE-DEMO-003",
+      "title": "Aberturas de aluminio con DVH",
+      "client": "Cliente ejemplo · Andrea Díaz",
+      "phone": "1100000000",
+      "scope": "Provisión y colocación de ventanas de aluminio con doble vidriado hermético y puerta de acceso. Sellado perimetral y limpieza final.",
+      "payment": "40% de anticipo y pagos por avance",
+      "taxRate": 0,
+      "status": "Convertido",
+      "lines": [
+        {
+          "id": "L-zmi5fb",
+          "name": "Ventanas de aluminio DVH",
+          "unit": "u",
+          "qty": 4,
+          "cost": 360000,
+          "price": 505000
+        },
+        {
+          "id": "L-eyo8ye",
+          "name": "Puerta de aluminio reforzada",
+          "unit": "u",
+          "qty": 1,
+          "cost": 420000,
+          "price": 620000
+        },
+        {
+          "id": "L-7wuf8i",
+          "name": "Colocación y sellado",
+          "unit": "u",
+          "qty": 5,
+          "cost": 48000,
+          "price": 78000
+        }
+      ],
+      "created": "2026-08-25T13:00:00.000Z",
+      "updated": "2026-10-16T13:00:00.000Z",
+      "projectId": "OC-103",
+      "history": [
+        {
+          "number": 1,
+          "at": "2026-08-25T13:00:00.000Z",
+          "snapshot": {
+            "title": "Aberturas de aluminio con DVH",
+            "client": "Cliente ejemplo · Andrea Díaz",
+            "phone": "1100000000",
+            "scope": "Provisión y colocación de ventanas de aluminio con doble vidriado hermético y puerta de acceso. Sellado perimetral y limpieza final.",
+            "payment": "40% de anticipo y pagos por avance",
+            "taxRate": 0,
+            "status": "Convertido",
+            "lines": [
+              {
+                "id": "L-zmi5fb",
+                "name": "Ventanas de aluminio DVH",
+                "unit": "u",
+                "qty": 4,
+                "cost": 360000,
+                "price": 505000
+              },
+              {
+                "id": "L-eyo8ye",
+                "name": "Puerta de aluminio reforzada",
+                "unit": "u",
+                "qty": 1,
+                "cost": 420000,
+                "price": 620000
+              },
+              {
+                "id": "L-7wuf8i",
+                "name": "Colocación y sellado",
+                "unit": "u",
+                "qty": 5,
+                "cost": 48000,
+                "price": 78000
+              }
+            ]
+          }
+        }
+      ],
+      "demo": true
+    },
+    {
+      "id": "PRE-DEMO-004",
+      "title": "Pérgola de madera de 18 m²",
+      "client": "Cliente ejemplo · Familia Romero",
+      "phone": "1100000000",
+      "scope": "Fabricación y montaje de pérgola de madera tratada con protección para intemperie.",
+      "payment": "50% de anticipo",
+      "taxRate": 0,
+      "status": "Borrador",
+      "lines": [
+        {
+          "id": "L-jwuhhm",
+          "name": "Estructura de madera",
+          "unit": "m²",
+          "qty": 18,
+          "cost": 62000,
+          "price": 100000
+        },
+        {
+          "id": "L-pwmw9u",
+          "name": "Barniz protector",
+          "unit": "m²",
+          "qty": 36,
+          "cost": 6900,
+          "price": 12500
+        },
+        {
+          "id": "L-e1oj85",
+          "name": "Montaje y anclajes",
+          "unit": "gl",
+          "qty": 1,
+          "cost": 310000,
+          "price": 520000
+        }
+      ],
+      "projectId": null,
+      "created": "2026-10-16T13:00:00.000Z",
+      "updated": "2026-10-16T13:00:00.000Z",
+      "history": [
+        {
+          "number": 1,
+          "at": "2026-10-16T13:00:00.000Z",
+          "snapshot": {
+            "title": "Pérgola de madera de 18 m²",
+            "client": "Cliente ejemplo · Familia Romero",
+            "phone": "1100000000",
+            "scope": "Fabricación y montaje de pérgola de madera tratada con protección para intemperie.",
+            "payment": "50% de anticipo",
+            "taxRate": 0,
+            "status": "Borrador",
+            "lines": [
+              {
+                "id": "L-jwuhhm",
+                "name": "Estructura de madera",
+                "unit": "m²",
+                "qty": 18,
+                "cost": 62000,
+                "price": 100000
+              },
+              {
+                "id": "L-pwmw9u",
+                "name": "Barniz protector",
+                "unit": "m²",
+                "qty": 36,
+                "cost": 6900,
+                "price": 12500
+              },
+              {
+                "id": "L-e1oj85",
+                "name": "Montaje y anclajes",
+                "unit": "gl",
+                "qty": 1,
+                "cost": 310000,
+                "price": 520000
+              }
+            ]
+          }
+        }
+      ],
+      "demo": true
+    },
+    {
+      "id": "PRE-DEMO-005",
+      "title": "Piso flotante en departamento",
+      "client": "Cliente ejemplo · Juan Castro",
+      "phone": "1100000000",
+      "scope": "Preparación de base y provisión e instalación de piso flotante con zócalos.",
+      "payment": "50% de anticipo",
+      "taxRate": 0,
+      "status": "Borrador",
+      "lines": [
+        {
+          "id": "L-lsfqk9",
+          "name": "Piso flotante",
+          "unit": "m²",
+          "qty": 58,
+          "cost": 21000,
+          "price": 36500
+        },
+        {
+          "id": "L-xnws2c",
+          "name": "Manta aislante",
+          "unit": "m²",
+          "qty": 58,
+          "cost": 2800,
+          "price": 4900
+        },
+        {
+          "id": "L-ovu2ls",
+          "name": "Zócalos",
+          "unit": "ml",
+          "qty": 68,
+          "cost": 3500,
+          "price": 6800
+        },
+        {
+          "id": "L-uhupj9",
+          "name": "Colocación",
+          "unit": "m²",
+          "qty": 58,
+          "cost": 8500,
+          "price": 14500
+        }
+      ],
+      "projectId": null,
+      "created": "2026-10-16T13:00:00.000Z",
+      "updated": "2026-10-16T13:00:00.000Z",
+      "history": [
+        {
+          "number": 1,
+          "at": "2026-10-16T13:00:00.000Z",
+          "snapshot": {
+            "title": "Piso flotante en departamento",
+            "client": "Cliente ejemplo · Juan Castro",
+            "phone": "1100000000",
+            "scope": "Preparación de base y provisión e instalación de piso flotante con zócalos.",
+            "payment": "50% de anticipo",
+            "taxRate": 0,
+            "status": "Borrador",
+            "lines": [
+              {
+                "id": "L-lsfqk9",
+                "name": "Piso flotante",
+                "unit": "m²",
+                "qty": 58,
+                "cost": 21000,
+                "price": 36500
+              },
+              {
+                "id": "L-xnws2c",
+                "name": "Manta aislante",
+                "unit": "m²",
+                "qty": 58,
+                "cost": 2800,
+                "price": 4900
+              },
+              {
+                "id": "L-ovu2ls",
+                "name": "Zócalos",
+                "unit": "ml",
+                "qty": 68,
+                "cost": 3500,
+                "price": 6800
+              },
+              {
+                "id": "L-uhupj9",
+                "name": "Colocación",
+                "unit": "m²",
+                "qty": 58,
+                "cost": 8500,
+                "price": 14500
+              }
+            ]
+          }
+        }
+      ],
+      "demo": true
+    }
+  ],
+  "catalog": [
+    {
+      "id": "CAT-DEMO-001",
+      "name": "Demolición y retiro de escombros",
+      "unit": "gl",
+      "cost": 170000,
+      "price": 270000,
+      "category": "Mano de obra",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-002",
+      "name": "Impermeabilización",
+      "unit": "m²",
+      "cost": 12500,
+      "price": 20500,
+      "category": "Materiales",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-003",
+      "name": "Revestimiento cerámico",
+      "unit": "m²",
+      "cost": 17500,
+      "price": 28000,
+      "category": "Construcción",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-004",
+      "name": "Instalación sanitaria",
+      "unit": "gl",
+      "cost": 260000,
+      "price": 415000,
+      "category": "Mano de obra",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-005",
+      "name": "Grifería y artefactos",
+      "unit": "gl",
+      "cost": 290000,
+      "price": 465000,
+      "category": "Materiales",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-006",
+      "name": "Movimiento de suelo",
+      "unit": "m²",
+      "cost": 14000,
+      "price": 21500,
+      "category": "Construcción",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-007",
+      "name": "Bases y encadenados",
+      "unit": "m²",
+      "cost": 32000,
+      "price": 49000,
+      "category": "Mano de obra",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-008",
+      "name": "Mampostería",
+      "unit": "m²",
+      "cost": 29500,
+      "price": 44000,
+      "category": "Materiales",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-009",
+      "name": "Cubierta de chapa",
+      "unit": "m²",
+      "cost": 24500,
+      "price": 37500,
+      "category": "Construcción",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-010",
+      "name": "Instalación eléctrica",
+      "unit": "gl",
+      "cost": 420000,
+      "price": 670000,
+      "category": "Mano de obra",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-011",
+      "name": "Pintura y terminaciones",
+      "unit": "m²",
+      "cost": 6200,
+      "price": 10500,
+      "category": "Materiales",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-012",
+      "name": "Ventanas de aluminio DVH",
+      "unit": "u",
+      "cost": 360000,
+      "price": 505000,
+      "category": "Construcción",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-013",
+      "name": "Puerta de aluminio reforzada",
+      "unit": "u",
+      "cost": 420000,
+      "price": 620000,
+      "category": "Mano de obra",
+      "updated": "2026-10-17",
+      "demo": true
+    },
+    {
+      "id": "CAT-DEMO-014",
+      "name": "Colocación y sellado",
+      "unit": "u",
+      "cost": 48000,
+      "price": 78000,
+      "category": "Materiales",
+      "updated": "2026-10-17",
+      "demo": true
+    }
+  ]
+}
