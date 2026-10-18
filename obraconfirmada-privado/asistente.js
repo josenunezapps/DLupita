@@ -1,7 +1,7 @@
 /* ObraConfirmada - agente de entrevistas y presupuestos, sin precios supuestos. */
 (function(){
 "use strict";
-let api=null,current=null,busy=false,aiBusy=false,cloudUnavailable=false,cloudSequence=0;
+let api=null,current=null,busy=false,aiBusy=false,cloudSequence=0;
 const $=id=>document.getElementById(id),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);
 const escape=s=>String(s??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
 const trim=s=>String(s||"").trim(),money=n=>Number(n||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:2});
@@ -42,8 +42,8 @@ function getStep(){return steps[current?.step]||null}
 function say(role,text){if(!current)return;current.log.push({role,text:String(text),at:new Date().toISOString()});if(current.log.length>180)current.log.splice(0,current.log.length-180)}
 function save(){if(!current)return;current.updated=new Date().toISOString();api.save()}
 function ask(){const s=getStep();if(s)say("assistant",s.q)}
-function begin(){current=newDraft();history().unshift(current);ask();save();render();api.show("asistente");askCloudflare()}
-function continueDraft(id){current=history().find(x=>x.id===id)||null;render();api.show("asistente");askCloudflare()}
+function begin(){cancelHelp();current=newDraft();history().unshift(current);ask();save();render();api.show("asistente")}
+function continueDraft(id){cancelHelp();current=history().find(x=>x.id===id)||null;render();api.show("asistente")}
 function questionKey(){return getStep()?.key||"done"}
 function msg(s){$("ocAssistantNotice").textContent=s}
 function validateAnswer(key,raw){
@@ -97,8 +97,8 @@ function answer(raw){
  const step=getStep();if(!step)return msg("La entrevista terminó. Guardá el presupuesto o iniciá otra.");
  const result=validateAnswer(step.key,raw);
  if(result.error){msg(result.error);return}
- say("user",trim(raw));
- advance(step.key,result.value);msg("");ask();save();render();askCloudflare();
+ cancelHelp();say("user",trim(raw));
+ advance(step.key,result.value);msg("");ask();save();render();
 }
 function fromCatalog(id){
  if(!current||!["concept","quantity","unit","price","cost"].includes(questionKey()))return;
@@ -109,7 +109,7 @@ function fromCatalog(id){
  current.step=stepKeys.indexOf("quantity");
  say("user","Utilizar del catálogo: "+entry.name+" (precio de venta "+money(price)+" por "+entry.unit+").");
  say("assistant","Elegiste «"+entry.name+"» del catálogo. ¿Qué cantidad necesitás? No asignaré ninguna cantidad por defecto.");
- save();render();askCloudflare();
+ cancelHelp();save();render();
 }
 function total(){
  const a=current?.answers||{},items=current?.lines||[];
@@ -145,7 +145,7 @@ function render(){
  if(!current){
   panel.classList.add("is-empty");
   panel.innerHTML='<div class="oc-ai-empty"><span class="oc-ai-empty-icon" aria-hidden="true">✦</span><strong>Un presupuesto, paso a paso</strong><p>Empezá describiendo tu trabajo. Yo te voy guiando.</p></div>';
-  form.classList.add("hidden");review.classList.add("hidden");work.classList.add("hidden");
+  form.classList.add("hidden");review.classList.add("hidden");work.classList.add("hidden");$("ocAssistantHelpArea").classList.add("hidden");
   $("ocAssistantNotice").textContent="";
   return;
  }
@@ -156,7 +156,7 @@ function render(){
  $("ocAssistantStep").textContent=done?"Información completa":"Paso "+(current.step+1)+" de "+steps.length;
  $("ocAssistantProgress").style.width=Math.min(100,100*current.step/steps.length)+"%";
  $("ocAssistantDelete").textContent=current.savedQuoteId?"Eliminar conversación":"Eliminar borrador";
- form.classList.toggle("hidden",done);
+ form.classList.toggle("hidden",done);$("ocAssistantHelpArea").classList.toggle("hidden",done);
  const hint=$("ocAssistantHint"),choices=$("ocAssistantChips"),catalogBlock=$("ocAssistantCatalogBlock");
  if(step){
   $("ocAssistantInput").placeholder=step.hint||"Escribí tu respuesta...";
@@ -178,63 +178,72 @@ function render(){
  $("ocAssistantDelete").disabled=false;
 }
 
-/* Cloudflare Workers AI runs on the server: only the requested interview field and
- * limited project context are sent. The response NEVER changes saved values.
- * The deterministic interview remains available if Cloudflare is unavailable.
- */
-async function askCloudflare(){
- if(!current||!getStep()||cloudUnavailable||aiBusy)return;
+/* La entrevista no usa IA. Esta ayuda solo se consulta por acción explícita. */
+function cancelHelp(){
+ cloudSequence++;
+ const panel=$("ocAssistantHelpBox"),output=$("ocAssistantHelpReply"),input=$("ocAssistantHelpInput");
+ if(panel)panel.classList.add("hidden");
+ if(output)output.textContent="";
+ if(input)input.value="";
+}
+async function askForHelp(){
+ const draft=current,step=getStep(),input=$("ocAssistantHelpInput"),output=$("ocAssistantHelpReply"),button=$("ocAssistantHelpSend");
+ if(!draft||!step||aiBusy)return;
+ const question=trim(input.value);
+ if(question.length<4){output.textContent="Escribí qué necesitás saber.";return}
  const token=api.getAccessToken?.();
- if(!token){$("ocCloudStatus").textContent="Iniciá sesión para continuar.";return}
- const active=current,index=current.step,question=getStep().q,sequence=++cloudSequence;
- const step=getStep(),context={
+ if(!token){output.textContent="Volvé a ingresar a tu cuenta para consultar.";return}
+ const index=current.step,sequence=++cloudSequence;
+ const context={
   project:String(current.answers.description||"").slice(0,210),
   area:String(current.answers.area||"").slice(0,90),
   floors:String(current.answers.floors||"").slice(0,65),
   scope:String(current.answers.scopeType||"").slice(0,40),
   currentConcept:String(current.pendingLine?.name||"").slice(0,110)
  };
- aiBusy=true;
- $("ocCloudStatus").textContent="Preparando pregunta...";
+ aiBusy=true;button.disabled=true;button.textContent="Consultando...";
+ output.textContent="Buscando una respuesta...";
  try{
   const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),15500);
-  let response,body;
+  const timeout=setTimeout(()=>controller.abort(),16000);
+  let res,data;
   try{
-   response=await fetch("https://zenix-fuego-sur.josene242.workers.dev/obra/ask",{
+   res=await fetch("https://zenix-fuego-sur.josene242.workers.dev/obra/ask",{
     method:"POST",
     headers:{"Content-Type":"application/json","Authorization":"Bearer "+token,"apikey":api.getPublicKey()},
-    body:JSON.stringify({step:step.key,context}),
+    body:JSON.stringify({mode:"help",step:step.key,question,context}),
     signal:controller.signal
    });
-   body=await response.json();
+   data=await res.json();
   }finally{clearTimeout(timeout)}
-  if(sequence!==cloudSequence||current!==active||current.step!==index)return;
-  if(!response.ok){
-   if(response.status===404||body?.error==="NOT_FOUND"||["cloudflare_not_configured","ai_quota","cloudflare_limit"].includes(body?.code)){cloudUnavailable=true}
-   $("ocCloudStatus").textContent=response.status===404||body?.error==="NOT_FOUND"?"":"";
+  if(sequence!==cloudSequence||current!==draft||current.step!==index)return;
+  if(!res.ok||typeof data?.answer!=="string"){
+   output.textContent=res.status===429?"Llegaste al límite de consultas por hoy. Podés seguir preparando el presupuesto.":"No pude responder en este momento. Podés continuar el presupuesto igualmente.";
    return;
   }
-  const proposal=String(body?.question||"").trim().replace(/\s+/g," ");
-  if(body?.source==="cloudflare"&&proposal.length>=15&&proposal.length<=185&&proposal.includes("?")&&!/https?:\/\/|<script|[$€]|\bprecio estimado\b/i.test(proposal)){
-   const last=active.log[active.log.length-1];
-   if(last?.role==="assistant"&&last.text===question){
-    last.text=proposal;
-    save();render();
-   }
-  }
-  $("ocCloudStatus").textContent=body?.source==="cloudflare"?"":"";
+  const answer=trim(data.answer).slice(0,850);
+  output.textContent=answer||"No pude obtener una respuesta. Probá reformular tu consulta.";
  }catch(e){
-  if(current===active&&current.step===index)$("ocCloudStatus").textContent="";
- }finally{aiBusy=false}
+  if(sequence===cloudSequence&&current===draft&&current.step===index)output.textContent="No pude responder ahora. Podés continuar sin usar la ayuda.";
+ }finally{
+  aiBusy=false;button.disabled=false;button.textContent="Consultar";
+ }
 }
 function init(bridge){
  api=bridge;
- const style=document.createElement("style");style.textContent=".oc-ai-workspace{padding:26px 28px 30px}.oc-ai-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:23px;border-bottom:1px solid #e9edf1}.oc-ai-header h2{font-size:24px;letter-spacing:-.035em;margin:7px 0 8px}.oc-ai-intro{font-size:13px;line-height:1.6;color:#657789;margin:0;max-width:630px}.oc-ai-header-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px}.oc-ai-saved{margin:24px 0 17px}.oc-ai-saved-head{margin-bottom:11px}.oc-ai-saved h3{font-size:13px;font-weight:850;margin:0;color:#33475a}.oc-ai-draft-list{display:flex;gap:10px;overflow-x:auto;padding:2px 1px 9px;scrollbar-width:thin}.oc-ai-draft{display:flex;flex-direction:column;gap:7px;text-align:left;min-width:188px;max-width:260px;flex:0 0 210px;padding:13px 14px;border:1px solid #e0e8ef;border-radius:12px;background:#f8fafc;color:#283a4c;transition:border-color .15s,background .15s}.oc-ai-draft:hover{border-color:#d58d59;background:#fffaf6}.oc-ai-draft.is-current{border-color:#db925b;background:#fff6ee;box-shadow:inset 3px 0 #d68a53}.oc-ai-draft strong{font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.oc-ai-draft span{font-size:11px;color:#748395}.oc-ai-sessionhead{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:23px;margin-bottom:8px}.oc-ai-step{font-weight:800;font-size:12px;color:#a8663a}.oc-ai-reset{background:transparent;color:#8996a4;border:0;font-size:11px;text-decoration:underline;text-underline-offset:3px;padding:7px}.oc-ai-track{height:5px;background:#e6ebef;border-radius:8px;overflow:hidden;margin-bottom:15px}.oc-ai-track div{height:100%;width:0;background:#d5894b;transition:width .25s}.oc-ai-chat{min-height:330px;max-height:460px;overflow:auto;background:#f6f8fa;border:1px solid #eef1f4;border-radius:14px;padding:21px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}.oc-ai-chat.is-empty{min-height:245px;justify-content:center;align-items:center}.oc-ai-bubble{font-size:13px;white-space:pre-wrap;line-height:1.65;max-width:86%;padding:12px 15px;border-radius:15px}.oc-ai-bot{align-self:flex-start;background:white;color:#23384b;border:1px solid #e4e9ef}.oc-ai-user{align-self:flex-end;background:#23374d;color:white}.oc-ai-empty{max-width:360px;margin:auto;text-align:center;line-height:1.6}.oc-ai-empty-icon{display:grid;place-items:center;width:48px;height:48px;background:#fff0e5;color:#c77941;border-radius:14px;font-size:25px;margin:0 auto 14px}.oc-ai-empty strong{display:block;font-size:17px;color:#2a3a4d}.oc-ai-empty p{font-size:13px;color:#798899;margin:9px 0 0}.oc-ai-input{display:flex;gap:9px;margin-top:13px}.oc-ai-input input{min-width:0;flex:1;padding:12px;border:1px solid #d6dee8;border-radius:10px}.oc-ai-chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.oc-ai-warning{background:#fff4df;padding:12px;border-radius:9px;color:#82550f}.oc-ai-actions{display:flex;gap:8px;flex-wrap:wrap}.oc-ai-review{margin-top:18px;padding:20px}.oc-ai-review h3{font-size:17px;margin:0 0 12px}.oc-ai-review p{line-height:1.55}.oc-ai-catalog{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}.oc-ai-catalog select{border:1px solid #d8e1e9;border-radius:9px;min-height:40px;padding:8px;max-width:100%;flex:1;min-width:190px}.oc-ai-status:not(:empty){margin-top:10px}.oc-ai-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:800px){.oc-ai-workspace{padding:20px 16px}.oc-ai-header{align-items:stretch}.oc-ai-header-actions{width:100%}.oc-ai-header-actions .btn{flex:1}.oc-ai-chat{min-height:320px;padding:13px}.oc-ai-chat.is-empty{min-height:215px}.oc-ai-bubble{max-width:95%}.oc-ai-draft{flex-basis:185px}.oc-ai-input{flex-wrap:wrap}.oc-ai-input button{width:100%}}";document.head.append(style);
+ const style=document.createElement("style");style.textContent=".oc-ai-workspace{padding:26px 28px 30px}.oc-ai-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:23px;border-bottom:1px solid #e9edf1}.oc-ai-header h2{font-size:24px;letter-spacing:-.035em;margin:7px 0 8px}.oc-ai-intro{font-size:13px;line-height:1.6;color:#657789;margin:0;max-width:630px}.oc-ai-header-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px}.oc-ai-saved{margin:24px 0 17px}.oc-ai-saved-head{margin-bottom:11px}.oc-ai-saved h3{font-size:13px;font-weight:850;margin:0;color:#33475a}.oc-ai-draft-list{display:flex;gap:10px;overflow-x:auto;padding:2px 1px 9px;scrollbar-width:thin}.oc-ai-draft{display:flex;flex-direction:column;gap:7px;text-align:left;min-width:188px;max-width:260px;flex:0 0 210px;padding:13px 14px;border:1px solid #e0e8ef;border-radius:12px;background:#f8fafc;color:#283a4c;transition:border-color .15s,background .15s}.oc-ai-draft:hover{border-color:#d58d59;background:#fffaf6}.oc-ai-draft.is-current{border-color:#db925b;background:#fff6ee;box-shadow:inset 3px 0 #d68a53}.oc-ai-draft strong{font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.oc-ai-draft span{font-size:11px;color:#748395}.oc-ai-sessionhead{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:23px;margin-bottom:8px}.oc-ai-step{font-weight:800;font-size:12px;color:#a8663a}.oc-ai-reset{background:transparent;color:#8996a4;border:0;font-size:11px;text-decoration:underline;text-underline-offset:3px;padding:7px}.oc-ai-track{height:5px;background:#e6ebef;border-radius:8px;overflow:hidden;margin-bottom:15px}.oc-ai-track div{height:100%;width:0;background:#d5894b;transition:width .25s}.oc-ai-chat{min-height:330px;max-height:460px;overflow:auto;background:#f6f8fa;border:1px solid #eef1f4;border-radius:14px;padding:21px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}.oc-ai-chat.is-empty{min-height:245px;justify-content:center;align-items:center}.oc-ai-bubble{font-size:13px;white-space:pre-wrap;line-height:1.65;max-width:86%;padding:12px 15px;border-radius:15px}.oc-ai-bot{align-self:flex-start;background:white;color:#23384b;border:1px solid #e4e9ef}.oc-ai-user{align-self:flex-end;background:#23374d;color:white}.oc-ai-empty{max-width:360px;margin:auto;text-align:center;line-height:1.6}.oc-ai-empty-icon{display:grid;place-items:center;width:48px;height:48px;background:#fff0e5;color:#c77941;border-radius:14px;font-size:25px;margin:0 auto 14px}.oc-ai-empty strong{display:block;font-size:17px;color:#2a3a4d}.oc-ai-empty p{font-size:13px;color:#798899;margin:9px 0 0}.oc-ai-input{display:flex;gap:9px;margin-top:13px}.oc-ai-input input{min-width:0;flex:1;padding:12px;border:1px solid #d6dee8;border-radius:10px}.oc-ai-chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.oc-ai-warning{background:#fff4df;padding:12px;border-radius:9px;color:#82550f}.oc-ai-actions{display:flex;gap:8px;flex-wrap:wrap}.oc-ai-review{margin-top:18px;padding:20px}.oc-ai-review h3{font-size:17px;margin:0 0 12px}.oc-ai-review p{line-height:1.55}.oc-ai-catalog{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}.oc-ai-catalog select{border:1px solid #d8e1e9;border-radius:9px;min-height:40px;padding:8px;max-width:100%;flex:1;min-width:190px}.oc-ai-status:not(:empty){margin-top:10px}.oc-ai-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:800px){.oc-ai-workspace{padding:20px 16px}.oc-ai-header{align-items:stretch}.oc-ai-header-actions{width:100%}.oc-ai-header-actions .btn{flex:1}.oc-ai-chat{min-height:320px;padding:13px}.oc-ai-chat.is-empty{min-height:215px}.oc-ai-bubble{max-width:95%}.oc-ai-draft{flex-basis:185px}.oc-ai-input{flex-wrap:wrap}.oc-ai-input button{width:100%}}.oc-ai-help-area{margin:13px 0 4px}.oc-ai-help-toggle{appearance:none;background:none;border:0;color:#a76539;font-size:12px;font-weight:750;padding:8px 2px;cursor:pointer}.oc-ai-help-toggle:hover{text-decoration:underline}.oc-ai-help-box{border:1px solid #e7e9ed;border-radius:11px;padding:15px;background:#fbfcfd;margin-top:7px}.oc-ai-help-box p{font-size:12px;color:#637589;margin:0 0 12px;line-height:1.55}.oc-ai-help-box form{display:flex;flex-direction:column;gap:10px}.oc-ai-help-box textarea{resize:vertical;min-height:70px;max-height:180px;border:1px solid #d5dfe9;border-radius:9px;padding:11px;font:inherit;font-size:13px;width:100%;box-sizing:border-box}.oc-ai-help-box .btn{align-self:flex-start}.oc-ai-help-box .oc-ai-help-reply{background:#fff7f0;color:#2a3848;font-size:13px;line-height:1.7;padding:10px 12px;border-radius:9px;margin:13px 0 0;white-space:pre-wrap}.oc-ai-help-reply:empty{display:none}";document.head.append(style);
  const nav=document.querySelector(".sidenav"),button=document.createElement("button");button.type="button";button.className="nav-item";button.dataset.nav="asistente";button.textContent="✦ Asistente de presupuestos";button.onclick=()=>api.show("asistente");nav.insertBefore(button,nav.querySelector('[data-nav="presupuestos"]'));
- const html="<section class=\"page hidden\" id=\"page-asistente\"><div class=\"card oc-ai-workspace\">\n <div class=\"oc-ai-header\">\n  <div><span class=\"eyebrow\">PRESUPUESTOS</span><h2>Creá tu presupuesto</h2><p class=\"oc-ai-intro\">Contame qué trabajo vas a hacer. Te voy a hacer las preguntas necesarias para preparar un presupuesto que después podés editar y compartir.</p></div>\n  <div class=\"oc-ai-header-actions\"><button type=\"button\" id=\"ocAssistantManual\" class=\"btn btn-secondary\">Crear manualmente</button><button type=\"button\" id=\"ocAssistantNew\" class=\"btn btn-primary\">+ Nuevo presupuesto</button></div>\n </div>\n <section id=\"ocAssistantSavedSection\" class=\"oc-ai-saved hidden\" aria-label=\"Presupuestos en preparación\"><div class=\"oc-ai-saved-head\"><h3>Seguir donde quedaste</h3></div><div id=\"ocAssistantDraftList\" class=\"oc-ai-draft-list\"></div></section>\n <div id=\"ocAssistantWorking\" class=\"hidden\"><div class=\"oc-ai-sessionhead\"><span class=\"oc-ai-step\" id=\"ocAssistantStep\"></span><button type=\"button\" id=\"ocAssistantDelete\" class=\"oc-ai-reset\">Eliminar borrador</button></div><div class=\"oc-ai-track\" aria-hidden=\"true\"><div id=\"ocAssistantProgress\"></div></div></div>\n <div class=\"oc-ai-chat is-empty\" id=\"ocAssistantConversation\"><div class=\"oc-ai-empty\"><span class=\"oc-ai-empty-icon\" aria-hidden=\"true\">✦</span><strong>Un presupuesto, paso a paso</strong><p>Empezá describiendo tu trabajo. Yo te voy guiando.</p></div></div>\n <form id=\"ocAssistantForm\" class=\"hidden\"><div class=\"oc-ai-input\"><input id=\"ocAssistantInput\" maxlength=\"1200\" autocomplete=\"off\" placeholder=\"Escribí tu respuesta...\" required><button class=\"btn btn-primary\">Responder</button></div><div id=\"ocAssistantChips\" class=\"oc-ai-chips\"></div><p id=\"ocAssistantHint\" class=\"subtle\"></p><div id=\"ocAssistantCatalogBlock\" class=\"oc-ai-catalog hidden\"><select id=\"ocAssistantCatalog\" aria-label=\"Conceptos de mi catálogo\"></select><button type=\"button\" id=\"ocAssistantUseCatalog\" class=\"btn btn-secondary btn-sm\">Agregar del catálogo</button></div></form>\n <div class=\"card oc-ai-review hidden\" id=\"ocAssistantReview\"><h3>Tu presupuesto está listo para revisar</h3><div id=\"ocAssistantSummary\"></div><button type=\"button\" id=\"ocAssistantGenerate\" class=\"btn btn-primary\">Guardar presupuesto editable</button><div class=\"oc-ai-actions hidden\" style=\"margin-top:14px\" id=\"ocAssistantExport\"><button type=\"button\" id=\"ocAssistantPdf\" class=\"btn btn-secondary btn-sm\">Descargar PDF</button><button type=\"button\" id=\"ocAssistantCsv\" class=\"btn btn-secondary btn-sm\">Excel (CSV)</button><button type=\"button\" id=\"ocAssistantShare\" class=\"btn btn-secondary btn-sm\">Compartir PDF</button><button type=\"button\" id=\"ocAssistantWa\" class=\"btn btn-secondary btn-sm\">WhatsApp</button><button type=\"button\" id=\"ocAssistantGmail\" class=\"btn btn-secondary btn-sm\">Gmail</button></div></div>\n <p id=\"ocAssistantNotice\" class=\"subtle oc-ai-status\" role=\"status\" aria-live=\"polite\"></p><span id=\"ocCloudStatus\" class=\"oc-ai-sr-only\" role=\"status\" aria-live=\"polite\"></span>\n </div></section>";
+ const html="<section class=\"page hidden\" id=\"page-asistente\"><div class=\"card oc-ai-workspace\">\n <div class=\"oc-ai-header\">\n  <div><span class=\"eyebrow\">PRESUPUESTOS</span><h2>Creá tu presupuesto</h2><p class=\"oc-ai-intro\">Contame qué trabajo vas a hacer. Te voy a hacer las preguntas necesarias para preparar un presupuesto que después podés editar y compartir.</p></div>\n  <div class=\"oc-ai-header-actions\"><button type=\"button\" id=\"ocAssistantManual\" class=\"btn btn-secondary\">Crear manualmente</button><button type=\"button\" id=\"ocAssistantNew\" class=\"btn btn-primary\">+ Nuevo presupuesto</button></div>\n </div>\n <section id=\"ocAssistantSavedSection\" class=\"oc-ai-saved hidden\" aria-label=\"Presupuestos en preparación\"><div class=\"oc-ai-saved-head\"><h3>Seguir donde quedaste</h3></div><div id=\"ocAssistantDraftList\" class=\"oc-ai-draft-list\"></div></section>\n <div id=\"ocAssistantWorking\" class=\"hidden\"><div class=\"oc-ai-sessionhead\"><span class=\"oc-ai-step\" id=\"ocAssistantStep\"></span><button type=\"button\" id=\"ocAssistantDelete\" class=\"oc-ai-reset\">Eliminar borrador</button></div><div class=\"oc-ai-track\" aria-hidden=\"true\"><div id=\"ocAssistantProgress\"></div></div></div>\n <div class=\"oc-ai-chat is-empty\" id=\"ocAssistantConversation\"><div class=\"oc-ai-empty\"><span class=\"oc-ai-empty-icon\" aria-hidden=\"true\">✦</span><strong>Un presupuesto, paso a paso</strong><p>Empezá describiendo tu trabajo. Yo te voy guiando.</p></div></div>\n <form id=\"ocAssistantForm\" class=\"hidden\"><div class=\"oc-ai-input\"><input id=\"ocAssistantInput\" maxlength=\"1200\" autocomplete=\"off\" placeholder=\"Escribí tu respuesta...\" required><button class=\"btn btn-primary\">Responder</button></div><div id=\"ocAssistantChips\" class=\"oc-ai-chips\"></div><p id=\"ocAssistantHint\" class=\"subtle\"></p><div id=\"ocAssistantCatalogBlock\" class=\"oc-ai-catalog hidden\"><select id=\"ocAssistantCatalog\" aria-label=\"Conceptos de mi catálogo\"></select><button type=\"button\" id=\"ocAssistantUseCatalog\" class=\"btn btn-secondary btn-sm\">Agregar del catálogo</button></div></form>\n <div id=\"ocAssistantHelpArea\" class=\"oc-ai-help-area hidden\">\n   <button type=\"button\" id=\"ocAssistantHelpToggle\" class=\"oc-ai-help-toggle\" aria-expanded=\"false\">¿Necesitás ayuda con esta pregunta?</button>\n   <div id=\"ocAssistantHelpBox\" class=\"oc-ai-help-box hidden\">\n      <p>Contame qué necesitás aclarar. La respuesta no modificará los datos de tu presupuesto.</p>\n      <form id=\"ocAssistantHelpForm\">\n        <label class=\"oc-ai-sr-only\" for=\"ocAssistantHelpInput\">Tu consulta</label>\n        <textarea id=\"ocAssistantHelpInput\" rows=\"2\" maxlength=\"400\" placeholder=\"Ej.: ¿Qué significa esta unidad de medida?\" required></textarea>\n        <button type=\"submit\" id=\"ocAssistantHelpSend\" class=\"btn btn-secondary btn-sm\">Consultar</button>\n      </form>\n      <p id=\"ocAssistantHelpReply\" class=\"oc-ai-help-reply\" role=\"status\" aria-live=\"polite\"></p>\n   </div>\n </div>\n <div class=\"card oc-ai-review hidden\" id=\"ocAssistantReview\"><h3>Tu presupuesto está listo para revisar</h3><div id=\"ocAssistantSummary\"></div><button type=\"button\" id=\"ocAssistantGenerate\" class=\"btn btn-primary\">Guardar presupuesto editable</button><div class=\"oc-ai-actions hidden\" style=\"margin-top:14px\" id=\"ocAssistantExport\"><button type=\"button\" id=\"ocAssistantPdf\" class=\"btn btn-secondary btn-sm\">Descargar PDF</button><button type=\"button\" id=\"ocAssistantCsv\" class=\"btn btn-secondary btn-sm\">Excel (CSV)</button><button type=\"button\" id=\"ocAssistantShare\" class=\"btn btn-secondary btn-sm\">Compartir PDF</button><button type=\"button\" id=\"ocAssistantWa\" class=\"btn btn-secondary btn-sm\">WhatsApp</button><button type=\"button\" id=\"ocAssistantGmail\" class=\"btn btn-secondary btn-sm\">Gmail</button></div></div>\n <p id=\"ocAssistantNotice\" class=\"subtle oc-ai-status\" role=\"status\" aria-live=\"polite\"></p><span id=\"ocCloudStatus\" class=\"oc-ai-sr-only\" role=\"status\" aria-live=\"polite\"></span>\n </div></section>";
  const page=document.createElement("div");page.innerHTML=html;const el=page.firstElementChild,config=document.getElementById("page-config");config.parentNode.insertBefore(el,config);
  $("ocAssistantForm").onsubmit=e=>{e.preventDefault();answer($("ocAssistantInput").value)};
+ $("ocAssistantHelpToggle").onclick=()=>{
+   const panel=$("ocAssistantHelpBox");
+   const opening=panel.classList.contains("hidden");
+   panel.classList.toggle("hidden",!opening);
+   $("ocAssistantHelpToggle").setAttribute("aria-expanded",String(opening));
+   if(opening)$("ocAssistantHelpInput").focus();
+ };
+ $("ocAssistantHelpForm").onsubmit=e=>{e.preventDefault();askForHelp()};
  $("ocAssistantNew").onclick=begin;
  $("ocAssistantDelete").onclick=()=>{if(!current||!confirm(current.savedQuoteId?"¿Eliminar esta conversación? El presupuesto que ya guardaste se conservará.":"¿Eliminar este borrador? No se puede recuperar."))return;const a=history(),i=a.findIndex(x=>x.id===current.id);if(i>=0)a.splice(i,1);current=a[0]||null;api.save();render()};
  $("ocAssistantManual").onclick=()=>api.show("presupuestos");
