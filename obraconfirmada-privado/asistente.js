@@ -130,17 +130,32 @@ function createQuote(){
  current.savedQuoteId=q.id;say("assistant","¡Presupuesto guardado! Código: "+q.id+". Podés editar cada concepto, descargar PDF o compartirlo.");save();render();
 }
 function render(){
- const list=history(),selection=$("ocAssistantDrafts");if(!selection)return;
- if(current&&!list.includes(current))current=null; if(!current&&list.length)current=list[0];
- selection.innerHTML='<option value="">Elegir entrevista guardada...</option>'+list.map(x=>'<option value="'+escape(x.id)+'">'+escape((x.answers?.description||"Entrevista iniciada").slice(0,60))+(x.savedQuoteId?" · Guardado":" · En progreso")+'</option>').join("");
- selection.value=current?.id||"";
- const panel=$("ocAssistantConversation"),form=$("ocAssistantForm"),review=$("ocAssistantReview");
- if(!current){panel.innerHTML='<div class="oc-ai-empty">Empezá una entrevista para preparar tu presupuesto. El asistente no inventará precios ni cantidades.</div>';form.classList.add("hidden");review.classList.add("hidden");$("ocAssistantStep").textContent="Sin entrevista";return}
+ const list=history();
+ if(current&&!list.includes(current))current=null;
+ if(!current&&list.length)current=list[0];
+ const shelf=$("ocAssistantSavedSection"),draftList=$("ocAssistantDraftList");
+ shelf.classList.toggle("hidden",list.length===0);
+ draftList.innerHTML=list.map(x=>{
+  const title=(x.answers?.description||"Nuevo presupuesto").trim().slice(0,70);
+  const state=x.savedQuoteId?"Presupuesto guardado":x.step>=steps.length?"Listo para guardar":Math.min(x.step,steps.length)+" de "+steps.length+" respuestas";
+  return '<button type="button" class="oc-ai-draft'+(current===x?" is-current":"")+'" data-draft="'+escape(x.id)+'" aria-pressed="'+(current===x?'true':'false')+'"><strong>'+escape(title)+'</strong><span>'+escape(state)+'</span></button>';
+ }).join("");
+ draftList.querySelectorAll("[data-draft]").forEach(btn=>btn.onclick=()=>continueDraft(btn.dataset.draft));
+ const panel=$("ocAssistantConversation"),form=$("ocAssistantForm"),review=$("ocAssistantReview"),work=$("ocAssistantWorking");
+ if(!current){
+  panel.classList.add("is-empty");
+  panel.innerHTML='<div class="oc-ai-empty"><span class="oc-ai-empty-icon" aria-hidden="true">✦</span><strong>Un presupuesto, paso a paso</strong><p>Empezá describiendo tu trabajo. Yo te voy guiando.</p></div>';
+  form.classList.add("hidden");review.classList.add("hidden");work.classList.add("hidden");
+  $("ocAssistantNotice").textContent="";
+  return;
+ }
+ work.classList.remove("hidden");panel.classList.remove("is-empty");
  panel.innerHTML=current.log.map(x=>'<div class="oc-ai-bubble '+(x.role==="user"?"oc-ai-user":"oc-ai-bot")+'">'+escape(x.text)+'</div>').join("");
  panel.scrollTop=panel.scrollHeight;
  const step=getStep(),done=!step;
- $("ocAssistantStep").textContent=done?"Entrevista completa":"Pregunta "+(current.step+1)+" de "+steps.length;
- const progress=Math.min(100,100*current.step/steps.length);$("ocAssistantProgress").style.width=progress+"%";
+ $("ocAssistantStep").textContent=done?"Información completa":"Paso "+(current.step+1)+" de "+steps.length;
+ $("ocAssistantProgress").style.width=Math.min(100,100*current.step/steps.length)+"%";
+ $("ocAssistantDelete").textContent=current.savedQuoteId?"Eliminar conversación":"Eliminar borrador";
  form.classList.toggle("hidden",done);
  const hint=$("ocAssistantHint"),choices=$("ocAssistantChips"),catalogBlock=$("ocAssistantCatalogBlock");
  if(step){
@@ -151,13 +166,17 @@ function render(){
   hint.textContent=step.hint||"";
   const canChoose=["concept","quantity","unit","price","cost"].includes(step.key)&&api.catalog().length>0;
   catalogBlock.classList.toggle("hidden",!canChoose);
-  if(canChoose){const sel=$("ocAssistantCatalog");sel.innerHTML='<option value="">Seleccioná un concepto guardado...</option>'+api.catalog().map(x=>'<option value="'+escape(x.id)+'">'+escape(x.name)+' · '+money(x.price)+'</option>').join("")}
+  if(canChoose){const select=$("ocAssistantCatalog");select.innerHTML='<option value="">Elegí un concepto del catálogo...</option>'+api.catalog().map(x=>'<option value="'+escape(x.id)+'">'+escape(x.name)+' · '+money(x.price)+'</option>').join("")}
  }
  review.classList.toggle("hidden",!done);
- if(done){$("ocAssistantExport").classList.toggle("hidden",!current.savedQuoteId);const t=total();$("ocAssistantSummary").innerHTML='<p><strong>'+escape(current.answers.description)+'</strong></p><p>Conceptos: '+current.lines.length+' · Subtotal: '+money(t.subtotal)+' · Descuento: '+money(t.discount)+' · Impuestos: '+money(t.tax)+'</p><h3>Total previsto: '+money(t.price)+'</h3>'+(t.missing?'<p class="oc-ai-warning">'+t.missing+' conceptos tienen costo interno pendiente. Revisalos antes de calcular la ganancia.</p>':"");$("ocAssistantGenerate").textContent=current.savedQuoteId?"Abrir presupuesto guardado":"Crear presupuesto editable"}
- $("ocAssistantDelete").disabled=!current;
+ if(done){
+  $("ocAssistantExport").classList.toggle("hidden",!current.savedQuoteId);
+  const t=total();
+  $("ocAssistantSummary").innerHTML='<p><strong>'+escape(current.answers.description)+'</strong></p><p>Conceptos: '+current.lines.length+' · Subtotal: '+money(t.subtotal)+' · Descuento: '+money(t.discount)+' · Impuestos: '+money(t.tax)+'</p><h3>Total: '+money(t.price)+'</h3>'+(t.missing?'<p class="oc-ai-warning">Tenés '+t.missing+' costos internos pendientes de completar.</p>':"");
+  $("ocAssistantGenerate").textContent=current.savedQuoteId?"Abrir presupuesto guardado":"Guardar presupuesto editable";
+ }
+ $("ocAssistantDelete").disabled=false;
 }
-
 
 /* Cloudflare Workers AI runs on the server: only the requested interview field and
  * limited project context are sent. The response NEVER changes saved values.
@@ -166,7 +185,7 @@ function render(){
 async function askCloudflare(){
  if(!current||!getStep()||cloudUnavailable||aiBusy)return;
  const token=api.getAccessToken?.();
- if(!token){$("ocCloudStatus").textContent="Iniciá sesión para usar la IA de Cloudflare.";return}
+ if(!token){$("ocCloudStatus").textContent="Iniciá sesión para continuar.";return}
  const active=current,index=current.step,question=getStep().q,sequence=++cloudSequence;
  const step=getStep(),context={
   project:String(current.answers.description||"").slice(0,210),
@@ -176,7 +195,7 @@ async function askCloudflare(){
   currentConcept:String(current.pendingLine?.name||"").slice(0,110)
  };
  aiBusy=true;
- $("ocCloudStatus").textContent="Cloudflare está preparando una pregunta...";
+ $("ocCloudStatus").textContent="Preparando pregunta...";
  try{
   const controller=new AbortController();
   const timeout=setTimeout(()=>controller.abort(),15500);
@@ -193,7 +212,7 @@ async function askCloudflare(){
   if(sequence!==cloudSequence||current!==active||current.step!==index)return;
   if(!response.ok){
    if(response.status===404||body?.error==="NOT_FOUND"||["cloudflare_not_configured","ai_quota","cloudflare_limit"].includes(body?.code)){cloudUnavailable=true}
-   $("ocCloudStatus").textContent=response.status===404||body?.error==="NOT_FOUND"?"El asistente está temporalmente en modo guiado. Podés seguir presupuestando normalmente.":body?.message||"La IA no está disponible en este momento. Podés continuar con las preguntas normales.";
+   $("ocCloudStatus").textContent=response.status===404||body?.error==="NOT_FOUND"?"":"";
    return;
   }
   const proposal=String(body?.question||"").trim().replace(/\s+/g," ");
@@ -204,9 +223,9 @@ async function askCloudflare(){
     save();render();
    }
   }
-  $("ocCloudStatus").textContent=body?.source==="cloudflare"?"Pregunta adaptada con Cloudflare AI. Los datos y precios siempre los ingresás vos.":"Asistente guiado activo.";
+  $("ocCloudStatus").textContent=body?.source==="cloudflare"?"":"";
  }catch(e){
-  if(current===active&&current.step===index)$("ocCloudStatus").textContent="La IA no respondió. Podés seguir con las preguntas normales.";
+  if(current===active&&current.step===index)$("ocCloudStatus").textContent="";
  }finally{aiBusy=false}
 }
 function init(bridge){
@@ -217,7 +236,7 @@ function init(bridge){
  const page=document.createElement("div");page.innerHTML=html;const el=page.firstElementChild,config=document.getElementById("page-config");config.parentNode.insertBefore(el,config);
  $("ocAssistantForm").onsubmit=e=>{e.preventDefault();answer($("ocAssistantInput").value)};
  $("ocAssistantNew").onclick=begin;
- $("ocAssistantDelete").onclick=()=>{if(!current||!confirm("¿Eliminar esta entrevista guardada? No eliminará el presupuesto ya creado."))return;const a=history(),i=a.findIndex(x=>x.id===current.id);if(i>=0)a.splice(i,1);current=a[0]||null;api.save();render()};
+ $("ocAssistantDelete").onclick=()=>{if(!current||!confirm(current.savedQuoteId?"¿Eliminar esta conversación? El presupuesto que ya guardaste se conservará.":"¿Eliminar este borrador? No se puede recuperar."))return;const a=history(),i=a.findIndex(x=>x.id===current.id);if(i>=0)a.splice(i,1);current=a[0]||null;api.save();render()};
  $("ocAssistantManual").onclick=()=>api.show("presupuestos");
  $("ocAssistantUseCatalog").onclick=()=>fromCatalog($("ocAssistantCatalog").value);
  $("ocAssistantGenerate").onclick=createQuote;
