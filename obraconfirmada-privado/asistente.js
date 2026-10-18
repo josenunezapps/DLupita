@@ -52,8 +52,8 @@ function validateAnswer(key,raw){
  if(["description","client","concept"].includes(key)&&omit)return {error:"Este dato es necesario para preparar el presupuesto."};
  if(["area","floors","location","phone","payment","delivery","notes"].includes(key)&&omit)return {value:""};
  if(key==="scopeType"){if(/ambos|materiales y mano|mano de obra y materiales/i.test(answer))return {value:"Ambos"};
-  if(/solo materiales|materiales solamente/i.test(answer))return {value:"Solo materiales"};
-  if(/solo mano|mano de obra solamente/i.test(answer))return {value:"Solo mano de obra"};
+  if(/solo materiales|materiales solamente|^materiales$/i.test(answer))return {value:"Solo materiales"};
+  if(/solo mano|mano de obra solamente|^mano de obra$/i.test(answer))return {value:"Solo mano de obra"};
   return {error:"Elegí «Ambos», «Solo materiales» o «Solo mano de obra»."};}
  if(key==="another"){if(/^(s[ií]|otro|agregar|sí, otro concepto)/i.test(answer))return {value:true};if(/^(no|terminar|no, terminar conceptos)/i.test(answer))return {value:false};return {error:"Respondé «Sí, otro concepto» o «No, terminar conceptos»."}}
  if(key==="cost"&&pending(answer))return {value:null};
@@ -74,7 +74,12 @@ function advance(key,value){
  const a=current.answers,l=current.pendingLine;
  switch(key){
  case "concept":l.name=value;break;
- case "quantity":l.qty=value;break;
+ case "quantity":
+    l.qty=value;
+    if(l.fromCatalog){
+      current.lines.push({id:"AI-"+uid(),name:l.name,qty:l.qty,unit:l.unit,price:l.price,cost:l.cost,missingCost:!!l.missingCost});
+      current.pendingLine={};current.step=stepKeys.indexOf("another");return;
+    }break;
  case "unit":l.unit=value;break;
  case "price":l.price=value;break;
  case "cost":
@@ -98,12 +103,13 @@ function answer(raw){
 function fromCatalog(id){
  if(!current||!["concept","quantity","unit","price","cost"].includes(questionKey()))return;
  const entry=api.catalog().find(x=>x.id===id);if(!entry)return;
- const catItem={id:"AI-"+uid(),name:entry.name,qty:1,unit:entry.unit,price:Number(entry.price),cost:Number(entry.cost||0),missingCost:false};
- if(!Number.isFinite(catItem.price)||catItem.price<0||!Number.isFinite(catItem.cost)||catItem.cost<0)return msg("El precio guardado no es válido.");
- current.lines.push(catItem);current.pendingLine={};
- say("user","Utilizar el concepto del catálogo: "+entry.name+" (cantidad inicial 1, precio de venta "+money(entry.price)+").");
- say("assistant","Agregué «"+entry.name+"» con cantidad 1 y los precios guardados en tu catálogo. Después podés editar esa cantidad y cualquier precio en el presupuesto. ¿Querés agregar otro concepto?");
- current.step=stepKeys.indexOf("another");save();render();
+ const price=Number(entry.price),cost=Number(entry.cost);
+ if(!Number.isFinite(price)||price<0||!Number.isFinite(cost)||cost<0)return msg("El precio guardado no es válido.");
+ current.pendingLine={fromCatalog:true,name:entry.name,unit:entry.unit,price,cost,missingCost:false};
+ current.step=stepKeys.indexOf("quantity");
+ say("user","Utilizar del catálogo: "+entry.name+" (precio de venta "+money(price)+" por "+entry.unit+").");
+ say("assistant","Elegiste «"+entry.name+"» del catálogo. ¿Qué cantidad necesitás? No asignaré ninguna cantidad por defecto.");
+ save();render();
 }
 function total(){
  const a=current?.answers||{},items=current?.lines||[];
