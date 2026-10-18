@@ -119,7 +119,7 @@ function total(){
 function payload(){
  if(!current||current.step<steps.length||!current.lines.length)return null;
  const a=current.answers,p=current.pendingLine;
- return {title:trim(a.description).slice(0,100),client:a.client,phone:a.phone||"",scope:[a.description,a.area?"Superficie informada: "+a.area:"",a.floors?"Plantas: "+a.floors:"",a.scopeType?"Alcance: "+a.scopeType:"",a.location?"Ubicación: "+a.location:""].filter(Boolean).join("\n"),lines:JSON.parse(JSON.stringify(current.lines)),payment:a.payment||"",taxRate:a.tax||0,discountRate:a.discount||0,validity:a.validity||15,delivery:a.delivery||"",notes:[a.notes||"",current.lines.some(x=>x.missingCost)?"Costos internos pendientes de confirmar.":""].filter(Boolean).join("\n"),status:"Borrador"};
+ return {title:trim(a.description).slice(0,100),client:a.client,phone:a.phone||"",scope:[a.description,a.area?"Superficie informada: "+a.area:"",a.floors?"Plantas: "+a.floors:"",a.scopeType?"Alcance: "+a.scopeType:"",a.location?"Ubicación: "+a.location:""].filter(Boolean).join("\n"),lines:JSON.parse(JSON.stringify(current.lines)),payment:a.payment||"",taxRate:a.tax||0,discountRate:a.discount||0,validity:a.validity||15,delivery:a.delivery||"",notes:a.notes||"",status:"Borrador"};
 }
 function createQuote(){
  const p=payload();if(!p)return msg("Faltan respuestas o conceptos para preparar el presupuesto.");
