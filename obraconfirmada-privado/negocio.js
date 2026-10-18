@@ -9,6 +9,7 @@ const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const today=()=>new Date().toISOString().slice(0,10);
 const get=id=>$(id).value.trim();
 const qs=()=>api.quotes(),cat=()=>api.catalog(),pro=()=>api.projects(),company=()=>api.business();
+const companySnapshot=()=>{const c=company();return {name:c.name||"",phone:c.phone||"",email:c.email||"",address:c.address||"",logo:c.logo||"",logoW:c.logoW||0,logoH:c.logoH||0}};
 const info=s=>{$("ocBusinessNotice").textContent=s};
 function totals(items,tax,discount){
  const cost=round(items.reduce((a,b)=>a+(+b.qty||0)*(+b.cost||0),0));
@@ -23,7 +24,7 @@ const tbody=$("ocLineRows");tbody.innerHTML="";
 lines.forEach((x,i)=>{
 const tr=document.createElement("tr");
 tr.innerHTML='<td><input data-k="name" aria-label="Concepto" value="'+safe(x.name)+'"></td><td><input data-k="unit" aria-label="Unidad" value="'+safe(x.unit)+'"></td><td><input data-k="qty" type="number" min="0.001" step="any" value="'+x.qty+'"></td><td><input data-k="cost" type="number" min="0" step="0.01" value="'+x.cost+'"></td><td><input data-k="price" type="number" min="0" step="0.01" value="'+x.price+'"></td><td><button class="btn btn-danger btn-sm" type="button">×</button></td>';
-tr.querySelectorAll("[data-k]").forEach(inp=>inp.oninput=()=>{const k=inp.dataset.k;x[k]=["qty","cost","price"].includes(k)?Number(inp.value):inp.value;renderSummary()});
+tr.querySelectorAll("[data-k]").forEach(inp=>inp.oninput=()=>{const k=inp.dataset.k;x[k]=["qty","cost","price"].includes(k)?Number(inp.value):inp.value;if(k==="cost")x.missingCost=false;renderSummary()});
 tr.querySelector("button").onclick=()=>{lines.splice(i,1);renderLines()};
 tbody.append(tr);
 });renderSummary();
@@ -69,7 +70,7 @@ function saveQuote(){
  const previous=old?JSON.parse(JSON.stringify(old)):null;
  const q={...data,id:quoteId,created:old?.created||now,updated:now,projectId:old?.projectId||null,history:old?.history||[],demo:old?.demo||false};
  const version=q.history.length+1;
- q.history=q.history.concat([{number:version,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:company()}))}]);
+ q.history=q.history.concat([{number:version,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:companySnapshot()}))}]);
  if(old)Object.assign(old,q);else qs().unshift(q);
  if(!api.save()){if(old)Object.assign(old,previous);else qs().splice(qs().indexOf(q),1);info("No se pudo guardar el presupuesto.");return null}
  editing=q.id;render();renderVersions(q);info("Presupuesto guardado · versión "+version+".");return q;
@@ -96,7 +97,7 @@ function cloneQuote(q){
  if(!q)return;
  const original={title:q.title,client:q.client,phone:q.phone||"",scope:q.scope||"",payment:q.payment||"",taxRate:q.taxRate||0,discountRate:q.discountRate||0,validity:q.validity??15,delivery:q.delivery||"",notes:q.notes||"",status:"Borrador",lines:JSON.parse(JSON.stringify(q.lines||[]))};
  const now=new Date().toISOString();let quoteId="PRE-"+Date.now();while(qs().some(x=>x.id===quoteId))quoteId+="A";
- const fresh={...original,title:original.title+" (copia)",id:quoteId,created:now,updated:now,projectId:null,demo:false,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...original,company:company()}))}]};
+ const fresh={...original,title:original.title+" (copia)",id:quoteId,created:now,updated:now,projectId:null,demo:false,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...original,company:companySnapshot()}))}]};
  qs().unshift(fresh);
  if(!api.save()){qs().shift();return info("No se pudo duplicar el presupuesto.")}
  render();loadQuote(fresh.id);info("Se creó una copia independiente del presupuesto.");
@@ -333,7 +334,7 @@ function createQuoteFromAgent(p){
  const now=new Date().toISOString();
  const data={title:String(p.title).slice(0,100),client:String(p.client).slice(0,90),phone:String(p.phone||"").slice(0,30),scope:String(p.scope||"").slice(0,3000),payment:String(p.payment||"").slice(0,180),taxRate:Number(p.taxRate||0),discountRate:Number(p.discountRate||0),validity:Number(p.validity||15),delivery:String(p.delivery||"").slice(0,120),notes:String(p.notes||"").slice(0,1200),status:"Borrador",lines:values};
  if(data.taxRate<0||data.taxRate>100||data.discountRate<0||data.discountRate>100||!Number.isInteger(data.validity)||data.validity<1||data.validity>365)return null;
- const q={...data,id:quoteId,created:now,updated:now,projectId:null,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:company()}))}]};
+ const q={...data,id:quoteId,created:now,updated:now,projectId:null,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:companySnapshot()}))}]};
  qs().unshift(q);
  if(!api.save()){qs().shift();return null}
  render();return q;
