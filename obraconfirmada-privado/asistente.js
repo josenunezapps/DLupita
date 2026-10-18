@@ -1,7 +1,7 @@
 /* ObraConfirmada - agente de entrevistas y presupuestos, sin precios supuestos. */
 (function(){
 "use strict";
-let api=null,current=null,busy=false;
+let api=null,current=null,busy=false,localEngine=null,aiBusy=false;
 const $=id=>document.getElementById(id),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);
 const escape=s=>String(s??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
 const trim=s=>String(s||"").trim(),money=n=>Number(n||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:2});
@@ -93,7 +93,7 @@ function answer(raw){
  const result=validateAnswer(step.key,raw);
  if(result.error){msg(result.error);return}
  say("user",trim(raw));
- advance(step.key,result.value);msg("");ask();save();render();
+ advance(step.key,result.value);msg("");ask();save();render();if(localEngine)maybeExplainQuestion();
 }
 function fromCatalog(id){
  if(!current||!["concept","quantity","unit","price","cost"].includes(questionKey()))return;
@@ -151,11 +151,59 @@ function render(){
  if(done){const t=total();$("ocAssistantSummary").innerHTML='<p><strong>'+escape(current.answers.description)+'</strong></p><p>Conceptos: '+current.lines.length+' · Subtotal: '+money(t.subtotal)+' · Descuento: '+money(t.discount)+' · Impuestos: '+money(t.tax)+'</p><h3>Total previsto: '+money(t.price)+'</h3>'+(t.missing?'<p class="oc-ai-warning">'+t.missing+' conceptos tienen costo interno pendiente. Revisalos antes de calcular la ganancia.</p>':"");$("ocAssistantGenerate").textContent=current.savedQuoteId?"Abrir presupuesto guardado":"Crear presupuesto editable"}
  $("ocAssistantDelete").disabled=!current;
 }
+
+async function enableLocalAI(){
+ if(localEngine){$("ocLocalStatus").textContent="La IA local ya está activa en este navegador.";return}
+ if(aiBusy)return;
+ if(!navigator.gpu||typeof navigator.gpu.requestAdapter!=="function"){
+  $("ocLocalStatus").textContent="Este navegador no admite WebGPU. El asistente guiado funciona sin IA local.";return;
+ }
+ const adapter=await navigator.gpu.requestAdapter();
+ if(!adapter){$("ocLocalStatus").textContent="No hay GPU compatible para ejecutar modelos locales. Continuá con el asistente guiado.";return}
+ if(!confirm("Se descargará un modelo abierto de aproximadamente cientos de MB y puede consumir mucha memoria. La IA se ejecutará en este dispositivo; no se envían las respuestas a un proveedor de IA. ¿Continuar?"))return;
+ aiBusy=true;$("ocEnableLocalAI").disabled=true;$("ocLocalStatus").textContent="Preparando el motor de IA local...";
+ try{
+  const webllm=await import("https://esm.sh/@mlc-ai/web-llm@0.2.84?bundle");
+  localEngine=await webllm.CreateMLCEngine("Qwen2.5-0.5B-Instruct-q4f16_1-MLC",{
+   initProgressCallback:report=>{$("ocLocalStatus").textContent="Cargando IA local: "+Math.round(Math.max(0,Math.min(1,report.progress||0))*100)+" %. "+(report.text||"")}
+  });
+  $("ocLocalStatus").textContent="IA local activada. Puede ayudarte a reformular preguntas; nunca genera precios ni cantidades para el presupuesto.";
+  $("ocEnableLocalAI").textContent="IA local activada";
+  maybeExplainQuestion();
+ }catch(e){
+  localEngine=null;$("ocEnableLocalAI").disabled=false;
+  $("ocLocalStatus").textContent="No se pudo activar IA local en este dispositivo. Podés seguir haciendo presupuestos con el agente guiado.";
+ }finally{aiBusy=false}
+}
+async function maybeExplainQuestion(){
+ if(!localEngine||aiBusy||!current||!getStep())return;
+ const active=current,question=getStep().q,index=current.step;
+ aiBusy=true;
+ try{
+  const response=await localEngine.chat.completions.create({
+   messages:[
+    {role:"system",content:"Sos ayudante de redacción para una entrevista de presupuestos de construcción. Reformulá la pregunta dada en UNA sola pregunta corta y clara de español rioplatense. No agregues datos, presupuestos, precios, materiales, cálculos, cantidades, recomendaciones técnicas ni ejemplos nuevos. Respondé solo una pregunta."},
+    {role:"user",content:question}
+   ],temperature:.1,max_tokens:85
+  });
+  const answer=String(response.choices?.[0]?.message?.content||"").trim().replace(/\s+/g," ");
+  if(current!==active||current.step!==index)return;
+  if(answer.length>15&&answer.length<190&&answer.includes("¿")&&answer.includes("?")&&!/[$€]|\d/.test(answer)&&!/precio estimado|aproximad|calculad|sugiero|recomiendo/i.test(answer)){
+   const last=active.log[active.log.length-1];
+   if(last?.role==="assistant"&&last.text===question){
+    last.text=question+"\n\nIA local, otra forma de preguntarlo: "+answer;
+    save();render();
+   }
+  }
+ }catch(e){$("ocLocalStatus").textContent="La IA local no pudo responder. Continuá con el asistente guiado."}
+ finally{aiBusy=false}
+}
+
 function init(bridge){
  api=bridge;
  const style=document.createElement("style");style.textContent=".oc-ai-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px}.oc-ai-chat{height:390px;overflow:auto;background:#f5f7fa;border-radius:14px;padding:17px;display:flex;flex-direction:column;gap:12px}.oc-ai-bubble{font-size:13px;white-space:pre-wrap;line-height:1.65;max-width:88%;padding:12px 14px;border-radius:15px}.oc-ai-bot{align-self:flex-start;background:#fff;color:#23384b;border:1px solid #e4e9ef}.oc-ai-user{align-self:flex-end;background:#23374d;color:#fff}.oc-ai-input{display:flex;gap:9px;margin-top:12px}.oc-ai-input input{min-width:0;flex:1;padding:12px;border:1px solid #d6dee8;border-radius:10px}.oc-ai-chips{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}.oc-ai-step{font-weight:700;font-size:12px;color:#a46639}.oc-ai-track{height:6px;background:#e6ecf1;border-radius:10px;overflow:hidden;margin:8px 0 14px}.oc-ai-track div{height:100%;width:0;background:#d5894b;transition:width .25s}.oc-ai-warning{background:#fff4df;padding:12px;border-radius:9px;color:#82550f}.oc-ai-actions{display:flex;gap:8px;flex-wrap:wrap}.oc-ai-empty{color:#657588;text-align:center;margin:auto;line-height:1.6}.oc-ai-side .card{margin-bottom:12px}@media(max-width:880px){.oc-ai-layout{grid-template-columns:1fr}.oc-ai-chat{height:340px}}";document.head.append(style);
  const nav=document.querySelector(".sidenav"),button=document.createElement("button");button.type="button";button.className="nav-item";button.dataset.nav="asistente";button.textContent="✦ Asistente de presupuestos";button.onclick=()=>api.show("asistente");nav.insertBefore(button,nav.querySelector('[data-nav="presupuestos"]'));
- const html='<section class="page hidden" id="page-asistente"><div class="card panel"><div class="sectionhead"><div><span class="eyebrow">PRESUPUESTOS GUIADOS</span><h2>Asistente de presupuestos</h2></div><button id="ocAssistantNew" class="btn btn-primary">+ Nueva entrevista</button></div><p class="subtle">El asistente pregunta y organiza tus respuestas. No estima cantidades ni precios: solo utiliza lo que ingresás o elegís del catálogo. Podés continuar entrevistas guardadas.</p><div class="oc-ai-layout"><div><div class="oc-ai-step" id="ocAssistantStep"></div><div class="oc-ai-track"><div id="ocAssistantProgress"></div></div><div class="oc-ai-chat" id="ocAssistantConversation"></div><form id="ocAssistantForm" class="hidden"><div class="oc-ai-input"><input id="ocAssistantInput" maxlength="1200" autocomplete="off" placeholder="Tu respuesta" required><button class="btn btn-primary">Responder</button></div><div id="ocAssistantChips" class="oc-ai-chips"></div><p id="ocAssistantHint" class="subtle"></p><div id="ocAssistantCatalogBlock" class="hidden"><select id="ocAssistantCatalog"></select><button type="button" id="ocAssistantUseCatalog" class="btn btn-secondary btn-sm">Usar concepto del catálogo</button></div></form><div class="card hidden" id="ocAssistantReview"><h3>Revisá el resumen</h3><div id="ocAssistantSummary"></div><button type="button" id="ocAssistantGenerate" class="btn btn-primary">Crear presupuesto editable</button></div><p id="ocAssistantNotice" class="subtle" role="status" aria-live="polite"></p></div><aside class="oc-ai-side"><div class="card"><h3>Entrevistas guardadas</h3><select id="ocAssistantDrafts" style="width:100%"></select><div class="oc-ai-actions" style="margin-top:12px"><button type="button" id="ocAssistantOpen" class="btn btn-secondary btn-sm">Continuar</button><button type="button" id="ocAssistantDelete" class="btn btn-danger btn-sm">Eliminar borrador</button></div></div><div class="card"><h3>Presupuesto manual</h3><p class="subtle">Si preferís, podés seguir creando presupuestos con el formulario tradicional.</p><button type="button" id="ocAssistantManual" class="btn btn-secondary">Ir al presupuesto manual</button></div></aside></div></div></section>';
+ const html='<section class="page hidden" id="page-asistente"><div class="card panel"><div class="sectionhead"><div><span class="eyebrow">PRESUPUESTOS GUIADOS</span><h2>Asistente de presupuestos</h2></div><button id="ocAssistantNew" class="btn btn-primary">+ Nueva entrevista</button></div><p class="subtle">El asistente pregunta y organiza tus respuestas. No estima cantidades ni precios: solo utiliza lo que ingresás o elegís del catálogo. Podés continuar entrevistas guardadas.</p><div class="oc-ai-layout"><div><div class="oc-ai-step" id="ocAssistantStep"></div><div class="oc-ai-track"><div id="ocAssistantProgress"></div></div><div class="oc-ai-chat" id="ocAssistantConversation"></div><form id="ocAssistantForm" class="hidden"><div class="oc-ai-input"><input id="ocAssistantInput" maxlength="1200" autocomplete="off" placeholder="Tu respuesta" required><button class="btn btn-primary">Responder</button></div><div id="ocAssistantChips" class="oc-ai-chips"></div><p id="ocAssistantHint" class="subtle"></p><div id="ocAssistantCatalogBlock" class="hidden"><select id="ocAssistantCatalog"></select><button type="button" id="ocAssistantUseCatalog" class="btn btn-secondary btn-sm">Usar concepto del catálogo</button></div></form><div class="card hidden" id="ocAssistantReview"><h3>Revisá el resumen</h3><div id="ocAssistantSummary"></div><button type="button" id="ocAssistantGenerate" class="btn btn-primary">Crear presupuesto editable</button></div><p id="ocAssistantNotice" class="subtle" role="status" aria-live="polite"></p></div><aside class="oc-ai-side"><div class="card"><h3>Entrevistas guardadas</h3><select id="ocAssistantDrafts" style="width:100%"></select><div class="oc-ai-actions" style="margin-top:12px"><button type="button" id="ocAssistantOpen" class="btn btn-secondary btn-sm">Continuar</button><button type="button" id="ocAssistantDelete" class="btn btn-danger btn-sm">Eliminar borrador</button></div></div><div class="card"><h3>IA local gratuita (experimental)</h3><p class="subtle">Funciona en el dispositivo si admite WebGPU y tiene suficiente memoria. Requiere descargar un modelo grande. El agente guiado no depende de esta opción.</p><button type="button" id="ocEnableLocalAI" class="btn btn-secondary btn-sm">Activar IA local</button><p class="subtle" id="ocLocalStatus">La IA puede ayudarte a reformular preguntas, pero no completará precios ni cantidades.</p></div><div class="card"><h3>Presupuesto manual</h3><p class="subtle">Si preferís, podés seguir creando presupuestos con el formulario tradicional.</p><button type="button" id="ocAssistantManual" class="btn btn-secondary">Ir al presupuesto manual</button></div></aside></div></div></section>';
  const page=document.createElement("div");page.innerHTML=html;const el=page.firstElementChild,config=document.getElementById("page-config");config.parentNode.insertBefore(el,config);
  $("ocAssistantForm").onsubmit=e=>{e.preventDefault();answer($("ocAssistantInput").value)};
  $("ocAssistantNew").onclick=begin;
@@ -164,6 +212,7 @@ function init(bridge){
  $("ocAssistantManual").onclick=()=>api.show("presupuestos");
  $("ocAssistantUseCatalog").onclick=()=>fromCatalog($("ocAssistantCatalog").value);
  $("ocAssistantGenerate").onclick=createQuote;
+ $("ocEnableLocalAI").onclick=enableLocalAI;
  render();
 }
 window.OCAssistant={init,render,begin,validateAnswer};
