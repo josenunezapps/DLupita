@@ -371,5 +371,5 @@ async function shareQuote(q,channel){
  if(channel==="whatsapp")window.open("https://wa.me/?text="+encodeURIComponent("Te comparto el presupuesto "+q.id+" de "+q.title+". Adjunto el PDF descargado."),"_blank","noopener,noreferrer");
  if(channel==="gmail")window.open("https://mail.google.com/mail/?view=cm&fs=1&su="+encodeURIComponent("Presupuesto "+q.id+" - "+q.title)+"&body="+encodeURIComponent("Hola, adjunto el presupuesto en PDF.\n\nSaludos."),"_blank","noopener,noreferrer");
 }
-window.OCBusiness={init,render,renderProject,totals,createQuoteFromAgent,shareQuote,csvQuote,openQuote:loadQuote};
+window.OCBusiness={init,render,renderProject,totals,createQuoteFromAgent,shareQuote,csvQuote,openQuote:loadQuote,downloadQuote:pdf};
 })();
