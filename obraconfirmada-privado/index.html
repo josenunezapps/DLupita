@@ -16,8 +16,38 @@ dialog{border:0;padding:0;background:white;color:var(--ink);border-radius:20px;b
 @media(max-width:850px){.shell{display:block}.sidebar{padding:14px;min-height:auto}.sidebar .brand{padding:0 0 13px}.nav-caption,.side-foot{display:none}.sidenav{display:flex;overflow-x:auto;gap:5px}.nav-item{width:auto;white-space:nowrap;padding:11px;font-size:12px}.main{padding:24px 16px 55px}.hero{padding:25px}.detailgrid{grid-template-columns:repeat(2,1fr)}.client-cols{grid-template-columns:1fr}}
 @media(max-width:550px){.pagehead{display:block}.pagehead .actions{margin-top:15px}.hero{display:block}.hero button{margin-top:19px}.hero h2{font-size:25px}.stat{padding:16px}.stat strong{font-size:25px}.stat strong.money{font-size:20px}.panel{padding:17px}.twocol aside{display:block}.sidebar-note{margin-top:13px}.fields{grid-template-columns:1fr}.detailhead{display:block}.detailhead .actions{margin-top:16px}.detailcard{padding:14px}.detailcard b{font-size:19px}.compare{grid-template-columns:1fr}.client-cols .card{padding:18px}.dialogbody{padding:17px}.dialoghead{padding:18px}.dialogfoot{padding:14px 18px}}
 @media print{body{background:white}.demo-bar,.shell,dialog{display:none!important}.print-sheet{display:block!important;padding:25px 35px;font:13px/1.6 Arial,sans-serif;color:#111}.print-sheet h1{font-size:27px}.print-sheet h2{font-size:18px;margin-top:25px}.print-sheet table{width:100%;border-collapse:collapse;margin:18px 0}.print-sheet td{padding:10px;border-bottom:1px solid #ccc;vertical-align:top}.print-sheet img{width:130px;height:100px;object-fit:cover;margin:5px}.print-sheet small{font-size:10px;color:#777}}
- .oc-auth-overlay{position:fixed;inset:0;z-index:900;background:#f3f6f8;display:grid;place-items:center;padding:20px;overflow:auto}.oc-auth-card{width:min(100%,440px);background:#fff;border:1px solid #e1e7ed;border-radius:22px;padding:clamp(24px,5vw,38px);box-shadow:0 16px 52px #1e293b18}.oc-auth-logo{display:flex;gap:12px;align-items:center;margin-bottom:25px;color:#182638;font-size:20px;font-weight:850}.oc-auth-mark{display:grid;place-items:center;background:#d78549;color:white;width:44px;height:44px;border-radius:12px}.oc-auth-card h1{font-size:27px;letter-spacing:-.04em}.oc-auth-card p{color:#5e6f7f;font-size:13px;line-height:1.6}.oc-auth-card label{display:block;font-size:13px;font-weight:750;margin:17px 0}.oc-auth-card input{display:block;width:100%;border:1px solid #d1dbe4;border-radius:10px;padding:13px;margin-top:7px;font:inherit}.oc-auth-actions{display:flex;flex-wrap:wrap;gap:8px}.oc-auth-actions button{flex:1}.oc-auth-message{font-size:12px;line-height:1.65;white-space:pre-wrap;color:#395570;margin-top:18px}.oc-account-strip{background:#e7edf2;padding:9px 18px;display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;color:#34465b;font-size:11px}.oc-account-strip button{border:1px solid #d4dfe8;background:#fff;padding:7px 11px;border-radius:8px;color:#26394b;font-weight:750}.oc-account-strip #ocSyncStatus{margin-right:auto;font-weight:750}.oc-account-strip #ocSyncStatus.error{color:#af4b4b}body.oc-locked .shell,body.oc-locked #ocAccountStrip{display:none!important}body.oc-locked{overflow:hidden}body.oc-locked .print-sheet{display:none}body.oc-locked .oc-auth-overlay{display:grid}.oc-auth-overlay.hidden{display:none!important}body:not(.oc-locked) .oc-auth-overlay{display:none!important}#page-cliente [data-client-change]{display:none!important}@media(max-width:650px){.oc-auth-overlay{padding:10px}.oc-auth-card{border-radius:17px}.oc-account-strip{justify-content:center}.oc-account-strip #ocSyncStatus{flex-basis:100%;text-align:center}} </style></head><body class="oc-locked">
-<div class="oc-auth-overlay" id="ocAuthGate" role="dialog" aria-modal="true" aria-labelledby="ocAuthHeading"><div class="oc-auth-card"><div class="oc-auth-logo"><span class="oc-auth-mark">▣</span>ObraConfirmada</div><h1 id="ocAuthHeading">Ingresá a tu cuenta</h1><p>Administrá tus obras y presupuestos desde un solo lugar.</p><form id="ocAuthForm"><label>Correo electrónico<input id="ocEmail" type="email" autocomplete="email" required></label><label>Contraseña<input id="ocPassword" type="password" autocomplete="current-password" minlength="8" required></label><div class="oc-auth-actions"><button type="submit" id="ocLoginBtn" class="btn btn-primary">Ingresar</button><button type="button" id="ocRegisterBtn" class="btn btn-secondary">Crear cuenta</button></div></form><div class="oc-auth-actions" style="margin-top:10px"><button type="button" id="ocResendBtn" class="btn btn-secondary btn-sm">Reenviar confirmación</button></div><p id="ocAuthMessage" class="oc-auth-message" role="status" aria-live="polite">Si ya creaste una cuenta, ingresá con tu correo y contraseña.</p></div></div>
+ .oc-auth-overlay{position:fixed;inset:0;z-index:900;background:#f3f6f8;display:grid;place-items:center;padding:20px;overflow:auto}.oc-auth-card{width:min(100%,440px);background:#fff;border:1px solid #e1e7ed;border-radius:22px;padding:clamp(24px,5vw,38px);box-shadow:0 16px 52px #1e293b18}.oc-auth-logo{display:flex;gap:12px;align-items:center;margin-bottom:25px;color:#182638;font-size:20px;font-weight:850}.oc-auth-mark{display:grid;place-items:center;background:#d78549;color:white;width:44px;height:44px;border-radius:12px}.oc-auth-card h1{font-size:27px;letter-spacing:-.04em}.oc-auth-card p{color:#5e6f7f;font-size:13px;line-height:1.6}.oc-auth-card label{display:block;font-size:13px;font-weight:750;margin:17px 0}.oc-auth-card input{display:block;width:100%;border:1px solid #d1dbe4;border-radius:10px;padding:13px;margin-top:7px;font:inherit}.oc-auth-actions{display:flex;flex-wrap:wrap;gap:8px}.oc-auth-actions button{flex:1}.oc-auth-message{font-size:12px;line-height:1.65;white-space:pre-wrap;color:#395570;margin-top:18px}.oc-account-strip{background:#e7edf2;padding:9px 18px;display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;color:#34465b;font-size:11px}.oc-account-strip button{border:1px solid #d4dfe8;background:#fff;padding:7px 11px;border-radius:8px;color:#26394b;font-weight:750}.oc-account-strip #ocSyncStatus{margin-right:auto;font-weight:750}.oc-account-strip #ocSyncStatus.error{color:#af4b4b}body.oc-locked .shell,body.oc-locked #ocAccountStrip{display:none!important}body.oc-locked{overflow:hidden}body.oc-locked .print-sheet{display:none}body.oc-locked .oc-auth-overlay{display:grid}.oc-auth-overlay.hidden{display:none!important}body:not(.oc-locked) .oc-auth-overlay{display:none!important}#page-cliente [data-client-change]{display:none!important}@media(max-width:650px){.oc-auth-overlay{padding:10px}.oc-auth-card{border-radius:17px}.oc-account-strip{justify-content:center}.oc-account-strip #ocSyncStatus{flex-basis:100%;text-align:center}} .oc-auth-logo small{display:block;font-size:9px;color:#75879b;letter-spacing:1.7px;font-weight:800;margin-top:3px}.oc-auth-card{width:min(100%,435px)}.oc-auth-primary{width:100%;margin-top:8px;min-height:48px;font-size:14px}.oc-auth-switch{border-top:1px solid #e8edf2;margin-top:25px;padding-top:19px;text-align:center}.oc-auth-switch p{margin:0 0 5px;font-size:13px}.oc-auth-switch-button{background:none;border:0;color:#ad642f;padding:8px 14px;font-size:14px;font-weight:850;text-decoration:underline;text-underline-offset:3px}.oc-auth-switch-button:hover{color:#82461f}.oc-auth-help{display:block;margin:15px auto 0;background:none;border:0;color:#697f93;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:8px}.oc-confirmation-view{text-align:center}.oc-confirmation-view h1{color:#182638;margin:12px 0}.oc-confirmation-view p{line-height:1.65}.oc-confirmation-icon{width:70px;height:70px;background:#fff0e5;border-radius:50%;color:#bd713e;display:grid;place-items:center;font-size:32px;margin:12px auto}.oc-confirm-email{padding:12px 10px;border-radius:10px;background:#eff4f7;color:#263a4e!important;font-weight:850;overflow-wrap:anywhere}.oc-confirm-tip{font-size:12px!important;color:#7d8b97!important}.oc-auth-message:empty{display:none}.oc-auth-message:not(:empty){background:#f3f7fa;border-radius:10px;padding:11px 12px}.oc-auth-card #ocAuthFields.hidden,.oc-auth-card #ocConfirmationView.hidden{display:none!important}</style></head><body class="oc-locked">
+<div class="oc-auth-overlay" id="ocAuthGate" role="dialog" aria-modal="true" aria-labelledby="ocAuthHeading">
+<div class="oc-auth-card">
+ <div class="oc-auth-logo"><span class="oc-auth-mark">▣</span><span>ObraConfirmada<small>GESTIÓN EMPRESARIAL</small></span></div>
+ <section id="ocAuthFields">
+  <h1 id="ocAuthHeading">Ingresá a tu cuenta</h1>
+  <p id="ocAuthSubtitle">Administrá tus obras y presupuestos desde un solo lugar.</p>
+  <form id="ocAuthForm">
+   <label>Correo electrónico<input id="ocEmail" type="email" autocomplete="email" placeholder="tuempresa@correo.com" required></label>
+   <label>Contraseña<input id="ocPassword" type="password" autocomplete="current-password" minlength="8" required></label>
+   <label id="ocConfirmField" class="hidden">Confirmar contraseña<input id="ocPasswordConfirm" type="password" autocomplete="new-password" minlength="8"></label>
+   <button type="submit" id="ocLoginBtn" class="btn btn-primary oc-auth-primary">Ingresar</button>
+  </form>
+  <div class="oc-auth-switch">
+   <p id="ocAuthSwitchHint">¿Todavía no tenés una cuenta?</p>
+   <button type="button" id="ocRegisterBtn" class="oc-auth-switch-button">Crear cuenta</button>
+  </div>
+  <button type="button" id="ocResendBtn" class="oc-auth-help">Reenviar correo de confirmación</button>
+  <p id="ocAuthMessage" class="oc-auth-message" role="status" aria-live="polite"></p>
+ </section>
+ <section id="ocConfirmationView" class="oc-confirmation-view hidden" aria-labelledby="ocConfirmHeading">
+  <div class="oc-confirmation-icon" aria-hidden="true">✉</div>
+  <h1 id="ocConfirmHeading">¡Revisá tu correo!</h1>
+  <p>Solicitamos un correo de confirmación para:</p>
+  <p class="oc-confirm-email" id="ocConfirmationEmail"></p>
+  <p>Abrí el mensaje, tocá el enlace para confirmar tu cuenta y después ingresá con tu correo y contraseña.</p>
+  <p class="oc-confirm-tip">Si no aparece, revisá la carpeta de Spam o Correo no deseado.</p>
+  <button type="button" id="ocBackToLogin" class="btn btn-primary oc-auth-primary">Volver a ingresar</button>
+  <button type="button" id="ocResendOnSuccess" class="oc-auth-help">Reenviar confirmación</button>
+  <p id="ocConfirmMessage" class="oc-auth-message" role="status" aria-live="polite"></p>
+ </section>
+</div></div>
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><symbol id="i-building" viewBox="0 0 24 24"><path d="M3 21V4l9-2v19M12 9l9 2v10M8 7v2m0 4v2m0 4v2m8-7v2m3-1v2M2 21h20"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol><symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.1M3 12h.1M3 18h.1"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 3"/></symbol><symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M8 13h8M8 17h8"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19 13 2 2-2 4-3-1-3 2-.5 3h-3L9 20l-3-2-3 1-2-4 2-2v-2L1 9l2-4 3 1 3-2L9.5 1h3L13 4l3 2 3-1 2 4-2 2z"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></symbol><symbol id="i-money" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 7h4l2-3h6l2 3h4v14H3z"/><circle cx="12" cy="14" r="3"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-4 9-9 10-5-1-9-5-9-10V6z"/></symbol></svg>
 <div id="ocAccountStrip" class="oc-account-strip hidden"><span id="ocLoggedUser">Área privada</span><span id="ocSyncStatus" role="status" aria-live="polite">Conectando...</span><button type="button" id="ocRetrySave" class="hidden">Reintentar guardado</button><button type="button" id="ocRefreshData">Actualizar datos</button><button type="button" id="ocLogout">Cerrar sesión</button></div>
 <div class="shell">
@@ -298,32 +328,87 @@ async function ocStartAuth(){
   if(saved){ocSession=JSON.parse(saved);if(ocSession&&ocSession.refresh_token){await ocRefreshToken();await ocEnter(ocSession);return}}
  }catch(e){ocMessage("Ingresá para continuar. "+ocFriendly(e));ocSession=null;ocUserId=null;sessionStorage.removeItem("oc_session")}
 }
+var ocAuthMode="login",ocAuthPending=false;
+function ocAuthSetMode(mode){
+ if(ocAuthPending)return;
+ ocAuthMode=mode;
+ var registering=mode==="register";
+ $("ocConfirmationView").classList.add("hidden");
+ $("ocAuthFields").classList.remove("hidden");
+ $("ocAuthHeading").textContent=registering?"Crear una cuenta":"Ingresá a tu cuenta";
+ $("ocAuthSubtitle").textContent=registering?"Registrate para gestionar tus obras y presupuestos de forma privada.":"Administrá tus obras y presupuestos desde un solo lugar.";
+ $("ocConfirmField").classList.toggle("hidden",!registering);
+ $("ocPasswordConfirm").required=registering;
+ $("ocPasswordConfirm").value="";
+ $("ocPassword").autocomplete=registering?"new-password":"current-password";
+ $("ocLoginBtn").textContent=registering?"Crear cuenta":"Ingresar";
+ $("ocAuthSwitchHint").textContent=registering?"¿Ya tenés una cuenta?":"¿Todavía no tenés una cuenta?";
+ $("ocRegisterBtn").textContent=registering?"Ingresar":"Crear cuenta";
+ $("ocResendBtn").classList.toggle("hidden",registering);
+ ocMessage("");
+}
+function ocAuthConfirmEmail(email){
+ $("ocAuthFields").classList.add("hidden");
+ $("ocConfirmationView").classList.remove("hidden");
+ $("ocConfirmationEmail").textContent=email;
+ $("ocConfirmMessage").textContent="";
+ $("ocPassword").value="";
+ $("ocPasswordConfirm").value="";
+ $("ocConfirmHeading").focus?.();
+}
+$("ocRegisterBtn").onclick=function(){
+ ocAuthSetMode(ocAuthMode==="login"?"register":"login");
+};
+$("ocBackToLogin").onclick=function(){ocAuthSetMode("login");$("ocEmail").focus()};
 $("ocAuthForm").onsubmit=async function(e){
- e.preventDefault();if(!$("ocAuthForm").reportValidity())return;
- var btn=$("ocLoginBtn");btn.disabled=true;btn.textContent="Ingresando...";
+ e.preventDefault();
+ if(ocAuthPending||!$("ocAuthForm").reportValidity())return;
+ var registering=ocAuthMode==="register";
+ var email=$("ocEmail").value.trim(),password=$("ocPassword").value;
+ if(registering&&password!==$("ocPasswordConfirm").value){
+  ocMessage("Las contraseñas no coinciden. Revisalas e intentá nuevamente.");
+  $("ocPasswordConfirm").focus();return;
+ }
+ ocAuthPending=true;
+ var submit=$("ocLoginBtn"),toggle=$("ocRegisterBtn");
+ submit.disabled=true;toggle.disabled=true;
+ submit.textContent=registering?"Creando cuenta...":"Ingresando...";
+ ocMessage("");
  try{
-  var data=await ocFetch("/auth/v1/token?grant_type=password","POST",{email:$("ocEmail").value.trim(),password:$("ocPassword").value},false);
-  await ocEnter(data);$("ocPassword").value="";
+  if(registering){
+   var created=await ocFetch("/auth/v1/signup?redirect_to="+encodeURIComponent(location.origin+location.pathname),"POST",{email:email,password:password},false);
+   if(created&&created.session&&created.session.access_token){
+    await ocEnter(created.session);
+    $("ocPassword").value="";$("ocPasswordConfirm").value="";
+   }else{
+    ocAuthConfirmEmail(email);
+   }
+  }else{
+   var data=await ocFetch("/auth/v1/token?grant_type=password","POST",{email:email,password:password},false);
+   await ocEnter(data);
+   $("ocPassword").value="";
+  }
  }catch(error){ocMessage(ocFriendly(error));document.body.classList.add("oc-locked")}
- finally{btn.disabled=false;btn.textContent="Ingresar"}
+ finally{
+  ocAuthPending=false;submit.disabled=false;toggle.disabled=false;
+  submit.textContent=ocAuthMode==="register"?"Crear cuenta":"Ingresar";
+ }
 };
-$("ocRegisterBtn").onclick=async function(){
- if(!$("ocAuthForm").reportValidity())return;
- var b=this;b.disabled=true;
+async function ocResendConfirmation(confirmationView){
+ if(ocAuthPending)return;
+ var email=confirmationView?$("ocConfirmationEmail").textContent.trim():$("ocEmail").value.trim();
+ var dest=confirmationView?$("ocConfirmMessage"):$("ocAuthMessage");
+ if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){dest.textContent="Ingresá primero un correo válido.";return}
+ var button=confirmationView?$("ocResendOnSuccess"):$("ocResendBtn");
+ button.disabled=true;
  try{
-  await ocFetch("/auth/v1/signup?redirect_to="+encodeURIComponent(location.origin+location.pathname),"POST",{email:$("ocEmail").value.trim(),password:$("ocPassword").value},false);
-  $("ocPassword").value="";
-  ocMessage("¡Revisá tu correo! Te enviamos un enlace para confirmar la cuenta a "+$("ocEmail").value.trim()+". Volvé acá e ingresá después de confirmarla.");
- }catch(e){ocMessage(ocFriendly(e))}
- finally{b.disabled=false}
-};
-$("ocResendBtn").onclick=async function(){
- var email=$("ocEmail").value.trim();if(!email||!$("ocEmail").checkValidity()){ocMessage("Ingresá primero un correo válido.");return}
- var b=this;b.disabled=true;
- try{await ocFetch("/auth/v1/resend","POST",{email:email,type:"signup",options:{emailRedirectTo:location.origin+location.pathname}},false);ocMessage("Si tu cuenta necesita confirmación, te llegará un correo. Revisá también Spam.")}
- catch(e){ocMessage(ocFriendly(e))}
- finally{b.disabled=false}
-};
+  await ocFetch("/auth/v1/resend","POST",{email:email,type:"signup",options:{emailRedirectTo:location.origin+location.pathname}},false);
+  dest.textContent="Si tu cuenta necesita confirmación, recibirás un nuevo enlace. Revisá tu correo y Spam.";
+ }catch(e){dest.textContent=ocFriendly(e)}
+ finally{button.disabled=false}
+}
+$("ocResendBtn").onclick=function(){ocResendConfirmation(false)};
+$("ocResendOnSuccess").onclick=function(){ocResendConfirmation(true)};
 $("ocRetrySave").onclick=function(){if(ocConflict){alert("Primero descargá una copia JSON y actualizá los datos.");return}ocFlush()};
 $("ocRefreshData").onclick=async function(){
  if(ocDirty||ocSaving){
@@ -338,7 +423,7 @@ $("ocLogout").onclick=async function(){
  ocSession=null;ocUserId=null;projects=[];ocQuotes=[];ocCatalog=[];ocCompany={};ocRevision=0;ocDirty=false;ocConflict=false;selected=null;lastLookup=null;
  try{sessionStorage.removeItem("oc_session")}catch(e){}
  $("ocAuthGate").classList.remove("hidden");document.body.classList.add("oc-locked");$("ocAccountStrip").classList.add("hidden");
- ocMessage("Sesión cerrada. Ingresá para continuar.");$("ocPassword").value="";
+ ocAuthSetMode("login");ocMessage("Sesión cerrada. Ingresá para continuar.");$("ocPassword").value="";
  if(token){try{await fetch(ocBase+"/auth/v1/logout",{method:"POST",headers:{apikey:ocPublishable,Authorization:"Bearer "+token}})}catch(e){}}
 };
 
