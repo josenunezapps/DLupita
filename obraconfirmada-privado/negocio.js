@@ -238,7 +238,9 @@ function installUI(){
  const extras='<div class="fields"><label class="field"><span>Descuento (%)</span><input id="ocDiscount" type="number" min="0" max="100" step="0.01" value="0"></label><label class="field"><span>Validez del presupuesto (días)</span><input id="ocValidity" type="number" min="1" max="365" step="1" value="15"></label></div><div class="fields"><label class="field"><span>Plazo estimado de ejecución</span><input id="ocDelivery" maxlength="120" placeholder="Ej.: 20 días desde el inicio"></label></div><label class="field"><span>Observaciones para el PDF</span><textarea id="ocNotes" rows="3" maxlength="1200" placeholder="Exclusiones, materiales, condiciones adicionales..."></textarea></label>';
  document.getElementById("ocTax").closest("label").insertAdjacentHTML("beforebegin",extras);
  document.getElementById("ocPrice").closest(".oc-stats").insertAdjacentHTML("afterend",'<p class="subtle">Subtotal: <strong id="ocSubtotal">$0</strong> · Descuento: <strong id="ocDiscountTotal">$0</strong> · Impuestos: <strong id="ocTaxTotal">$0</strong></p>');
- const businessForm=document.getElementById("ocCompanyForm");
+ const quoteButtons=document.getElementById("ocConvert").parentNode;
+ quoteButtons.insertAdjacentHTML("beforeend",'<button type="button" class="btn btn-secondary" id="ocDownloadCsv">Descargar Excel (CSV)</button><button type="button" class="btn btn-secondary" id="ocShareQuote">Compartir PDF</button><button type="button" class="btn btn-secondary btn-sm" id="ocShareWhatsApp">WhatsApp</button><button type="button" class="btn btn-secondary btn-sm" id="ocShareGmail">Gmail</button>');
+  const businessForm=document.getElementById("ocCompanyForm");
  businessForm.querySelector("button").insertAdjacentHTML("beforebegin",'<label class="field"><span>Correo comercial</span><input id="ocCompanyEmail" type="email" maxlength="100" placeholder="contacto@tuempresa.com"></label><label class="field"><span>Dirección o localidad</span><input id="ocCompanyAddress" maxlength="115" placeholder="Ciudad, provincia"></label><label class="field"><span>Logo del negocio (JPG, PNG o WEBP, hasta 2 MB)</span><input id="ocCompanyLogo" type="file" accept="image/jpeg,image/png,image/webp"></label><div class="oc-logo-preview"><img id="ocLogoPreview" alt="Logo del negocio" class="hidden" style="max-width:115px;max-height:85px;object-fit:contain"><button type="button" id="ocRemoveLogo" class="btn btn-secondary btn-sm">Quitar logo</button></div><p class="subtle">El logo se adapta al PDF y queda guardado en tu cuenta.</p>');
 
  const d=document.getElementById("page-detalle");d.insertAdjacentHTML("beforeend","<section class=\"card panel\" style=\"margin-top:18px\"><h2>Control económico de la obra</h2><div class=\"oc-stats\"><div class=\"card\"><small>Gastos cargados</small><b id=\"ocJobCost\">$0</b></div><div class=\"card\"><small>Cobrado</small><b id=\"ocJobPaid\">$0</b></div><div class=\"card\"><small>Por cobrar</small><b id=\"ocJobPending\">$0</b></div><div class=\"card\"><small>Presupuesto menos gastos</small><b id=\"ocJobProfit\">$0</b></div></div><p class=\"subtle\">La diferencia no representa la ganancia definitiva si faltan costos por registrar.</p><div class=\"oc-split\"><div><h3>Registrar gasto</h3><form id=\"ocExpenseForm\"><label class=\"field\"><span>Concepto *</span><input id=\"ocExpenseConcept\" required maxlength=\"120\"></label><div class=\"fields\"><label class=\"field\"><span>Importe *</span><input id=\"ocExpenseAmount\" type=\"number\" min=\"0.01\" step=\"0.01\" required></label><label class=\"field\"><span>Fecha *</span><input id=\"ocExpenseDate\" type=\"date\" required></label><label class=\"field\"><span>Categoría</span><select id=\"ocExpenseCategory\"><option>Materiales</option><option>Mano de obra</option><option>Transporte</option><option>Equipos</option><option>Otros</option></select></label></div><button class=\"btn btn-secondary\">Guardar gasto</button></form><div id=\"ocExpenses\"></div></div><div><h3>Registrar cobro</h3><form id=\"ocPaymentForm\"><label class=\"field\"><span>Detalle *</span><input id=\"ocPaymentConcept\" required maxlength=\"120\"></label><div class=\"fields\"><label class=\"field\"><span>Importe *</span><input id=\"ocPaymentAmount\" type=\"number\" min=\"0.01\" step=\"0.01\" required></label><label class=\"field\"><span>Fecha *</span><input id=\"ocPaymentDate\" type=\"date\" required></label></div><button class=\"btn btn-secondary\">Guardar cobro</button></form><div id=\"ocPayments\"></div></div></div></section>");
@@ -264,6 +266,11 @@ $("ocTax").oninput=renderSummary;$("ocDiscount").oninput=renderSummary;
 $("ocSaveQuote").onclick=saveQuote;
 $("ocPrintQuote").onclick=()=>{const q=saveQuote();if(q)pdf({...q,version:q.history.length,issuedAt:q.history[q.history.length-1]?.at})};
 $("ocConvert").onclick=convert;
+ $("ocDownloadCsv").onclick=()=>{const q=qs().find(q=>q.id===editing);if(!q)return info("Guardá antes el presupuesto.");csvQuote(q)};
+ $("ocShareQuote").onclick=()=>{const q=qs().find(q=>q.id===editing);if(!q)return info("Guardá antes el presupuesto.");shareQuote(q)};
+ $("ocShareWhatsApp").onclick=()=>{const q=qs().find(q=>q.id===editing);if(!q)return info("Guardá antes el presupuesto.");shareQuote(q,"whatsapp")};
+ $("ocShareGmail").onclick=()=>{const q=qs().find(q=>q.id===editing);if(!q)return info("Guardá antes el presupuesto.");shareQuote(q,"gmail")};
+
 $("ocCatalogForm").onsubmit=e=>{e.preventDefault();const name=get("ocConcept"),unit=get("ocUnit"),cost=+$("ocUnitCost").value,price=+$("ocUnitPrice").value;
 if(!name||!unit||!Number.isFinite(cost)||cost<0||!Number.isFinite(price)||price<0){info("Revisá los datos del catálogo.");return}
 const previous=editingCatalog&&cat().find(x=>x.id===editingCatalog);
@@ -317,5 +324,51 @@ $("ocRemoveLogo").onclick=function(){
 $("ocExpenseDate").value=today();$("ocPaymentDate").value=today();
 newQuote();render();
 }
-window.OCBusiness={init,render,renderProject,totals};
+
+function createQuoteFromAgent(p){
+ if(!p||!String(p.title||"").trim()||!String(p.client||"").trim()||!Array.isArray(p.lines)||!p.lines.length)return null;
+ const values=p.lines.map(x=>({id:x.id||id(),name:String(x.name||"").trim(),unit:String(x.unit||"").trim(),qty:Number(x.qty),price:Number(x.price),cost:Number(x.cost||0),missingCost:x.missingCost===true}));
+ if(values.some(x=>!x.name||!x.unit||!Number.isFinite(x.qty)||x.qty<=0||!Number.isFinite(x.price)||x.price<0||!Number.isFinite(x.cost)||x.cost<0))return null;
+ let quoteId="PRE-"+Date.now();while(qs().some(q=>q.id===quoteId))quoteId+="A";
+ const now=new Date().toISOString();
+ const data={title:String(p.title).slice(0,100),client:String(p.client).slice(0,90),phone:String(p.phone||"").slice(0,30),scope:String(p.scope||"").slice(0,3000),payment:String(p.payment||"").slice(0,180),taxRate:Number(p.taxRate||0),discountRate:Number(p.discountRate||0),validity:Number(p.validity||15),delivery:String(p.delivery||"").slice(0,120),notes:String(p.notes||"").slice(0,1200),status:"Borrador",lines:values};
+ if(data.taxRate<0||data.taxRate>100||data.discountRate<0||data.discountRate>100||!Number.isInteger(data.validity)||data.validity<1||data.validity>365)return null;
+ const q={...data,id:quoteId,created:now,updated:now,projectId:null,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:company()}))}]};
+ qs().unshift(q);
+ if(!api.save()){qs().shift();return null}
+ render();return q;
+}
+function csvQuote(q){
+ if(!q)return;
+ const escCSV=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+ const header=["Concepto","Cantidad","Unidad","Precio unitario","Subtotal"];
+ const rows=(q.lines||[]).map(l=>[l.name,l.qty,l.unit,l.price,round(l.qty*l.price)]);
+ const t=totals(q.lines||[],q.taxRate,q.discountRate);
+ rows.push(["Subtotal","","","",t.subtotal],["Descuento","","","",-t.discount],["Impuestos","","","",t.tax],["TOTAL","","","",t.price]);
+ const csv="\ufeffsep=;\r\n"+header.map(escCSV).join(";")+"\r\n"+rows.map(row=>row.map(escCSV).join(";")).join("\r\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="ObraConfirmada-"+q.id+".csv";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+ info("Archivo CSV compatible con Excel preparado.");
+}
+async function shareQuote(q,channel){
+ if(!q)return info("Guardá primero el presupuesto.");
+ if(!window.OCBudgetPDF)return info("El generador de PDF no está disponible.");
+ const p={...q,id:q.id,issuedAt:q.updated||q.created,version:q.history?.length||1};
+ let file;
+ try{
+  const blob=window.OCBudgetPDF.build(p,company());
+  file=new File([blob],"ObraConfirmada-"+q.id+".pdf",{type:"application/pdf"});
+ }catch(e){return info("No se pudo preparar el PDF: "+e.message)}
+ if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+  try{await navigator.share({files:[file],title:"Presupuesto "+q.id,text:"Presupuesto de "+q.title+". Elegí WhatsApp, Gmail u otra aplicación para compartir el PDF."});info("Se abrió el menú de compartir.");return}
+  catch(e){if(e.name==="AbortError")return}
+ }
+ // No navegador universal permite adjuntar PDF a WhatsApp/Gmail por enlace sin autorización.
+ api.pdf({...p,lines:q.lines},"ObraConfirmada-"+q.id+".pdf",company());
+ info("Tu navegador no permite adjuntar directamente el PDF. Lo descargué para que lo adjuntes en "+(channel==="gmail"?"Gmail":channel==="whatsapp"?"WhatsApp":"el servicio que prefieras")+".");
+ if(channel==="whatsapp")window.open("https://wa.me/?text="+encodeURIComponent("Te comparto el presupuesto "+q.id+" de "+q.title+". Adjunto el PDF descargado."),"_blank","noopener,noreferrer");
+ if(channel==="gmail")window.open("https://mail.google.com/mail/?view=cm&fs=1&su="+encodeURIComponent("Presupuesto "+q.id+" - "+q.title)+"&body="+encodeURIComponent("Hola, adjunto el presupuesto en PDF.\n\nSaludos."),"_blank","noopener,noreferrer");
+}
+window.OCBusiness={init,render,renderProject,totals,createQuoteFromAgent,shareQuote,csvQuote,openQuote:loadQuote};
 })();
