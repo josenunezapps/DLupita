@@ -326,14 +326,29 @@ $("ocExpenseDate").value=today();$("ocPaymentDate").value=today();
 newQuote();render();
 }
 
-function createQuoteFromAgent(p){
+function createQuoteFromAgent(p,existingId){
  if(!p||!String(p.title||"").trim()||!String(p.client||"").trim()||!Array.isArray(p.lines)||!p.lines.length)return null;
- const values=p.lines.map(x=>({id:x.id||id(),name:String(x.name||"").trim(),unit:String(x.unit||"").trim(),qty:Number(x.qty),price:Number(x.price),cost:Number(x.cost||0),missingCost:x.missingCost===true}));
- if(values.some(x=>!x.name||!x.unit||!Number.isFinite(x.qty)||x.qty<=0||!Number.isFinite(x.price)||x.price<0||!Number.isFinite(x.cost)||x.cost<0))return null;
- let quoteId="PRE-"+Date.now();while(qs().some(q=>q.id===quoteId))quoteId+="A";
+ const values=p.lines.map(x=>({id:x.id||id(),name:String(x.name||"").trim(),unit:String(x.unit||"").trim(),qty:Number(x.qty),price:Number(x.price),cost:Number(x.cost||0),category:String(x.category||"Materiales").slice(0,40),missingCost:x.missingCost===true}));
+ if(values.some(x=>!x.name||!x.unit||!Number.isFinite(x.qty)||x.qty<=0||!Number.isFinite(x.price)||x.price<0||!Number.isFinite(x.cost)||x.cost<0||x.qty>999999999||x.price>999999999))return null;
+ const tax=Number(p.taxRate||0),discount=Number(p.discountRate||0),validity=Number(p.validity||15);
+ if(!Number.isFinite(tax)||tax<0||tax>100||!Number.isFinite(discount)||discount<0||discount>100||!Number.isInteger(validity)||validity<1||validity>365)return null;
+ const sum=totals(values,tax,discount);if(!Number.isFinite(sum.price)||sum.price>999999999)return null;
+ const existing=existingId?qs().find(x=>x.id===existingId):null;
+ if(existingId&&!existing)return null;
+ const data={title:String(p.title).slice(0,100),client:String(p.client).slice(0,90),phone:String(p.phone||"").slice(0,30),scope:String(p.scope||"").slice(0,3000),payment:String(p.payment||"").slice(0,180),taxRate:tax,discountRate:discount,validity,delivery:String(p.delivery||"").slice(0,120),notes:String(p.notes||"").slice(0,1200),status:existing?.status||"Borrador",lines:values};
  const now=new Date().toISOString();
- const data={title:String(p.title).slice(0,100),client:String(p.client).slice(0,90),phone:String(p.phone||"").slice(0,30),scope:String(p.scope||"").slice(0,3000),payment:String(p.payment||"").slice(0,180),taxRate:Number(p.taxRate||0),discountRate:Number(p.discountRate||0),validity:Number(p.validity||15),delivery:String(p.delivery||"").slice(0,120),notes:String(p.notes||"").slice(0,1200),status:"Borrador",lines:values};
- if(data.taxRate<0||data.taxRate>100||data.discountRate<0||data.discountRate>100||!Number.isInteger(data.validity)||data.validity<1||data.validity>365)return null;
+ if(existing){
+  if(existing.projectId){info("Este presupuesto ya está vinculado a una obra. Editalo desde Presupuestos y revisá su relación con la obra.");return null}
+  const dataKeys=["title","client","phone","scope","payment","taxRate","discountRate","validity","delivery","notes","status","lines"];
+  if(dataKeys.every(k=>JSON.stringify(existing[k])===JSON.stringify(data[k])))return existing;
+  const backup=JSON.parse(JSON.stringify(existing));
+  Object.assign(existing,data,{updated:now});
+  const prior=Array.isArray(existing.history)?existing.history:[];
+  existing.history=prior.concat([{number:prior.length+1,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:companySnapshot()}))}]);
+  if(!api.save()){Object.keys(existing).forEach(k=>delete existing[k]);Object.assign(existing,backup);return null}
+  render();return existing;
+ }
+ let quoteId="PRE-"+Date.now();while(qs().some(q=>q.id===quoteId))quoteId+="A";
  const q={...data,id:quoteId,created:now,updated:now,projectId:null,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...data,company:companySnapshot()}))}]};
  qs().unshift(q);
  if(!api.save()){qs().shift();return null}
