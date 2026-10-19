@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0d222a">
+<meta name="description" content="ServiControl Empresarial, gestión de mantenimientos y servicios técnicos.">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>ServiControl · Zenix AR</title>
+<style>:root{
+  --accent:#138c77;
+  --accent-strong:#096a59;
+  --accent-soft:#e6f7f1;
+  --muted:#6b7890;
+  --ink:#172d35;
+  --ink-soft:#35535d;
+  --bg:#f3f6fb;
+  --bg-strong:#eaf0f8;
+  --line:#dde5f0;
+  --line-strong:#ccd7e7;
+  --white:#ffffff;
+  --aside:#0f232b;
+  --aside-2:#142f37;
+  --good:#128465;
+  --good-soft:#e5f6ef;
+  --danger:#c04a5e;
+  --danger-soft:#ffedf1;
+  --warn:#b57618;
+  --warn-soft:#fff3db;
+  --info:#2d8e89;
+  --info-soft:#e6f7f1;
+  --shadow-sm:0 2px 8px rgba(18,32,61,.06);
+  --shadow-md:0 16px 38px rgba(16,28,56,.08);
+  --shadow-lg:0 26px 60px rgba(13,28,58,.16);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--ink);
+  font-size:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at top left, rgba(79,107,255,.08), transparent 26%),
+    linear-gradient(180deg, #f7f9fd 0%, var(--bg) 36%, #eef3f9 100%);
+  min-height:100vh;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(79,107,255,.28);
+  outline-offset:2px;
+}
+.shell{min-height:100vh;display:grid;grid-template-columns:280px minmax(0,1fr)}
+.sidebar{
+  background:linear-gradient(180deg,var(--aside) 0%, var(--aside-2) 100%);
+  color:#fff;
+  min-height:100vh;
+  padding:28px 18px 20px;
+  display:flex;
+  flex-direction:column;
+  position:sticky;
+  top:0;
+  height:100vh;
+  border-right:1px solid rgba(255,255,255,.06);
+  box-shadow:inset -1px 0 0 rgba(255,255,255,.02);
+}
+.brand{display:flex;align-items:center;gap:14px;padding:0 10px 24px}
+.brandIcon{
+  width:46px;height:46px;border-radius:15px;
+  background:linear-gradient(135deg,#5a7bff 0%,#3750d6 100%);
+  display:grid;place-items:center;font-size:23px;
+  box-shadow:0 16px 26px rgba(61,97,255,.28), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.brand span{font-size:20px;font-weight:800;letter-spacing:-.04em;font-family:Inter,system-ui,sans-serif}
+.brand small{display:block;font-size:10px;letter-spacing:.18em;color:#90a1be;margin-top:3px;font-weight:700}
+.navLabel{padding:0 14px;margin:8px 0 12px;font-size:10px;text-transform:uppercase;color:#7e91b0;letter-spacing:.18em;font-weight:800}
+.nav{display:grid;gap:6px}
+.nav button{
+  background:transparent;border:1px solid transparent;text-align:left;display:flex;gap:12px;align-items:center;width:100%;
+  border-radius:14px;color:#a8b6cd;font-weight:650;padding:12px 14px;
+  transition:.18s ease;
+}
+.nav button b{
+  width:28px;height:28px;border-radius:10px;display:grid;place-items:center;
+  text-align:center;font-size:15px;font-weight:700;background:rgba(255,255,255,.04);color:#d4def0;flex-shrink:0
+}
+.nav button:hover{
+  background:rgba(255,255,255,.05);color:#fff;border-color:rgba(255,255,255,.05);transform:translateX(1px)
+}
+.nav button.active{
+  background:linear-gradient(180deg,rgba(74,101,255,.23),rgba(74,101,255,.16));
+  color:#fff;border-color:rgba(130,151,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 24px rgba(10,19,39,.22)
+}
+.nav button.active b{background:rgba(255,255,255,.1);color:#fff}
+.sideCard{
+  margin:18px 8px 0;padding:16px;border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow-md);
+}
+.sideCardLabel{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#98a8c3;font-weight:800}
+.sideCardValue{font-size:28px;font-weight:850;letter-spacing:-.05em;margin:10px 0 6px}
+.sideCardSub{font-size:12px;color:#c2cee0;line-height:1.55;margin:0 0 14px}
+.sideMiniGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sideMini{
+  border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px;
+  background:rgba(4,10,20,.15)
+}
+.sideMini strong{display:block;font-size:16px;letter-spacing:-.03em}
+.sideMini span{display:block;margin-top:3px;font-size:11px;color:#8fa2c0;line-height:1.35}
+.sideFoot{margin-top:auto;padding:18px 14px;border-top:1px solid rgba(255,255,255,.08);color:#8ea1bf;font-size:12px;line-height:1.7}
+.sideFoot strong{color:#fff;font-weight:750}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{
+  position:sticky;top:0;z-index:10;
+  min-height:84px;background:rgba(248,250,253,.84);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(205,216,231,.72);padding:18px 34px;display:flex;align-items:center;justify-content:space-between;gap:18px
+}
+.topbarMain{min-width:0}
+.crumb{font-size:11px;color:#7d8aa2;text-transform:uppercase;letter-spacing:.12em;font-weight:800}
+.topbarTitle{font-size:20px;font-weight:800;letter-spacing:-.04em;margin:5px 0 0;color:var(--ink)}
+.topbarSub{font-size:13px;color:var(--muted);margin-top:3px}
+.topRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.mark,.signal,.signal.bad,.signal.good,.signal.warn{
+  display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;border:1px solid var(--line);
+  background:#fff;font-size:11px;font-weight:800;letter-spacing:.04em;color:#617086;box-shadow:var(--shadow-sm)
+}
+.signal .sigDot,.mark .sigDot{height:8px;width:8px;border-radius:999px;background:currentColor;display:inline-block}
+.signal.good{background:var(--good-soft);color:var(--good);border-color:#ccebdd}
+.signal.bad{background:var(--danger-soft);color:var(--danger);border-color:#f2ccd4}
+.signal.warn{background:var(--warn-soft);color:var(--warn);border-color:#f0ddb9}
+.avatar{height:40px;width:40px;background:linear-gradient(180deg,#fff,#eef3fd);display:grid;place-items:center;border-radius:14px;font-weight:850;color:var(--accent);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.content{max-width:1520px;margin:0 auto;padding:28px 34px 58px;width:100%}
+.workspaceBar{display:grid;grid-template-columns:1.55fr repeat(3,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.workspaceLead,.workspaceMetric{
+  background:rgba(255,255,255,.82);border:1px solid rgba(214,224,238,.95);border-radius:20px;box-shadow:var(--shadow-sm)
+}
+.workspaceLead{padding:18px 20px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(246,249,255,.92))}
+.workspaceLead b{display:block;font-size:15px;letter-spacing:-.02em}
+.workspaceLead p{margin:8px 0 0;color:var(--muted);line-height:1.55;font-size:13px}
+.workspaceMetric{padding:16px 18px}
+.workspaceMetricLabel{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8190a9;font-weight:800}
+.workspaceMetricValue{margin-top:8px;font-size:24px;font-weight:850;letter-spacing:-.05em}
+.workspaceMetricNote{margin-top:5px;color:var(--muted);font-size:12px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.18em;font-weight:850;color:var(--accent);margin:0 0 8px}
+.heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:0 0 24px}
+.heading h1{margin:0;font-size:32px;letter-spacing:-.06em;line-height:1.1;font-family:Inter,system-ui,sans-serif}
+.sub{color:var(--muted);line-height:1.65;margin:10px 0 0;max-width:730px;font-size:14px}
+.actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line-strong);background:#fff;border-radius:12px;
+  padding:11px 16px;font-weight:780;white-space:nowrap;color:var(--ink);min-height:42px;box-shadow:var(--shadow-sm);transition:.18s ease
+}
+.btn:hover{border-color:#bcc8da;background:#fcfdff;transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(180deg,var(--accent),var(--accent-strong));color:white;border-color:transparent;box-shadow:0 14px 28px rgba(63,89,218,.24)}
+.btn.primary:hover{filter:brightness(.98)}
+.btn.ghost{box-shadow:none;background:transparent}
+.btn.danger{color:var(--danger)}
+.btn.sm{padding:7px 10px;border-radius:10px;min-height:34px;font-size:12px}
+.btn.full{width:100%}
+.banner{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;margin:0 0 20px;
+  background:linear-gradient(135deg,#16213a 0%,#203357 100%);color:#fff;border-radius:20px;box-shadow:var(--shadow-md)
+}
+.banner strong{font-size:18px;letter-spacing:-.03em}
+.banner p{margin:7px 0 0;color:#d3dcf2;line-height:1.55;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0 24px}
+.stat,.panel,.callout{background:rgba(255,255,255,.9);border:1px solid rgba(216,225,238,.95);border-radius:20px;box-shadow:var(--shadow-sm)}
+.stat{padding:22px 22px 20px;min-width:0;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:auto -14px -18px auto;width:82px;height:82px;border-radius:20px;background:radial-gradient(circle,rgba(79,107,255,.15),transparent 66%)}
+.statLabel{color:#617089;font-size:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:760;position:relative;z-index:1}
+.statIcon{font-size:18px;width:40px;height:40px;background:var(--accent-soft);color:var(--accent);border-radius:13px;display:grid;place-items:center;border:1px solid #d8f0e7}
+.statValue{font-size:29px;font-weight:860;letter-spacing:-.06em;margin:16px 0 4px;overflow-wrap:anywhere;position:relative;z-index:1}
+.statNote{color:#8190a4;font-size:12px;margin-top:6px;position:relative;z-index:1}
+.dashboardGrid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);gap:18px}
+.panel{overflow:hidden;margin-bottom:18px}
+.panelHead{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:18px 22px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#ffffff,#fafcff)}
+.panelHead h2{font-size:16px;margin:0;letter-spacing:-.03em}
+.panelHead span{color:var(--muted);font-size:12px}
+.panelBody{padding:20px 22px}
+.toolbar{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);background:rgba(249,251,255,.8)}
+.toolbar .left{display:flex;gap:10px;flex:1;min-width:230px;flex-wrap:wrap}
+.search{
+  padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#f8fbff;width:100%;min-width:130px;outline:0;
+  color:var(--ink);box-shadow:inset 0 1px 1px rgba(255,255,255,.5)
+}
+.search:focus{border-color:#c6d2ee;background:white;box-shadow:0 0 0 4px rgba(79,107,255,.08)}
+.select{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 12px;color:var(--ink);min-width:130px;max-width:215px;box-shadow:var(--shadow-sm)}
+.tableScroll{width:100%;overflow-x:auto}
+table{border-collapse:separate;border-spacing:0;width:100%;text-align:left}
+th{
+  color:#8190a8;text-transform:uppercase;font-size:10px;font-weight:850;letter-spacing:.14em;background:#f7fafe;padding:14px 18px;white-space:nowrap;border-bottom:1px solid var(--line)
+}
+td{padding:16px 18px;border-bottom:1px solid #ebf0f7;font-size:13px;vertical-align:middle;white-space:nowrap;background:transparent}
+tr:last-child td{border-bottom:0}
+tbody tr{transition:.14s ease}
+tbody tr:hover{box-shadow:inset 0 0 0 999px rgba(79,107,255,.028)}
+.muted{color:var(--muted)}.strong{font-weight:800;color:var(--ink)}
+.meta{font-size:11px;color:#95a0ae;margin-top:4px}
+.cellName{display:flex;align-items:center;gap:12px}
+.initial{
+  width:38px;height:38px;display:grid;place-items:center;background:linear-gradient(180deg,#f4f7ff,#e8eeff);color:#4f62c7;border-radius:12px;font-size:12px;font-weight:850;flex-shrink:0;border:1px solid #dbe3fb
+}
+.pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:7px 11px;background:#f2f5f9;color:#637185;font-size:11px;font-weight:850;border:1px solid transparent}
+.pill.good{background:var(--good-soft);color:var(--good);border-color:#ccebdd}.pill.bad{background:var(--danger-soft);color:var(--danger);border-color:#f2ccd4}.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:#f0ddb9}.pill.info{background:var(--info-soft);color:var(--info);border-color:#d9f1e9}
+.dot{height:7px;width:7px;display:inline-block;border-radius:100%;background:currentColor}.link{border:0;background:transparent;padding:4px;color:var(--accent);font-weight:800;font-size:12px}.link:hover{text-decoration:underline}
+.empty{padding:50px 25px;text-align:center;color:var(--muted)}.empty b{display:block;color:var(--ink);font-size:16px;margin:12px 0 6px}.emptyIcon{font-size:32px}
+.stack{display:grid;gap:10px}
+.mini{border:1px solid var(--line);padding:15px;border-radius:14px;display:flex;align-items:center;gap:10px;justify-content:space-between;background:linear-gradient(180deg,#fff,#fbfcff)}
+.miniTitle{font-weight:800;font-size:13px}.miniSub{font-size:11px;margin-top:5px;color:var(--muted)}.miniRight{text-align:right;font-weight:850;font-size:13px}
+.note{padding:13px 14px;background:#f7f9fc;border-radius:13px;border:1px dashed var(--line-strong);font-size:12px;color:#5d6b81;line-height:1.65}
+.quick{
+  display:flex;gap:13px;align-items:flex-start;border:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfcff);padding:16px;border-radius:16px;text-align:left;
+  transition:.18s ease;box-shadow:var(--shadow-sm)
+}
+.quick:hover{border-color:#c6d0e0;transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.quickIcon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:18px;flex-shrink:0;border:1px solid #dcefe8}
+.quick strong{display:block;font-size:13px;letter-spacing:-.01em}.quick small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
+.listCards{display:grid;gap:12px;padding:16px 20px 20px}
+.clientCard,.movementCard{
+  border:1px solid var(--line);border-radius:18px;padding:17px 18px;background:linear-gradient(180deg,#ffffff,#fbfcff);display:grid;gap:14px;box-shadow:var(--shadow-sm)
+}
+.cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.cardTop .left{min-width:0}.cardTitle{font-size:15px;font-weight:850;letter-spacing:-.03em}.cardSub{font-size:12px;color:var(--muted);margin-top:5px}.cardActions{display:flex;gap:8px;flex-wrap:wrap}.moneyStrong{font-size:20px;font-weight:850;letter-spacing:-.04em}.dataGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.dataBox{border:1px solid #e6ecf5;background:#f8fbff;border-radius:14px;padding:12px}.dataBox span{display:block;color:#7f8da4;font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:800}.dataBox b{display:block;margin-top:8px;font-size:15px;letter-spacing:-.03em}
+.twoPanels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.reportActions{display:flex;gap:10px;flex-wrap:wrap}
+.overlay{position:fixed;inset:0;background:rgba(11,20,35,.56);display:grid;place-items:center;padding:18px;z-index:30;backdrop-filter:blur(6px)}
+.modal{width:100%;max-width:620px;max-height:calc(100vh - 36px);overflow:auto;border-radius:22px;background:white;box-shadow:var(--shadow-lg);border:1px solid rgba(219,228,240,.95)}
+.modalTop{padding:22px 25px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;background:linear-gradient(180deg,#fff,#fafcff)}
+.modalTop h2{font-size:21px;margin:0;letter-spacing:-.04em}.close{border:0;background:#f2f5fb;height:36px;width:36px;border-radius:12px;font-size:20px;color:#637086}
+.formGrid{padding:22px 25px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.field{display:grid;gap:8px;min-width:0}.field.wide{grid-column:1/-1}.field label{font-weight:760;font-size:12px;color:#46536a;letter-spacing:.01em}.field input,.field textarea,.field select{width:100%;background:#f8fbff;padding:12px 12px;border:1px solid #dce4ef;border-radius:12px;color:var(--ink);outline:0}.field input:focus,.field textarea:focus,.field select:focus{border-color:#c8d3ea;background:white;box-shadow:0 0 0 4px rgba(79,107,255,.08)}.field textarea{resize:vertical;min-height:94px}
+.modalFoot{padding:18px 25px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;background:linear-gradient(180deg,#fff,#fafcff)}.helper{margin:0;padding:0 25px 20px;color:#78859a;font-size:12px;line-height:1.6}
+.toast{position:fixed;z-index:40;bottom:23px;right:26px;background:#14243c;color:white;border-radius:14px;padding:13px 18px;box-shadow:0 18px 40px rgba(21,34,56,.26);display:none;font-weight:700;font-size:12px;max-width:calc(100vw - 40px)}.toast.show{display:block}
+.tips{font-size:12px;color:var(--muted);line-height:1.8}.tipItem{display:flex;gap:9px;padding:10px 0;border-bottom:1px solid var(--line)}.tipItem:last-child{border:0}.tipCheck{color:var(--good);font-weight:900}.footer{text-align:center;font-size:11px;color:#97a2b2;margin-top:18px}.kpiIcon{font-size:19px}.reportRow{display:flex;padding:12px 0;border-bottom:1px solid var(--line);justify-content:space-between;gap:12px}.reportRow:last-child{border-bottom:0}
+@media (max-width:1150px){
+  .workspaceBar{grid-template-columns:1fr 1fr}
+  .workspaceLead{grid-column:1/-1}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dashboardGrid,.twoPanels{grid-template-columns:1fr}
+}
+@media (max-width:920px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:relative;height:auto;min-height:auto}
+  .topbar{position:relative;padding:18px 18px}
+  .content{padding:20px 18px 50px}
+}
+@media (max-width:720px){
+  .heading{flex-direction:column}
+  .stats,.workspaceBar,.sideMiniGrid,.dataGrid,.twoPanels,.formGrid{grid-template-columns:1fr}
+  .workspaceLead{grid-column:auto}
+  .topRight{justify-content:flex-start}
+  .banner{flex-direction:column;align-items:flex-start}
+  .panelHead,.panelBody,.toolbar{padding-left:16px;padding-right:16px}
+  th,td{padding:13px 14px}
+}
+
+/* Refinamiento móvil y accesibilidad empresarial */
+@media(max-width:920px){
+  .shell{display:block}
+  .sidebar{position:relative;top:auto;height:auto;min-height:0;padding:16px 16px 13px;box-shadow:none}
+  .sidebar>.sideFoot,.sideCard,.sideFoot{display:none}
+  .brand{padding:0 2px 12px}
+  .brandIcon{height:39px;width:39px;border-radius:12px;font-size:19px}
+  .brand span{font-size:19px}
+  .navLabel{display:none}
+  .nav{display:flex;overflow-x:auto;padding:1px 0 4px;gap:6px;scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{width:auto;min-width:max-content;padding:8px 12px;border-radius:11px;white-space:nowrap;font-size:12px;gap:8px}
+  .nav button b{width:24px;height:24px;font-size:13px;border-radius:7px}
+  .topbar{padding:16px;min-height:0;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+  .topbarTitle{font-size:21px}
+  .topbarSub{font-size:12px;line-height:1.45}
+  .topRight{width:100%;justify-content:flex-start}
+  .avatar{display:none}
+  .content{padding:20px 14px 48px}
+}
+@media(max-width:650px){
+  .heading h1{font-size:27px}
+  .statValue{font-size:24px}
+  .workspaceMetricValue{font-size:23px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .stat{padding:16px 14px}
+  .statLabel{font-size:11px}
+  .statIcon{width:32px;height:32px;font-size:15px}
+  .statNote{font-size:10px}
+  .workspaceBar{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .workspaceLead{grid-column:1/-1}
+  .workspaceMetric{padding:14px 12px}
+  .workspaceMetricLabel{font-size:10px}
+  .workspaceMetric:nth-child(4){grid-column:1/-1}
+  .toolbar .left{min-width:0;width:100%;flex-wrap:wrap}
+  .search{min-width:0}
+  .select{max-width:none}
+  .btn{min-height:43px;padding:10px 12px}
+  .banner{padding:20px}
+  .banner strong{font-size:17px}
+  .tableScroll{scrollbar-width:thin}
+  .formGrid{padding:18px;gap:14px}
+  .modalTop,.modalFoot{padding:17px}
+  .modalFoot{position:sticky;bottom:0}
+}
+
+/* Business: panel de decisión y tratamiento visual de foco */
+.focus-panel{
+  display:grid;grid-template-columns:minmax(0,1.14fr) minmax(320px,.9fr);gap:24px;
+  background:linear-gradient(115deg,#ffffff 0%,#f8faff 58%,#eef3ff 100%);
+  border:1px solid #d8e1f0;border-radius:24px;padding:28px 30px;
+  box-shadow:0 16px 34px rgba(20,42,81,.07);margin:2px 0 24px;
+}
+.focus-left{display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.focus-eyebrow{letter-spacing:.17em;text-transform:uppercase;color:#5066bd;font-size:11px;font-weight:850}
+.focus-left h2{font-size:23px;line-height:1.24;letter-spacing:-.05em;margin:12px 0 10px;max-width:480px}
+.focus-left p{font-size:13px;line-height:1.72;color:#69788e;margin:0;max-width:490px}
+.focus-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.focus-right{background:rgba(255,255,255,.88);border:1px solid #e0e8f4;border-radius:18px;padding:20px;min-width:0}
+.focus-meter-title{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#5c6a80;font-size:12px;font-weight:750}
+.focus-meter-title b{font-size:20px;color:#202f4c;letter-spacing:-.04em}
+.focus-meter{height:9px;background:#e8edf6;border-radius:999px;overflow:hidden;margin:12px 0 7px}
+.focus-meter i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#f0ad6a,#dc6c7b)}
+.focus-meter-note{font-size:11px;color:#8190a7;margin:0 0 12px;line-height:1.5}
+.focus-list{border-top:1px solid #e6ecf5;margin-top:15px;padding-top:3px}
+.focus-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #ecf0f7}
+.focus-row:last-child{border-bottom:0;padding-bottom:0}
+.focus-row b{display:block;font-size:12px;color:#34435b;overflow-wrap:anywhere}
+.focus-row small{display:block;font-size:11px;color:#8794a6;margin-top:4px}
+.focus-row strong{font-size:13px;white-space:nowrap;color:#b64f65}
+.focus-clean{padding:20px 12px;color:#137b62;background:#eaf8f3;border-radius:12px;font-size:13px;font-weight:750}
+@media(max-width:1050px){.focus-panel{grid-template-columns:1fr}.focus-right{width:100%}}
+@media(max-width:650px){.focus-panel{padding:20px 16px;gap:17px}.focus-left h2{font-size:21px}.focus-actions{width:100%}.focus-actions .btn{flex:1 1 auto}}
+
+/* ServiControl enterprise layer */
+:root{--accent:#138c77;--accent-strong:#096a59;--accent-soft:#e6f7f1;--aside:#0d222a;--aside-2:#152f36;--warn:#ad701c;--danger:#bd4252}
+body{background:radial-gradient(circle at top left,rgba(14,145,119,.065),transparent 26%),linear-gradient(180deg,#f8fbfa 0%,#f2f7f7 35%,#edf4f5 100%)}
+.brandIcon{background:linear-gradient(140deg,#2fb99b,#086b5e);box-shadow:0 13px 27px rgba(7,112,94,.2)}
+.nav button.active{background:linear-gradient(180deg,rgba(23,171,137,.22),rgba(23,171,137,.11));border-color:rgba(80,203,171,.26)}
+.nav button.active b{background:rgba(23,171,137,.2)}
+.btn.primary{background:linear-gradient(180deg,#179e86,#0b745f);box-shadow:0 10px 22px rgba(11,116,95,.17)}
+.banner{background:linear-gradient(110deg,#102d34 0%,#1a4a4c 100%)}
+.banner p{color:#d0e9e4}
+.banner .btn{background:#fff;color:#116e5d;border-color:#fff;box-shadow:none}
+.statIcon{color:#128c74;border-color:#ddf3e9}
+.eyebrow{color:#108775}
+.stat::after{background:radial-gradient(circle,rgba(19,140,119,.14),transparent 65%)}
+.sideCard{margin-top:17px}
+.mark .sigDot{background:#3f9f8c}
+.nav button{font-size:13px}
+.panelHead h2{font-weight:800}
+.topbarSub{max-width:600px}
+.serviceStripe{display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:12px;margin:0 0 24px}
+.serviceStripe > div{padding:16px 18px;border:1px solid #dceae8;border-radius:16px;background:#fff;box-shadow:var(--shadow-sm);min-width:0}
+.serviceStripe .stripeIntro{background:linear-gradient(145deg,#173e44,#113138);color:white;border-color:#113b3f}
+.serviceStripe .stripeIntro strong{font-size:15px;display:block;letter-spacing:-.02em}
+.serviceStripe .stripeIntro p{font-size:12px;line-height:1.6;margin:8px 0 0;color:#bddbd7}
+.serviceStripe .metricLabel{text-transform:uppercase;letter-spacing:.1em;color:#718a8c;font-size:10px;font-weight:800}
+.serviceStripe .metricValue{font-weight:850;font-size:25px;letter-spacing:-.04em;margin-top:9px;overflow-wrap:anywhere}
+.serviceStripe .metricCaption{font-size:11px;color:#80959a;margin-top:3px}
+.serviceSection{margin-bottom:20px}
+.servicePanel{border-radius:20px;border:1px solid #deebe8;background:white;box-shadow:var(--shadow-sm);overflow:hidden}
+.servicePanelInner{padding:18px 22px}
+.detailOverlay{position:fixed;inset:0;background:rgba(7,26,32,.62);backdrop-filter:blur(5px);z-index:31;display:flex;align-items:center;justify-content:center;padding:18px}
+.detailSheet{background:#fff;width:min(900px,100%);max-height:calc(100dvh - 36px);overflow:auto;border-radius:22px;box-shadow:0 35px 100px rgba(10,27,33,.28)}
+.detailHead{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.detailHead small{display:block;text-transform:uppercase;letter-spacing:.13em;color:#158d77;font-size:10px;font-weight:850;margin-bottom:9px}
+.detailHead h2{font-size:24px;letter-spacing:-.04em;margin:0}
+.detailHead p{color:var(--muted);font-size:12px;margin:6px 0 0}
+.detailClose{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#f7fbfa;font-size:20px;flex-shrink:0}
+.detailBody{padding:22px 24px}
+.detailStats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.detailStat{background:#f6faf9;border:1px solid #e2eeea;border-radius:15px;padding:15px}
+.detailStat label{display:block;font-size:11px;color:#718589;font-weight:700}
+.detailStat strong{display:block;font-size:18px;margin-top:7px;letter-spacing:-.03em;overflow-wrap:anywhere}
+.detailTitle{font-size:15px;font-weight:800;margin:19px 0 12px}
+.detailFooter{padding:15px 24px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
+.orderBlock{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.orderBlock>div{border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px}
+.orderBlock span{font-size:12px;color:var(--muted);display:block}
+.orderBlock b{font-size:24px;letter-spacing:-.04em;margin-top:7px;display:block}
+.viewAlert{border:1px solid #dcebe7;padding:12px 14px;background:#f2faf7;border-radius:13px;margin-bottom:17px;color:#43665e;font-size:12px;line-height:1.6}
+.textDark{color:var(--ink)}
+@media(max-width:1150px){.serviceStripe{grid-template-columns:repeat(2,1fr)}.stripeIntro{grid-column:1/-1}}
+@media(max-width:920px){.sidebar{display:flex;flex-direction:column;gap:0}.sidebar .sideCard,.sidebar .sideFoot{display:none}.nav{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}.nav button{flex:0 0 auto;padding:9px 12px;display:flex;align-items:center;gap:7px;min-width:unset}.nav button b{font-size:14px;width:25px;height:25px}.brand{padding-bottom:12px}.navLabel{display:none}.topbar{border-top:1px solid #dae8e4}}
+@media(max-width:720px){.sidebar{padding:14px 12px 12px}.topbar{display:flex;flex-wrap:wrap;gap:8px;padding:13px 15px}.topbarTitle{font-size:16px}.topbarSub{font-size:11px}.topRight{width:100%;display:flex;justify-content:flex-start}.mark{display:none}.content{padding:18px 13px 50px}.heading h1{font-size:25px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.banner{padding:19px}.panelHead{padding:16px}.serviceStripe{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stripeIntro{grid-column:1/-1}.serviceStripe>div{padding:14px}.serviceStripe .metricValue{font-size:21px}.detailBody{padding:15px}.detailHead{padding:17px}.detailStats{grid-template-columns:1fr 1fr}.detailFooter{padding:13px}.detailFooter .btn{flex:1}.orderBlock{grid-template-columns:1fr 1fr}.toolbar .left{flex-wrap:wrap}.nav button{font-size:11px}}
+@media(max-width:400px){.detailStats{grid-template-columns:1fr}.orderBlock{grid-template-columns:1fr 1fr}.statIcon{display:none}.statValue{font-size:19px}}
+</style>
+<style>
+.navScrollHint{display:none}
+@media(max-width:920px){.navScrollHint{display:block;text-align:right;font-size:10px;font-weight:700;color:#a7bfbd;padding:3px 4px 0}}
+@media(max-width:720px){.tableScroll:before{content:"Deslizá hacia los costados para ver todas las columnas →";display:block;font-size:10px;font-weight:650;padding:8px 14px;background:#f1f8f6;color:#657c7a;white-space:normal}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="modal-root"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<script>const APP={
+ key:'mantenimientos',title:'ServiControl',accent:'#258e79',icon:'✳',
+ tabs:[['inicio','Resumen','▦'],['equipos','Equipos','⚙'],['agenda','Agenda','▣'],['historial','Historial','◴'],['informes','Informes','▤']],
+ seed(){let d=today();return {version:1,app:'mantenimientos',clients:[{id:'c1',name:'Edificio Costa (demo)',phone:'',address:'Av. Central 120'},{id:'c2',name:'Oficinas Norte (demo)',phone:'',address:'Calle 5 340'},{id:'c3',name:'Hotel del Lago (demo)',phone:'',address:'Ruta 8 km 3'}],equipment:[{id:'q1',clientId:'c1',name:'Caldera principal',category:'Calefacción',serial:'CAL-001',frequency:90,last:plusDays(d,-99),next:plusDays(d,-9)},{id:'q2',clientId:'c2',name:'Aire acondicionado sala',category:'Climatización',serial:'AC-220',frequency:180,last:plusDays(d,-168),next:plusDays(d,12)},{id:'q3',clientId:'c3',name:'Bomba de agua',category:'Bombas',serial:'BM-71',frequency:60,last:plusDays(d,-42),next:plusDays(d,18)}],orders:[{id:'o1',equipmentId:'q2',date:plusDays(d,-160),completedDate:plusDays(d,-160),status:'realizado',technician:'Técnico demo',cost:65000,notes:'Limpieza de filtros y revisión general.'}]};},
+ empty(){return {version:1,app:'mantenimientos',clients:[],equipment:[],orders:[]}},
+ client(id){return db.clients.find(x=>x.id===id)},eq(id){return db.equipment.find(x=>x.id===id)},
+ urgent(){return db.equipment.filter(q=>q.next<today())},
+ schedule(){return db.equipment.filter(q=>q.next<=plusDays(today(),30)).sort((a,b)=>a.next.localeCompare(b.next))},
+ equipmentRows(){return db.equipment.filter(x=>[x.name,x.category,x.serial,APP.client(x.clientId)?.name].join(' ').toLowerCase().includes(search.toLowerCase())).filter(x=>filter==='todos'||(filter==='atrasados'&&x.next<today())||(filter==='proximos'&&x.next>=today()&&x.next<=plusDays(today(),30))).sort((a,b)=>a.next.localeCompare(b.next)).map(q=>{const c=APP.client(q.clientId);const d=daysBetween(today(),q.next);return [cellName(q.name,q.serial||q.category),h(c?.name||'Cliente'),h(q.category),`${dateText(q.next)}<div class="meta">Cada ${h(q.frequency)} días</div>`,d<0?pill('Atrasado '+Math.abs(d)+' d','bad'):d<=30?pill('Próximo · '+d+' d','warn'):pill('Al día','good'),`<div class="rowActions">${btn('Ver ficha','viewEq',q.id)}${smallLink('Visita','addOrder',q.id)}${smallLink('Editar','editEq',q.id)}</div>`]})},
+ agendaRows(){return APP.schedule().filter(q=>[q.name,APP.client(q.clientId)?.name].join(' ').toLowerCase().includes(search.toLowerCase())).map(q=>{const c=APP.client(q.clientId);return [cellName(q.name,c?.name||''),dateText(q.next),q.next<today()?pill('Vencido','bad'):pill('Próximo','warn'),`<div class="rowActions">${btn('Realizar servicio','addOrder',q.id)}${smallLink('Avisar','wa',q.id)}</div>`]})},
+ historyRows(){return [...db.orders].sort((a,b)=>b.date.localeCompare(a.date)).filter(o=>{const q=APP.eq(o.equipmentId);return [o.notes,o.technician,q?.name].join(' ').toLowerCase().includes(search.toLowerCase())}).map(o=>{const q=APP.eq(o.equipmentId);return [dateText(o.completedDate||o.date),cellName(q?.name||'Equipo eliminado',APP.client(q?.clientId)?.name||''),pill(o.status==='realizado'?'Realizado':'Planificado',o.status==='realizado'?'good':'warn'),h(o.technician||'—'),money(o.cost),`<div class="rowActions">${smallLink('Informe PDF','orderPdf',o.id)}${smallLink('Eliminar','delOrder',o.id)}</div>`]})},
+ list(){if(tab==='equipos')return table(['Equipo','Cliente','Categoría','Próximo','Estado','Acciones'],APP.equipmentRows());if(tab==='agenda')return table(['Equipo / Cliente','Vencimiento','Estado','Acción'],APP.agendaRows());return table(['Fecha','Equipo','Estado','Técnico','Costo','Acciones'],APP.historyRows())},
+ render(tab){const late=APP.urgent().length,soon=APP.schedule().length,done=db.orders.filter(x=>x.status==='realizado').length;
+ if(tab==='inicio')return `<div class="heading"><div><p class="eyebrow">Mantenimiento preventivo</p><h1>Que ningún servicio se te pase.</h1><p class="sub">Equipos, intervenciones y fechas de mantenimiento, organizados para trabajar mejor.</p></div><div class="actions">${btn('＋ Nuevo equipo','newEq','','primary')}${btn('＋ Cliente','newClient')}</div></div><div class="banner"><div><strong>La próxima visita, siempre a la vista.</strong><p>Controlá equipos con servicio vencido o que vence en los próximos 30 días.</p></div>${btn('Abrir agenda →','goAgenda','','primary')}</div>${stats([card('Equipos registrados',db.equipment.length,'⚙','En seguimiento'),card('Servicios vencidos',late,'⚠','Necesitan atención'),card('Próximos 30 días',soon,'📅','Incluye los vencidos'),card('Trabajos realizados',done,'✔','Historial registrado')])}<div class="dashboardGrid">${panel('Próximos mantenimientos',table(['Equipo / Cliente','Fecha','Estado',''],APP.schedule().slice(0,7).map(q=>[cellName(q.name,APP.client(q.clientId)?.name||''),dateText(q.next),q.next<today()?pill('Vencido','bad'):pill('Próximo','warn'),smallLink('Registrar','addOrder',q.id)])))}${panel('Accesos rápidos',`<div class="panelBody stack"><button class="quick" data-action="newClient"><span class="quickIcon">👤</span><span><strong>Nuevo cliente</strong><small>Empresa, teléfono y dirección</small></span></button><button class="quick" data-action="newEq"><span class="quickIcon">⚙️</span><span><strong>Registrar equipo</strong><small>Frecuencia y próxima visita</small></span></button><button class="quick" data-action="goHistory"><span class="quickIcon">📄</span><span><strong>Ver historial</strong><small>Informes de tareas realizadas</small></span></button></div>`)}</div>`;
+ if(tab==='equipos')return `<div class="heading"><div><p class="eyebrow">Inventario técnico</p><h1>Equipos bajo mantenimiento</h1><p class="sub">Asociá cada equipo a un cliente y configurá cuándo necesita volver a revisarse.</p></div><div class="actions">${btn('＋ Nuevo cliente','newClient')}${btn('＋ Nuevo equipo','newEq','','primary')}</div></div>${panel('Listado de equipos',`<div class="toolbar"><div class="left"><input class="search" data-search="true" placeholder="Buscar equipo, cliente o número de serie..." value="${h(search)}"><select class="select" data-filter="true"><option value="todos">Todos</option><option value="atrasados" ${filter==='atrasados'?'selected':''}>Vencidos</option><option value="proximos" ${filter==='proximos'?'selected':''}>Próximos</option></select></div></div><div id="dynamicList">${APP.list()}</div>`)}`;
+ if(tab==='agenda')return `<div class="heading"><div><p class="eyebrow">Agenda preventiva</p><h1>Servicios por realizar</h1><p class="sub">Equipos con mantenimiento vencido o programado dentro de 30 días.</p></div>${btn('＋ Cargar servicio','addOrder','','primary')}</div>${stats([card('Vencidos',late,'⚠','Revisar con prioridad'),card('En próximos 30 días',soon-late,'🗓','Planificar visita')])}${panel('Agenda de vencimientos',`<div class="toolbar"><div class="left"><input class="search" data-search="true" placeholder="Buscar equipo o cliente..." value="${h(search)}"></div></div><div id="dynamicList">${APP.list()}</div>`)}`;
+ return `<div class="heading"><div><p class="eyebrow">Registro técnico</p><h1>Historial de servicios</h1><p class="sub">Intervenciones documentadas con fecha, técnico y observaciones.</p></div>${btn('＋ Nueva intervención','addOrder','','primary')}</div>${panel('Trabajos registrados',`<div class="toolbar"><div class="left"><input class="search" data-search="true" placeholder="Buscar intervención..." value="${h(search)}"></div></div><div id="dynamicList">${APP.list()}</div>`)}`},
+ report(){return {subtitle:'Equipos y próximos servicios',headers:['Equipo','Cliente','Categoría','Serie','Frecuencia (días)','Último servicio','Próximo servicio'],rows:db.equipment.map(q=>[q.name,APP.client(q.clientId)?.name||'',q.category,q.serial,q.frequency,dateText(q.last),dateText(q.next)]),summary:[['Clientes',db.clients.length],['Equipos',db.equipment.length],['Servicios vencidos',APP.urgent().length],['Intervenciones registradas',db.orders.length]]}},
+ actions:{
+ goAgenda(){tab='agenda';render()},goHistory(){tab='historial';render()},
+ newClient(){modal('Nuevo cliente',[{name:'name',label:'Nombre / razón social',wide:true},{name:'phone',label:'WhatsApp',type:'tel',required:false},{name:'address',label:'Dirección',required:false,wide:true}],v=>db.clients.push({id:uid(),...v}))},
+ newEq(){if(!db.clients.length){APP.actions.newClient();notify('Primero registrá un cliente');return}modal('Registrar equipo',[{name:'clientId',label:'Cliente',type:'select',wide:true,options:db.clients.map(c=>({value:c.id,label:c.name}))},{name:'name',label:'Nombre del equipo',wide:true},{name:'category',label:'Tipo de equipo',type:'select',options:['Climatización','Calefacción','Electricidad','Bombas','Portones','Seguridad','Otro']},{name:'serial',label:'Número de serie',required:false},{name:'frequency',label:'Frecuencia de revisión (días)',type:'number',min:1,default:90},{name:'last',label:'Último servicio realizado',type:'date',default:today()},{name:'next',label:'Próximo vencimiento',type:'date',default:plusDays(today(),90)}],v=>db.equipment.push({...v,id:uid(),frequency:num(v.frequency)}))},
+ editEq(id){const q=APP.eq(id);if(!q)return;modal('Editar equipo',[{name:'clientId',label:'Cliente',type:'select',wide:true,options:db.clients.map(c=>({value:c.id,label:c.name}))},{name:'name',label:'Nombre del equipo',wide:true},{name:'category',label:'Tipo de equipo',type:'select',options:['Climatización','Calefacción','Electricidad','Bombas','Portones','Seguridad','Otro']},{name:'serial',label:'Número de serie',required:false},{name:'frequency',label:'Frecuencia de revisión (días)',type:'number',min:1},{name:'last',label:'Último servicio',type:'date'},{name:'next',label:'Próximo vencimiento',type:'date'}],v=>Object.assign(q,v,{frequency:num(v.frequency)}),q)},
+ addOrder(id){if(!db.equipment.length){notify('Primero registrá un equipo');APP.actions.newEq();return}modal('Registrar intervención',[{name:'equipmentId',label:'Equipo',type:'select',wide:true,options:db.equipment.map(q=>({value:q.id,label:q.name+' — '+(APP.client(q.clientId)?.name||'')}))},{name:'date',label:'Fecha de la intervención',type:'date',default:today()},{name:'status',label:'Resultado',type:'select',options:[{value:'realizado',label:'Servicio realizado'},{value:'pendiente',label:'Visita programada'}]},{name:'technician',label:'Técnico responsable',required:false},{name:'cost',label:'Importe del servicio ($)',type:'number',min:0,default:0},{name:'notes',label:'Trabajos, observaciones y repuestos',type:'textarea',wide:true,required:false}],v=>{const q=APP.eq(v.equipmentId);if(v.status==='realizado'){q.last=v.date;q.next=plusDays(v.date,q.frequency)}db.orders.push({...v,id:uid(),cost:num(v.cost),completedDate:v.status==='realizado'?v.date:''})},{equipmentId:id||db.equipment[0].id},'Marcar como realizado actualizará automáticamente la próxima fecha del equipo.')},
+ wa(id){const q=APP.eq(id),c=APP.client(q?.clientId);if(!q||!c)return;msgLink(c.phone,`Hola ${c.name}, les recordamos que el equipo ${q.name} tiene su próximo mantenimiento previsto para el ${dateText(q.next)}. ¿Podemos coordinar una visita? Muchas gracias.`)},
+ orderPdf(id){const o=db.orders.find(x=>x.id===id);if(!o)return;const q=APP.eq(o.equipmentId),c=APP.client(q?.clientId);printReport('Informe de mantenimiento — '+(q?.name||''),['Campo','Detalle'],[['Cliente',c?.name||''],['Dirección',c?.address||''],['Equipo',q?.name||''],['Número de serie',q?.serial||''],['Fecha',dateText(o.date)],['Estado',o.status==='realizado'?'Realizado':'Programado'],['Técnico',o.technician],['Descripción',o.notes],['Costo',money(o.cost)]],'Comprobante de intervención')},
+ delOrder(id){if(confirm('¿Eliminar esta intervención? Si era un servicio realizado, revisá la próxima fecha del equipo manualmente.')){db.orders=db.orders.filter(o=>o.id!==id);save()}}
+ }
+};
+</script>
+<script>
+/* ServiControl Empresarial — mejoras de producto sobre el motor estable */
+APP.tabs=[['inicio','Resumen','▦'],['clientes','Clientes','♙'],['equipos','Equipos','⚙'],['agenda','Agenda','▣'],['ordenes','Órdenes','▤'],['historial','Historial','◴'],['informes','Informes','⇩']];
+const __renderOriginal=APP.render.bind(APP);
+const __listOriginal=APP.list.bind(APP);
+const __seedOriginal=APP.seed.bind(APP);
+APP.seed=()=>{
+ const data=__seedOriginal();
+ data.orders.push({id:'o2',equipmentId:'q1',date:plusDays(today(),2),completedDate:'',status:'pendiente',technician:'Por asignar',cost:0,notes:'Revisión preventiva pendiente de confirmar.'});
+ return data;
+};
+const viewService=(tab)=>({inicio:['Centro de operaciones','Controlá servicios, equipos y visitas en un solo lugar.'],clientes:['Cartera de clientes','Empresas, datos de contacto y activos asociados.'],equipos:['Inventario técnico','Trazabilidad de cada equipo y su calendario preventivo.'],agenda:['Agenda preventiva','Servicios vencidos y próximas revisiones.'],ordenes:['Órdenes de trabajo','Planificá, completá y documentá intervenciones.'],historial:['Historial técnico','Registro de tareas realizadas y comprobantes.'],informes:['Informes y respaldo','Exportaciones, documentos y copias de seguridad.']})[tab]||['ServiControl','Gestión técnica'];
+function pendingOrders(){return db.orders.filter(o=>o.status!=='realizado').sort((a,b)=>a.date.localeCompare(b.date))}
+function workStatus(q){if(!q)return '—';const days=daysBetween(today(),q.next);return days<0?pill('Vencido · '+(-days)+' d','bad'):days<=30?pill('Próximo · '+days+' d','warn'):pill('Vigente','good')}
+function serviceMetrics(){const overdue=APP.urgent().length;const upcoming=APP.schedule().filter(q=>q.next>=today()).length;return {overdue,upcoming,clients:db.clients.length,assets:db.equipment.length,pending:pendingOrders().length,done:db.orders.filter(o=>o.status==='realizado').length}}
+function serviceStripe(){const s=serviceMetrics();return `<section class="serviceStripe"><div class="stripeIntro"><strong>Operación técnica, bajo control.</strong><p>Gestioná mantenimientos preventivos, órdenes y clientes sin perder el historial de cada equipo.</p></div><div><div class="metricLabel">Visitas vencidas</div><div class="metricValue">${s.overdue}</div><div class="metricCaption">Equipos para priorizar</div></div><div><div class="metricLabel">Órdenes abiertas</div><div class="metricValue">${s.pending}</div><div class="metricCaption">Pendientes de finalizar</div></div><div><div class="metricLabel">Próximos 30 días</div><div class="metricValue">${s.upcoming}</div><div class="metricCaption">Mantenimientos previstos</div></div></section>`}
+APP.clientRows=function(){return db.clients.filter(c=>[c.name,c.address,c.phone].join(' ').toLowerCase().includes(search.toLowerCase())).map(c=>{const assets=db.equipment.filter(q=>q.clientId===c.id);const late=assets.filter(q=>q.next<today()).length;return [cellName(c.name,c.address||'Sin dirección'),h(c.phone||'—'),String(assets.length),late?pill(late+' vencido'+(late>1?'s':''),'bad'):pill('Al día','good'),`<div class="rowActions">${btn('Ver ficha','viewClient',c.id)}${smallLink('Editar','editClient',c.id)}</div>`]})};
+APP.orderRows=function(){return [...db.orders].sort((a,b)=>a.status===b.status?b.date.localeCompare(a.date):a.status==='pendiente'?-1:1).filter(o=>{const q=APP.eq(o.equipmentId);return [q?.name,APP.client(q?.clientId)?.name,o.technician,o.notes].join(' ').toLowerCase().includes(search.toLowerCase())}).map(o=>{const q=APP.eq(o.equipmentId);const cl=APP.client(q?.clientId);return [cellName(q?.name||'Equipo eliminado',cl?.name||'Cliente'),dateText(o.date),pill(o.status==='realizado'?'Realizado':'Pendiente',o.status==='realizado'?'good':o.date<today()?'bad':'warn'),h(o.technician||'Sin asignar'),`<div class="rowActions">${o.status==='realizado'?smallLink('Informe PDF','orderPdf',o.id):btn('Completar','completeOrder',o.id)}${smallLink('Eliminar','delOrder',o.id)}</div>`]})};
+APP.list=function(){if(tab==='clientes')return table(['Cliente','Contacto','Equipos','Estado','Acciones'],APP.clientRows());if(tab==='ordenes')return table(['Equipo / Cliente','Fecha','Estado','Responsable','Acciones'],APP.orderRows());return __listOriginal()};
+APP.render=function(tab){
+ if(tab==='clientes')return `<div class="heading"><div><p class="eyebrow">Relaciones comerciales</p><h1>Clientes y establecimientos</h1><p class="sub">Encontrá a cada cliente y consultá sus equipos, vencimientos e intervenciones.</p></div>${btn('＋ Nuevo cliente','newClient','','primary')}</div>${panel('Directorio de clientes',`<div class="toolbar"><div class="left"><input class="search" data-search="true" placeholder="Buscar nombre, dirección o contacto..." value="${h(search)}"></div></div><div id="dynamicList">${APP.list()}</div>`)}`;
+ if(tab==='ordenes'){const pending=pendingOrders().length;return `<div class="heading"><div><p class="eyebrow">Ejecución de servicios</p><h1>Órdenes de trabajo</h1><p class="sub">Dejá constancia de visitas programadas y completalas cuando el técnico termine.</p></div>${btn('＋ Nueva orden','addOrder','','primary')}</div><div class="orderBlock"><div><span>Por realizar</span><b>${pending}</b></div><div><span>Completadas</span><b>${db.orders.filter(o=>o.status==='realizado').length}</b></div><div><span>Equipos controlados</span><b>${db.equipment.length}</b></div><div><span>Clientes</span><b>${db.clients.length}</b></div></div>${panel('Seguimiento de órdenes',`<div class="toolbar"><div class="left"><input class="search" data-search="true" placeholder="Buscar equipo, técnico u observación..." value="${h(search)}"></div></div><div id="dynamicList">${APP.list()}</div>`)}`}
+ const original=__renderOriginal(tab);
+ if(tab==='inicio'){const box=document.createElement('div');box.innerHTML=original;box.querySelector('.banner')?.remove();box.querySelector('.stats')?.remove();return serviceStripe()+box.innerHTML;}
+ if(tab==='agenda'){
+ const orders=pendingOrders().map(o=>{const q=APP.eq(o.equipmentId);return [cellName(q?.name||'Equipo eliminado',APP.client(q?.clientId)?.name||''),dateText(o.date),pill(o.date<today()?'Atrasada':'Programada',o.date<today()?'bad':'warn'),btn('Completar','completeOrder',o.id)]});
+ return original+panel('Visitas programadas',table(['Equipo / Cliente','Fecha','Estado','Acción'],orders),`${orders.length} órdenes abiertas`);
+ }
+ return original;
+};
+function assetLedger(q){return [...db.orders].filter(o=>o.equipmentId===q.id).sort((a,b)=>b.date.localeCompare(a.date))}
+function detailDialog(kicker,name,sub,statHtml,body,buttons){
+ const root=document.getElementById('modal-root');
+ root.innerHTML=`<div class="detailOverlay" id="detailMask"><section class="detailSheet" role="dialog" aria-modal="true" aria-label="${h(name)}"><div class="detailHead"><div><small>${h(kicker)}</small><h2>${h(name)}</h2><p>${h(sub)}</p></div><button class="detailClose" id="detailClose" aria-label="Cerrar">×</button></div><div class="detailBody"><div class="detailStats">${statHtml}</div>${body}</div><div class="detailFooter"><button type="button" class="btn" id="detailCancel">Cerrar</button>${buttons}</div></section></div>`;
+ const close=()=>root.innerHTML='';root.querySelector('#detailClose').onclick=close;root.querySelector('#detailCancel').onclick=close;root.querySelector('#detailMask').onclick=e=>{if(e.target.id==='detailMask')close()};root.querySelector('#detailClose').focus();
+}
+const infoBox=(label,value)=>`<div class="detailStat"><label>${h(label)}</label><strong>${h(value)}</strong></div>`;
+function eqDetail(id){const q=APP.eq(id);if(!q)return;const c=APP.client(q.clientId);const records=assetLedger(q);const rows=records.map(o=>[dateText(o.date),pill(o.status==='realizado'?'Realizado':'Planificado',o.status==='realizado'?'good':'warn'),h(o.technician||'—'),h(o.notes||'—'),smallLink('Informe PDF','orderPdf',o.id)]);detailDialog('Ficha técnica',q.name,(c?.name||'Cliente eliminado')+' · '+(q.serial||'Sin número de serie'),infoBox('Estado',q.next<today()?'Vencido':'Vigente')+infoBox('Próxima revisión',dateText(q.next))+infoBox('Frecuencia',q.frequency+' días'),`<div class="detailTitle">Intervenciones del equipo</div>${table(['Fecha','Estado','Responsable','Notas',''],rows)}`,`${btn('Editar equipo','editEq',id)}${btn('Registrar visita','addOrder',id,'primary')}${btn('PDF técnico','assetPdf',id)}`)}
+function clientDetail(id){const c=APP.client(id);if(!c)return;const assets=db.equipment.filter(q=>q.clientId===id);const past=db.orders.filter(o=>assets.some(q=>q.id===o.equipmentId));detailDialog('Ficha del cliente',c.name,c.address||'Dirección no registrada',infoBox('Equipos',assets.length)+infoBox('Vencidos',assets.filter(q=>q.next<today()).length)+infoBox('Intervenciones',past.length),`<div class="detailTitle">Equipos asociados</div>${table(['Equipo','Categoría','Próximo servicio','Acción'],assets.map(q=>[cellName(q.name,q.serial||'Sin serie'),h(q.category),workStatus(q),btn('Ver equipo','viewEq',q.id)]))}`,`${btn('Editar cliente','editClient',id)}${btn('Informe PDF','clientPdf',id)}${btn('WhatsApp','waClient',id,'primary')}`)}
+function eqFields(){return [{name:'clientId',label:'Cliente',type:'select',wide:true,options:db.clients.map(c=>({value:c.id,label:c.name}))},{name:'name',label:'Nombre del equipo',wide:true},{name:'category',label:'Categoría',type:'select',options:['Climatización','Calefacción','Electricidad','Bombas','Portones','Seguridad','Otro']},{name:'serial',label:'Número de serie',required:false},{name:'frequency',label:'Revisión cada (días)',type:'number',min:1,default:90},{name:'last',label:'Último servicio',type:'date',default:today()},{name:'next',label:'Próxima revisión (opcional)',type:'date',required:false,default:''}]}
+APP.actions.viewEq=eqDetail;APP.actions.viewClient=clientDetail;
+APP.actions.waClient=function(id){const c=APP.client(id);if(!c)return;msgLink(c.phone,'Hola '+c.name+', te contactamos desde el servicio técnico para coordinar un mantenimiento. ¿Podemos confirmar una fecha?')};
+APP.actions.editClient=function(id){const c=APP.client(id);if(!c)return;modal('Editar cliente',[{name:'name',label:'Nombre / razón social',wide:true},{name:'phone',label:'WhatsApp',type:'tel',required:false},{name:'address',label:'Dirección',wide:true,required:false}],v=>Object.assign(c,{name:v.name.trim(),phone:v.phone.trim(),address:v.address.trim()}),c)};
+APP.actions.newEq=function(){if(!db.clients.length){APP.actions.newClient();notify('Primero registrá un cliente');return}modal('Registrar equipo',eqFields(),v=>{const f=num(v.frequency);if(f<1)throw Error('Ingresá una frecuencia mayor a cero.');const next=v.next||plusDays(v.last,f);if(next<v.last)throw Error('La fecha próxima no puede ser anterior al último servicio.');db.equipment.push({...v,id:uid(),name:v.name.trim(),frequency:f,next})},{},'Si dejás vacía la próxima revisión, se calcula según la frecuencia.')};
+APP.actions.editEq=function(id){const q=APP.eq(id);if(!q)return;modal('Editar equipo',eqFields(),v=>{const f=num(v.frequency);if(f<1)throw Error('La frecuencia debe ser mayor a cero.');const next=v.next||plusDays(v.last,f);if(next<v.last)throw Error('La próxima fecha no puede ser anterior al último servicio.');Object.assign(q,v,{frequency:f,next})},q,'Podés ajustar la frecuencia y la fecha del próximo servicio.')};
+APP.actions.addOrder=function(id){if(!db.equipment.length){APP.actions.newEq();notify('Primero agregá un equipo');return}modal('Nueva orden de servicio',[{name:'equipmentId',label:'Equipo',type:'select',wide:true,options:db.equipment.map(q=>({value:q.id,label:q.name+' · '+(APP.client(q.clientId)?.name||'')}))},{name:'date',label:'Fecha de la visita',type:'date',default:today()},{name:'status',label:'Estado',type:'select',options:[{value:'pendiente',label:'Visita programada'},{value:'realizado',label:'Trabajo realizado'}]},{name:'technician',label:'Técnico responsable',required:false},{name:'cost',label:'Importe del servicio ($)',type:'number',min:0,default:0},{name:'notes',label:'Detalle, repuestos y observaciones',type:'textarea',wide:true,required:false}],v=>{
+ const q=APP.eq(v.equipmentId);if(!q)throw Error('Equipo inválido');if(v.status==='realizado'&&v.date>today())throw Error('No podés marcar como realizada una visita futura.');if(num(v.cost)<0)throw Error('El importe no puede ser negativo.');const oldLast=q.last,oldNext=q.next;
+ if(v.status==='realizado'){q.last=v.date;q.next=plusDays(v.date,q.frequency)}
+ db.orders.push({...v,id:uid(),cost:num(v.cost),completedDate:v.status==='realizado'?v.date:'',priorLast:oldLast,priorNext:oldNext});
+ },{equipmentId:id||db.equipment[0].id},'Programar una visita no modifica el ciclo preventivo. Solo se actualiza al marcar el trabajo como realizado.')};
+APP.actions.completeOrder=function(id){const o=db.orders.find(x=>x.id===id);if(!o||o.status==='realizado')return;modal('Completar orden',[{name:'date',label:'Fecha en que se realizó',type:'date',default:today()},{name:'technician',label:'Técnico responsable',required:false},{name:'cost',label:'Importe del servicio ($)',type:'number',min:0,default:o.cost},{name:'notes',label:'Trabajo realizado, repuestos y observaciones',type:'textarea',wide:true,required:false}],v=>{
+ if(v.date>today())throw Error('La fecha realizada no puede ser futura.');const q=APP.eq(o.equipmentId);if(!q)throw Error('No se encontró el equipo.');
+ o.priorLast=q.last;o.priorNext=q.next;o.status='realizado';o.date=v.date;o.completedDate=v.date;o.technician=v.technician;o.cost=num(v.cost);o.notes=v.notes;q.last=v.date;q.next=plusDays(v.date,q.frequency);
+ },{technician:o.technician,cost:o.cost,notes:o.notes},'Al completar se calcula automáticamente el próximo mantenimiento.')};
+APP.actions.delOrder=function(id){const o=db.orders.find(x=>x.id===id);if(!o)return;if(!confirm('¿Eliminar esta intervención? Esta acción no se puede deshacer.'))return;const q=APP.eq(o.equipmentId);db.orders=db.orders.filter(x=>x.id!==id);if(q&&o.status==='realizado'){
+ const past=db.orders.filter(x=>x.equipmentId===q.id&&x.status==='realizado').sort((a,b)=>b.date.localeCompare(a.date))[0];
+ if(past){q.last=past.completedDate||past.date;q.next=plusDays(q.last,q.frequency)}
+ else if(o.priorLast&&o.priorNext){q.last=o.priorLast;q.next=o.priorNext}
+ else notify('Revisá las fechas del equipo: se eliminó su único servicio registrado.');
+ }save();notify('Orden eliminada')};
+APP.actions.clientPdf=function(id){const c=APP.client(id);if(!c)return;const assets=db.equipment.filter(q=>q.clientId===id);printReport('Ficha de cliente · '+c.name,['Equipo','Categoría','Serie','Último servicio','Próximo servicio'],assets.map(q=>[q.name,q.category,q.serial,dateText(q.last),dateText(q.next)]),c.address||'Cliente')};
+APP.actions.assetPdf=function(id){const q=APP.eq(id);if(!q)return;const c=APP.client(q.clientId);const records=assetLedger(q);printReport('Historial del equipo · '+q.name,['Fecha','Tipo','Técnico','Detalle','Costo'],records.map(o=>[dateText(o.date),o.status==='realizado'?'Realizado':'Programado',o.technician||'—',o.notes||'—',money(o.cost)]),'Cliente: '+(c?.name||'—')+' · Serie: '+(q.serial||'—')+' · Próximo servicio: '+dateText(q.next))};
+</script>
+<script>'use strict';
+const h = (x) => String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=(x)=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(x)||0);
+const num=x=>Number(x)||0;
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const plusDays=(date,n)=>{const [y,m,d]=date.split('-').map(Number);const day=new Date(y,m-1,d);day.setDate(day.getDate()+Number(n));return `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`};
+const daysBetween=(a,b)=>{const d=x=>{const [y,m,dd]=x.split('-').map(Number);return Date.UTC(y,m-1,dd)};return Math.round((d(b)-d(a))/86400000)};
+const dateText=v=>v?`${v.slice(8,10)}/${v.slice(5,7)}/${v.slice(0,4)}`:'—';
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);
+const initial=name=>String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
+const dateInput=(v)=>v||today();
+const pill=(label,color='info')=>`<span class="pill ${color}"><span class="dot"></span>${h(label)}</span>`;
+const cellName=(name,detail)=>`<div class="cellName"><span class="initial">${h(initial(name))}</span><div><div class="strong">${h(name)}</div>${detail?`<div class="meta">${h(detail)}</div>`:''}</div></div>`;
+const escAttr=h;
+const btn=(txt,act,id,cls='sm')=>`<button class="btn ${cls}" type="button" data-action="${h(act)}" data-id="${h(id??'')}">${txt}</button>`;
+const smallLink=(txt,act,id)=>`<button class="link" type="button" data-action="${h(act)}" data-id="${h(id??'')}">${txt}</button>`;
+const card=(label,value,icon,note='')=>`<div class="stat"><div class="statLabel"><span>${h(label)}</span><span class="statIcon">${icon}</span></div><div class="statValue">${value}</div><div class="statNote">${h(note)}</div></div>`;
+const stats=(arr)=>`<section class="stats">${arr.join('')}</section>`;
+const empty=(text='Todavía no hay registros',caption='Agregá el primer registro para comenzar.')=>`<div class="empty"><div class="emptyIcon">🗂️</div><b>${h(text)}</b><div>${h(caption)}</div></div>`;
+const panel=(title,content,extra='')=>`<section class="panel"><div class="panelHead"><h2>${h(title)}</h2><span>${extra}</span></div>${content}</section>`;
+const table=(head,rows)=>rows.length?`<div class="tableScroll"><table><thead><tr>${head.map(t=>`<th>${h(t)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:empty();
+const printReport=(title,headers,rows,subtitle='')=>{const p=window.open('','_blank');if(!p){alert('Habilitá las ventanas emergentes para imprimir.');return}p.document.write(`<!doctype html><html lang="es"><meta charset="utf-8"><title>${h(title)}</title><style>body{font:13px Arial,sans-serif;padding:35px;color:#132238}h1{font-size:25px}p{color:#78849a}table{width:100%;border-collapse:collapse;margin-top:30px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e2e7ed}th{background:#edf1f6}footer{font-size:10px;color:#98a2af;margin-top:32px}@media print{@page{size:A4 landscape;margin:15mm}}</style><h1>${h(title)}</h1><p>${h(subtitle)} · Generado el ${dateText(today())}</p><table><tr>${headers.map(x=>`<th>${h(x)}</th>`).join('')}</tr>${rows.map(row=>`<tr>${row.map(x=>`<td>${h(x)}</td>`).join('')}</tr>`).join('')}</table><footer>Zenix AR · Exportación desde el navegador</footer></html>`);p.document.close();p.focus();p.print()};
+const csvExport=(filename,headers,rows)=>{const cell=(x)=>{let v=String(x??'');if(/^[=+@]/.test(v))v="'"+v;return `"${v.replace(/"/g,'""')}"`};const csv='\ufeff'+[headers,...rows].map(row=>row.map(cell).join(';')).join('\r\n');download(filename+'.csv',csv,'text/csv;charset=utf-8;')};
+function download(filename,contents,type='application/json'){const b=new Blob([contents],{type});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)}
+const STORAGE_KEY='zenix-'+APP.key+'-v1';
+function load(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const parsed=JSON.parse(raw);if(parsed&&typeof parsed==='object'&&parsed.version===1)return parsed}}catch(e){console.warn('storage',e)}return structuredClone(APP.seed())}
+let db=load();let tab='inicio';let search='';let filter='todos';
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(err){alert('No se pudieron guardar los datos. Revisá si el navegador permite almacenamiento local.')}render()}
+function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),2800)}
+function modal(title,fields,onSave,defaults={},tip=''){const html=fields.map(f=>{const value=defaults[f.name]??f.default??'';const a=`name="${h(f.name)}" id="field-${h(f.name)}" ${f.required===false?'':'required'} ${f.min!==undefined?`min="${h(f.min)}"`:''} ${f.step!==undefined?`step="${h(f.step)}"`:''} ${f.placeholder?`placeholder="${h(f.placeholder)}"`:''}`;let inp;if(f.type==='select'){inp=`<select ${a}>${f.options.map(o=>{const obj=typeof o==='string'?{value:o,label:o}:o;return `<option value="${h(obj.value)}" ${String(value)===String(obj.value)?'selected':''}>${h(obj.label)}</option>`}).join('')}</select>`}else if(f.type==='textarea')inp=`<textarea ${a}>${h(value)}</textarea>`;else inp=`<input type="${h(f.type||'text')}" ${a} value="${h(value)}"/>`;return `<div class="field ${f.wide?'wide':''}"><label for="field-${h(f.name)}">${h(f.label)}</label>${inp}</div>`}).join('');document.getElementById('modal-root').innerHTML=`<div class="floatMask" id="mask"><section class="modal" role="dialog" aria-modal="true" aria-label="${h(title)}"><div class="modalTop"><h2>${h(title)}</h2><button type="button" class="close" id="modalClose" aria-label="Cerrar">×</button></div><form id="entryForm"><div class="formGrid">${html}</div>${tip?`<p class="helper">${h(tip)}</p>`:''}<div class="modalFoot"><button type="button" class="btn" id="formCancel">Cancelar</button><button type="submit" class="btn primary">Guardar cambios →</button></div></form></section></div>`;const root=document.getElementById('modal-root');const close=()=>root.innerHTML='';root.querySelector('#modalClose').onclick=close;root.querySelector('#formCancel').onclick=close;root.querySelector('#mask').onclick=e=>{if(e.target.id==='mask')close()};root.querySelector('#entryForm').onsubmit=e=>{e.preventDefault();const vals=Object.fromEntries(new FormData(e.currentTarget).entries());try{const result=onSave(vals);if(result===false)return;close();save();notify('Los cambios se guardaron correctamente')}catch(err){alert(err?.message||String(err))}};setTimeout(()=>root.querySelector('input,select,textarea')?.focus(),20)}
+const msgLink=(phone,text)=>{let p=String(phone??'').replace(/\D/g,'');if(p.startsWith('0'))p=p.slice(1);if(p.length===10)p='54'+p;if(!p){notify('Este cliente no tiene teléfono cargado.');return}window.open(`https://wa.me/${p}?text=${encodeURIComponent(text)}`,'_blank','noopener,noreferrer')};
+function reportPage(){const data=APP.report();return `<div class="heading"><div><p class="eyebrow">Datos y respaldo</p><h1>Informes y exportaciones</h1><p class="sub">Exportá tus registros. En PDF se utiliza la opción de imprimir del navegador.</p></div></div><div class="twoPanels">${panel('Generar informes',`<div class="panelBody"><p class="tips">Descargá una planilla CSV compatible con Excel, o generá un informe listo para guardar en PDF.</p><div class="reportActions">${btn('⬇ Exportar Excel (CSV)','csv','', 'primary')}${btn('▣ Guardar PDF','print')}</div><div class="note" style="margin-top:18px">El PDF se crea desde la opción <b>Guardar como PDF</b> de la ventana de impresión.</div></div>`)}${panel('Copias de seguridad',`<div class="panelBody"><p class="tips">Todos los datos se guardan en este navegador. Creá una copia JSON periódicamente. Para cambiar de dispositivo, importá ese archivo.</p><div class="reportActions">${btn('⬇ Descargar JSON','backup')}${btn('⬆ Importar JSON','import')}</div><p class="tips" style="margin-top:20px">También podés borrar los datos de ejemplo y comenzar desde cero.</p>${btn('Borrar todos los datos','clear','', 'danger')}</div>`)}</div>${panel('Resumen del informe',`<div class="panelBody">${data.summary.map(x=>`<div class="reportRow"><span class="muted">${h(x[0])}</span><strong>${h(x[1])}</strong></div>`).join('')}</div>`)}`}
+function render(){
+ const current=APP.tabs.find(x=>x[0]===tab)||APP.tabs[0];const meta=viewService(current[0]);const metrics=serviceMetrics();
+ document.documentElement.style.setProperty('--accent',APP.accent);document.title=APP.title+' · Zenix AR';
+ const labels=APP.tabs.map(x=>`<button type="button" data-nav="${x[0]}" class="${tab===x[0]?'active':''}"><b>${x[2]}</b><span>${h(x[1])}</span></button>`).join('');
+ document.getElementById('root').innerHTML=`<div class="shell"><aside class="sidebar"><div><div class="brand"><div class="brandIcon">${APP.icon}</div><div><span>${h(APP.title)}</span><small>ZENIX AR · SERVICIOS</small></div></div><p class="navLabel">Panel de gestión</p><nav class="nav" aria-label="Secciones">${labels}</nav><div class="navScrollHint">Deslizá para ver más secciones →</div><section class="sideCard"><div class="sideCardLabel">Estado de la operación</div><div class="sideCardValue">${metrics.assets} equipos</div><p class="sideCardSub">Inventario de mantenimiento preventivo bajo seguimiento.</p><div class="sideMiniGrid"><div class="sideMini"><strong>${metrics.overdue}</strong><span>servicios vencidos</span></div><div class="sideMini"><strong>${metrics.pending}</strong><span>órdenes abiertas</span></div></div></section></div><div class="sideFoot"><strong>Entorno de demostración</strong><br>Guardado en este navegador.<br>Sin usuarios ni datos sincronizados.</div></aside><div class="main"><header class="topbar"><div class="topbarMain"><div class="crumb">ServiControl <span style="padding:0 6px">/</span> ${h(current[1])}</div><div class="topbarTitle">${h(meta[0])}</div><div class="topbarSub">${h(meta[1])}</div></div><div class="topRight"><span class="signal ${metrics.overdue?'bad':'good'}"><span class="sigDot"></span>${metrics.overdue?metrics.overdue+' revisiones vencidas':'Mantenimiento al día'}</span><span class="mark"><span class="sigDot"></span>DATOS LOCALES</span><div class="avatar">SC</div></div></header><main class="content">${tab==='informes'?reportPage():APP.render(tab)}<div class="footer">ServiControl Empresarial · Zenix AR · Los datos se guardan únicamente en este navegador</div></main></div></div>`;
+}
+document.addEventListener('click',e=>{const nav=e.target.closest('[data-nav]');if(nav){tab=nav.dataset.nav;search='';filter='todos';render();return}const b=e.target.closest('[data-action]');if(!b)return;const act=b.dataset.action,id=b.dataset.id;if(act==='backup')return download(APP.key+'-respaldo-'+today()+'.json',JSON.stringify(db,null,2));if(act==='import'){document.getElementById('importFile').click();return}if(act==='clear'){if(confirm('¿Borrar TODOS los registros guardados en este navegador? Esta acción no se puede deshacer. Hacé una copia JSON primero.')){db=APP.empty();save();notify('Se borraron todos los datos')}return}if(act==='csv'){const v=APP.report();csvExport(APP.key+'-'+today(),v.headers,v.rows);return}if(act==='print'){const v=APP.report();printReport(APP.title+' · Informe',v.headers,v.rows,v.subtitle);return}if(APP.actions[act])return APP.actions[act](id,b);});
+document.addEventListener('input',e=>{if(e.target.dataset.search==='true'){search=e.target.value;const target=document.querySelector('#dynamicList');if(target&&APP.list)target.innerHTML=APP.list();}});
+document.addEventListener('change',e=>{if(e.target.dataset.filter==='true'){filter=e.target.value;const target=document.querySelector('#dynamicList');if(target&&APP.list)target.innerHTML=APP.list();}});
+document.getElementById('importFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const x=JSON.parse(await file.text());if(x?.version!==1||x?.app!==APP.key)throw new Error('El archivo no corresponde a esta aplicación.');const requiredArrays=Object.keys(APP.empty()).filter(k=>Array.isArray(APP.empty()[k]));if(requiredArrays.some(k=>!Array.isArray(x[k])))throw new Error('El respaldo tiene un formato incompleto.');if(!confirm('¿Reemplazar todos los datos actuales por este respaldo?'))return;db=x;save();notify('Copia restaurada')}catch(err){alert('No se pudo importar: '+err.message)}finally{e.target.value=''}});
+render();
+</script>
+</body>
+</html>
