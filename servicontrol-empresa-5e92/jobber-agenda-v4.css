@@ -144,3 +144,81 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 @media(max-width:1190px){#root .fsScheduleBody{grid-template-columns:minmax(0,1fr) 240px}#root .fsPage{padding:22px 18px}#root .fsBodyExtras{grid-template-columns:1fr}}
 @media(max-width:930px){#root .fsRail{width:72px}#root .fsRailNav button{font-size:9px}#root .fsScheduleBody{grid-template-columns:1fr}#root .fsSideQueue{border-top:1px solid #dde7e8;border-left:0;min-height:0}#root .fsQueueList{display:flex;overflow-x:auto;max-height:unset;padding-bottom:13px}#root .fsQueueItem{min-width:190px;width:190px}#root .fsQueueFoot{display:none}}
 @media(max-width:680px){#root .fsRail{display:none}#root .fsTopbar{height:60px;padding:0 14px}#root .fsBrand strong{font-size:16px}#root .fsBrand .fsDivider,#root .fsBrand small,#root .fsAccount .fsDemo{display:none}#root .fsPage{padding:20px 12px 85px}#root .fsHeading{display:block}#root .fsHeading h1{font-size:24px}#root .fsHeading p{font-size:11px}#root .fsHeading .fsButtons{margin-top:14px}#root .fsToolbar{padding:12px}#root .fsDateTitle{font-size:13px;min-width:0}#root .fsViewTools{width:100%;justify-content:space-between}#root .fsTeamSelect{flex:1;min-width:0}#root .fsCalendarInner{min-width:unset!important}#root .fsDayHeader{font-size:10px}#root .fsScheduleBody{min-height:0}#root .fsCalendarScroll{max-height:625px}#root .fsQueueHead{padding:14px}#root .fsMonthGrid{min-width:650px}#root .fsMobileNav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;justify-content:space-around;border-top:1px solid #e1e7e9;background:#fff;padding:8px 0 calc(9px + env(safe-area-inset-bottom));box-shadow:0 -4px 18px #102c3711}#root .fsMobileNav button{background:transparent;border:0;color:#7b919d;display:grid;justify-items:center;gap:5px;font-size:10px;font-weight:750;min-width:0;flex:1}#root .fsMobileNav svg{width:20px;height:20px}#root .fsMobileNav button.active{color:#2c8d51}#root .fsDrawer{width:100%}#root .fsJobRows{grid-template-columns:1fr}#root .fsFilterTabs{overflow-x:auto}#root .fsFilterTabs button{white-space:nowrap}#root .fsBtn{padding:9px 11px}#root .fsHourRail{width:49px}#root .fsCalendarHead,#root .fsCalendarAllDay,#root .fsTimeline{grid-template-columns:49px repeat(var(--fs-columns,1),minmax(0,1fr))}#root .fsDrawerActions{grid-template-columns:1fr}}
+
+/* More navigation: root is #modal-root, outside #root; this panel must not
+   depend on #root-scoped styles. */
+body.fsMoreOpen{overflow:hidden}
+#modal-root .fsMoreMask{
+ position:fixed;inset:0;z-index:300;border:0;width:100vw;height:100dvh;
+ background:rgba(8,28,40,.61);backdrop-filter:blur(4px);cursor:pointer
+}
+#modal-root .fsMoreSheet{
+ position:fixed;z-index:301;right:20px;bottom:20px;
+ width:min(430px,calc(100vw - 40px));max-height:calc(100dvh - 40px);
+ overflow:auto;background:#fff;border:1px solid #e7ebef;border-radius:20px;
+ box-shadow:0 24px 85px rgba(6,28,43,.28);
+ padding:20px 18px 16px;color:#203c4a;
+ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+ animation:fsMoreSlide .19s ease-out both
+}
+#modal-root .fsMoreHandle{
+ width:42px;height:4px;border-radius:9px;background:#d2dce1;
+ margin:0 auto 17px
+}
+#modal-root .fsMoreHeader{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:12px;padding:3px 4px 19px
+}
+#modal-root .fsMoreHeader span{
+ font-size:10px;font-weight:850;letter-spacing:.16em;color:#369178
+}
+#modal-root .fsMoreHeader h2{
+ font-size:22px;line-height:1.1;font-weight:850;letter-spacing:-.05em;
+ margin:7px 0 0;color:#203b49
+}
+#modal-root .fsMoreX{
+ flex-shrink:0;width:38px;height:38px;border-radius:11px;
+ display:grid;place-items:center;border:0;
+ background:#f0f4f5;color:#647985;font-size:25px;line-height:1
+}
+#modal-root .fsMoreX:focus-visible,#modal-root .fsMoreItem:focus-visible{
+ outline:3px solid #91d4c2;outline-offset:2px
+}
+#modal-root .fsMoreItems{display:grid;gap:8px}
+#modal-root .fsMoreItem{
+ display:flex;align-items:center;gap:13px;text-align:left;
+ border:1px solid #e5ecee;border-radius:13px;
+ min-height:75px;padding:12px 13px;width:100%;
+ color:#263d4a;background:#fff;cursor:pointer;
+ font:inherit;transition:background .15s,border-color .15s;
+}
+#modal-root .fsMoreItem:hover{
+ background:#f2f9f7;border-color:#bbdfd3
+}
+#modal-root .fsMoreItemIcon{
+ display:grid;place-items:center;flex-shrink:0;width:41px;height:41px;
+ border-radius:12px;background:#e7f4f0;color:#208a70
+}
+#modal-root .fsMoreItemIcon svg{width:21px;height:21px}
+#modal-root .fsMoreItemText{flex:1;min-width:0}
+#modal-root .fsMoreItemText strong{
+ display:block;color:#203846;font-weight:800;font-size:14px
+}
+#modal-root .fsMoreItemText small{
+ display:block;color:#8a99a2;font-size:11px;line-height:1.4;margin-top:5px
+}
+#modal-root .fsMoreArrow{font-size:25px;font-weight:400;color:#9caab4}
+@keyframes fsMoreSlide{from{transform:translateY(18px);opacity:.45}to{transform:translateY(0);opacity:1}}
+@media(max-width:680px){
+ #modal-root .fsMoreMask{background:rgba(8,28,40,.55)}
+ #modal-root .fsMoreSheet{
+  bottom:0;left:0;right:0;width:100%;max-height:82dvh;
+  border-radius:23px 23px 0 0;border-bottom:0;
+  box-shadow:0 -18px 65px #0a273b29;
+  padding:13px 15px calc(22px + env(safe-area-inset-bottom))
+ }
+ #modal-root .fsMoreItem{min-height:73px}
+}
+@media(prefers-reduced-motion:reduce){
+ #modal-root .fsMoreSheet{animation:none}
+}
