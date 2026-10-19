@@ -205,7 +205,7 @@ function createPayload(d){
   title:d.title.trim(),client:d.client.trim(),phone:d.phone.trim(),scope:details,
   payment:d.payment.trim(),discountRate:num(d.discountRate),taxRate:num(d.taxRate),
   validity:num(d.validity),delivery:d.delivery.trim(),notes:d.notes.trim(),status:"Borrador",
-  lines:d.lines.map(x=>({name:x.name.trim(),unit:x.unit.trim(),qty:num(x.qty),cost:x.cost===""?0:num(x.cost),price:num(x.price),missingCost:x.cost==="",category:x.category}))
+  lines:d.lines.map(x=>({id:x.id,name:x.name.trim(),unit:x.unit.trim(),qty:num(x.qty),cost:x.cost===""?0:num(x.cost),price:num(x.price),missingCost:x.cost==="",category:x.category}))
  };
 }
 function saveBudget(e){
