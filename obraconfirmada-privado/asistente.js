@@ -246,6 +246,9 @@ function fill(){
  $("ocFormBlank").classList.toggle("hidden",!!d);
  form.classList.toggle("hidden",!d);
  $("ocFormDelete").classList.toggle("hidden",!d);
+ // Starting another budget is only useful after saving the current one.
+ // While drafting, the button is redundant and risks accidental extra drafts.
+ $("ocFormNew").classList.toggle("hidden",!d?.savedQuoteId);
  if(!d)return;
  const mapping={title:"ocFTitle",client:"ocFClient",phone:"ocFPhone",location:"ocFLocation",measurements:"ocFMeasures",floors:"ocFFloors",scopeType:"ocFScopeType",scope:"ocFScope",payment:"ocFPayment",discountRate:"ocFDiscount",taxRate:"ocFTax",validity:"ocFValidity",delivery:"ocFDelivery",notes:"ocFNotes"};
  for(const [field,id] of Object.entries(mapping))$(id).value=d[field]??"";
