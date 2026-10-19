@@ -125,7 +125,7 @@ function surfaceCandidates(d){
  return d.lines.filter(line=>line&&(line.qty===""||line.quantityOrigin==="revisar superficie")).flatMap(line=>{
   const type=d.areaPurpose;
   // Reglas guardadas por el profesional; nunca son valores asumidos.
-  const rate=api?.business?.()?.quantityRates?.[line.name];
+  const rate=api?.business?.()?.quantityRates?.["concept:"+line.name];
   if(rate&&rate.basis===type&&Number.isFinite(Number(rate.factor))&&Number(rate.factor)>0&&rate.unit){
     const qty=Math.round(measured.area*Number(rate.factor)*1000)/1000;
     if(qty>0&&qty<=999999999)return [{id:line.id,qty,unit:rate.unit,formula:measured.formula+" × "+rate.factor,reason:"Coeficiente propio guardado: "+rate.factor+" "+rate.unit+" por m²; revisar antes de usar"}];
@@ -215,7 +215,10 @@ function saveOwnRate(row,line){
   message.textContent="Completá nombre, unidad, tipo de superficie y un coeficiente mayor que cero.";return;
  }
  if(!api.business().quantityRates)api.business().quantityRates={};
- api.business().quantityRates[line.name]={basis,factor,unit,created:new Date().toISOString()};
+ api.business().quantityRates["concept:"+line.name]={basis,factor,unit,created:new Date().toISOString()};
+ for(const draft of drafts())for(const x of draft.lines||[])if(x.name===line.name&&x.quantityOrigin==="propuesta aceptada"){
+  x.quantityOrigin="revisar superficie";x.quantityReason="Se actualizó un coeficiente. Revisá la cantidad antes de confirmar.";
+ }
  flushSave();renderEstimates();
  message.textContent="Regla guardada. Se reutilizará en próximos presupuestos y siempre requerirá tu aprobación.";
 }
@@ -339,7 +342,7 @@ function linesHTML(){
  }
  if(foundUnit)scheduleSave();
  host.innerHTML=d.lines.length?d.lines.map((x,i)=>'<div class="oc-simple-line" data-row="'+safe(x.id)+'">'+
- '<div class="oc-simple-name"><strong>'+safe(x.name||"Nuevo trabajo")+'</strong><small>'+safe(x.category||"")+(x.quantityOrigin?' · '+safe(x.quantityOrigin):'')+'</small></div>'+
+ '<div class="oc-simple-name"><strong>'+safe(x.name||"Nuevo trabajo")+'</strong><small>'+safe(x.category||"")+(x.unitIsSuggested?' · unidad sugerida':'')+(x.quantityOrigin?' · '+safe(x.quantityOrigin):'')+'</small></div>'+
  '<label class="oc-form-field oc-simple-qty"><span>Cantidad</span><input data-key="qty" type="number" min="0.000001" step="any" placeholder="Falta" value="'+safe(x.qty)+'"></label>'+
  '<label class="oc-form-field oc-simple-unit"><span>Unidad</span><input data-key="unit" maxlength="16" list="ocUnitOptions" placeholder="m², u..." value="'+safe(x.unit)+'"></label>'+
  '<label class="oc-form-field oc-simple-price"><span>Precio por unidad</span><input data-key="price" type="number" min="0" step="any" placeholder="Falta" value="'+safe(x.price)+'"></label>'+
@@ -379,7 +382,7 @@ function linesHTML(){
   });
   row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(t=>t.id!==x.id);flushSave();linesHTML();renderEstimates()};
   row.querySelector("[data-calc-check]").onclick=()=>calculateLine(row,x);
-  const rate=api?.business?.()?.quantityRates?.[x.name],form=row.querySelector("[data-rate-form]");
+  const rate=api?.business?.()?.quantityRates?.["concept:"+x.name],form=row.querySelector("[data-rate-form]");
   if(rate){form.querySelector('[data-rate="basis"]').value=rate.basis;form.querySelector('[data-rate="factor"]').value=rate.factor}
   row.querySelector("[data-rate-save]").onclick=()=>saveOwnRate(row,x);
  });
