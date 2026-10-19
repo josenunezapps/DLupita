@@ -514,6 +514,89 @@ td{font-size:12px}
 @media(max-width:950px){.shell{grid-template-columns:1fr}.sidebar{display:none!important}.content{padding:23px 18px 95px}.topbar{padding:13px 18px}.scMobileNav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:25;background:#fff;border-top:1px solid #dfe6ef;box-shadow:0 -4px 24px #1b293515;overflow-x:auto;overscroll-behavior-inline:contain;justify-content:space-around;gap:0;padding:8px 5px max(8px,env(safe-area-inset-bottom));scrollbar-width:none}.scMobileNav button{background:transparent;border:0;min-width:66px;flex:1;display:grid;gap:4px;justify-items:center;color:#7d8b9a;font-size:9px;font-weight:750;padding:4px 2px;border-radius:9px}.scMobileNav button.active{color:#087b6d;background:#eef8f4}.scMobileNav svg{width:20px;height:20px}.scSummary{grid-template-columns:repeat(2,1fr)}.scMetric:nth-child(2){border-right:0}.scMetric:nth-child(-n+2){border-bottom:1px solid #e7ecf2}}
 @media(max-width:520px){.topRight .mark,.topRight .signal{display:none!important}.operationsHeader{display:block}.operationsHeader h1{font-size:26px}.operationsActions{justify-content:start;margin-top:17px}.scMetric{padding:15px}.scMetric strong{font-size:25px}.scTask{grid-template-columns:36px 1fr auto;gap:8px;padding:14px}.scTaskMeta{max-width:94px}.scDetailHead,.scDetailBody{padding:17px}.scDetailActions{padding:15px}.scFieldRow{grid-template-columns:103px 1fr}.heading h1{font-size:25px}}
 </style>
+
+<style id="sc-native-mobile-v2">
+@media(max-width:950px){
+ body{background:#f4f7f9!important;color:#202f39}
+ .shell,.main{background:#f4f7f9!important}
+ .topbar{display:none!important}
+ .content{padding:0 0 92px!important;min-height:100vh}
+ .mobileHome,.mobileOrders{padding:18px 15px 26px;min-height:100vh}
+ .mobileBrandRow{display:flex;justify-content:space-between;align-items:center;margin:3px 2px 17px}
+ .mobileLogo{display:flex;align-items:center;gap:10px;min-width:0}
+ .mobileLogoIcon{background:#0b6f67;color:white;border-radius:13px;width:41px;height:41px;display:grid;place-items:center;font-size:21px;font-weight:750}
+ .mobileLogoWords strong{display:block;font-size:19px;font-weight:850;letter-spacing:-.06em;line-height:1}
+ .mobileLogoWords small{display:block;color:#91a1ae;font-size:10px;margin-top:5px;letter-spacing:.12em;font-weight:750}
+ .mobileDemoPill{border:1px solid #dce8e4;color:#457568;background:#fff;padding:8px 10px;border-radius:50px;font-size:10px;letter-spacing:.04em;font-weight:800}
+ .mobileHero{padding:24px 22px 21px;position:relative;overflow:hidden;border-radius:22px;color:white;background:linear-gradient(128deg,#0a6b62,#075d59 65%,#143a46);box-shadow:0 17px 30px #0c584329}
+ .mobileHero:after{content:"";position:absolute;right:-70px;top:-95px;width:235px;height:235px;border:1px solid #ffffff25;border-radius:50%;box-shadow:0 0 0 35px #ffffff07,0 0 0 71px #ffffff06;pointer-events:none}
+ .mobileHeroKicker{color:#c2e8d9;font-size:10px;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
+ .mobileHero h1{position:relative;z-index:1;font-size:29px;font-weight:850;line-height:1.12;letter-spacing:-.05em;margin:12px 0 9px;max-width:300px}
+ .mobileHero p{color:#cbe4df;line-height:1.6;margin:0;font-size:12.5px;max-width:280px}
+ .mobileHeroMetrics{position:relative;z-index:1;margin-top:22px;padding-top:17px;border-top:1px solid #ffffff30;display:grid;grid-template-columns:1fr 1fr}
+ .mobileHeroMetric{padding-right:10px}
+ .mobileHeroMetric+.mobileHeroMetric{padding-left:20px;border-left:1px solid #ffffff29}
+ .mobileHeroMetric strong{display:block;font-size:25px;letter-spacing:-.06em}
+ .mobileHeroMetric span{font-size:11px;color:#cae8e1;display:block;margin-top:3px}
+ .mobileActionPair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 1px 25px}
+ .mobileActionPair button{border:1px solid #dce5e8;background:#fff;border-radius:14px;box-shadow:0 3px 12px #23403709;min-height:61px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:800;font-size:12px;color:#263944}
+ .mobileActionPair button.primary{background:#143c44;border-color:#143c44;color:white}
+ .mobileActionPair button b{font-size:20px;line-height:1;font-weight:400}
+ .mobileSectionTitle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px 11px}
+ .mobileSectionTitle h2{font-size:17px;letter-spacing:-.045em;margin:0;font-weight:850}
+ .mobileSectionTitle small{font-size:11px;color:#728497}
+ .mobileSectionTitle button{border:0;background:none;color:#087b6d;font-size:12px;font-weight:850;padding:7px 0}
+ .mobileWorkCard{background:white;border:1px solid #e1e9ee;border-radius:17px;overflow:hidden;box-shadow:0 3px 12px #182f3705;margin-bottom:20px}
+ .mobileRow{display:flex;align-items:center;gap:12px;width:100%;min-height:76px;padding:15px;border:0;background:#fff;border-bottom:1px solid #edf1f2;text-align:left;color:#263b45}
+ .mobileRow:last-child{border-bottom:0}
+ .mobileRow:active{background:#f1f7f5}
+ .mobileRowIcon{width:41px;height:41px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;background:#e6f4ef;color:#087869;font-size:19px}
+ .mobileRowIcon.late{background:#ffedeb;color:#c14b52}
+ .mobileRowMain{flex:1;min-width:0}
+ .mobileRowMain strong{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.02em}
+ .mobileRowMain small{display:block;color:#8897a3;font-size:11px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-top:5px}
+ .mobileRowSide{text-align:right;flex-shrink:0}
+ .mobileRowSide b{display:block;font-size:10px;color:#be5756;background:#fff2f0;border-radius:7px;padding:5px 7px}
+ .mobileRowSide b.ok{color:#0e806c;background:#e6f7f1}
+ .mobileRowSide small{display:block;font-size:10px;color:#9aa4b1;margin-top:5px}
+ .mobileEmpty{padding:27px 18px;text-align:center;color:#8695a5;font-size:12px;line-height:1.65}
+ .mobileEmpty span{display:block;font-size:27px;margin-bottom:6px}
+ .mobileOrderList .mobileRow{padding:16px}
+ .mobileOrderList .mobileRowIcon{background:#edf3fb;color:#4775a5}
+ .mobileOrderHeader{display:flex;gap:12px;align-items:start;justify-content:space-between;padding:4px 0 19px}
+ .mobileOrderHeader h1{font-size:28px;line-height:1.06;letter-spacing:-.055em;margin:9px 0 5px}
+ .mobileOrderHeader p{font-size:12px;color:#8694a4;margin:0}
+ .mobileRoundPlus{width:45px;height:45px;background:#087b6d;color:#fff;border:0;border-radius:13px;font-size:25px;line-height:1;box-shadow:0 7px 14px #087b6d26;flex-shrink:0}
+ .mobileFilterChips{display:flex;gap:7px;margin-bottom:15px;overflow:auto;scrollbar-width:none}
+ .mobileFilterChips button{border:1px solid #e1e8ef;background:white;color:#83909e;border-radius:9px;padding:10px 15px;white-space:nowrap;font-size:12px;font-weight:750}
+ .mobileFilterChips button.active{background:#163e43;color:white;border-color:#163e43}
+ .mobileOrderSheetBackdrop{position:fixed;inset:0;background:#0c1e2895;z-index:42;border:0;width:100%;height:100%}
+ .mobileOrderSheet{position:fixed;left:0;right:0;bottom:0;z-index:43;background:#fff;border-radius:24px 24px 0 0;max-height:87vh;overflow:auto;box-shadow:0 -18px 35px #0002;padding:25px 19px calc(23px + env(safe-area-inset-bottom))}
+ .mobileSheetHandle{height:4px;width:46px;border-radius:8px;background:#d5dee3;margin:-11px auto 22px}
+ .mobileSheetTop{display:flex;justify-content:space-between;gap:12px;align-items:start}
+ .mobileSheetTop h2{font-size:23px;margin:7px 0 5px;letter-spacing:-.05em}
+ .mobileSheetTop small{font-size:10px;color:#087b6d;letter-spacing:.14em;font-weight:900}
+ .mobileClose{background:#f0f4f6;border:0;color:#485b68;border-radius:10px;width:35px;height:35px;font-size:20px;flex-shrink:0}
+ .mobileSheetSub{font-size:12px;color:#8997a5;margin:0 0 15px}
+ .mobileDetailGrid{display:grid;margin:13px 0}
+ .mobileDetailItem{display:flex;justify-content:space-between;align-items:start;gap:15px;border-bottom:1px solid #edf1f3;padding:13px 0;font-size:12px}
+ .mobileDetailItem span{color:#8795a3}.mobileDetailItem strong{color:#263846;text-align:right;max-width:60%;font-weight:750}
+ .mobileSheetNote{background:#f5f8fa;border-radius:10px;padding:14px;font-size:12px;color:#657685;line-height:1.55;margin:13px 0 19px}
+ .mobileSheetActions{display:grid;gap:9px}.mobileSheetActions button{width:100%;padding:14px;border-radius:11px;background:#0b7365;color:white;border:0;font-weight:800;min-height:44px}.mobileSheetActions button.secondary{background:#fff;border:1px solid #dbe5e9;color:#263946}
+ .mobileMoreSheet{position:fixed;z-index:43;bottom:0;left:0;right:0;border-radius:25px 25px 0 0;background:white;padding:20px 18px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -20px 50px #0002}
+ .mobileMoreSheet h2{font-size:20px;margin:3px 0 17px;letter-spacing:-.04em}
+ .mobileMoreSheet button{display:flex;align-items:center;gap:14px;width:100%;padding:16px 10px;border:0;border-bottom:1px solid #e8eef0;background:#fff;font-weight:750;font-size:14px;text-align:left;color:#273a45}
+ .mobileMoreSheet button:last-child{border:0}
+ .scMobileNav{justify-content:space-around!important;overflow:hidden!important;padding:8px 9px calc(9px + env(safe-area-inset-bottom))!important}
+ .scMobileNav button{min-width:0!important;flex:1 1 20%!important;max-width:95px;gap:5px!important;font-size:10px!important;padding:7px 3px!important;border-radius:9px}
+ .scMobileNav svg{height:21px!important;width:21px!important}
+ .heading{margin:0 16px 16px; padding-top:20px}
+ .stats{margin:15px 16px}
+ .panel{margin:0 15px 14px}
+ .toolbar{padding:12px!important}
+ .footer{padding:0 15px 20px;font-size:10px}
+}
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -692,7 +775,7 @@ function render(){
  const current=APP.tabs.find(x=>x[0]===tab)||APP.tabs[0],m=serviceMetrics();
  document.documentElement.style.setProperty('--accent','#087b6d');document.title='ServiControl · Gestión técnica';
  const nav=APP.tabs.map(x=>'<button type="button" data-nav="'+x[0]+'" class="'+(tab===x[0]?'active':'')+'"><b>'+scIcon(x[0])+'</b><span>'+h(x[1])+'</span></button>').join('');
- const bottom=APP.tabs.map(x=>'<button type="button" data-nav="'+x[0]+'" class="'+(tab===x[0]?'active':'')+'">'+scIcon(x[0])+'<span>'+h(x[1])+'</span></button>').join('');
+ const bottom=[['inicio','Inicio'],['ordenes','Órdenes'],['equipos','Equipos'],['agenda','Agenda']].map(x=>'<button type="button" data-nav="'+x[0]+'" class="'+(tab===x[0]?'active':'')+'">'+scIcon(x[0])+'<span>'+h(x[1])+'</span></button>').join('')+'<button type="button" data-action="scMore" class="'+(['clientes','historial','informes'].includes(tab)?'active':'')+'">'+scIcon('informes')+'<span>Más</span></button>';
  document.getElementById('root').innerHTML='<div class="shell"><aside class="sidebar"><div><div class="brand"><div class="brandIcon">✳</div><div><span>ServiControl</span><small>GESTIÓN TÉCNICA</small></div></div><p class="navLabel">ESPACIO DE TRABAJO</p><nav class="nav" aria-label="Navegación">'+nav+'</nav><div class="navSectionDivider"></div><div class="sideCard"><div class="sideCardLabel">ESTADO OPERATIVO</div><div class="sideCardValue">'+m.assets+' equipos</div><p class="sideCardSub">Inventario en seguimiento</p><div class="sideMiniGrid"><div class="sideMini"><strong>'+m.overdue+'</strong><span>Vencidos</span></div><div class="sideMini"><strong>'+m.pending+'</strong><span>Órdenes abiertas</span></div></div></div></div><div class="sideFoot"><strong>Entorno de demostración</strong><br>Los datos se guardan en este navegador.<br>No hay usuarios ni sincronización online.</div></aside><div class="main"><header class="topbar"><div class="topbarMain"><div class="crumb">ESPACIO DE TRABAJO / '+h(current[1].toUpperCase())+'</div><div class="topbarTitle">'+h(current[1])+'</div></div><div class="topRight"><span class="signal '+(m.overdue?'bad':'good')+'"><span class="sigDot"></span>'+(m.overdue?m.overdue+' vencidos':'Todo en orden')+'</span><span class="mark">DEMO LOCAL</span><div class="avatar">SC</div></div></header><main class="content">'+(tab==='informes'?reportPage():APP.render(tab))+'<div class="footer">ServiControl · Zenix AR · Datos guardados localmente</div></main></div><nav class="scMobileNav" aria-label="Navegación móvil">'+bottom+'</nav></div>';
 }
 document.addEventListener('click',e=>{const nav=e.target.closest('[data-nav]');if(nav){tab=nav.dataset.nav;search='';filter='todos';render();return}const b=e.target.closest('[data-action]');if(!b)return;const act=b.dataset.action,id=b.dataset.id;if(act==='backup')return download(APP.key+'-respaldo-'+today()+'.json',JSON.stringify(db,null,2));if(act==='import'){document.getElementById('importFile').click();return}if(act==='clear'){if(confirm('¿Borrar TODOS los registros guardados en este navegador? Esta acción no se puede deshacer. Hacé una copia JSON primero.')){db=APP.empty();save();notify('Se borraron todos los datos')}return}if(act==='csv'){const v=APP.report();csvExport(APP.key+'-'+today(),v.headers,v.rows);return}if(act==='print'){const v=APP.report();printReport(APP.title+' · Informe',v.headers,v.rows,v.subtitle);return}if(APP.actions[act])return APP.actions[act](id,b);});
@@ -700,6 +783,42 @@ document.addEventListener('input',e=>{if(e.target.dataset.search==='true'){searc
 document.addEventListener('change',e=>{if(e.target.dataset.filter==='true'){filter=e.target.value;const target=document.querySelector('#dynamicList');if(target&&APP.list)target.innerHTML=APP.list();}});
 document.getElementById('importFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const x=JSON.parse(await file.text());if(x?.version!==1||x?.app!==APP.key)throw new Error('El archivo no corresponde a esta aplicación.');const requiredArrays=Object.keys(APP.empty()).filter(k=>Array.isArray(APP.empty()[k]));if(requiredArrays.some(k=>!Array.isArray(x[k])))throw new Error('El respaldo tiene un formato incompleto.');if(!confirm('¿Reemplazar todos los datos actuales por este respaldo?'))return;db=x;save();notify('Copia restaurada')}catch(err){alert('No se pudo importar: '+err.message)}finally{e.target.value=''}});
 render();
+</script>
+
+<script id="sc-mobile-controller-v2">
+(function(){
+ function mobile(){return window.matchMedia('(max-width:950px)').matches}
+ function fmt(date){return dateText(date)}
+ function labelFor(q){return APP.client(q.clientId)?.name||'Cliente sin especificar'}
+ function dateLabel(){return new Date().toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'})}
+ function mobileBrand(){return '<div class="mobileBrandRow"><div class="mobileLogo"><span class="mobileLogoIcon">✳</span><div class="mobileLogoWords"><strong>ServiControl</strong><small>FIELD SERVICE</small></div></div><span class="mobileDemoPill">DEMO LOCAL</span></div>'}
+ function home(){
+  const m=serviceMetrics(),due=APP.schedule().slice(0,5),open=pendingOrders().slice(0,3);
+  const msg=m.overdue?('Hay '+m.overdue+' mantenimientos vencidos que requieren atención.'):'Tus vencimientos están al día. Revisá las visitas programadas.';
+  return '<div class="mobileHome">'+mobileBrand()+
+   '<section class="mobileHero"><div class="mobileHeroKicker">MI OPERACIÓN · '+h(dateLabel())+'</div><h1>Tu trabajo, organizado.</h1><p>'+h(msg)+'</p><div class="mobileHeroMetrics"><div class="mobileHeroMetric"><strong>'+m.pending+'</strong><span>órdenes abiertas</span></div><div class="mobileHeroMetric"><strong>'+m.assets+'</strong><span>equipos registrados</span></div></div></section>'+
+   '<div class="mobileActionPair"><button class="primary" data-action="addOrder"><b>＋</b>Nueva orden</button><button data-action="newEq"><b>⚙</b> Nuevo equipo</button></div>'+
+   '<div class="mobileSectionTitle"><h2>Próximos mantenimientos</h2><button data-action="goAgenda">Ver agenda ›</button></div>'+
+   '<div class="mobileWorkCard">'+(due.length?due.map(q=>{const late=q.next<today();return '<button class="mobileRow" data-action="goAgenda"><span class="mobileRowIcon '+(late?'late':'')+'">⚙</span><span class="mobileRowMain"><strong>'+h(q.name)+'</strong><small>'+h(labelFor(q))+'</small></span><span class="mobileRowSide"><b class="'+(late?'':'ok')+'">'+(late?'Vencido':'Programado')+'</b><small>'+h(fmt(q.next))+'</small></span></button>'}).join(''):'<div class="mobileEmpty"><span>✓</span>No hay mantenimientos pendientes por ahora.</div>')+'</div>'+
+   '<div class="mobileSectionTitle"><h2>Órdenes abiertas</h2><button data-action="scGoOrders">Ver todas ›</button></div>'+
+   '<div class="mobileWorkCard">'+(open.length?open.map(o=>{const q=APP.eq(o.equipmentId);return '<button class="mobileRow" data-action="scGoOrders"><span class="mobileRowIcon">▤</span><span class="mobileRowMain"><strong>'+h(q?.name||'Equipo')+'</strong><small>'+h(q?labelFor(q):'Cliente')+' · '+h(o.technician||'Sin asignar')+'</small></span><span class="mobileRowSide"><b class="ok">Abierta</b><small>'+h(fmt(o.date))+'</small></span></button>'}).join(''):'<div class="mobileEmpty"><span>✓</span>Sin órdenes abiertas.</div>')+'</div></div>';
+ }
+ function orderSheet(o){const q=APP.eq(o.equipmentId),c=q?APP.client(q.clientId):null;
+ const data=[['Estado',o.status==='realizado'?'Completada':o.date<today()?'Atrasada':'Programada'],['Cliente',c?.name||'—'],['Equipo',q?.name||'—'],['Tipo de equipo',q?.category||'—'],['Fecha prevista',fmt(o.date)],['Técnico',o.technician||'Sin asignar'],['Importe',money(o.cost||0)]];
+ return '<button class="mobileOrderSheetBackdrop" data-action="scMobileClose" aria-label="Cerrar detalle"></button><section class="mobileOrderSheet" role="dialog" aria-modal="true" aria-label="Detalle de orden"><div class="mobileSheetHandle"></div><div class="mobileSheetTop"><div><small>ORDEN DE TRABAJO #'+h(o.id.slice(-6).toUpperCase())+'</small><h2>'+h(q?.name||'Equipo sin datos')+'</h2></div><button class="mobileClose" data-action="scMobileClose">×</button></div><p class="mobileSheetSub">'+h(c?.name||'Cliente')+'</p><div class="mobileDetailGrid">'+data.map(x=>'<div class="mobileDetailItem"><span>'+h(x[0])+'</span><strong>'+h(x[1])+'</strong></div>').join('')+'</div><div class="mobileSheetNote">'+h(o.notes||'Sin observaciones registradas.')+'</div><div class="mobileSheetActions">'+(o.status==='realizado'?'<button data-action="orderPdf" data-id="'+h(o.id)+'">Descargar informe PDF</button>':'<button data-action="completeOrder" data-id="'+h(o.id)+'">Marcar como realizada</button>')+(q?'<button class="secondary" data-action="viewEq" data-id="'+h(q.id)+'">Ver ficha del equipo</button>':'')+'<button class="secondary" data-action="scMobileClose">Volver a las órdenes</button></div></section>';
+ }
+ function orders(){const all=[...db.orders].sort((a,b)=>b.date.localeCompare(a.date));const visible=all.filter(o=>scOrderFilter==='todos'||(scOrderFilter==='pendiente'?o.status!=='realizado':o.status==='realizado'));const selected=visible.find(x=>x.id===scSelectedOrder);
+ return '<div class="mobileOrders">'+mobileBrand()+'<div class="mobileOrderHeader"><div><div class="workspaceKicker">TRABAJO DE CAMPO</div><h1>Órdenes</h1><p>'+visible.length+' resultados · Tocá una para ver el detalle</p></div><button class="mobileRoundPlus" aria-label="Nueva orden" data-action="addOrder">+</button></div><div class="mobileFilterChips">'+[['pendiente','Abiertas'],['realizado','Completadas'],['todos','Todas']].map(x=>'<button data-action="scFilterOrders" data-id="'+x[0]+'" class="'+(scOrderFilter===x[0]?'active':'')+'">'+x[1]+'</button>').join('')+'</div><div class="mobileWorkCard mobileOrderList">'+(visible.length?visible.map(o=>{const q=APP.eq(o.equipmentId);const late=o.status!=='realizado'&&o.date<today();return '<button class="mobileRow" data-action="scSelectOrder" data-id="'+h(o.id)+'"><span class="mobileRowIcon '+(late?'late':'')+'">▤</span><span class="mobileRowMain"><strong>'+h(q?.name||'Equipo sin datos')+'</strong><small>'+h(q?labelFor(q):'Cliente')+' · '+h(fmt(o.date))+'</small></span><span class="mobileRowSide"><b class="'+(late?'':'ok')+'">'+(o.status==='realizado'?'Completada':late?'Atrasada':'Abierta')+'</b><small>Ver detalle ›</small></span></button>'}).join(''):'<div class="mobileEmpty"><span>▤</span>No hay órdenes en este estado.</div>')+'</div>'+(selected?orderSheet(selected):'')+'</div>';
+ }
+ const oldRender=APP.render;
+ APP.render=(page)=>mobile()&&page==='inicio'?home():mobile()&&page==='ordenes'?orders():oldRender(page);
+ APP.actions.scMobileClose=()=>{scSelectedOrder='';render()};
+ APP.actions.scMore=()=>{const root=document.getElementById('modal-root');root.innerHTML='<button class="mobileOrderSheetBackdrop" data-action="scMoreClose" aria-label="Cerrar menú"></button><section class="mobileMoreSheet" role="dialog" aria-modal="true" aria-label="Más secciones"><h2>Más secciones</h2>'+[['clientes','Clientes'],['historial','Historial técnico'],['informes','Informes y respaldos']].map(x=>'<button data-action="scMoreNav" data-id="'+x[0]+'">'+scIcon(x[0])+'<span>'+x[1]+'</span> ›</button>').join('')+'<button data-action="scMoreClose">Cerrar</button></section>'};
+ APP.actions.scMoreClose=()=>{document.getElementById('modal-root').innerHTML=''};
+ APP.actions.scMoreNav=id=>{APP.actions.scMoreClose();tab=id;search='';filter='todos';render()};
+ window.addEventListener('resize',()=>{if(!window.__scResize){window.__scResize=true;requestAnimationFrame(()=>{window.__scResize=false;render()})}});
+ render();
+})();
 </script>
 </body>
 </html>
