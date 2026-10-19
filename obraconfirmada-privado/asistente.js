@@ -210,16 +210,11 @@ function linesHTML(){
  });
  totalsUI();
 }
-function addLine(fromCatalog=false){
- let d=get();if(!d)return;
- if(fromCatalog){
-  const source=api.catalog().find(x=>x.id===$("ocFormCatalog").value);
-  if(!source)return note("Elegí primero un precio del catálogo.","error");
-  // Price comes from the user's catalog. Quantity is ALWAYS blank.
-  d.lines.push(item(source.name,source.unit,"",source.cost,source.price,source.category||"Materiales"));
- }else d.lines.push(item());
- note("");flushSave();linesHTML();
- $("ocFormLines").lastElementChild?.querySelector(fromCatalog?'[data-key="qty"]':'[data-key="name"]')?.focus();
+function addLine(){
+ const d=get();if(!d)return;
+ d.lines.push(item("","","","","","Otros"));flushSave();linesHTML();note("");
+ const rows=$("ocFormLines").querySelectorAll("[data-row]");
+ rows[rows.length-1]?.querySelector('[data-key="name"]')?.focus();
 }
 function updateLine(line,key,value){
  if(!line)return;line[key]=String(value);scheduleSave();totalsUI();
@@ -242,7 +237,8 @@ function totalsUI(){
  $("ocFormDiscountTotal").textContent=money(discount);
  $("ocFormTaxTotal").textContent=money(tax);
  $("ocFormTotal").textContent=money(taxable+tax);
- $("ocFormProfit").textContent=missingQty||missingPrice||missingCosts?"Pendiente":money(taxable-cost);
+ $("ocFormProfit").textContent=!d.lines.length||missingQty||missingPrice||missingCosts?"Pendiente":money(taxable-cost);
+ $("ocFormTotalCaption").textContent=!d.lines.length?"Sin trabajos":missingQty||missingPrice?"Total parcial: faltan cantidades o precios":"Total calculado";
  $("ocFormPending").textContent=(!d.lines.length?"Agregá al menos un concepto.":missingQty||missingPrice?"Completá todas las cantidades y precios de venta antes de guardar.":missingCosts?"Hay costos internos pendientes; la ganancia no será definitiva.":"Los importes se calculan con los datos que cargaste.");
 }
 function fill(){
@@ -253,9 +249,8 @@ function fill(){
  if(!d)return;
  const mapping={title:"ocFTitle",client:"ocFClient",phone:"ocFPhone",location:"ocFLocation",measurements:"ocFMeasures",floors:"ocFFloors",scopeType:"ocFScopeType",scope:"ocFScope",payment:"ocFPayment",discountRate:"ocFDiscount",taxRate:"ocFTax",validity:"ocFValidity",delivery:"ocFDelivery",notes:"ocFNotes"};
  for(const [field,id] of Object.entries(mapping))$(id).value=d[field]??"";
- const selector=$("ocFormCatalog");
- selector.innerHTML='<option value="">Elegí un precio que ya guardaste...</option>'+api.catalog().map(x=>'<option value="'+safe(x.id)+'">'+safe(x.name)+" · "+money(x.price)+'</option>').join("");
- linesHTML();$("ocFormSave").textContent=d.savedQuoteId?"Guardar cambios":"Guardar en Mis presupuestos";
+ renderTypes();
+ linesHTML();$("ocFormSave").textContent=d.savedQuoteId?"Actualizar presupuesto":"Guardar presupuesto completo";
  $("ocFormActions").classList.toggle("hidden",!d.savedQuoteId);
 }
 function render(){
@@ -281,7 +276,7 @@ function createPayload(d){
  if(!fullNum(d.discountRate)||num(d.discountRate)>100||!fullNum(d.taxRate)||num(d.taxRate)>100){note("Revisá los porcentajes de descuento e impuestos (0 a 100).","error");return null}
  if(d.floors!==""&&(!Number.isInteger(num(d.floors))||num(d.floors)<1||num(d.floors)>100)){note("La cantidad de plantas debe ser un número entero positivo.","error");return null}
  if(!Number.isInteger(num(d.validity))||num(d.validity)<1||num(d.validity)>365){note("La validez debe ser de 1 a 365 días.","error");return null}
- const details=[d.scope,d.measurements?"Medidas o superficie informadas: "+d.measurements:"",d.floors?"Plantas: "+d.floors:"",d.scopeType?"Incluye: "+d.scopeType:"",d.location?"Localidad: "+d.location:""].filter(Boolean).join("\n");
+ const details=[d.scope,d.workType?"Tipo de trabajo: "+d.workType:"",d.measurements?"Medidas o superficie informadas: "+d.measurements:"",d.floors?"Plantas: "+d.floors:"",d.scopeType?"Incluye: "+d.scopeType:"",d.location?"Localidad: "+d.location:""].filter(Boolean).join("\n");
  return {
   title:d.title.trim(),client:d.client.trim(),phone:d.phone.trim(),scope:details,
   payment:d.payment.trim(),discountRate:num(d.discountRate),taxRate:num(d.taxRate),
@@ -303,13 +298,28 @@ function saveBudget(e){
  d.savedQuoteId=q.id;flushSave();showDrafts();fill();
  note("Presupuesto "+q.id+" guardado. Ya podés descargarlo, compartirlo o seguir editándolo.","success");
 }
+function editQuote(q){
+ if(!q||!q.id)return;
+ flushBeforeSwitch();
+ let d=drafts().find(x=>x.savedQuoteId===q.id);
+ if(!d){
+  d=empty();d.savedQuoteId=q.id;
+  d.workType=q.workType||"";d.title=q.title||"";d.client=q.client||"";d.phone=q.phone||"";
+  d.scope=q.scope||"";d.payment=q.payment||"";d.notes=q.notes||"";
+  d.discountRate=String(q.discountRate||0);d.taxRate=String(q.taxRate||0);
+  d.validity=String(q.validity??15);d.delivery=q.delivery||"";
+  d.lines=Array.isArray(q.lines)?q.lines.map(x=>({...item(x.name,x.unit,x.qty,x.missingCost?"":x.cost,x.price,x.category||"Materiales"),id:x.id||"I-"+uid()})):[];
+  drafts().unshift(d);api.save();
+ }
+ activeId=d.id;render();api.show("asistente");
+}
 function savedQuote(){
  const d=get();return api.quotes().find(q=>q.id===d?.savedQuoteId)||null;
 }
 function action(type){
  const q=savedQuote();
  if(!q){note("Guardá primero el presupuesto.","error");return}
- if(type==="open")api.openQuote(q.id);
+ if(type==="open")api.convert?.(q.id);
  else if(type==="pdf")api.download(q);
  else if(type==="csv")api.csv(q);
  else api.share(q,type==="wa"?"whatsapp":type==="gmail"?"gmail":undefined);
@@ -465,12 +475,18 @@ function init(bridge){
  }
  $("ocBudgetForm").onsubmit=saveBudget;
  $("ocFormNew").onclick=createDraft;$("ocFormStart").onclick=createDraft;
- $("ocFormGoManual").onclick=()=>api.show("presupuestos");
- $("ocFormAddLine").onclick=()=>addLine(false);
- $("ocFormAddCatalog").onclick=()=>addLine(true);
+ $("ocFormGoQuotes").onclick=()=>api.show("presupuestos");
+ $("ocFormAddLine").onclick=addLine;
+ $("ocFormPick").onclick=openPicker;
+ $("ocPickerClose").onclick=closePicker;
+ $("ocPickerCancel").onclick=closePicker;
+ $("ocPickerSearch").oninput=drawPicker;
+ $("ocPickerConfirm").onclick=commitPicker;
+ $("ocPickerOverlay").onclick=e=>{if(e.target===$("ocPickerOverlay"))closePicker()};
+ $("ocFormSaveDraft").onclick=()=>{if(!get())return;flushSave();showDrafts();note("Borrador preparado para guardar. Revisá arriba el estado de sincronización.","success")};
  $("ocFormDelete").onclick=removeDraft;
  for(const type of ["pdf","csv","share","wa","gmail","open"]){const id={pdf:"ocFormPdf",csv:"ocFormCsv",share:"ocFormShare",wa:"ocFormWa",gmail:"ocFormGmail",open:"ocFormOpen"}[type];$(id).onclick=()=>action(type)}
  render();
 }
-window.OCAssistant={init,render,begin:createDraft,validateAnswer:()=>({error:"Usá los campos del formulario."})};
+window.OCAssistant={init,render,begin:createDraft,editQuote,validateAnswer:()=>({error:"Usá los campos del formulario."})};
 })();
