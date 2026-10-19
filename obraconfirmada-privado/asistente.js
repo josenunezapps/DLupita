@@ -169,6 +169,7 @@ function renderEstimates(){
  const valid=d.areaConfirmed&&d.areaSource===d.measurements;
  summary.innerHTML='<strong>'+safe(measured.area.toLocaleString("es-AR"))+' m²</strong><span> Calculado a partir de '+safe(measured.formula)+'. No equivale automáticamente a superficie de terreno, muros o excavación.</span>';
  $("ocAreaPurpose").value=valid?d.areaPurpose||"":"";
+ $("ocEstimates").querySelector(".oc-calc-status").textContent=valid?"Superficie confirmada":"Requiere confirmación";
  $("ocAreaConfirm").classList.toggle("hidden",!!valid);
  $("ocAreaRecheck").classList.toggle("hidden",!valid);
  const proposals=valid?surfaceCandidates(d):[];
@@ -177,9 +178,14 @@ function renderEstimates(){
  if(!valid){result.innerHTML='<p class="oc-calc-muted">Confirmá primero qué área representan esas medidas. Todavía no se aplicó ninguna cantidad.</p>';return}
  result.innerHTML=proposals.length?
  '<div class="oc-calc-suggestions"><div class="oc-calc-title"><strong>Propuestas para revisar</strong><button type="button" id="ocAcceptAll" class="btn btn-secondary btn-sm">Aceptar todas ('+proposals.length+')</button></div>'+
- proposals.map(x=>'<div class="oc-calc-suggestion"><div><strong>'+safe(d.lines.find(y=>y.id===x.id)?.name||"")+'</strong><small>'+safe(x.reason)+' · '+safe(x.formula)+'</small></div><span>'+safe(x.qty.toLocaleString("es-AR"))+' m²</span><button type="button" data-accept="'+safe(x.id)+'" class="btn btn-primary btn-sm">Aceptar</button></div>').join("")+
+ proposals.map(x=>'<div class="oc-calc-suggestion"><div><strong>'+safe(d.lines.find(y=>y.id===x.id)?.name||"")+'</strong><small>'+safe(x.reason)+' · '+safe(x.formula)+'</small></div><span>'+safe(x.qty.toLocaleString("es-AR"))+' m²</span><button type="button" data-accept="'+safe(x.id)+'" class="btn btn-primary btn-sm">Aceptar</button><button type="button" data-correct="'+safe(x.id)+'" class="btn btn-secondary btn-sm">Corregir</button></div>').join("")+
  '</div>':'<p class="oc-calc-muted">No hay cantidades nuevas para completar automáticamente con esta superficie. Las que dependen de planos y medidas específicas quedan pendientes.</p>';
  result.querySelectorAll("[data-accept]").forEach(btn=>btn.onclick=()=>acceptQuantity(btn.dataset.accept));
+ result.querySelectorAll("[data-correct]").forEach(btn=>btn.onclick=()=>{
+   const row=[...$("ocFormLines").querySelectorAll("[data-row]")].find(e=>e.dataset.row===btn.dataset.correct);
+   row?.querySelector('[data-key="qty"]')?.focus();
+   note("Ingresá tu cantidad real en el campo del trabajo. No se aplicará la propuesta.","info");
+ });
  const all=$("ocAcceptAll");if(all)all.onclick=acceptAllQuantities;
 }
 function positive(v){return Number.isFinite(Number(v))&&String(v).trim()!==""&&Number(v)>0&&Number(v)<=100000?Number(v):NaN}
