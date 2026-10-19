@@ -168,6 +168,7 @@ function fill(){
  const d=get(),form=$("ocBudgetForm");
  $("ocFormBlank").classList.toggle("hidden",!!d);
  form.classList.toggle("hidden",!d);
+ $("ocFormDelete").classList.toggle("hidden",!d);
  if(!d)return;
  const mapping={title:"ocFTitle",client:"ocFClient",phone:"ocFPhone",location:"ocFLocation",measurements:"ocFMeasures",floors:"ocFFloors",scopeType:"ocFScopeType",scope:"ocFScope",payment:"ocFPayment",discountRate:"ocFDiscount",taxRate:"ocFTax",validity:"ocFValidity",delivery:"ocFDelivery",notes:"ocFNotes"};
  for(const [field,id] of Object.entries(mapping))$(id).value=d[field]??"";
@@ -197,6 +198,7 @@ function createPayload(d){
   if(line.cost!==""&&!fullNum(line.cost)){note("El costo interno del concepto "+(i+1)+" no es válido.","error");return null}
  }
  if(!fullNum(d.discountRate)||num(d.discountRate)>100||!fullNum(d.taxRate)||num(d.taxRate)>100){note("Revisá los porcentajes de descuento e impuestos (0 a 100).","error");return null}
+ if(d.floors!==""&&(!Number.isInteger(num(d.floors))||num(d.floors)<1||num(d.floors)>100)){note("La cantidad de plantas debe ser un número entero positivo.","error");return null}
  if(!Number.isInteger(num(d.validity))||num(d.validity)<1||num(d.validity)>365){note("La validez debe ser de 1 a 365 días.","error");return null}
  const details=[d.scope,d.measurements?"Medidas o superficie informadas: "+d.measurements:"",d.floors?"Plantas: "+d.floors:"",d.scopeType?"Incluye: "+d.scopeType:"",d.location?"Localidad: "+d.location:""].filter(Boolean).join("\n");
  return {
@@ -211,7 +213,11 @@ function saveBudget(e){
  const d=get();if(!d)return;
  flushBeforeSwitch();
  const payload=createPayload(d);if(!payload)return;
- const q=api.createQuote(payload,d.savedQuoteId||null);
+ $("ocFormSave").disabled=true;
+ let q=null;
+ try{q=api.createQuote(payload,d.savedQuoteId||null)}
+ catch(e){note("No se pudo guardar el presupuesto. Revisá la información.","error")}
+ finally{$("ocFormSave").disabled=false}
  if(!q){note("No se pudo guardar el presupuesto. Revisá tu conexión e intentá nuevamente.","error");return}
  d.savedQuoteId=q.id;flushSave();showDrafts();fill();
  note("Presupuesto "+q.id+" guardado. Ya podés descargarlo, compartirlo o seguir editándolo.","success");
