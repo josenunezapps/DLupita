@@ -124,6 +124,12 @@ function surfaceCandidates(d){
  if(!measured||d.areaConfirmed!==true||d.areaSource!==d.measurements||!["build","land"].includes(d.areaPurpose))return [];
  return d.lines.filter(line=>line&&(line.qty===""||line.quantityOrigin==="revisar superficie")).flatMap(line=>{
   const type=d.areaPurpose;
+  // Reglas guardadas por el profesional; nunca son valores asumidos.
+  const rate=api?.business?.()?.quantityRates?.[line.name];
+  if(rate&&rate.basis===type&&Number.isFinite(Number(rate.factor))&&Number(rate.factor)>0&&rate.unit){
+    const qty=Math.round(measured.area*Number(rate.factor)*1000)/1000;
+    if(qty>0&&qty<=999999999)return [{id:line.id,qty,unit:rate.unit,formula:measured.formula+" × "+rate.factor,reason:"Coeficiente propio guardado: "+rate.factor+" "+rate.unit+" por m²; revisar antes de usar"}];
+  }
   if(type==="land"&&line.name==="Limpieza del terreno"){
    return [{id:line.id,qty:measured.area,unit:"m²",formula:measured.formula,reason:"Superficie de terreno que confirmaste que se va a limpiar"}];
   }
@@ -193,6 +199,19 @@ function calcFromMeasures(unit,values){
  result-=deduction;
  if(!Number.isFinite(result)||result<=0||result>999999999)return {error:"La cantidad calculada está fuera del rango admitido."};
  return {value:Math.round(result*1000)/1000,explanation:unit==="m²"?"Largo × ancho × número de superficies":"Largo × ancho × profundidad × número de elementos"};
+}
+function saveOwnRate(row,line){
+ const form=row.querySelector("[data-rate-form]");
+ const field=form.querySelector('[data-rate="factor"]'),type=form.querySelector('[data-rate="basis"]');
+ const factor=Number(field.value),basis=type.value,unit=String(line.unit||"").trim();
+ const message=row.querySelector("[data-rate-message]");
+ if(!line.name||!unit||!["build","land"].includes(basis)||!Number.isFinite(factor)||factor<=0||factor>10000){
+  message.textContent="Completá nombre, unidad, tipo de superficie y un coeficiente mayor que cero.";return;
+ }
+ if(!api.business().quantityRates)api.business().quantityRates={};
+ api.business().quantityRates[line.name]={basis,factor,unit,created:new Date().toISOString()};
+ flushSave();renderEstimates();
+ message.textContent="Regla guardada. Se reutilizará en próximos presupuestos y siempre requerirá tu aprobación.";
 }
 function calculateLine(row,line){
  const form=row.querySelector("[data-calc-form]");if(!form)return;
@@ -334,6 +353,13 @@ function linesHTML(){
  '<label class="oc-form-field"><span>N.º de elementos</span><input data-measure="count" type="number" min="0.001" step="any" placeholder="Ej.: 1 o 4"></label>'+
  '<label class="oc-form-field"><span>Descontar área o volumen (opcional)</span><input data-measure="deduction" type="number" min="0" step="any" placeholder="0"></label>'+
  '</div><div class="oc-calc-line-actions"><button type="button" class="btn btn-secondary btn-sm" data-calc-check>Calcular</button><button type="button" class="btn btn-primary btn-sm" data-calc-apply disabled>Usar cantidad</button><span data-calc-result role="status"></span></div>'+
+ '</details>'+
+ '<details class="oc-simple-rowdetail oc-own-rate"><summary>Guardar coeficiente propio para futuros presupuestos (opcional)</summary>'+
+ '<p class="oc-calc-muted">Usá únicamente un consumo real que vos conozcas. No hay valores universales para fundaciones ni estructuras.</p>'+
+ '<div class="oc-calc-line-fields" data-rate-form>'+
+ '<label class="oc-form-field"><span>Por m² de...</span><select data-rate="basis"><option value="">Elegí superficie</option><option value="build">Superficie construida</option><option value="land">Terreno a limpiar</option></select></label>'+
+ '<label class="oc-form-field"><span>Coeficiente ('+safe(x.unit||"unidad")+' por m²)</span><input data-rate="factor" type="number" min="0.000001" max="10000" step="any" placeholder="Coeficiente real"></label>'+
+ '</div><div class="oc-calc-line-actions"><button type="button" data-rate-save class="btn btn-secondary btn-sm">Guardar regla</button><span data-rate-message role="status"></span></div>'+
  '</details></div>').join(""):'<div class="oc-form-noitems">Todavía no seleccionaste trabajos. Tocá «Seleccionar trabajos» para empezar.</div>';
  host.querySelectorAll("[data-row]").forEach(row=>{
   const x=d.lines.find(t=>t.id===row.dataset.row);
@@ -347,6 +373,9 @@ function linesHTML(){
   });
   row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(t=>t.id!==x.id);flushSave();linesHTML();renderEstimates()};
   row.querySelector("[data-calc-check]").onclick=()=>calculateLine(row,x);
+  const rate=api?.business?.()?.quantityRates?.[x.name],form=row.querySelector("[data-rate-form]");
+  if(rate){form.querySelector('[data-rate="basis"]').value=rate.basis;form.querySelector('[data-rate="factor"]').value=rate.factor}
+  row.querySelector("[data-rate-save]").onclick=()=>saveOwnRate(row,x);
  });
  totalsUI();
 }
