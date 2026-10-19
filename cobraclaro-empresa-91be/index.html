@@ -329,6 +329,36 @@ tbody tr:hover{box-shadow:inset 0 0 0 999px rgba(79,107,255,.028)}
 @media(max-width:1050px){.focus-panel{grid-template-columns:1fr}.focus-right{width:100%}}
 @media(max-width:650px){.focus-panel{padding:20px 16px;gap:17px}.focus-left h2{font-size:21px}.focus-actions{width:100%}.focus-actions .btn{flex:1 1 auto}}
 </style>
+
+<style>
+.accountModal{max-width:940px}
+.accountEyebrow{font-size:10px;letter-spacing:.16em;color:var(--accent);font-weight:900;margin-bottom:5px}
+.accountSubtitle{font-size:12px;color:var(--muted);margin-top:6px}
+.accountBody{padding:24px}
+.accountSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.accountTile{border:1px solid var(--line);background:#f8faff;border-radius:15px;padding:16px;min-width:0}
+.accountTile span{display:block;color:var(--muted);font-size:11px;font-weight:750;margin-bottom:9px}
+.accountTile b{font-size:22px;letter-spacing:-.04em;overflow-wrap:anywhere}
+.accountTileLate{background:#fff7f7}
+.accountTileLate b{color:var(--danger)}
+.accountSectionTitle{font-weight:850;color:var(--ink);font-size:15px;display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.accountSectionTitle small{color:var(--muted);font-size:11px}
+.accountTableWrap{border:1px solid var(--line);border-radius:15px;max-height:360px;overflow:auto}
+.accountTableWrap table{min-width:660px}
+.accountTableWrap thead{position:sticky;top:0;z-index:1}
+.accountTableWrap td,.accountTableWrap th{padding:12px 15px}
+.accountTableWrap .number{text-align:right;font-variant-numeric:tabular-nums}
+.accountHint{font-size:11px;color:var(--muted);line-height:1.6;margin-top:14px}
+.accountEmpty{padding:34px;border:1px dashed var(--line-strong);color:var(--muted);text-align:center;border-radius:15px}
+.accountFoot{flex-wrap:wrap}
+@media(max-width:650px){
+  .accountBody{padding:15px}
+  .accountSummary{grid-template-columns:1fr}
+  .accountTile{padding:13px 15px}
+  .accountTile b{font-size:20px}
+  .accountFoot .btn{flex:1 1 100%}
+}
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -344,8 +374,8 @@ tbody tr:hover{box-shadow:inset 0 0 0 999px rgba(79,107,255,.028)}
  balance(id){return db.entries.filter(x=>x.clientId===id).reduce((s,x)=>s+(x.kind==='venta'?num(x.amount):-num(x.amount)),0)},
  overdue(id){const debts=db.entries.filter(x=>x.clientId===id&&x.kind==='venta'&&x.due<today()).reduce((s,x)=>s+num(x.amount),0);const credits=db.entries.filter(x=>x.clientId===id&&x.kind==='pago').reduce((s,x)=>s+num(x.amount),0);return Math.max(0,debts-credits)},
  recordRows(){return [...db.entries].sort((a,b)=>b.date.localeCompare(a.date)).filter(x=>filter==='todos'||x.kind===filter).filter(x=>{const c=APP.client(x.clientId);return (x.concept+' '+(c?.name||'')).toLowerCase().includes(search.toLowerCase())}).map(x=>{const c=APP.client(x.clientId);return [dateText(x.date),cellName(c?.name||'Cliente eliminado',x.concept),pill(x.kind==='venta'?'Venta a crédito':'Pago',x.kind==='venta'?'warn':'good'),`<span class="strong" style="color:${x.kind==='pago'?'#188769':'#243148'}">${x.kind==='pago'?'−':'+'} ${money(x.amount)}</span>`,x.kind==='venta'?dateText(x.due):'—',btn('Eliminar','deleteEntry',x.id,'sm danger')]} )},
- clientRows(){return db.clients.filter(x=>(x.name+' '+x.zone).toLowerCase().includes(search.toLowerCase())).map(c=>{let bal=APP.balance(c.id),late=APP.overdue(c.id);return [cellName(c.name,c.zone||'Sin zona'),h(c.phone||'Sin teléfono'),`<span class="strong">${money(Math.max(0,bal))}</span>`,late>0?pill('Vencido · '+money(late),'bad'):(bal>0?pill('Al día','good'):pill('Sin deuda','info')) ,`<div class="rowActions">${btn('Cobrar','pay',c.id)}${smallLink('Editar','editClient',c.id)}${smallLink('WhatsApp','wa',c.id)}</div>`]})},
- dueRows(){return db.clients.filter(c=>APP.overdue(c.id)>0).filter(c=>c.name.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>APP.overdue(b.id)-APP.overdue(a.id)).map(c=>[cellName(c.name,c.zone||''),`<span class="strong">${money(APP.balance(c.id))}</span>`,`<span class="strong" style="color:#bc4a5a">${money(APP.overdue(c.id))}</span>`,btn('Preparar aviso','wa',c.id)])},
+ clientRows(){return db.clients.filter(x=>(x.name+' '+x.zone).toLowerCase().includes(search.toLowerCase())).map(c=>{let bal=APP.balance(c.id),late=APP.overdue(c.id);return [cellName(c.name,c.zone||'Sin zona'),h(c.phone||'Sin teléfono'),`<span class="strong">${money(Math.max(0,bal))}</span>`,late>0?pill('Vencido · '+money(late),'bad'):(bal>0?pill('Al día','good'):pill('Sin deuda','info')) ,`<div class="rowActions">${btn('Ver cuenta','account',c.id)}${btn('Cobrar','pay',c.id)}${smallLink('Editar','editClient',c.id)}${smallLink('WhatsApp','wa',c.id)}</div>`]})},
+ dueRows(){return db.clients.filter(c=>APP.overdue(c.id)>0).filter(c=>c.name.toLowerCase().includes(search.toLowerCase())).sort((a,b)=>APP.overdue(b.id)-APP.overdue(a.id)).map(c=>[cellName(c.name,c.zone||''),`<span class="strong">${money(APP.balance(c.id))}</span>`,`<span class="strong" style="color:#bc4a5a">${money(APP.overdue(c.id))}</span>`,`<div class="rowActions">${btn('Ver cuenta','account',c.id)}${btn('Preparar aviso','wa',c.id)}</div>`])},
  list(){if(tab==='clientes')return table(['Cliente','Teléfono','Saldo','Estado','Acciones'],APP.clientRows());if(tab==='movimientos')return table(['Fecha','Cliente / Concepto','Tipo','Importe','Vence',''],APP.recordRows());return table(['Cliente','Saldo total','Saldo vencido','Acción'],APP.dueRows())},
  render(tab){const total=db.clients.reduce((s,c)=>s+Math.max(0,APP.balance(c.id)),0),overdue=db.clients.reduce((s,c)=>s+APP.overdue(c.id),0),paid=db.entries.filter(x=>x.kind==='pago').reduce((s,x)=>s+num(x.amount),0);
  if(tab==='inicio')return `<div class="heading"><div><p class="eyebrow">Control financiero</p><h1>Tu operación financiera, en orden.</h1><p class="sub">Una vista ejecutiva para cobrar a tiempo, identificar riesgos y mantener cada cuenta al día.</p></div><div class="actions">${btn('＋ Nueva venta','sale','', 'primary')}${btn('Registrar cobro','pay')}</div></div><div class="banner"><div><strong>Convertí información en cobros efectivos.</strong><p>Identificá lo urgente, contactá al cliente indicado y registrá cada movimiento con claridad.</p></div>${btn('Ver vencimientos →','goLate','', 'primary')}</div>${stats([card('Cuentas por cobrar',money(total),'↗','Saldo pendiente total'),card('Deuda vencida',money(overdue),'!','Facturas vencidas sin cubrir'),card('Cobros registrados',money(paid),'✓','Histórico de pagos'),card('Clientes',String(db.clients.length),'◎','Registrados')])}<div class="dashboardGrid">${panel('Clientes con deuda',table(['Cliente','Saldo pendiente','Estado',''],db.clients.filter(c=>APP.balance(c.id)>0).sort((a,b)=>APP.balance(b.id)-APP.balance(a.id)).map(c=>[cellName(c.name,c.zone||''),`<b>${money(APP.balance(c.id))}</b>`,APP.overdue(c.id)>0?pill('Vencido','bad'):pill('Al día','good'),smallLink('Cobrar','pay',c.id)])),`<button class="link" data-action="goClients">Ver clientes →</button>`)}${panel('Acciones rápidas',`<div class="panelBody stack"><button class="quick" data-action="client"><span class="quickIcon">◎</span><span><strong>Agregar cliente</strong><small>Creá una nueva cuenta corriente</small></span></button><button class="quick" data-action="sale"><span class="quickIcon">▤</span><span><strong>Registrar venta a crédito</strong><small>Sumá una nueva deuda</small></span></button><button class="quick" data-action="pay"><span class="quickIcon">↗</span><span><strong>Registrar un cobro</strong><small>Descontá un pago parcial o total</small></span></button></div>`)}</div>`;
@@ -356,11 +386,13 @@ tbody tr:hover{box-shadow:inset 0 0 0 999px rgba(79,107,255,.028)}
  report(){return {subtitle:'Clientes y sus cuentas corrientes',headers:['Cliente','Zona','Teléfono','Saldo','Vencido','Límite de crédito'],rows:db.clients.map(c=>[c.name,c.zone,c.phone,money(Math.max(0,APP.balance(c.id))),money(APP.overdue(c.id)),money(c.limit)]),summary:[['Clientes',db.clients.length],['Ventas a crédito',db.entries.filter(x=>x.kind==='venta').length],['Pagos',db.entries.filter(x=>x.kind==='pago').length],['Cuentas por cobrar',money(db.clients.reduce((s,c)=>s+Math.max(0,APP.balance(c.id)),0))]]}},
  actions:{
  goLate(){tab='vencimientos';render()},goClients(){tab='clientes';render()},
+ account(id){clientAccountDialog(id)},
+ printAccount(id){const c=APP.client(id);if(!c)return;const rows=accountLedger(id).map(x=>[dateText(x.date),x.kind==='venta'?'Venta a crédito':'Cobro',x.concept,money(x.kind==='venta'?x.amount:0),money(x.kind==='pago'?x.amount:0),money(x.balance)]);rows.push(['','', 'SALDO PENDIENTE','','',money(Math.max(0,APP.balance(id)))]);printReport('Estado de cuenta · '+c.name,['Fecha','Operación','Concepto','Debe','Haber','Saldo'],rows,'CobraClaro | '+c.name+' | Saldo vencido estimado: '+money(APP.overdue(id)))},
  client(){modal('Nuevo cliente',[{name:'name',label:'Nombre del comercio',wide:true},{name:'phone',label:'WhatsApp (con código de país)',type:'tel',required:false,placeholder:'Ej.: 5492901...'}, {name:'zone',label:'Zona o barrio',required:false},{name:'limit',label:'Límite de crédito ($)',type:'number',min:0,default:0}],v=>{db.clients.push({id:uid(),name:v.name.trim(),phone:v.phone,zone:v.zone,limit:num(v.limit)})})},
  editClient(id){const c=APP.client(id);if(!c)return;modal('Editar cliente',[{name:'name',label:'Nombre del comercio',wide:true},{name:'phone',label:'WhatsApp',type:'tel',required:false},{name:'zone',label:'Zona',required:false},{name:'limit',label:'Límite de crédito ($)',type:'number',min:0}],v=>Object.assign(c,{name:v.name,phone:v.phone,zone:v.zone,limit:num(v.limit)}),c)},
  sale(){if(!db.clients.length){notify('Primero agregá un cliente');APP.actions.client();return}modal('Nueva venta a crédito',[{name:'clientId',label:'Cliente',type:'select',wide:true,options:db.clients.map(c=>({value:c.id,label:c.name}))},{name:'amount',label:'Importe de la venta ($)',type:'number',min:1},{name:'date',label:'Fecha de venta',type:'date',default:today()},{name:'due',label:'Fecha de vencimiento',type:'date',default:plusDays(today(),14)},{name:'concept',label:'Concepto / mercadería',wide:true}],v=>{if(v.due<v.date)throw Error('El vencimiento no puede ser anterior a la fecha de venta.');db.entries.push({id:uid(),kind:'venta',amount:num(v.amount),clientId:v.clientId,date:v.date,due:v.due,concept:v.concept})})},
  pay(id){const allowed=db.clients.filter(c=>APP.balance(c.id)>0);if(!allowed.length){notify('No hay clientes con saldo pendiente');return}modal('Registrar cobro',[{name:'clientId',label:'Cliente',type:'select',wide:true,options:allowed.map(c=>({value:c.id,label:c.name}))},{name:'amount',label:'Importe recibido ($)',type:'number',min:1},{name:'date',label:'Fecha de cobro',type:'date',default:today()},{name:'concept',label:'Medio de pago / detalle',required:false,wide:true,default:'Transferencia'}],v=>{if(num(v.amount)>APP.balance(v.clientId))throw Error('El cobro supera el saldo pendiente de ese cliente.');db.entries.push({id:uid(),kind:'pago',clientId:v.clientId,amount:num(v.amount),date:v.date,concept:v.concept,due:''})},{clientId:id||allowed[0].id})},
- deleteEntry(id){if(confirm('¿Eliminar este movimiento? Se recalcularán todos los saldos.')){db.entries=db.entries.filter(x=>x.id!==id);save();notify('Movimiento eliminado')}},
+ deleteEntry(id){const entry=db.entries.find(x=>x.id===id);if(!entry)return;if(entry.kind==='venta'&&APP.balance(entry.clientId)-num(entry.amount)<-0.001){alert('No podés eliminar esta venta porque ya tiene cobros que superarían el saldo restante. Revisá los movimientos de ese cliente primero.');return}if(confirm('¿Eliminar este movimiento? Se recalcularán todos los saldos.')){db.entries=db.entries.filter(x=>x.id!==id);save();notify('Movimiento eliminado')}},
  wa(id){const c=APP.client(id);if(!c)return;const total=Math.max(0,APP.balance(id)),late=APP.overdue(id);const message=`Hola, ${c.name}. Te contactamos para informar que tu cuenta corriente presenta un saldo pendiente de ${money(total)}${late?' (incluye '+money(late)+' vencidos)':''}. ¿Podemos coordinar el pago? Muchas gracias.`;msgLink(c.phone,message)}
  }
 };
@@ -396,6 +428,38 @@ function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}catch(e
 function notify(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),2800)}
 function modal(title,fields,onSave,defaults={},tip=''){const html=fields.map(f=>{const value=defaults[f.name]??f.default??'';const a=`name="${h(f.name)}" id="field-${h(f.name)}" ${f.required===false?'':'required'} ${f.min!==undefined?`min="${h(f.min)}"`:''} ${f.step!==undefined?`step="${h(f.step)}"`:''} ${f.placeholder?`placeholder="${h(f.placeholder)}"`:''}`;let inp;if(f.type==='select'){inp=`<select ${a}>${f.options.map(o=>{const obj=typeof o==='string'?{value:o,label:o}:o;return `<option value="${h(obj.value)}" ${String(value)===String(obj.value)?'selected':''}>${h(obj.label)}</option>`}).join('')}</select>`}else if(f.type==='textarea')inp=`<textarea ${a}>${h(value)}</textarea>`;else inp=`<input type="${h(f.type||'text')}" ${a} value="${h(value)}"/>`;return `<div class="field ${f.wide?'wide':''}"><label for="field-${h(f.name)}">${h(f.label)}</label>${inp}</div>`}).join('');document.getElementById('modal-root').innerHTML=`<div class="floatMask" id="mask"><section class="modal" role="dialog" aria-modal="true" aria-label="${h(title)}"><div class="modalTop"><h2>${h(title)}</h2><button type="button" class="close" id="modalClose" aria-label="Cerrar">×</button></div><form id="entryForm"><div class="formGrid">${html}</div>${tip?`<p class="helper">${h(tip)}</p>`:''}<div class="modalFoot"><button type="button" class="btn" id="formCancel">Cancelar</button><button type="submit" class="btn primary">Guardar cambios →</button></div></form></section></div>`;const root=document.getElementById('modal-root');const close=()=>root.innerHTML='';root.querySelector('#modalClose').onclick=close;root.querySelector('#formCancel').onclick=close;root.querySelector('#mask').onclick=e=>{if(e.target.id==='mask')close()};root.querySelector('#entryForm').onsubmit=e=>{e.preventDefault();const vals=Object.fromEntries(new FormData(e.currentTarget).entries());try{const result=onSave(vals);if(result===false)return;close();save();notify('Los cambios se guardaron correctamente')}catch(err){alert(err?.message||String(err))}};setTimeout(()=>root.querySelector('input,select,textarea')?.focus(),20)}
 const msgLink=(phone,text)=>{let p=String(phone??'').replace(/\D/g,'');if(p.startsWith('0'))p=p.slice(1);if(p.length===10)p='54'+p;if(!p){notify('Este cliente no tiene teléfono cargado.');return}window.open(`https://wa.me/${p}?text=${encodeURIComponent(text)}`,'_blank','noopener,noreferrer')};
+
+function accountLedger(clientId){
+  const events=db.entries.map((x,i)=>({...x,order:i})).filter(x=>x.clientId===clientId)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date))||a.order-b.order);
+  let balance=0;
+  return events.map(x=>{
+    balance+=x.kind==='venta'?num(x.amount):-num(x.amount);
+    return {...x,balance};
+  });
+}
+function clientAccountDialog(id){
+  const c=APP.client(id);if(!c)return;
+  const rows=accountLedger(id);
+  const balance=Math.max(0,APP.balance(id));
+  const overdue=APP.overdue(id);
+  const tableRows=rows.map(x=>'<tr><td>'+h(dateText(x.date))+'</td><td>'+h(x.kind==='venta'?'Venta a crédito':'Cobro')+'</td><td>'+h(x.concept||'—')+'</td><td class="number">'+(x.kind==='venta'?money(x.amount):'—')+'</td><td class="number">'+(x.kind==='pago'?money(x.amount):'—')+'</td><td class="number"><b>'+money(x.balance)+'</b></td></tr>').join('');
+  const root=document.getElementById('modal-root');
+  root.innerHTML='<div class="floatMask" id="accountMask"><section class="modal accountModal" role="dialog" aria-modal="true" aria-label="Estado de cuenta de '+h(c.name)+'">'
+    +'<div class="modalTop"><div><div class="accountEyebrow">ESTADO DE CUENTA</div><h2>'+h(c.name)+'</h2><div class="accountSubtitle">'+h(c.zone||'Sin zona')+' · '+h(c.phone||'Sin teléfono registrado')+'</div></div><button class="close" type="button" id="accountClose" aria-label="Cerrar">×</button></div>'
+    +'<div class="accountBody"><div class="accountSummary"><div class="accountTile"><span>Saldo pendiente</span><b>'+money(balance)+'</b></div><div class="accountTile accountTileLate"><span>Saldo vencido estimado</span><b>'+money(overdue)+'</b></div><div class="accountTile"><span>Límite configurado</span><b>'+(num(c.limit)>0?money(c.limit):'Sin límite')+'</b></div></div>'
+    +'<div class="accountSectionTitle">Historial de movimientos <small>'+rows.length+' registros</small></div>'
+    +(rows.length?'<div class="accountTableWrap"><table><thead><tr><th>Fecha</th><th>Operación</th><th>Concepto</th><th>Venta</th><th>Cobro</th><th>Saldo</th></tr></thead><tbody>'+tableRows+'</tbody></table></div>':'<div class="accountEmpty">Todavía no hay ventas ni cobros registrados para este cliente.</div>')
+    +'<div class="accountHint">El saldo vencido es una estimación según fechas de venta, vencimientos y cobros registrados. Los datos se guardan en este navegador.</div></div>'
+    +'<div class="modalFoot accountFoot"><button type="button" class="btn" id="accountCancel">Cerrar</button><button type="button" class="btn" data-action="printAccount" data-id="'+h(id)+'">Imprimir / Guardar PDF</button>'+(balance>0?'<button type="button" class="btn primary" data-action="pay" data-id="'+h(id)+'">Registrar cobro</button>':'')+'</div>'
+    +'</section></div>';
+  const close=()=>{root.innerHTML=''};
+  root.querySelector('#accountClose').onclick=close;
+  root.querySelector('#accountCancel').onclick=close;
+  root.querySelector('#accountMask').onclick=e=>{if(e.target.id==='accountMask')close()};
+  root.querySelector('#accountClose').focus();
+}
+
 function reportPage(){const data=APP.report();return `<div class="heading"><div><p class="eyebrow">Datos y respaldo</p><h1>Informes y exportaciones</h1><p class="sub">Exportá tus registros. En PDF se utiliza la opción de imprimir del navegador.</p></div></div><div class="twoPanels">${panel('Generar informes',`<div class="panelBody"><p class="tips">Descargá una planilla CSV compatible con Excel, o generá un informe listo para guardar en PDF.</p><div class="reportActions">${btn('⬇ Exportar Excel (CSV)','csv','', 'primary')}${btn('▣ Guardar PDF','print')}</div><div class="note" style="margin-top:18px">El PDF se crea desde la opción <b>Guardar como PDF</b> de la ventana de impresión.</div></div>`)}${panel('Copias de seguridad',`<div class="panelBody"><p class="tips">Todos los datos se guardan en este navegador. Creá una copia JSON periódicamente. Para cambiar de dispositivo, importá ese archivo.</p><div class="reportActions">${btn('⬇ Descargar JSON','backup')}${btn('⬆ Importar JSON','import')}</div><p class="tips" style="margin-top:20px">También podés borrar los datos de ejemplo y comenzar desde cero.</p>${btn('Borrar todos los datos','clear','', 'danger')}</div>`)}</div>${panel('Resumen del informe',`<div class="panelBody">${data.summary.map(x=>`<div class="reportRow"><span class="muted">${h(x[0])}</span><strong>${h(x[1])}</strong></div>`).join('')}</div>`)}`}
 
 function shellOverview(){
