@@ -307,8 +307,13 @@ function makeOptions(current){
 function linesHTML(){
  const d=get();if(!d)return;
  const host=$("ocFormLines");
+ let foundUnit=false;
+ for(const x of d.lines){
+  if(!x.unit&&unitHint(x.name)){x.unit=unitHint(x.name);x.unitIsSuggested=true;foundUnit=true}
+ }
+ if(foundUnit)scheduleSave();
  host.innerHTML=d.lines.length?d.lines.map((x,i)=>'<div class="oc-simple-line" data-row="'+safe(x.id)+'">'+
- '<div class="oc-simple-name"><strong>'+safe(x.name||"Nuevo trabajo")+'</strong><small>'+safe(x.category||"")+'</small></div>'+
+ '<div class="oc-simple-name"><strong>'+safe(x.name||"Nuevo trabajo")+'</strong><small>'+safe(x.category||"")+(x.quantityOrigin?' · '+safe(x.quantityOrigin):'')+'</small></div>'+
  '<label class="oc-form-field oc-simple-qty"><span>Cantidad</span><input data-key="qty" type="number" min="0.000001" step="any" placeholder="Falta" value="'+safe(x.qty)+'"></label>'+
  '<label class="oc-form-field oc-simple-unit"><span>Unidad</span><input data-key="unit" maxlength="16" list="ocUnitOptions" placeholder="m², u..." value="'+safe(x.unit)+'"></label>'+
  '<label class="oc-form-field oc-simple-price"><span>Precio por unidad</span><input data-key="price" type="number" min="0" step="any" placeholder="Falta" value="'+safe(x.price)+'"></label>'+
@@ -318,7 +323,17 @@ function linesHTML(){
  '<label class="oc-form-field"><span>Nombre del trabajo</span><input data-key="name" maxlength="140" value="'+safe(x.name)+'"></label>'+
  '<label class="oc-form-field"><span>Categoría</span><select data-key="category">'+["Materiales","Mano de obra","Servicios","Otros"].map(c=>'<option'+(x.category===c?" selected":"")+'>'+c+'</option>').join("")+'</select></label>'+
  '<label class="oc-form-field"><span>Costo interno por unidad (opcional)</span><input data-key="cost" type="number" min="0" step="any" placeholder="Pendiente" value="'+safe(x.cost)+'"></label>'+
- '</div></details></div>').join(""):'<div class="oc-form-noitems">Todavía no seleccionaste trabajos. Tocá «Seleccionar trabajos» para empezar.</div>';
+ '</div></details>'+
+ '<details class="oc-simple-rowdetail oc-calc-line-details"><summary>Calcular cantidad con medidas (m² / m³)</summary>'+
+ '<p class="oc-calc-muted">Ingresá medidas reales de este trabajo. Para excavaciones y fundaciones, utilizá las dimensiones definidas en el proyecto, no las de toda la casa.</p>'+
+ '<div class="oc-calc-line-fields" data-calc-form>'+
+ '<label class="oc-form-field"><span>Largo (m)</span><input data-measure="length" type="number" min="0.001" step="any" placeholder="Largo"></label>'+
+ '<label class="oc-form-field"><span>Ancho (m)</span><input data-measure="width" type="number" min="0.001" step="any" placeholder="Ancho"></label>'+
+ '<label class="oc-form-field"><span>Altura o profundidad (m, solo m³)</span><input data-measure="height" type="number" min="0.001" step="any" placeholder="Profundidad"></label>'+
+ '<label class="oc-form-field"><span>N.º de elementos</span><input data-measure="count" type="number" min="0.001" step="any" placeholder="Ej.: 1 o 4"></label>'+
+ '<label class="oc-form-field"><span>Descontar área o volumen (opcional)</span><input data-measure="deduction" type="number" min="0" step="any" placeholder="0"></label>'+
+ '</div><div class="oc-calc-line-actions"><button type="button" class="btn btn-secondary btn-sm" data-calc-check>Calcular</button><button type="button" class="btn btn-primary btn-sm" data-calc-apply disabled>Usar cantidad</button><span data-calc-result role="status"></span></div>'+
+ '</details></div>').join(""):'<div class="oc-form-noitems">Todavía no seleccionaste trabajos. Tocá «Seleccionar trabajos» para empezar.</div>';
  host.querySelectorAll("[data-row]").forEach(row=>{
   const x=d.lines.find(t=>t.id===row.dataset.row);
   row.querySelectorAll("[data-key]").forEach(c=>{
@@ -330,6 +345,7 @@ function linesHTML(){
    c.onchange=()=>{updateLine(x,c.dataset.key,c.value);flushSave()};
   });
   row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(t=>t.id!==x.id);flushSave();linesHTML()};
+  row.querySelector("[data-calc-check]").onclick=()=>calculateLine(row,x);
  });
  totalsUI();
 }
@@ -343,6 +359,7 @@ function updateLine(line,key,value){
  if(!line)return;
  line[key]=String(value);
  if(key==="qty"){line.quantityOrigin="manual";line.quantityReason="";renderEstimates()}
+ if(key==="unit")line.unitIsSuggested=false;
  scheduleSave();totalsUI();
 }
 function totalsUI(){
@@ -509,6 +526,25 @@ function init(bridge){
 .oc-pick-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid #edf0f3;padding-top:15px}
 @media(max-width:850px){.oc-worktype-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-simple-line{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-simple-name{grid-column:1/-1}.oc-simple-amount{text-align:left}.oc-simple-rowdetail{grid-column:1/-1}.oc-simple-remove{grid-row:1;grid-column:2;justify-self:end}}
 @media(max-width:440px){.oc-pick-dialog{padding:14px}.oc-form-page{padding:15px}.oc-pick-actions{flex-wrap:wrap}.oc-pick-actions>.btn{flex:1}}
+
+.oc-calc-panel{margin:16px 0 6px;padding:16px;background:#f6fafb;border:1px solid #d9e7ee;border-radius:13px}
+.oc-calc-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.oc-calc-head strong{font-size:14px;color:#253b4f}.oc-calc-head p{font-size:12px;color:#5f7182;margin:8px 0}
+.oc-calc-status{color:#995e32;background:#fff1e4;border-radius:20px;padding:6px 9px;font-size:11px}
+.oc-calc-confirm{display:flex;align-items:flex-end;flex-wrap:wrap;gap:9px;margin:10px 0}
+.oc-calc-confirm label{flex:1;min-width:180px}
+.oc-calc-muted{font-size:12px;line-height:1.6;color:#758492;margin:11px 0}
+.oc-calc-suggestions{margin-top:15px;border-top:1px solid #e1e9ee;padding-top:11px}
+.oc-calc-title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.oc-calc-title strong{font-size:13px}
+.oc-calc-suggestion{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #e7ecef;padding:12px 0}
+.oc-calc-suggestion>div{flex:1;min-width:180px}.oc-calc-suggestion strong{display:block;font-size:12px}.oc-calc-suggestion small{display:block;margin-top:5px;color:#7c8896;font-size:11px;line-height:1.55}
+.oc-calc-suggestion>span{font-size:13px;font-weight:750;color:#20384c}
+.oc-calc-line-details{background:#fdfefe;border-radius:7px;margin-top:5px}
+.oc-calc-line-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.oc-calc-line-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin-top:13px}
+.oc-calc-line-actions [data-calc-result]{font-size:12px;color:#3d5d6d}
+@media(max-width:720px){.oc-calc-line-fields{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-calc-head{display:block}.oc-calc-status{display:inline-flex;margin-top:7px}}
 `;
  const style=document.createElement("style");style.textContent=css;document.head.append(style);
  const nav=document.querySelector(".sidenav");
@@ -529,6 +565,15 @@ function init(bridge){
     <label class="oc-form-field"><span>Medidas o superficie (opcional)</span><input id="ocFMeasures" maxlength="120" placeholder="Ej.: 23 × 15 metros"></label>
     <label class="oc-form-field"><span>Localidad (opcional)</span><input id="ocFLocation" maxlength="100" placeholder="Ciudad o localidad"></label>
    </div>
+   <section id="ocEstimates" class="oc-calc-panel hidden" aria-label="Cálculo y propuestas de cantidades">
+    <div class="oc-calc-head"><div><strong>Superficie detectada</strong><p id="ocSurfaceResult"></p></div><span class="oc-calc-status">Requiere confirmación</span></div>
+    <div id="ocAreaChoices" class="oc-calc-confirm">
+     <label class="oc-form-field"><span>¿Qué superficie representan esas medidas?</span><select id="ocAreaPurpose"><option value="">Elegí qué representa...</option><option value="build">Superficie construida / área de replanteo</option><option value="land">Superficie del terreno que se va a limpiar</option><option value="other">Otra superficie (no aplicar cantidades)</option></select></label>
+     <button type="button" id="ocAreaConfirm" class="btn btn-secondary">Confirmar superficie</button>
+    </div>
+    <button type="button" id="ocAreaRecheck" class="btn btn-secondary btn-sm hidden">Cambiar qué representa</button>
+    <div id="ocEstimateSuggestions"></div>
+   </section>
    <details class="oc-form-advanced"><summary>Más datos de la obra (opcional)</summary><div class="oc-form-grid">
     <label class="oc-form-field"><span>Teléfono</span><input id="ocFPhone" maxlength="30" type="tel" placeholder="Contacto"></label>
     <label class="oc-form-field"><span>Cantidad de plantas</span><input id="ocFFloors" type="number" min="1" max="100" step="1" placeholder="Ej.: 1"></label>
@@ -610,6 +655,12 @@ function init(bridge){
  $("ocFormNew").onclick=createDraft;$("ocFormStart").onclick=createDraft;
  $("ocFormGoQuotes").onclick=()=>api.show("presupuestos");
  $("ocFormAddLine").onclick=addLine;
+ $("ocAreaConfirm").onclick=confirmArea;
+ $("ocAreaRecheck").onclick=()=>{
+   const d=get();if(!d)return;
+   d.areaConfirmed=false;d.areaPurpose="";d.areaSource="";
+   flushSave();renderEstimates();
+ };
  $("ocFormPick").onclick=openPicker;
  $("ocPickerClose").onclick=closePicker;
  $("ocPickerCancel").onclick=closePicker;
