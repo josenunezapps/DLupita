@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0d222a">
+<meta name="theme-color" content="#087b6d">
 <meta name="description" content="ServiControl Empresarial, gestión de mantenimientos y servicios técnicos.">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>ServiControl · Zenix AR</title>
@@ -387,6 +387,133 @@ body{background:radial-gradient(circle at top left,rgba(14,145,119,.065),transpa
 @media(max-width:920px){.navScrollHint{display:block;text-align:right;font-size:10px;font-weight:700;color:#a7bfbd;padding:3px 4px 0}}
 @media(max-width:720px){.tableScroll:before{content:"Deslizá hacia los costados para ver todas las columnas →";display:block;font-size:10px;font-weight:650;padding:8px 14px;background:#f1f8f6;color:#657c7a;white-space:normal}}
 </style>
+
+<style id="sc-us-redesign">
+:root{--accent:#087b6d;--accent-strong:#06695d;--accent-soft:#e8f7f2;--ink:#1b2635;--muted:#6b788c;--line:#e3e8f0;--bg:#f7f9fc;--aside:#fff;--good:#14856c}
+body{background:#f7f9fc;color:#1b2635;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.shell{grid-template-columns:238px minmax(0,1fr)}
+.sidebar{background:#fff!important;color:#253247!important;box-shadow:none!important;border-right:1px solid #e3e8ee!important;padding:26px 13px 20px;height:100vh}
+.brand{padding:2px 10px 29px;gap:11px}
+.brandIcon{height:39px;width:39px;background:#087b6d!important;border-radius:11px!important;color:#fff;box-shadow:none!important;font-size:21px}
+.brand span{color:#203047!important;font-size:17px;letter-spacing:-.045em}
+.brand small{color:#8995a6!important;font-size:9px;letter-spacing:.13em}
+.navLabel{color:#a3adba!important;font-size:10px;letter-spacing:.12em;margin:11px 0 10px}
+.nav{gap:3px}
+.nav button{color:#58667a!important;border:0!important;font-size:13px;gap:12px;padding:10px 13px;border-radius:9px;background:transparent!important;font-weight:650;transform:none!important;box-shadow:none!important}
+.nav button b{color:#78869a!important;background:transparent!important;height:23px;width:23px;padding:0}
+.nav button.active{background:#e6f4ef!important;color:#087b6d!important;box-shadow:none!important}
+.nav button.active b,.nav button:hover b{color:#087b6d!important;background:transparent!important}
+.nav button:hover{background:#f1f5f9!important;color:#21354e!important}
+.navSectionDivider{height:1px;background:#e9edf3;margin:13px 12px}
+.sidebar .sideCard{margin:24px 5px 0;background:#f5f8fa!important;box-shadow:none!important;border:1px solid #e6ebf1!important;padding:15px;border-radius:12px}
+.sideCardLabel{color:#758598!important;font-size:10px}
+.sideCardValue{color:#223044!important;font-size:25px!important}
+.sideCardSub{color:#738295!important;font-size:11px}
+.sideMini{background:#fff!important;border-color:#e2e9f0!important}
+.sideMini strong{color:#1f2c3c}
+.sideMini span{color:#7a889a}
+.sideFoot{color:#8a97a7!important;border-color:#e7edf3!important;font-size:11px}
+.sideFoot strong{color:#36455b!important}
+.main{background:#f7f9fc}
+.topbar{background:#fff!important;border-bottom:1px solid #e2e8f0!important;backdrop-filter:none!important;position:sticky;top:0;z-index:8;min-height:68px;height:auto;padding:13px 32px}
+.crumb{color:#91a0ae;letter-spacing:.08em}
+.topbarTitle{color:#1f2c3a;font-size:17px}
+.topbarSub{display:none}
+.mark{background:#fff!important;box-shadow:none!important;color:#8a97a5!important}
+.avatar{border-radius:11px;background:#e8f5f0!important;color:#087b6d!important}
+.signal{box-shadow:none!important}
+.content{max-width:1580px;padding:31px 35px 70px}
+.serviceStripe,.banner{display:none!important}
+.heading h1{font-family:Inter,system-ui,sans-serif;font-size:28px;letter-spacing:-.04em;color:#1f2937}
+.eyebrow{color:#087b6d!important}
+.sub{font-size:13px;color:#798697}
+.stat,.panel,.callout{border:1px solid #e3e9f0!important;border-radius:13px!important;background:#fff!important;box-shadow:none!important}
+.stat{padding:20px!important}.stat::after{display:none!important}
+.statValue{color:#1c2a38;letter-spacing:-.04em}
+.btn{box-shadow:none!important;border-radius:9px;border-color:#dce4ed;background:#fff;color:#364459}
+.btn:hover{transform:none!important}
+.btn.primary{background:#087b6d!important;color:#fff;border-color:#087b6d!important;box-shadow:none!important}
+.panelHead{background:#fff!important;border-color:#e7edf3!important;padding:17px 19px}
+.panelHead h2{font-size:14px;color:#253547}
+.toolbar{background:#fff!important}
+th{background:#f9fafc!important;font-size:10px!important;color:#8190a2!important}
+td{font-size:12px}
+.pill{font-weight:750!important}
+.initial{background:#e7f4ef!important;color:#087b6d!important;border-color:#d6ebe4!important;border-radius:9px}
+.modal,.detailSheet{border-radius:16px!important}
+.field input,.field select,.field textarea,.search,.select{border-radius:9px!important;background:#fff!important}
+.footer{color:#a4adba;font-size:10px}
+.operationsHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:0 0 23px}
+.operationsHeader small,.workspaceKicker{font-size:10px;text-transform:uppercase;letter-spacing:.15em;font-weight:850;color:#087b6d}
+.operationsHeader h1{font-size:29px;letter-spacing:-.055em;margin:7px 0 6px;color:#192a38}
+.operationsHeader p{color:#798596;margin:0;line-height:1.6}
+.operationsActions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.scSummary{background:#fff;border:1px solid #e3e9f0;border-radius:12px;display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:20px}
+.scMetric{padding:21px 23px;min-width:0;border-right:1px solid #e7ecf2}
+.scMetric:last-child{border-right:0}
+.scMetricTop{font-size:11px;font-weight:750;color:#78869a;display:flex;justify-content:space-between;align-items:center}
+.scMetricTop span:last-child{color:#a3afbb}
+.scMetric strong{font-size:30px;letter-spacing:-.055em;color:#1d2f40;margin:9px 0 4px;display:block;line-height:1.1}
+.scMetric small{color:#919dad;font-size:11px}
+.scMetric.critical strong{color:#c4484e}
+.scWorkGrid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:19px}
+.scCard{background:#fff;border:1px solid #e3e9f0;border-radius:13px;min-width:0;overflow:hidden}
+.scCardHead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:19px 20px;border-bottom:1px solid #edf0f5}
+.scCardHead h2{font-size:15px;margin:0;color:#273749;letter-spacing:-.025em}
+.scCardHead small{color:#8997a7;font-size:11px}
+.scLink{background:none;border:0;color:#087b6d;font-weight:750;font-size:12px}
+.scList{display:grid}
+.scTask{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;background:#fff;border:0;border-bottom:1px solid #eef1f5;padding:16px 19px;text-align:left;min-width:0}
+.scTask:last-child{border-bottom:0}
+.scTask:hover{background:#f8fbfa}
+.scTaskIcon{width:38px;height:38px;border-radius:10px;background:#e8f5ef;color:#087b6d;display:grid;place-items:center;font-size:16px;font-weight:800}
+.scTaskIcon.late{background:#fff0ef;color:#c84b50}
+.scTaskName{font-weight:750;font-size:13px;color:#223044;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scTaskSub{font-size:11px;color:#8695a5;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scTaskMeta{text-align:right;display:grid;gap:5px;justify-items:end}
+.scTag{display:inline-flex;font-size:10px;font-weight:800;border-radius:6px;padding:5px 8px;background:#e8f4ef;color:#087b6d;white-space:nowrap}
+.scTag.late{background:#fff0ef;color:#c44953}
+.scTag.soon{background:#fff5e5;color:#a9761b}
+.scEmpty{padding:32px;text-align:center;color:#8190a2;font-size:12px}
+.scTimeline{padding:8px 20px 10px}
+.scTimelineRow{display:grid;grid-template-columns:43px 1fr;gap:12px;align-items:start;padding:13px 0;border-bottom:1px solid #f0f2f6}
+.scTimelineRow:last-child{border:0}
+.scDateBadge{background:#f2f7f8;color:#087b6d;border-radius:8px;display:grid;place-items:center;padding:6px 0}
+.scDateBadge b{font-size:16px}.scDateBadge span{font-size:9px;text-transform:uppercase}
+.scTimelineRow strong{font-size:12px;color:#263548}
+.scTimelineRow p{font-size:11px;color:#8c98a7;margin:4px 0 0}
+.scSection{margin-top:21px}
+.scTinyAction{margin-top:17px;display:flex;gap:9px;flex-wrap:wrap}
+.scPill{padding:4px 8px;font-size:10px;border-radius:7px;background:#e7f6f1;color:#087b6d;font-weight:780}
+.scOrderHeader{display:flex;justify-content:space-between;gap:14px;align-items:start;flex-wrap:wrap;margin-bottom:18px}
+.scOrderHeader h1{margin:5px 0 6px;font-size:28px;letter-spacing:-.04em}
+.scOrderHeader p{margin:0;color:#8490a1;font-size:13px}
+.scWorkLayout{display:grid;grid-template-columns:minmax(300px,1.05fr) minmax(320px,1fr);gap:17px;align-items:start}
+.scOrdersPanel,.scDetailPanel{background:#fff;border:1px solid #e3e9f0;border-radius:13px;min-width:0;overflow:hidden}
+.scTabs{display:flex;overflow-x:auto;gap:7px;padding:16px;border-bottom:1px solid #edf0f5}
+.scTabs button{border:1px solid #e5eaf0;background:#fff;border-radius:8px;padding:9px 11px;font-weight:750;color:#7e8b9a;font-size:11px;white-space:nowrap}
+.scTabs button.active{background:#e8f6f1;color:#087b6d;border-color:#c9e5db}
+.scOrderRow{width:100%;border:0;border-bottom:1px solid #eef1f5;background:#fff;text-align:left;padding:17px 18px;display:grid;grid-template-columns:1fr auto;gap:9px;cursor:pointer}
+.scOrderRow.selected{background:#eff8f4;border-left:3px solid #087b6d;padding-left:15px}
+.scOrderRow:hover{background:#f6faf8}
+.scOrderName{font-size:13px;color:#223145;font-weight:800}
+.scOrderSub{font-size:11px;color:#8491a2;margin-top:5px}
+.scOrderRef{font-size:10px;color:#a4afbb}
+.scDetailHead{padding:23px;border-bottom:1px solid #edf0f4}
+.scDetailHead small{font-size:10px;color:#7c899a;text-transform:uppercase;letter-spacing:.12em}
+.scDetailHead h2{font-size:21px;letter-spacing:-.04em;margin:7px 0}
+.scDetailSub{font-size:12px;color:#8592a3}
+.scDetailBody{padding:22px 23px}
+.scFieldRow{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:13px 0;border-bottom:1px solid #edf1f4;align-items:start}
+.scFieldRow span{font-size:11px;color:#8794a3}
+.scFieldRow strong{font-size:12px;color:#253548;overflow-wrap:anywhere;font-weight:700}
+.scDetailActions{padding:18px 23px;display:flex;gap:9px;flex-wrap:wrap}
+.scDetailNotes{margin-top:19px;font-size:12px;line-height:1.7;border-radius:9px;background:#f6f8fb;border:1px solid #e9edf4;padding:14px;color:#5c6e7e}
+.scMobileNav{display:none}
+@media(max-width:1220px){.scWorkGrid{grid-template-columns:1fr}.scWorkLayout{grid-template-columns:1fr}.sidebar .sideCard{display:none}}
+@media(max-width:950px){.shell{grid-template-columns:1fr}.sidebar{display:none!important}.content{padding:23px 18px 95px}.topbar{padding:13px 18px}.scMobileNav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:25;background:#fff;border-top:1px solid #dfe6ef;box-shadow:0 -4px 24px #1b293515;overflow-x:auto;overscroll-behavior-inline:contain;justify-content:space-around;gap:0;padding:8px 5px max(8px,env(safe-area-inset-bottom));scrollbar-width:none}.scMobileNav button{background:transparent;border:0;min-width:66px;flex:1;display:grid;gap:4px;justify-items:center;color:#7d8b9a;font-size:9px;font-weight:750;padding:4px 2px;border-radius:9px}.scMobileNav button.active{color:#087b6d;background:#eef8f4}.scMobileNav svg{width:20px;height:20px}.scSummary{grid-template-columns:repeat(2,1fr)}.scMetric:nth-child(2){border-right:0}.scMetric:nth-child(-n+2){border-bottom:1px solid #e7ecf2}}
+@media(max-width:520px){.topRight .mark,.topRight .signal{display:none!important}.operationsHeader{display:block}.operationsHeader h1{font-size:26px}.operationsActions{justify-content:start;margin-top:17px}.scMetric{padding:15px}.scMetric strong{font-size:25px}.scTask{grid-template-columns:36px 1fr auto;gap:8px;padding:14px}.scTaskMeta{max-width:94px}.scDetailHead,.scDetailBody{padding:17px}.scDetailActions{padding:15px}.scFieldRow{grid-template-columns:103px 1fr}.heading h1{font-size:25px}}
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -518,11 +645,55 @@ function notify(msg){const t=document.getElementById('toast');t.textContent=msg;
 function modal(title,fields,onSave,defaults={},tip=''){const html=fields.map(f=>{const value=defaults[f.name]??f.default??'';const a=`name="${h(f.name)}" id="field-${h(f.name)}" ${f.required===false?'':'required'} ${f.min!==undefined?`min="${h(f.min)}"`:''} ${f.step!==undefined?`step="${h(f.step)}"`:''} ${f.placeholder?`placeholder="${h(f.placeholder)}"`:''}`;let inp;if(f.type==='select'){inp=`<select ${a}>${f.options.map(o=>{const obj=typeof o==='string'?{value:o,label:o}:o;return `<option value="${h(obj.value)}" ${String(value)===String(obj.value)?'selected':''}>${h(obj.label)}</option>`}).join('')}</select>`}else if(f.type==='textarea')inp=`<textarea ${a}>${h(value)}</textarea>`;else inp=`<input type="${h(f.type||'text')}" ${a} value="${h(value)}"/>`;return `<div class="field ${f.wide?'wide':''}"><label for="field-${h(f.name)}">${h(f.label)}</label>${inp}</div>`}).join('');document.getElementById('modal-root').innerHTML=`<div class="floatMask" id="mask"><section class="modal" role="dialog" aria-modal="true" aria-label="${h(title)}"><div class="modalTop"><h2>${h(title)}</h2><button type="button" class="close" id="modalClose" aria-label="Cerrar">×</button></div><form id="entryForm"><div class="formGrid">${html}</div>${tip?`<p class="helper">${h(tip)}</p>`:''}<div class="modalFoot"><button type="button" class="btn" id="formCancel">Cancelar</button><button type="submit" class="btn primary">Guardar cambios →</button></div></form></section></div>`;const root=document.getElementById('modal-root');const close=()=>root.innerHTML='';root.querySelector('#modalClose').onclick=close;root.querySelector('#formCancel').onclick=close;root.querySelector('#mask').onclick=e=>{if(e.target.id==='mask')close()};root.querySelector('#entryForm').onsubmit=e=>{e.preventDefault();const vals=Object.fromEntries(new FormData(e.currentTarget).entries());try{const result=onSave(vals);if(result===false)return;close();save();notify('Los cambios se guardaron correctamente')}catch(err){alert(err?.message||String(err))}};setTimeout(()=>root.querySelector('input,select,textarea')?.focus(),20)}
 const msgLink=(phone,text)=>{let p=String(phone??'').replace(/\D/g,'');if(p.startsWith('0'))p=p.slice(1);if(p.length===10)p='54'+p;if(!p){notify('Este cliente no tiene teléfono cargado.');return}window.open(`https://wa.me/${p}?text=${encodeURIComponent(text)}`,'_blank','noopener,noreferrer')};
 function reportPage(){const data=APP.report();return `<div class="heading"><div><p class="eyebrow">Datos y respaldo</p><h1>Informes y exportaciones</h1><p class="sub">Exportá tus registros. En PDF se utiliza la opción de imprimir del navegador.</p></div></div><div class="twoPanels">${panel('Generar informes',`<div class="panelBody"><p class="tips">Descargá una planilla CSV compatible con Excel, o generá un informe listo para guardar en PDF.</p><div class="reportActions">${btn('⬇ Exportar Excel (CSV)','csv','', 'primary')}${btn('▣ Guardar PDF','print')}</div><div class="note" style="margin-top:18px">El PDF se crea desde la opción <b>Guardar como PDF</b> de la ventana de impresión.</div></div>`)}${panel('Copias de seguridad',`<div class="panelBody"><p class="tips">Todos los datos se guardan en este navegador. Creá una copia JSON periódicamente. Para cambiar de dispositivo, importá ese archivo.</p><div class="reportActions">${btn('⬇ Descargar JSON','backup')}${btn('⬆ Importar JSON','import')}</div><p class="tips" style="margin-top:20px">También podés borrar los datos de ejemplo y comenzar desde cero.</p>${btn('Borrar todos los datos','clear','', 'danger')}</div>`)}</div>${panel('Resumen del informe',`<div class="panelBody">${data.summary.map(x=>`<div class="reportRow"><span class="muted">${h(x[0])}</span><strong>${h(x[1])}</strong></div>`).join('')}</div>`)}`}
+
+let scOrderFilter='pendiente',scSelectedOrder='';
+function scIcon(key){const d={"inicio":"<rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/>","clientes":"<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21v-2a8 8 0 0 1 16 0v2\"/>","equipos":"<rect x=\"5\" y=\"3\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M9 7h6M9 12h6M9 17h4\"/>","agenda":"<rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M7 3v4m10-4v4M3 10h18\"/>","ordenes":"<path d=\"M8 4h11v16H5V7zM8 4v3H5m5 4h6m-6 4h6\"/>","historial":"<path d=\"M3 12a9 9 0 1 0 4-7.5M3 4v5h5M12 7v5l4 3\"/>","informes":"<path d=\"M5 20V9m5 11V4m5 16v-7m5 7V8\"/>"};return '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(d[key]||d.inicio)+'</svg>'}
+
+function scOrderStatus(o){return o.status==='realizado'?'Completada':o.date<today()?'Atrasada':'Programada'}
+function scOrderClass(o){return o.status==='realizado'?'':o.date<today()?'late':'soon'}
+function scTaskItem(q){
+ const cl=APP.client(q.clientId),late=q.next<today();
+ return '<button class="scTask" data-action="addOrder" data-id="'+h(q.id)+'"><span class="scTaskIcon '+(late?'late':'')+'">⚙</span><div><div class="scTaskName">'+h(q.name)+'</div><div class="scTaskSub">'+h(cl?.name||'Cliente no encontrado')+' · '+h(q.category)+'</div></div><div class="scTaskMeta"><span class="scTag '+(late?'late':'soon')+'">'+(late?'Vencido':'Próximo')+'</span><span class="scOrderRef">'+h(dateText(q.next))+'</span></div></button>';
+}
+function scOperations(){
+ const m=serviceMetrics();
+ const due=APP.schedule().slice(0,6),recent=pendingOrders().slice(0,4);
+ const metrics=[['Equipos registrados',m.assets,'En seguimiento',''],['Mantenimientos vencidos',m.overdue,'Requieren prioridad','critical'],['Órdenes abiertas',m.pending,'Pendientes de finalizar',''],['Servicios completados',m.done,'Historial registrado','']];
+ return '<section class="operationsHeader"><div><small>CENTRO DE OPERACIONES</small><h1>Tu jornada, bajo control.</h1><p>Priorizá órdenes, coordiná visitas y mantené cada equipo al día.</p></div><div class="operationsActions">'+btn('+ Nueva orden','addOrder','','primary')+btn('Registrar equipo','newEq')+'</div></section>'
+ +'<section class="scSummary">'+metrics.map((x,i)=>'<div class="scMetric '+x[3]+'"><div class="scMetricTop">'+x[0]+'<span>'+['▦','!','↗','✓'][i]+'</span></div><strong>'+x[1]+'</strong><small>'+x[2]+'</small></div>').join('')+'</section>'
+ +'<section class="scWorkGrid"><div class="scCard"><div class="scCardHead"><h2>Mantenimientos que requieren atención</h2><button class="scLink" data-action="goAgenda">Ver agenda →</button></div><div class="scList">'+(due.length?due.map(scTaskItem).join(''):'<div class="scEmpty">Todos los equipos están al día. No hay vencimientos en los próximos 30 días.</div>')+'</div></div>'
+ +'<div class="scCard"><div class="scCardHead"><h2>Órdenes programadas</h2><button class="scLink" data-action="scGoOrders">Ver todas →</button></div><div class="scTimeline">'+(recent.length?recent.map(o=>{const q=APP.eq(o.equipmentId);return '<div class="scTimelineRow"><div class="scDateBadge"><b>'+h(o.date.slice(8))+'</b><span>'+h(new Date(o.date+'T12:00:00').toLocaleDateString('es-AR',{month:'short'}))+'</span></div><div><strong>'+h(q?.name||'Equipo sin asignar')+'</strong><p>'+h(APP.client(q?.clientId)?.name||'Cliente')+' · '+h(scOrderStatus(o))+'</p></div></div>'}).join(''):'<div class="scEmpty">No hay órdenes abiertas por ahora.</div>')+'</div><div style="padding:3px 19px 18px">'+btn('+ Programar visita','addOrder')+'</div></div></section>'
+ +'<section class="scSection scCard"><div class="scCardHead"><h2>Gestioná tu operación</h2><small>Accesos directos</small></div><div class="scTinyAction" style="padding:0 19px 19px">'+btn('Ver órdenes','scGoOrders')+btn('Inventario de equipos','scGoAssets')+btn('Clientes','scGoClients')+btn('Ver historial','goHistory')+'</div></section>';
+}
+function scOrders(){
+ const all=[...db.orders].sort((a,b)=>a.status===b.status?b.date.localeCompare(a.date):a.status==='pendiente'?-1:1);
+ const visible=all.filter(o=>scOrderFilter==='todos'||(scOrderFilter==='pendiente'?o.status!=='realizado':o.status==='realizado'));
+ let sel=visible.find(o=>o.id===scSelectedOrder)||visible[0];
+ const q=sel?APP.eq(sel.equipmentId):null,c=q?APP.client(q.clientId):null;
+ const tabs=[['pendiente','Pendientes'],['realizado','Completadas'],['todos','Todas']];
+ return '<section class="scOrderHeader"><div><div class="workspaceKicker">GESTIÓN DE CAMPO</div><h1>Órdenes de trabajo</h1><p>Seleccioná una orden para consultar sus datos y gestionarla.</p></div>'+btn('+ Nueva orden','addOrder','','primary')+'</section>'
+ +'<div class="scWorkLayout"><section class="scOrdersPanel"><div class="scCardHead"><h2>Listado de órdenes</h2><small>'+visible.length+' resultados</small></div><div class="scTabs">'+tabs.map(x=>'<button data-action="scFilterOrders" data-id="'+x[0]+'" class="'+(scOrderFilter===x[0]?'active':'')+'">'+x[1]+'</button>').join('')+'</div>'
+ +(visible.length?visible.map(o=>{const eq=APP.eq(o.equipmentId);return '<button class="scOrderRow '+(sel&&o.id===sel.id?'selected':'')+'" data-action="scSelectOrder" data-id="'+h(o.id)+'"><div><div class="scOrderName">'+h(eq?.name||'Equipo sin datos')+'</div><div class="scOrderSub">'+h(APP.client(eq?.clientId)?.name||'Cliente')+' · '+h(dateText(o.date))+'</div></div><div style="display:grid;justify-items:end;gap:9px"><span class="scTag '+scOrderClass(o)+'">'+h(scOrderStatus(o))+'</span><span class="scOrderRef">#'+h(o.id.slice(-6).toUpperCase())+'</span></div></button>'}).join(''):'<div class="scEmpty">No hay órdenes en este estado. Podés crear una nueva orden con el botón superior.</div>')
+ +'</section><section class="scDetailPanel"><div class="scDetailHead">'+(sel?'<small>DETALLE DE ORDEN · #'+h(sel.id.slice(-6).toUpperCase())+'</small><h2>'+h(q?.name||'Equipo sin datos')+'</h2><div class="scDetailSub">'+h(c?.name||'Cliente')+' · '+h(dateText(sel.date))+'</div>':'<small>DETALLE DE ORDEN</small><h2>Seleccioná una orden</h2><div class="scDetailSub">Acá verás su información y acciones.</div>')+'</div>'
+ +(sel?'<div class="scDetailBody"><span class="scTag '+scOrderClass(sel)+'">'+h(scOrderStatus(sel))+'</span>'
+ +[['Cliente',c?.name||'—'],['Equipo',q?.name||'—'],['Categoría',q?.category||'—'],['Fecha prevista',dateText(sel.date)],['Técnico',sel.technician||'Sin asignar'],['Importe del servicio',money(sel.cost||0)]].map(x=>'<div class="scFieldRow"><span>'+h(x[0])+'</span><strong>'+h(x[1])+'</strong></div>').join('')
+ +'<div class="scDetailNotes"><b>Observaciones</b><div style="margin-top:7px">'+h(sel.notes||'Sin observaciones registradas.')+'</div></div></div>'
+ +'<div class="scDetailActions">'+(sel.status==='realizado'?btn('Informe PDF','orderPdf',sel.id,'primary'):btn('Marcar como realizada','completeOrder',sel.id,'primary'))+(q?btn('Ver equipo','viewEq',q.id):'')+btn('Eliminar','delOrder',sel.id,'danger')+'</div>':'<div class="scEmpty">Creá una orden de trabajo y empezá a organizar las visitas.</div>')+'</section></div>';
+}
+APP.actions.scGoOrders=()=>{tab='ordenes';search='';render()};
+APP.actions.scGoAssets=()=>{tab='equipos';search='';render()};
+APP.actions.scGoClients=()=>{tab='clientes';search='';render()};
+APP.actions.scFilterOrders=(id)=>{scOrderFilter=id;scSelectedOrder='';render()};
+APP.actions.scSelectOrder=(id)=>{scSelectedOrder=id;render()};
+const scPreviousRender=APP.render;
+APP.render=(page)=>page==='inicio'?scOperations():page==='ordenes'?scOrders():scPreviousRender(page);
+
 function render(){
- const current=APP.tabs.find(x=>x[0]===tab)||APP.tabs[0];const meta=viewService(current[0]);const metrics=serviceMetrics();
- document.documentElement.style.setProperty('--accent',APP.accent);document.title=APP.title+' · Zenix AR';
- const labels=APP.tabs.map(x=>`<button type="button" data-nav="${x[0]}" class="${tab===x[0]?'active':''}"><b>${x[2]}</b><span>${h(x[1])}</span></button>`).join('');
- document.getElementById('root').innerHTML=`<div class="shell"><aside class="sidebar"><div><div class="brand"><div class="brandIcon">${APP.icon}</div><div><span>${h(APP.title)}</span><small>ZENIX AR · SERVICIOS</small></div></div><p class="navLabel">Panel de gestión</p><nav class="nav" aria-label="Secciones">${labels}</nav><div class="navScrollHint">Deslizá para ver más secciones →</div><section class="sideCard"><div class="sideCardLabel">Estado de la operación</div><div class="sideCardValue">${metrics.assets} equipos</div><p class="sideCardSub">Inventario de mantenimiento preventivo bajo seguimiento.</p><div class="sideMiniGrid"><div class="sideMini"><strong>${metrics.overdue}</strong><span>servicios vencidos</span></div><div class="sideMini"><strong>${metrics.pending}</strong><span>órdenes abiertas</span></div></div></section></div><div class="sideFoot"><strong>Entorno de demostración</strong><br>Guardado en este navegador.<br>Sin usuarios ni datos sincronizados.</div></aside><div class="main"><header class="topbar"><div class="topbarMain"><div class="crumb">ServiControl <span style="padding:0 6px">/</span> ${h(current[1])}</div><div class="topbarTitle">${h(meta[0])}</div><div class="topbarSub">${h(meta[1])}</div></div><div class="topRight"><span class="signal ${metrics.overdue?'bad':'good'}"><span class="sigDot"></span>${metrics.overdue?metrics.overdue+' revisiones vencidas':'Mantenimiento al día'}</span><span class="mark"><span class="sigDot"></span>DATOS LOCALES</span><div class="avatar">SC</div></div></header><main class="content">${tab==='informes'?reportPage():APP.render(tab)}<div class="footer">ServiControl Empresarial · Zenix AR · Los datos se guardan únicamente en este navegador</div></main></div></div>`;
+ const current=APP.tabs.find(x=>x[0]===tab)||APP.tabs[0],m=serviceMetrics();
+ document.documentElement.style.setProperty('--accent','#087b6d');document.title='ServiControl · Gestión técnica';
+ const nav=APP.tabs.map(x=>'<button type="button" data-nav="'+x[0]+'" class="'+(tab===x[0]?'active':'')+'"><b>'+scIcon(x[0])+'</b><span>'+h(x[1])+'</span></button>').join('');
+ const bottom=APP.tabs.map(x=>'<button type="button" data-nav="'+x[0]+'" class="'+(tab===x[0]?'active':'')+'">'+scIcon(x[0])+'<span>'+h(x[1])+'</span></button>').join('');
+ document.getElementById('root').innerHTML='<div class="shell"><aside class="sidebar"><div><div class="brand"><div class="brandIcon">✳</div><div><span>ServiControl</span><small>GESTIÓN TÉCNICA</small></div></div><p class="navLabel">ESPACIO DE TRABAJO</p><nav class="nav" aria-label="Navegación">'+nav+'</nav><div class="navSectionDivider"></div><div class="sideCard"><div class="sideCardLabel">ESTADO OPERATIVO</div><div class="sideCardValue">'+m.assets+' equipos</div><p class="sideCardSub">Inventario en seguimiento</p><div class="sideMiniGrid"><div class="sideMini"><strong>'+m.overdue+'</strong><span>Vencidos</span></div><div class="sideMini"><strong>'+m.pending+'</strong><span>Órdenes abiertas</span></div></div></div></div><div class="sideFoot"><strong>Entorno de demostración</strong><br>Los datos se guardan en este navegador.<br>No hay usuarios ni sincronización online.</div></aside><div class="main"><header class="topbar"><div class="topbarMain"><div class="crumb">ESPACIO DE TRABAJO / '+h(current[1].toUpperCase())+'</div><div class="topbarTitle">'+h(current[1])+'</div></div><div class="topRight"><span class="signal '+(m.overdue?'bad':'good')+'"><span class="sigDot"></span>'+(m.overdue?m.overdue+' vencidos':'Todo en orden')+'</span><span class="mark">DEMO LOCAL</span><div class="avatar">SC</div></div></header><main class="content">'+(tab==='informes'?reportPage():APP.render(tab))+'<div class="footer">ServiControl · Zenix AR · Datos guardados localmente</div></main></div><nav class="scMobileNav" aria-label="Navegación móvil">'+bottom+'</nav></div>';
 }
 document.addEventListener('click',e=>{const nav=e.target.closest('[data-nav]');if(nav){tab=nav.dataset.nav;search='';filter='todos';render();return}const b=e.target.closest('[data-action]');if(!b)return;const act=b.dataset.action,id=b.dataset.id;if(act==='backup')return download(APP.key+'-respaldo-'+today()+'.json',JSON.stringify(db,null,2));if(act==='import'){document.getElementById('importFile').click();return}if(act==='clear'){if(confirm('¿Borrar TODOS los registros guardados en este navegador? Esta acción no se puede deshacer. Hacé una copia JSON primero.')){db=APP.empty();save();notify('Se borraron todos los datos')}return}if(act==='csv'){const v=APP.report();csvExport(APP.key+'-'+today(),v.headers,v.rows);return}if(act==='print'){const v=APP.report();printReport(APP.title+' · Informe',v.headers,v.rows,v.subtitle);return}if(APP.actions[act])return APP.actions[act](id,b);});
 document.addEventListener('input',e=>{if(e.target.dataset.search==='true'){search=e.target.value;const target=document.querySelector('#dynamicList');if(target&&APP.list)target.innerHTML=APP.list();}});
