@@ -724,6 +724,165 @@ td{font-size:12px}
  .scProStatVal{font-size:27px}
 }
 </style>
+
+<style id="jobber-inspired-v1">
+:root{--jb-ink:#1b3246;--jb-muted:#738499;--jb-primary:#2563e9;--jb-green:#258e61;--jb-line:#e5eaf1;--jb-bg:#f7f9fc;--jb-navy:#183549}
+body{background:var(--jb-bg)!important;color:var(--jb-ink)!important;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif!important}
+#root .jb-shell{min-height:100vh;display:grid;grid-template-columns:224px minmax(0,1fr)}
+#root .jb-rail{background:#fff;border-right:1px solid #e3e9ef;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:25px 13px 18px}
+#root .jb-logo{display:flex;gap:11px;align-items:center;padding:3px 11px 24px}
+#root .jb-symbol{width:39px;height:39px;border-radius:11px;display:grid;place-items:center;color:#fff;background:#2169d7;font-size:22px;font-weight:800;box-shadow:0 5px 12px #2169d71f}
+#root .jb-logo strong{font-size:18px;letter-spacing:-.06em;color:#153448;display:block;line-height:1.1}
+#root .jb-logo small{font-size:9px;letter-spacing:.13em;color:#8b9ba9;display:block;margin-top:5px;font-weight:850}
+#root .jb-menuTitle{margin:14px 12px 11px;color:#a0adbb;font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:800}
+#root .jb-nav{display:grid;gap:5px}
+#root .jb-nav button{display:flex;align-items:center;gap:12px;border:0;background:transparent;text-align:left;color:#5b7185;padding:12px 13px;border-radius:9px;font-weight:700;font-size:12.5px;min-height:43px}
+#root .jb-nav button svg{flex-shrink:0;color:#8397a9}
+#root .jb-nav button:hover{background:#f3f7fd}
+#root .jb-nav button.active{background:#eaf1ff;color:#215cc5}
+#root .jb-nav button.active svg{color:#2868d6}
+#root .jb-nav button .jb-pillCount{margin-left:auto;background:#f8e9e7;color:#bc4d44;font-size:10px;padding:3px 7px;border-radius:30px}
+#root .jb-railFoot{margin-top:auto;padding:19px 12px 5px;border-top:1px solid #edf0f4}
+#root .jb-demoTag{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;background:#f0f4fa;border-radius:8px;color:#708396;font-size:10px;font-weight:800;letter-spacing:.03em}
+#root .jb-railFoot p{color:#9ba7b4;font-size:10px;line-height:1.7;margin:11px 0 0}
+#root .jb-work{min-width:0;background:#f7f9fc}
+#root .jb-top{height:75px;padding:0 33px;background:#fff;border-bottom:1px solid #e6eaf1;display:flex;align-items:center;justify-content:space-between;gap:15px}
+#root .jb-crumb{font-weight:780;color:#213a4e;font-size:15px;display:flex;align-items:center;gap:9px}
+#root .jb-crumb small{font-size:12px;color:#9cabb9;font-weight:650}
+#root .jb-right{display:flex;align-items:center;gap:13px}
+#root .jb-dateChip{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#667b90;background:#f7f9fc;border:1px solid #e8edf3;border-radius:8px;padding:9px 11px}
+#root .jb-avatar{height:37px;width:37px;border-radius:50%;display:grid;place-items:center;color:#245fca;background:#eaf1ff;font-size:12px;font-weight:900}
+#root .jb-bell{border:1px solid #e8ecf2;background:#fff;border-radius:10px;height:37px;min-width:37px;display:grid;place-items:center;color:#5f7387;position:relative}
+#root .jb-bell i{position:absolute;top:2px;right:2px;background:#db6256;border-radius:50%;width:7px;height:7px}
+#root .jb-container{padding:30px 34px 64px;max-width:1700px;margin:0 auto}
+#root .jb-topline{font-size:11px;color:#98a5b4;font-weight:850;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px}
+#root .jb-pagehead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:23px}
+#root .jb-pagehead h1{font-size:29px;letter-spacing:-.06em;line-height:1.13;color:#203a4f;margin:0;font-weight:850}
+#root .jb-pagehead p{color:#7b8da0;font-size:13px;line-height:1.55;margin:9px 0 0}
+#root .jb-headActions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+#root .jb-btn{background:#fff;border:1px solid #dfe6ef;border-radius:9px;font-weight:800;color:#39556b;padding:11px 15px;min-height:42px;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:9px;cursor:pointer}
+#root .jb-btn:hover{background:#f8fbfe;border-color:#c9d5e5}
+#root .jb-btn.primary{background:#2563e9;border-color:#2563e9;color:white;box-shadow:0 5px 13px #245de025}
+#root .jb-btn.primary:hover{background:#1756d3}
+#root .jb-btn.green{background:#258e61;color:white;border-color:#258e61}
+#root .jb-btn.tiny{padding:7px 10px;min-height:31px;font-size:11px}
+#root .jb-btn.danger{color:#b84955}
+#root .jb-card{background:#fff;border:1px solid #e4eaf2;border-radius:14px;box-shadow:0 3px 10px rgba(21,42,64,.035);min-width:0;overflow:hidden}
+#root .jb-cardTitle{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 20px;border-bottom:1px solid #edf0f5}
+#root .jb-cardTitle h2{font-size:15px;font-weight:820;color:#263f53;margin:0;letter-spacing:-.02em}
+#root .jb-cardTitle small{display:block;color:#98a6b5;font-size:11px;margin-top:5px}
+#root .jb-link{border:0;background:none;color:#2563e9;font-size:11px;font-weight:800;padding:5px;white-space:nowrap}
+#root .jb-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 20px}
+#root .jb-metric{padding:19px 19px 18px;border:1px solid #e4eaf2;border-radius:13px;background:#fff;min-width:0;display:flex;align-items:flex-start;justify-content:space-between}
+#root .jb-metric small{font-size:11px;color:#8192a2;font-weight:700}
+#root .jb-metric strong{display:block;font-size:29px;font-weight:850;letter-spacing:-.055em;margin:11px 0 4px;color:#213a51}
+#root .jb-metric span{font-size:10px;color:#98a5b2}
+#root .jb-metricIcon{border-radius:11px;height:38px;width:38px;flex-shrink:0;background:#edf3ff;display:grid;place-items:center;color:#3972da}
+#root .jb-metricIcon.green{color:#268f66;background:#e7f7ee}
+#root .jb-metricIcon.orange{color:#d27b31;background:#fff3e7}
+#root .jb-metricIcon.violet{color:#7660ca;background:#f0edff}
+#root .jb-overviewGrid{display:grid;grid-template-columns:minmax(0,1.78fr) minmax(280px,1fr);gap:17px;align-items:start}
+#root .jb-agendaControls{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:15px 19px;border-bottom:1px solid #e9edf3;flex-wrap:wrap}
+#root .jb-monthLabel{font-size:15px;font-weight:830;color:#213c54;display:flex;gap:10px;align-items:center}
+#root .jb-calNav{display:flex;align-items:center;gap:7px}
+#root .jb-navBtn{background:#fff;border:1px solid #e1e6ed;border-radius:8px;min-width:32px;height:32px;font-weight:850;color:#4e6378;font-size:14px}
+#root .jb-switch{display:flex;gap:3px;padding:3px;background:#f1f4f8;border-radius:9px}
+#root .jb-switch button{border:0;border-radius:7px;padding:7px 10px;background:transparent;color:#8190a0;font-size:11px;font-weight:800}
+#root .jb-switch button.active{background:#fff;box-shadow:0 1px 5px #172b3b12;color:#225dd1}
+#root .jb-weekDays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:#fff;border-bottom:1px solid #e8edf3}
+#root .jb-dayHead{padding:15px 4px;display:grid;justify-items:center;gap:5px;color:#95a1af;border-right:1px solid #eef1f5;text-align:center;font-size:10px;font-weight:850}
+#root .jb-dayHead:last-child{border-right:0}
+#root .jb-dayHead strong{font-size:16px;color:#475e72;font-weight:820;border-radius:50%;height:33px;width:33px;display:grid;place-items:center}
+#root .jb-dayHead.today strong{background:#2563e9;color:white}
+#root .jb-dayHead button{background:transparent;border:0;font-size:10px;font-weight:850;color:inherit;text-transform:uppercase}
+#root .jb-calendarGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-height:220px}
+#root .jb-dayColumn{border-right:1px solid #edf0f5;min-width:0;padding:11px 6px;background:#fff}
+#root .jb-dayColumn:last-child{border-right:0}
+#root .jb-dayColumn.today{background:#f6faff}
+#root .jb-dayEmpty{display:block;color:#c6ced8;font-size:11px;text-align:center;margin-top:45px}
+#root .jb-calEvent{display:block;width:100%;text-align:left;border:0;border-radius:7px;margin-bottom:7px;padding:10px 8px;background:#e5f3e8;border-left:3px solid #4aad6b;color:#28744f;min-width:0}
+#root .jb-calEvent.order{background:#e9f0ff;border-left-color:#477ce2;color:#275dbb}
+#root .jb-calEvent.late{background:#fff0ed;border-left-color:#dc7a66;color:#ad5649}
+#root .jb-calEvent b{display:block;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#root .jb-calEvent small{display:block;font-size:9px;opacity:.8;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#root .jb-legend{display:flex;gap:15px;flex-wrap:wrap;padding:12px 19px;border-top:1px solid #e9edf3;color:#8090a1;font-size:10px}
+#root .jb-legend i{width:8px;height:8px;display:inline-block;border-radius:50%;margin-right:6px}
+#root .jb-sideStack{display:grid;gap:17px}
+#root .jb-activityRow{display:flex;gap:12px;align-items:center;padding:15px 17px;width:100%;background:#fff;border:0;border-bottom:1px solid #edf1f5;text-align:left}
+#root .jb-activityRow:last-child{border-bottom:0}
+#root .jb-activityRow:hover{background:#f8faff}
+#root .jb-activityIcon{width:37px;height:37px;border-radius:10px;background:#edf3ff;display:grid;place-items:center;color:#366ddd;flex-shrink:0}
+#root .jb-activityIcon.orange{color:#d57640;background:#fff2ec}
+#root .jb-activityText{flex:1;min-width:0}
+#root .jb-activityText strong{font-size:12px;font-weight:790;color:#274159;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#root .jb-activityText small{font-size:10px;color:#92a0af;display:block;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#root .jb-badge{font-size:10px;font-weight:830;padding:6px 9px;border-radius:8px;background:#e9f5ed;color:#308960;white-space:nowrap}
+#root .jb-badge.orange{background:#fff3e6;color:#c27630}
+#root .jb-badge.blue{background:#eaf1ff;color:#326cdb}
+#root .jb-badge.red{background:#ffeded;color:#bd5b57}
+#root .jb-empty{padding:34px 17px;color:#97a4b1;font-size:12px;text-align:center;line-height:1.65}
+#root .jb-tableTools{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;padding:15px 19px;border-bottom:1px solid #edf0f5}
+#root .jb-search{background:#f9fbfd;border:1px solid #dfe6ee;border-radius:9px;padding:11px 13px;width:min(330px,100%);color:#2a4053;outline:none;font-size:12px}
+#root .jb-search:focus{border-color:#2563e9;box-shadow:0 0 0 3px #2563e913}
+#root .jb-table{border-collapse:collapse;width:100%;text-align:left}
+#root .jb-table th{background:#f8fafd;color:#94a1af;text-transform:uppercase;letter-spacing:.09em;font-size:10px;padding:14px 19px;border-bottom:1px solid #e8edf3;white-space:nowrap;font-weight:850}
+#root .jb-table td{padding:16px 19px;border-bottom:1px solid #edf0f4;color:#455a70;font-size:12px;vertical-align:middle;white-space:normal}
+#root .jb-table tr:last-child td{border-bottom:0}
+#root .jb-table tbody tr:hover td{background:#f9fbfe}
+#root .jb-tableWrap{overflow:auto;width:100%}
+#root .jb-cell{display:flex;gap:11px;align-items:center;min-width:160px}
+#root .jb-cellAvatar{width:36px;height:36px;flex-shrink:0;display:grid;place-items:center;background:#e8f1ff;color:#2961c4;border-radius:10px;font-weight:850;font-size:11px}
+#root .jb-cellAvatar.green{background:#e8f7ef;color:#2a8a61}
+#root .jb-cell strong{font-size:12px;color:#253e52;font-weight:800;display:block}
+#root .jb-cell small{font-size:10px;color:#94a1af;display:block;margin-top:4px}
+#root .jb-tableButtons{display:flex;gap:7px;align-items:center;white-space:nowrap}
+#root .jb-scheduleTop{display:flex;justify-content:space-between;gap:15px;margin-bottom:20px}
+#root .jb-scheduleTop h1{font-size:28px;margin:0;font-weight:850;letter-spacing:-.06em}
+#root .jb-scheduleTop p{font-size:13px;margin:7px 0 0;color:#8998a8}
+#root .jb-agendaFull .jb-calendarGrid{min-height:410px}
+#root .jb-monthGrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+#root .jb-monthCell{min-height:99px;padding:8px 7px;border-right:1px solid #edf1f4;border-bottom:1px solid #edf1f4;background:#fff;min-width:0}
+#root .jb-monthCell.other{background:#f9fafc}
+#root .jb-monthCell .day{display:block;margin-bottom:6px;border:0;background:transparent;text-align:left;font-size:11px;color:#8797a7;font-weight:800}
+#root .jb-monthCell.today .day{background:#eaf1ff;color:#2563e9;border-radius:6px;padding:4px 7px}
+#root .jb-monthCell .jb-calEvent{padding:6px;margin-bottom:4px}
+#root .jb-monthCell .jb-calEvent b{font-size:9px}
+#root .jb-monthCell .jb-calEvent small{display:none}
+#root .jb-listEvent{border:0;border-bottom:1px solid #edf1f4;padding:15px 19px;display:flex;align-items:center;gap:14px;background:#fff;text-align:left;width:100%}
+#root .jb-listEvent:hover{background:#f8fbff}
+#root .jb-listDate{background:#f0f5ff;border-radius:9px;padding:8px;min-width:48px;text-align:center;color:#2d62c5;font-weight:830;font-size:11px}
+#root .jb-listEvent strong{font-size:12px;color:#344a5d}
+#root .jb-listEvent small{font-size:10px;color:#93a0ae;display:block;margin-top:5px}
+#root .jb-workSplit{display:grid;grid-template-columns:minmax(330px,1fr) minmax(330px,.85fr);gap:18px;align-items:start}
+#root .jb-workList{max-height:650px;overflow:auto}
+#root .jb-workRow{display:flex;align-items:center;gap:12px;border:0;border-bottom:1px solid #edf0f4;background:#fff;text-align:left;padding:17px;width:100%}
+#root .jb-workRow:last-child{border-bottom:0}
+#root .jb-workRow.chosen{background:#f0f5ff;box-shadow:inset 3px 0 #2563e9}
+#root .jb-workRow strong{font-size:12px;color:#294358;display:block}
+#root .jb-workRow small{font-size:11px;color:#93a2b0;display:block;margin-top:5px}
+#root .jb-workRow .jb-badge{margin-left:auto}
+#root .jb-jobDetail{padding:24px}
+#root .jb-jobDetail h2{font-size:22px;letter-spacing:-.04em;margin:10px 0 6px}
+#root .jb-jobDetail .sub{font-size:12px;color:#96a4b2;margin-bottom:21px}
+#root .jb-detailRow{display:grid;grid-template-columns:125px 1fr;border-bottom:1px solid #edf0f4;gap:13px;padding:13px 0;font-size:12px}
+#root .jb-detailRow span{color:#9aa7b3}
+#root .jb-detailRow strong{color:#344b5c;font-weight:750;overflow-wrap:anywhere}
+#root .jb-jobButtons{display:flex;flex-wrap:wrap;gap:9px;margin-top:19px}
+#root .jb-infoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+#root .jb-infoBox{border:1px solid #e4eaf2;background:white;border-radius:12px;padding:17px}
+#root .jb-infoBox small{color:#8c9dad;font-size:11px;font-weight:700}
+#root .jb-infoBox strong{font-size:24px;color:#253d52;display:block;margin-top:10px;letter-spacing:-.04em}
+#root .jb-footer{color:#a3afbd;font-size:10px;text-align:center;margin-top:29px}
+#root .jb-mobileNav{display:none}
+#root .jb-sheetMask{position:fixed;inset:0;background:#112b45a6;z-index:42;border:0;width:100%}
+#root .jb-moreSheet{position:fixed;z-index:43;bottom:0;left:0;right:0;background:white;border-radius:22px 22px 0 0;padding:21px 19px calc(21px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px #102c4029}
+#root .jb-moreSheet h2{margin:0 0 14px;font-size:20px}
+#root .jb-moreSheet button{border:0;border-bottom:1px solid #ebeff3;background:white;width:100%;text-align:left;padding:16px 8px;font-size:14px;color:#365169;font-weight:750;display:flex;align-items:center;gap:11px}
+#root .jb-moreSheet button:last-child{border:0}
+@media(max-width:1180px){#root .jb-overview{grid-template-columns:repeat(2,1fr)}#root .jb-overviewGrid{grid-template-columns:1fr}#root .jb-workSplit{grid-template-columns:1fr}#root .jb-dayColumn{min-height:195px}}
+@media(max-width:900px){#root .jb-shell{display:block}#root .jb-rail{display:none}#root .jb-top{padding:0 18px;height:61px}#root .jb-dateChip{display:none}#root .jb-container{padding:23px 15px 95px}#root .jb-mobileNav{position:fixed;bottom:0;left:0;right:0;z-index:29;background:white;border-top:1px solid #e2e8ef;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -5px 25px #1d3a4c12}#root .jb-mobileNav button{width:20%;min-width:0;border:0;background:transparent;display:grid;justify-items:center;gap:4px;color:#8ca0b2;font-size:10px;font-weight:750;padding:5px 0;border-radius:8px}#root .jb-mobileNav button.active{color:#2563e9;background:#eef4ff}#root .jb-mobileNav button svg{height:20px;width:20px}#root .jb-pagehead h1{font-size:25px}#root .jb-weekDays,#root .jb-calendarGrid{overflow:auto}#root .jb-overviewGrid{display:block}#root .jb-sideStack{margin-top:17px}#root .jb-dayHead{padding:10px 1px}#root .jb-calEvent{padding:7px 4px}}
+@media(max-width:610px){#root .jb-overview{gap:9px}#root .jb-metric{padding:15px}#root .jb-metric strong{font-size:25px}#root .jb-pagehead{display:block}#root .jb-headActions{margin-top:16px}#root .jb-headActions .jb-btn{flex:1}#root .jb-calendarGrid,#root .jb-weekDays{min-width:590px}#root .jb-calendarViewport{overflow-x:auto}#root .jb-agendaControls{padding:13px;gap:9px}#root .jb-monthLabel{font-size:13px}#root .jb-infoGrid{grid-template-columns:1fr}#root .jb-monthGrid{min-width:590px}#root .jb-cardTitle{padding:16px}#root .jb-jobDetail{padding:17px}#root .jb-table td,#root .jb-table th{padding:12px}#root .jb-workSplit{display:block}#root .jb-workSplit .jb-card{margin-bottom:15px}#root .jb-detailRow{grid-template-columns:100px 1fr}#root .jb-logo{padding:0}#root .jb-pagehead p{font-size:12px}}
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -1005,6 +1164,188 @@ render();
  APP.actions.scMoreNav=id=>{APP.actions.scMoreClose();tab=id;search='';filter='todos';render()};
  window.addEventListener('resize',()=>{if(!window.__scResize){window.__scResize=true;requestAnimationFrame(()=>{window.__scResize=false;render()})}});
  render();
+})();
+</script>
+
+<script id="jobber-ui">
+(function(){
+'use strict';
+const I={
+ home:'<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/>',
+ agenda:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18"/>',
+ ordenes:'<path d="M8 4H5v17h14V4h-3"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/>',
+ clientes:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+ equipos:'<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 7h6M9 12h6M9 17h5"/>',
+ historial:'<path d="M3 12a9 9 0 1 0 4-7.5M3 4v5h5M12 7v5l4 3"/>',
+ informes:'<path d="M5 20V9m5 11V4m5 16v-7m5 7V8"/>',
+ bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
+ wrench:'<path d="M21 7a7 7 0 0 1-9 9L6 22l-4-4 6-6a7 7 0 0 1 9-9l-4 4 4 4z"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 3"/>',
+ check:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+ search:'<circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/>',
+ chevron:'<path d="m9 18 6-6-6-6"/>',
+ folder:'<path d="M3 7V5h7l2 3h9v12H3z"/>'
+};
+const ico=(key,size=18)=>'<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(I[key]||I.home)+'</svg>';
+const state={date:today(),mode:'week',orderFilter:'all',search:'',selected:'',more:false};
+const PAGES=[['inicio','Inicio','home'],['agenda','Agenda','agenda'],['ordenes','Trabajos','ordenes'],['clientes','Clientes','clientes'],['equipos','Equipos','equipos'],['historial','Historial','historial'],['informes','Informes','informes']];
+const localDate=x=>new Date((x||today())+'T12:00:00');
+const dateISO=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+const monday=x=>{const d=localDate(x);d.setDate(d.getDate()-(d.getDay()+6)%7);return dateISO(d)};
+const sunday=week=>plusDays(week,6);
+const labelMonth=x=>localDate(x).toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+const dateShort=x=>dateText(x);
+const shortDay=x=>localDate(x).toLocaleDateString('es-AR',{weekday:'short'}).replace('.','');
+const userDate=()=>new Date().toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'});
+const go=page=>{tab=page;search='';filter='todos';state.search='';state.more=false;state.selected='';document.getElementById('modal-root').innerHTML='';render()};
+const newButton=(name,act,cls='',id='')=>'<button type="button" class="jb-btn '+cls+'" data-action="'+h(act)+'" data-id="'+h(id)+'">'+name+'</button>';
+const link=(name,act,id='')=>'<button class="jb-link" data-action="'+h(act)+'" data-id="'+h(id)+'">'+name+'</button>';
+const names={inicio:'Resumen',agenda:'Agenda',ordenes:'Trabajos',clientes:'Clientes',equipos:'Equipos',historial:'Historial',informes:'Informes'};
+const navButton=(p)=>'<button type="button" data-nav="'+p[0]+'" class="'+(tab===p[0]?'active':'')+'">'+ico(p[2])+'<span>'+p[1]+'</span>'+(p[0]==='agenda'&&APP.urgent().length?'<span class="jb-pillCount">'+APP.urgent().length+'</span>':'')+'</button>';
+function shell(){
+ const m=serviceMetrics();
+ const side='<aside class="jb-rail"><div class="jb-logo"><span class="jb-symbol">✳</span><div><strong>ServiControl</strong><small>POR ZENIX AR</small></div></div><p class="jb-menuTitle">ESPACIO DE TRABAJO</p><nav class="jb-nav">'+PAGES.slice(0,5).map(navButton).join('')+'</nav><p class="jb-menuTitle">ADMINISTRACIÓN</p><nav class="jb-nav">'+PAGES.slice(5).map(navButton).join('')+'</nav><div class="jb-railFoot"><span class="jb-demoTag">● DEMOSTRACIÓN</span><p>Esta versión guarda los datos en el navegador. No incluye acceso privado ni sincronización entre dispositivos.</p></div></aside>';
+ const head='<header class="jb-top"><div class="jb-crumb">'+(tab==='inicio'?'Mi espacio de trabajo':names[tab]||'ServiControl')+' <small>/ ServiControl</small></div><div class="jb-right"><span class="jb-dateChip">'+ico('agenda',14)+' '+h(userDate())+'</span><button class="jb-bell" data-nav="agenda" aria-label="Ver mantenimientos vencidos">'+ico('bell',18)+(m.overdue?'<i></i>':'')+'</button><span class="jb-avatar">SC</span></div></header>';
+ const content=page();
+ const nav='<nav class="jb-mobileNav" aria-label="Menú móvil">'+[['inicio','Inicio','home'],['agenda','Agenda','agenda'],['ordenes','Trabajos','ordenes'],['clientes','Clientes','clientes']].map(x=>'<button data-nav="'+x[0]+'" class="'+(tab===x[0]?'active':'')+'">'+ico(x[2])+'<span>'+x[1]+'</span></button>').join('')+'<button data-action="jbMore" class="'+(['equipos','historial','informes'].includes(tab)?'active':'')+'">'+ico('folder')+'<span>Más</span></button></nav>';
+ return '<div class="jb-shell">'+side+'<div class="jb-work">'+head+'<main class="jb-container">'+content+'<footer class="jb-footer">ServiControl · Zenix AR · Datos de demostración guardados en este navegador</footer></main></div>'+nav+'</div>';
+}
+function heading(kicker,title,sub,actions=''){
+ return '<div class="jb-pagehead"><div><div class="jb-topline">'+h(kicker)+'</div><h1>'+h(title)+'</h1><p>'+h(sub)+'</p></div><div class="jb-headActions">'+actions+'</div></div>';
+}
+function metric(title,value,note,icon,cls){
+ return '<div class="jb-metric"><div><small>'+h(title)+'</small><strong>'+h(value)+'</strong><span>'+h(note)+'</span></div><span class="jb-metricIcon '+cls+'">'+ico(icon,19)+'</span></div>';
+}
+function events(d){
+ let list=[];
+ for(const o of db.orders){if(o.date===d){const q=APP.eq(o.equipmentId);list.push({kind:'order',id:o.id,date:o.date,name:q?.name||'Equipo no disponible',sub:APP.client(q?.clientId)?.name||'Cliente',late:o.status!=='realizado'&&o.date<today(),done:o.status==='realizado'});}}
+ for(const q of db.equipment){if(q.next===d){list.push({kind:'equipment',id:q.id,date:q.next,name:q.name,sub:APP.client(q.clientId)?.name||'Cliente',late:q.next<today(),done:false});}}
+ return list.sort((a,b)=>a.kind==='order'?-1:1);
+}
+function calendarEvent(x){
+ return '<button type="button" class="jb-calEvent '+(x.late?'late':x.kind==='order'?'order':'')+'" data-action="'+(x.kind==='order'?'jbOrder':'jbEquip')+'" data-id="'+h(x.id)+'"><b>'+h(x.name)+'</b><small>'+h(x.kind==='order'?'Orden · '+x.sub:'Revisión · '+x.sub)+'</small></button>';
+}
+function timeline(d){
+ const week=monday(d),end=sunday(week),days=Array.from({length:7},(_,i)=>plusDays(week,i));
+ if(state.mode==='month'){
+  const first=localDate(d);first.setDate(1);const start=monday(dateISO(first));const cells=Array.from({length:42},(_,i)=>plusDays(start,i));
+  const weekhead='<div class="jb-weekDays">'+days.map(x=>'<div class="jb-dayHead">'+h(shortDay(x))+'</div>').join('')+'</div>';
+  return '<div class="jb-calendarViewport">'+weekhead+'<div class="jb-monthGrid">'+cells.map(x=>{const list=events(x);return '<div class="jb-monthCell '+(localDate(x).getMonth()===first.getMonth()?'':'other')+' '+(x===today()?'today':'')+'"><button class="day" data-action="jbOpenDay" data-id="'+h(x)+'">'+h(localDate(x).getDate())+'</button>'+list.slice(0,2).map(calendarEvent).join('')+(list.length>2?link('+'+(list.length-2)+' más','jbOpenDay',x):'')+'</div>'}).join('')+'</div></div>';
+ }
+ if(state.mode==='day'){
+ const list=events(d);
+ return '<div>'+ (list.length?list.map(x=>'<div class="jb-listEvent"><div class="jb-listDate">'+h(dateShort(x.date))+'</div><div><strong>'+h(x.name)+'</strong><small>'+h(x.sub)+' · '+(x.kind==='order'?'Orden de trabajo':'Próximo servicio')+'</small></div><span style="margin-left:auto" class="jb-badge '+(x.late?'red':x.kind==='order'?'blue':'')+'">'+(x.late?'Vencido':'Ver')+'</span></div>').join(''):'<div class="jb-empty">No hay órdenes ni vencimientos programados para este día.</div>')+'</div>';
+ }
+ return '<div class="jb-calendarViewport"><div class="jb-weekDays">'+days.map(x=>'<div class="jb-dayHead '+(x===today()?'today':'')+'"><button data-action="jbOpenDay" data-id="'+h(x)+'">'+h(shortDay(x))+'</button><strong>'+localDate(x).getDate()+'</strong></div>').join('')+'</div><div class="jb-calendarGrid">'+days.map(x=>{const list=events(x);return '<div class="jb-dayColumn '+(x===today()?'today':'')+'">'+(list.length?list.slice(0,5).map(calendarEvent).join('')+(list.length>5?link('+'+(list.length-5)+' más','jbOpenDay',x):''):'<span class="jb-dayEmpty">—</span>')+'</div>'}).join('')+'</div></div>';
+}
+function agendaCard(full=false){
+ const range=state.mode==='month'?labelMonth(state.date):state.mode==='day'?localDate(state.date).toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'}):dateShort(monday(state.date))+' – '+dateShort(sunday(monday(state.date)));
+ const controls='<div class="jb-agendaControls"><div class="jb-monthLabel">'+h(range)+'<div class="jb-calNav"><button class="jb-navBtn" data-action="jbPrev" aria-label="Anterior">‹</button><button class="jb-navBtn" data-action="jbNext" aria-label="Siguiente">›</button><button class="jb-navBtn" data-action="jbToday" style="font-size:10px;min-width:43px">Hoy</button></div></div><div class="jb-switch">'+[['week','Semana'],['day','Día'],['month','Mes']].map(x=>'<button class="'+(state.mode===x[0]?'active':'')+'" data-action="jbMode" data-id="'+x[0]+'">'+x[1]+'</button>').join('')+'</div></div>';
+ return '<section class="jb-card '+(full?'jb-agendaFull':'')+'"><div class="jb-cardTitle"><div><h2>Calendario de servicios</h2><small>Visitas y próximas revisiones organizadas por fecha</small></div>'+link('Abrir agenda completa →','jbGoAgenda')+'</div>'+controls+timeline(state.date)+'<div class="jb-legend"><span><i style="background:#477ce2"></i>Órdenes</span><span><i style="background:#4aad6b"></i>Mantenimientos</span><span><i style="background:#dc7a66"></i>Vencidos</span></div></section>';
+}
+function briefOrders(){
+ const arr=[...db.orders].sort((a,b)=>(a.status==='realizado')-(b.status==='realizado')||a.date.localeCompare(b.date)).slice(0,5);
+ return '<div class="jb-card"><div class="jb-cardTitle"><div><h2>Órdenes recientes</h2><small>Seguimiento de trabajos</small></div>'+link('Ver todas','jbGoOrders')+'</div>'+(arr.length?arr.map(o=>{const q=APP.eq(o.equipmentId),c=APP.client(q?.clientId);return '<button class="jb-activityRow" data-action="jbOrder" data-id="'+h(o.id)+'"><span class="jb-activityIcon">'+ico('ordenes')+'</span><span class="jb-activityText"><strong>'+h(q?.name||'Equipo')+'</strong><small>'+h(c?.name||'Cliente')+' · '+h(dateShort(o.date))+'</small></span><span class="jb-badge '+(o.status==='realizado'?'':o.date<today()?'red':'blue')+'">'+(o.status==='realizado'?'Hecha':o.date<today()?'Vencida':'Abierta')+'</span></button>'}).join(''):'<div class="jb-empty">Todavía no hay órdenes registradas.</div>')+'</div>';
+}
+function urgentCard(){
+ const arr=[...APP.urgent()].sort((a,b)=>a.next.localeCompare(b.next)).slice(0,4);
+ return '<div class="jb-card"><div class="jb-cardTitle"><div><h2>Requieren atención</h2><small>Mantenimientos vencidos</small></div>'+link('Ver equipos','jbGoEquipos')+'</div>'+(arr.length?arr.map(q=>'<button class="jb-activityRow" data-action="jbEquip" data-id="'+h(q.id)+'"><span class="jb-activityIcon orange">'+ico('wrench')+'</span><span class="jb-activityText"><strong>'+h(q.name)+'</strong><small>'+h(APP.client(q.clientId)?.name||'Cliente')+'</small></span><span class="jb-badge red">'+h(dateShort(q.next))+'</span></button>').join(''):'<div class="jb-empty">No hay mantenimientos vencidos.</div>')+'</div>';
+}
+function dashboard(){
+ const m=serviceMetrics();
+ return heading('PANEL GENERAL','Bienvenido a tu espacio de trabajo','Organizá el servicio técnico, coordiná visitas y seguí cada orden. '+userDate(),newButton(ico('plus')+' Nueva orden','addOrder','primary')+newButton('Nuevo cliente','newClient'))
+ +'<section class="jb-overview">'+metric('Órdenes abiertas',m.pending,'Por realizar o en curso','ordenes','')+metric('Visitas vencidas',m.overdue,'Mantenimientos pendientes','clock','orange')+metric('Clientes registrados',m.clients,'Establecimientos activos','clientes','green')+metric('Trabajos finalizados',m.done,'Historial disponible','check','violet')+'</section>'
+ +'<div class="jb-overviewGrid"><div>'+agendaCard(false)+'</div><aside class="jb-sideStack">'+briefOrders()+urgentCard()+'</aside></div>';
+}
+function agenda(){
+ const m=serviceMetrics();
+ return heading('PLANIFICACIÓN','Agenda de servicios','Organizá las próximas visitas y vencimientos. Los registros existentes no tienen horario asignado.',newButton(ico('plus')+' Programar visita','addOrder','primary')+newButton('Registrar equipo','newEq'))
+ +'<section class="jb-infoGrid"><div class="jb-infoBox"><small>Órdenes abiertas</small><strong>'+m.pending+'</strong></div><div class="jb-infoBox"><small>Revisiones próximas (30 días)</small><strong>'+m.upcoming+'</strong></div><div class="jb-infoBox"><small>Equipos vencidos</small><strong>'+m.overdue+'</strong></div></section>'+agendaCard(true);
+}
+function fieldName(name,sub,kind=''){
+ return '<div class="jb-cell"><span class="jb-cellAvatar '+kind+'">'+h(initial(name))+'</span><div><strong>'+h(name)+'</strong><small>'+h(sub||'—')+'</small></div></div>';
+}
+function tableCard(title,subtitle,heads,rows,placeholder='Buscar...'){
+ return '<section class="jb-card"><div class="jb-cardTitle"><div><h2>'+h(title)+'</h2><small>'+h(subtitle)+'</small></div><span style="font-size:11px;color:#9cabb9">'+rows.length+' registros</span></div><div class="jb-tableTools"><input class="jb-search" data-jb-search="yes" value="'+h(state.search)+'" placeholder="'+h(placeholder)+'" aria-label="Buscar registros"></div><div class="jb-tableWrap"><table class="jb-table"><thead><tr>'+heads.map(x=>'<th>'+h(x)+'</th>').join('')+'</tr></thead><tbody class="jb-results">'+rows.join('')+'</tbody></table></div></section>';
+}
+function clientRows(){
+ const q=state.search.toLowerCase();
+ return db.clients.filter(c=>[c.name,c.address,c.phone].join(' ').toLowerCase().includes(q)).map(c=>{
+ const eq=db.equipment.filter(x=>x.clientId===c.id),late=eq.filter(x=>x.next<today()).length;
+ return '<tr><td>'+fieldName(c.name,c.address,'')+'</td><td>'+h(c.phone||'Sin teléfono')+'</td><td>'+eq.length+'</td><td><span class="jb-badge '+(late?'orange':'')+'">'+(late?late+' vencidos':'Al día')+'</span></td><td><div class="jb-tableButtons">'+newButton('Ver ficha','viewClient','tiny',c.id)+newButton('Editar','editClient','tiny',c.id)+'</div></td></tr>';
+ });
+}
+function clients(){
+ return heading('RELACIONES COMERCIALES','Clientes','Datos de contacto, equipos instalados y servicios de cada establecimiento.',newButton(ico('plus')+' Nuevo cliente','newClient','primary'))
+ +tableCard('Directorio de clientes','Accedé a las fichas y su historial',['Cliente / establecimiento','Contacto','Equipos','Estado','Acciones'],clientRows(),'Buscar nombre, domicilio o teléfono');
+}
+function equipmentRows(){
+ const q=state.search.toLowerCase();
+ return db.equipment.filter(e=>[e.name,e.serial,e.category,APP.client(e.clientId)?.name].join(' ').toLowerCase().includes(q)).map(e=>{
+ const late=e.next<today(),near=e.next<=plusDays(today(),30);
+ return '<tr><td>'+fieldName(e.name,e.serial||'Sin número de serie','green')+'</td><td>'+h(APP.client(e.clientId)?.name||'Sin cliente')+'</td><td>'+h(e.category||'General')+'</td><td>'+h(dateShort(e.next))+'</td><td><span class="jb-badge '+(late?'red':near?'orange':'')+'">'+(late?'Vencido':near?'Próximo':'Vigente')+'</span></td><td><div class="jb-tableButtons">'+newButton('Ver ficha','viewEq','tiny',e.id)+newButton('Editar','editEq','tiny',e.id)+'</div></td></tr>';
+ });
+}
+function equipment(){
+ return heading('ACTIVOS TÉCNICOS','Equipos','Controlá números de serie, fechas de revisión y mantenimiento preventivo.',newButton(ico('plus')+' Registrar equipo','newEq','primary'))
+ +tableCard('Inventario de equipos','Próximas revisiones y fichas técnicas',['Equipo','Cliente','Categoría','Próxima revisión','Estado','Acciones'],equipmentRows(),'Buscar equipo, cliente o número de serie');
+}
+function orderBadge(o){return '<span class="jb-badge '+(o.status==='realizado'?'':o.date<today()?'red':'blue')+'">'+(o.status==='realizado'?'Realizada':o.date<today()?'Atrasada':'Programada')+'</span>'}
+function jobList(){
+ const orders=[...db.orders].sort((a,b)=>(a.status==='realizado')-(b.status==='realizado')||a.date.localeCompare(b.date)).filter(o=>state.orderFilter==='all'||(state.orderFilter==='open'?o.status!=='realizado':o.status==='realizado'));
+ const qq=state.search.toLowerCase();
+ return orders.filter(o=>{const e=APP.eq(o.equipmentId);return [e?.name,APP.client(e?.clientId)?.name,o.notes,o.technician].join(' ').toLowerCase().includes(qq)});
+}
+function orders(){
+ const list=jobList(),sel=list.find(x=>x.id===state.selected)||list[0],e=sel?APP.eq(sel.equipmentId):null,c=e?APP.client(e.clientId):null;
+ const filters='<div class="jb-tableTools"><div class="jb-switch">'+[['all','Todas'],['open','Abiertas'],['done','Finalizadas']].map(x=>'<button data-action="jbOrderFilter" data-id="'+x[0]+'" class="'+(state.orderFilter===x[0]?'active':'')+'">'+x[1]+'</button>').join('')+'</div><input class="jb-search" style="max-width:210px" data-jb-search="yes" value="'+h(state.search)+'" placeholder="Buscar trabajos..."></div>';
+ return heading('OPERACIÓN Y CAMPO','Trabajos y órdenes','Planificá servicios, asigná técnicos y registrá las intervenciones.',newButton(ico('plus')+' Nueva orden','addOrder','primary'))
+ +'<div class="jb-workSplit"><section class="jb-card"><div class="jb-cardTitle"><div><h2>Órdenes de trabajo</h2><small>'+list.length+' órdenes en esta vista</small></div></div>'+filters+'<div class="jb-workList jb-results">'+(list.length?list.map(o=>{const eq=APP.eq(o.equipmentId);return '<button class="jb-workRow '+(sel?.id===o.id?'chosen':'')+'" data-action="jbOrder" data-id="'+h(o.id)+'"><span class="jb-cellAvatar">'+ico('wrench')+'</span><span style="flex:1;min-width:0"><strong>'+h(eq?.name||'Equipo no encontrado')+'</strong><small>'+h(APP.client(eq?.clientId)?.name||'Cliente')+' · '+h(dateShort(o.date))+'</small></span>'+orderBadge(o)+'</button>'}).join(''):'<div class="jb-empty">No hay órdenes con estos filtros.</div>')+'</div></section>'
+ +'<section class="jb-card"><div class="jb-cardTitle"><div><h2>Detalle de la orden</h2><small>Información y acciones del servicio seleccionado</small></div></div>'+(sel?'<div class="jb-jobDetail"><div class="jb-topline">ORDEN #'+h(sel.id.slice(-6).toUpperCase())+'</div><h2>'+h(e?.name||'Equipo')+'</h2><div class="sub">'+h(c?.name||'Cliente')+'</div>'+orderBadge(sel)+[['Cliente',c?.name||'—'],['Equipo',e?.name||'—'],['Técnico',sel.technician||'Sin asignar'],['Fecha prevista',dateShort(sel.date)],['Costo del trabajo',money(sel.cost||0)],['Observaciones',sel.notes||'Sin observaciones']].map(x=>'<div class="jb-detailRow"><span>'+h(x[0])+'</span><strong>'+h(x[1])+'</strong></div>').join('')+'<div class="jb-jobButtons">'+(sel.status==='realizado'?newButton('Informe PDF','orderPdf','primary',sel.id):newButton('Completar trabajo','completeOrder','green',sel.id))+(e?newButton('Ver equipo','viewEq','',e.id):'')+newButton('Eliminar','delOrder','danger',sel.id)+'</div></div>':'<div class="jb-empty">Elegí una orden del listado para consultar su información.</div>')+'</section></div>';
+}
+function historyRows(){
+ const q=state.search.toLowerCase();
+ return [...db.orders].filter(o=>o.status==='realizado').sort((a,b)=>b.date.localeCompare(a.date)).filter(o=>{const e=APP.eq(o.equipmentId);return [e?.name,APP.client(e?.clientId)?.name,o.technician,o.notes].join(' ').toLowerCase().includes(q)}).map(o=>{
+ const e=APP.eq(o.equipmentId);
+ return '<tr><td>'+h(dateShort(o.completedDate||o.date))+'</td><td>'+fieldName(e?.name||'Equipo',APP.client(e?.clientId)?.name||'Cliente','green')+'</td><td>'+h(o.technician||'—')+'</td><td>'+h(money(o.cost||0))+'</td><td>'+newButton('Ver informe','orderPdf','tiny',o.id)+'</td></tr>';
+ });
+}
+function history(){
+ return heading('DOCUMENTACIÓN','Historial de servicios','Consultá trabajos realizados, importes y comprobantes técnicos.',newButton('Registrar intervención','addOrder','primary'))
+ +tableCard('Trabajos finalizados','Historial completo de intervenciones',['Fecha','Equipo / cliente','Técnico','Importe','Acción'],historyRows(),'Buscar trabajos, técnicos o clientes');
+}
+function reports(){
+ const v=APP.report();
+ return heading('ADMINISTRACIÓN','Informes y respaldos','Exportaciones y copias para conservar los registros de tu empresa.')
+ +'<div class="jb-infoGrid"><div class="jb-infoBox"><small>Clientes registrados</small><strong>'+db.clients.length+'</strong></div><div class="jb-infoBox"><small>Equipos inventariados</small><strong>'+db.equipment.length+'</strong></div><div class="jb-infoBox"><small>Órdenes registradas</small><strong>'+db.orders.length+'</strong></div></div>'
+ +'<div class="jb-overviewGrid"><section class="jb-card"><div class="jb-cardTitle"><div><h2>Descargar informes</h2><small>Prepará la información para enviar o guardar</small></div></div><div style="padding:22px"><p style="font-size:12px;color:#8191a0;line-height:1.65">Exportá los equipos como planilla CSV compatible con Excel o generá una vista lista para imprimir y guardar en PDF.</p><div class="jb-headActions" style="margin-top:18px">'+newButton('Exportar Excel (CSV)','csv','primary')+newButton('Imprimir / guardar PDF','print')+'</div></div></section><div class="jb-sideStack"><section class="jb-card"><div class="jb-cardTitle"><div><h2>Copias de seguridad</h2><small>Los datos se guardan solo en este navegador</small></div></div><div style="padding:21px"><p style="font-size:12px;color:#8291a2;line-height:1.65">Descargá un respaldo JSON para recuperarlo o cambiar de dispositivo. Importarlo reemplaza los datos actuales.</p><div class="jb-headActions">'+newButton('Descargar respaldo','backup','primary')+newButton('Importar JSON','import')+'</div><div style="margin-top:24px">'+newButton('Borrar registros','clear','danger')+'</div></div></section></div></div>';
+}
+function page(){return ({inicio:dashboard,agenda,ordenes:orders,clientes:clients,equipos:equipment,historial:history,informes:reports}[tab]||dashboard)()}
+render=function(){document.documentElement.style.setProperty('--accent','#2563e9');document.title=(names[tab]||'Inicio')+' · ServiControl';document.getElementById('root').innerHTML=shell();};
+APP.actions.jbGoAgenda=()=>go('agenda');
+APP.actions.jbGoOrders=()=>go('ordenes');
+APP.actions.jbGoEquipos=()=>go('equipos');
+APP.actions.jbToday=()=>{state.date=today();render()};
+APP.actions.jbPrev=()=>{state.date=plusDays(state.date,state.mode==='day'?-1:state.mode==='month'?-30:-7);render()};
+APP.actions.jbNext=()=>{state.date=plusDays(state.date,state.mode==='day'?1:state.mode==='month'?30:7);render()};
+APP.actions.jbMode=id=>{state.mode=id;render()};
+APP.actions.jbOpenDay=id=>{state.date=id;state.mode='day';render()};
+APP.actions.jbOrder=id=>{tab='ordenes';state.orderFilter='all';state.search='';state.selected=id;render()};
+APP.actions.jbEquip=id=>{if(APP.actions.viewEq)APP.actions.viewEq(id)};
+APP.actions.jbOrderFilter=id=>{state.orderFilter=id;state.selected='';render()};
+APP.actions.jbMore=()=>{document.getElementById('modal-root').innerHTML='<button class="jb-sheetMask" data-action="jbCloseMore" aria-label="Cerrar"></button><div class="jb-moreSheet"><h2>Otras secciones</h2>'+PAGES.slice(4).map(x=>'<button data-action="jbMoreNav" data-id="'+x[0]+'">'+ico(x[2])+' '+h(x[1])+'</button>').join('')+'<button data-action="jbCloseMore">Cerrar</button></div>'};
+APP.actions.jbCloseMore=()=>{document.getElementById('modal-root').innerHTML=''};
+APP.actions.jbMoreNav=id=>{APP.actions.jbCloseMore();go(id)};
+document.addEventListener('input',e=>{
+ if(!e.target.matches('[data-jb-search]'))return;
+ state.search=e.target.value;
+ const results=document.querySelector('.jb-results');if(!results)return;
+ if(tab==='ordenes'){const wrap=document.querySelector('.jb-workList');if(wrap){const caret=e.target.selectionStart;render();const input=document.querySelector('[data-jb-search]');if(input){input.focus();input.setSelectionRange(caret,caret)};}return;}
+ const maker=tab==='clientes'?clientRows:tab==='equipos'?equipmentRows:tab==='historial'?historyRows:null;
+ if(maker)results.innerHTML=maker().join('');
+});
+render();
 })();
 </script>
 </body>
