@@ -4,7 +4,7 @@
  */
 (function(){
 "use strict";
-let api=null,activeId=null,saveTimer=null;
+let api=null,activeId=null,saveTimer=null,pickerSelection=new Set();
 const $=id=>document.getElementById(id);
 const money=value=>Number(value||0).toLocaleString("es-AR",{style:"currency",currency:"ARS",minimumFractionDigits:0,maximumFractionDigits:2});
 const safe=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
@@ -12,10 +12,84 @@ const uid=()=>Math.random().toString(36).slice(2,10)+"-"+Date.now().toString(36)
 const num=value=>value===""||value==null?NaN:Number(value);
 const fullNum=value=>Number.isFinite(num(value))&&num(value)>=0&&num(value)<=999999999;
 const date=()=>new Date().toISOString();
+const workTypes=[
+ {id:"Construcción",icon:"⌂",desc:"Casas y obras nuevas"},
+ {id:"Refacción",icon:"⚒",desc:"Reparaciones y reformas"},
+ {id:"Aberturas",icon:"▣",desc:"Puertas y ventanas"},
+ {id:"Personalizado",icon:"+",desc:"Cualquier otro trabajo"}
+];
+const suggested={
+ "Construcción":[
+ ["Preparación y terreno",["Limpieza del terreno","Replanteo de la obra","Excavaciones","Movimiento de suelo","Retiro de escombros"]],
+ ["Fundaciones y estructura",["Fundaciones","Hormigonado de bases","Encadenados","Columnas y vigas","Losas y entrepisos"]],
+ ["Muros y cubierta",["Mampostería","Revoques","Contrapisos y carpetas","Estructura de techo","Cubierta y aislaciones"]],
+ ["Instalaciones",["Instalación eléctrica","Instalación sanitaria","Desagües pluviales","Instalación de gas","Climatización"]],
+ ["Terminaciones",["Aberturas","Pisos y revestimientos","Pintura interior","Pintura exterior","Artefactos sanitarios","Limpieza final"]]
+ ],
+ "Refacción":[
+ ["Preparación",["Protección de superficies","Demolición de sectores","Retiro de escombros","Reparación de mampostería"]],
+ ["Trabajos",["Revoques y reparaciones","Impermeabilización","Contrapisos y carpetas","Revestimientos y pisos","Instalación eléctrica","Instalación sanitaria"]],
+ ["Terminaciones",["Pintura","Colocación de aberturas","Griferías y artefactos","Limpieza final"]]
+ ],
+ "Aberturas":[
+ ["Fabricación y suministro",["Ventanas","Puertas","Paños fijos","Mosquiteros","Herrajes y accesorios"]],
+ ["Instalación",["Retiro de aberturas existentes","Preparación de vanos","Colocación y nivelación","Sellado perimetral","Terminaciones y ajustes"]]
+ ],
+ "Personalizado":[["Trabajos frecuentes",["Mano de obra","Suministro de materiales","Traslado y flete","Instalación","Retiro de residuos"]]]
+};
+function pickEntries(){
+ const d=get();if(!d)return [];
+ const entries=[];
+ for(const [group,names] of suggested[d.workType]||[]){
+  for(const name of names)entries.push({key:"tpl:"+d.workType+":"+name,name,group,unit:"",price:"",cost:"",category:"Servicios"});
+ }
+ for(const x of api.catalog()){
+  entries.push({key:"cat:"+x.id,name:String(x.name||""),group:"De tu catálogo",unit:x.unit||"",price:String(x.price??""),cost:String(x.cost??""),category:x.category||"Materiales"});
+ }
+ return entries;
+}
+function selectType(type){
+ const d=get();if(!d||!workTypes.some(x=>x.id===type))return;
+ d.workType=type;flushSave();
+ renderTypes();note("");
+}
+function renderTypes(){
+ const d=get(),host=$("ocWorkTypeCards");if(!d||!host)return;
+ host.innerHTML=workTypes.map(t=>'<button type="button" data-type="'+safe(t.id)+'" class="oc-type-card'+(d.workType===t.id?" is-active":"")+'" aria-pressed="'+(d.workType===t.id)+'"><span class="oc-type-icon" aria-hidden="true">'+safe(t.icon)+'</span><strong>'+safe(t.id)+'</strong><small>'+safe(t.desc)+'</small></button>').join("");
+ host.querySelectorAll("[data-type]").forEach(btn=>btn.onclick=()=>selectType(btn.dataset.type));
+}
+function openPicker(){
+ const d=get();if(!d)return;
+ if(!d.workType){note("Primero elegí el tipo de trabajo.","error");$("ocWorkTypeCards").scrollIntoView({behavior:"smooth",block:"center"});return}
+ pickerSelection.clear();
+ $("ocPickerSearch").value="";
+ $("ocPickerOverlay").classList.remove("hidden");
+ $("ocPickerSearch").focus();
+ drawPicker();
+}
+function closePicker(){$("ocPickerOverlay").classList.add("hidden");pickerSelection.clear()}
+function drawPicker(){
+ const host=$("ocPickerList"),q=$("ocPickerSearch").value.trim().toLocaleLowerCase("es-AR"),entries=pickEntries().filter(x=>(x.name+" "+x.group).toLocaleLowerCase("es-AR").includes(q));
+ const groups=[...new Set(entries.map(x=>x.group))];
+ host.innerHTML=entries.length?groups.map(group=>'<div class="oc-pick-group"><h4>'+safe(group)+'</h4>'+entries.filter(x=>x.group===group).map(x=>'<label class="oc-pick-choice"><input type="checkbox" data-pick="'+safe(x.key)+'"'+(pickerSelection.has(x.key)?" checked":"")+'><span><strong>'+safe(x.name)+'</strong>'+(x.key.startsWith("cat:")?'<small>Precio guardado: '+money(x.price||0)+'</small>':"<small>Precio y cantidad por completar</small>")+'</span></label>').join("")+'</div>').join(""):'<p class="oc-form-noitems">No encontramos conceptos con ese nombre. Podés agregar uno personalizado.</p>';
+ host.querySelectorAll("[data-pick]").forEach(check=>check.onchange=()=>{check.checked?pickerSelection.add(check.dataset.pick):pickerSelection.delete(check.dataset.pick);updatePickerCount()});
+ updatePickerCount();
+}
+function updatePickerCount(){$("ocPickerConfirm").textContent="Agregar seleccionados ("+pickerSelection.size+")";$("ocPickerConfirm").disabled=pickerSelection.size===0}
+function commitPicker(){
+ const d=get();if(!d)return;
+ const entries=pickEntries(),selected=entries.filter(x=>pickerSelection.has(x.key));
+ for(const x of selected)d.lines.push(item(x.name,x.unit,"",x.cost,x.price,x.category));
+ if(!selected.length)return;
+ flushSave();closePicker();linesHTML();
+ note(selected.length+" trabajo"+(selected.length===1?" agregado":"s agregados")+". Completá cantidades y precios antes de generar el PDF.","success");
+ $("ocFormLines").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
 const drafts=()=>api.business().formDrafts||(api.business().formDrafts=[]);
 const get=()=>drafts().find(d=>d.id===activeId)||null;
 const empty=()=>({
- id:"B-"+uid(),title:"",client:"",phone:"",location:"",measurements:"",floors:"",
+ id:"B-"+uid(),workType:"",title:"",client:"",phone:"",location:"",measurements:"",floors:"",
  scopeType:"Ambos",scope:"",payment:"",discountRate:"0",taxRate:"0",validity:"15",
  delivery:"",notes:"",lines:[],savedQuoteId:null,created:date(),updated:date()
 });
@@ -26,6 +100,7 @@ function fromLegacy(source){
  const a=source.answers||{};
  const result=empty();
  result.legacyId=source.id;
+ result.workType="";
  result.title=String(a.description||"");
  result.client=String(a.client||"");
  result.phone=String(a.phone||"");
@@ -109,23 +184,29 @@ function makeOptions(current){
 function linesHTML(){
  const d=get();if(!d)return;
  const host=$("ocFormLines");
- host.innerHTML=d.lines.length?d.lines.map((r,i)=>'<div class="oc-form-line" data-row="'+safe(r.id)+'">'+
-  '<div class="oc-form-linehead"><strong>Concepto '+(i+1)+'</strong><button type="button" class="oc-form-remove" data-remove="'+safe(r.id)+'">Quitar</button></div>'+
-  '<div class="oc-form-linegrid">'+
-  '<label class="oc-form-field oc-form-name"><span>Material o trabajo *</span><input data-key="name" maxlength="140" required placeholder="Ej.: instalación eléctrica" value="'+safe(r.name)+'"></label>'+
-  '<label class="oc-form-field"><span>Tipo</span><select data-key="category">'+["Materiales","Mano de obra","Servicios","Otros"].map(cat=>'<option'+(cat===r.category?" selected":"")+'>'+cat+'</option>').join("")+'</select></label>'+
-  '<label class="oc-form-field"><span>Unidad *</span><input data-key="unit" maxlength="16" list="ocUnitOptions" required placeholder="m², u, gl..." value="'+safe(r.unit)+'"></label>'+
-  '<label class="oc-form-field"><span>Cantidad *</span><input data-key="qty" type="number" step="any" min="0.000001" required placeholder="Ingresá cantidad" value="'+safe(r.qty)+'"></label>'+
-  '<label class="oc-form-field"><span>Costo/u (interno)</span><input data-key="cost" type="number" min="0" step="any" placeholder="Pendiente" value="'+safe(r.cost)+'"></label>'+
-  '<label class="oc-form-field"><span>Venta/u *</span><input data-key="price" type="number" step="any" min="0" required placeholder="Precio definido" value="'+safe(r.price)+'"></label>'+
-  '</div></div>').join(""):'<div class="oc-form-noitems">Todavía no agregaste conceptos. Podés incorporarlos manualmente o desde tu catálogo.</div>';
+ host.innerHTML=d.lines.length?d.lines.map((x,i)=>'<div class="oc-simple-line" data-row="'+safe(x.id)+'">'+
+ '<div class="oc-simple-name"><strong>'+safe(x.name||"Nuevo trabajo")+'</strong><small>'+safe(x.category||"")+'</small></div>'+
+ '<label class="oc-form-field oc-simple-qty"><span>Cantidad</span><input data-key="qty" type="number" min="0.000001" step="any" placeholder="Falta" value="'+safe(x.qty)+'"></label>'+
+ '<label class="oc-form-field oc-simple-unit"><span>Unidad</span><input data-key="unit" maxlength="16" list="ocUnitOptions" placeholder="m², u..." value="'+safe(x.unit)+'"></label>'+
+ '<label class="oc-form-field oc-simple-price"><span>Precio por unidad</span><input data-key="price" type="number" min="0" step="any" placeholder="Falta" value="'+safe(x.price)+'"></label>'+
+ '<div class="oc-simple-amount"><small>Importe</small><strong data-amount>'+((num(x.qty)>0&&fullNum(x.price))?money(num(x.qty)*num(x.price)):"Pendiente")+'</strong></div>'+
+ '<button class="oc-form-remove oc-simple-remove" type="button" data-remove="'+safe(x.id)+'" title="Quitar concepto" aria-label="Quitar '+safe(x.name||"concepto")+'">×</button>'+
+ '<details class="oc-simple-rowdetail"><summary>Editar nombre y datos internos</summary><div class="oc-form-grid">'+
+ '<label class="oc-form-field"><span>Nombre del trabajo</span><input data-key="name" maxlength="140" value="'+safe(x.name)+'"></label>'+
+ '<label class="oc-form-field"><span>Categoría</span><select data-key="category">'+["Materiales","Mano de obra","Servicios","Otros"].map(c=>'<option'+(x.category===c?" selected":"")+'>'+c+'</option>').join("")+'</select></label>'+
+ '<label class="oc-form-field"><span>Costo interno por unidad (opcional)</span><input data-key="cost" type="number" min="0" step="any" placeholder="Pendiente" value="'+safe(x.cost)+'"></label>'+
+ '</div></details></div>').join(""):'<div class="oc-form-noitems">Todavía no seleccionaste trabajos. Tocá «Seleccionar trabajos» para empezar.</div>';
  host.querySelectorAll("[data-row]").forEach(row=>{
-  const line=d.lines.find(x=>x.id===row.dataset.row);
-  row.querySelectorAll("[data-key]").forEach(control=>{
-   control.oninput=()=>updateLine(line,control.dataset.key,control.value);
-   control.onchange=()=>{updateLine(line,control.dataset.key,control.value);flushSave()};
+  const x=d.lines.find(t=>t.id===row.dataset.row);
+  row.querySelectorAll("[data-key]").forEach(c=>{
+   c.oninput=()=>{
+    updateLine(x,c.dataset.key,c.value);
+    if(c.dataset.key==="name"){row.querySelector(".oc-simple-name strong").textContent=c.value||"Nuevo trabajo"}
+    const label=row.querySelector("[data-amount]");if(label)label.textContent=num(x.qty)>0&&fullNum(x.price)?money(num(x.qty)*num(x.price)):"Pendiente";
+   };
+   c.onchange=()=>{updateLine(x,c.dataset.key,c.value);flushSave()};
   });
-  row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(x=>x.id!==line.id);flushSave();linesHTML();totalsUI()};
+  row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(t=>t.id!==x.id);flushSave();linesHTML()};
  });
  totalsUI();
 }
