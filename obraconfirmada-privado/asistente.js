@@ -85,7 +85,7 @@ function commitPicker(){
   d.lines.push(line);
  }
  if(!selected.length)return;
- flushSave();closePicker();linesHTML();
+ flushSave();closePicker();linesHTML();renderEstimates();
  note(selected.length+" trabajo"+(selected.length===1?" agregado":"s agregados")+". Completá cantidades y precios antes de generar el PDF.","success");
  $("ocFormLines").scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -122,7 +122,7 @@ function parseArea(input){
 function surfaceCandidates(d){
  const measured=d&&parseArea(d.measurements);
  if(!measured||d.areaConfirmed!==true||d.areaSource!==d.measurements||!["build","land"].includes(d.areaPurpose))return [];
- return d.lines.filter(line=>line&&line.qty==="").flatMap(line=>{
+ return d.lines.filter(line=>line&&(line.qty===""||line.quantityOrigin==="revisar superficie")).flatMap(line=>{
   const type=d.areaPurpose;
   if(type==="land"&&line.name==="Limpieza del terreno"){
    return [{id:line.id,qty:measured.area,unit:"m²",formula:measured.formula,reason:"Superficie de terreno que confirmaste que se va a limpiar"}];
@@ -142,7 +142,7 @@ function confirmArea(){
 function acceptQuantity(id){
  const d=get(),proposal=d&&surfaceCandidates(d).find(x=>x.id===id);
  if(!proposal)return;
- const line=d.lines.find(x=>x.id===id);if(!line||line.qty!=="")return;
+ const line=d.lines.find(x=>x.id===id);if(!line||(line.qty!==""&&line.quantityOrigin!=="revisar superficie"))return;
  line.qty=String(proposal.qty);line.unit=proposal.unit;line.quantityOrigin="propuesta aceptada";
  line.quantityReason=proposal.reason;flushSave();linesHTML();renderEstimates();
 }
@@ -151,7 +151,7 @@ function acceptAllQuantities(){
  const proposals=surfaceCandidates(d);
  if(!proposals.length)return;
  if(!confirm("¿Aplicar las "+proposals.length+" cantidades propuestas? Revisalas después antes de emitir el presupuesto."))return;
- for(const p of proposals){const x=d.lines.find(y=>y.id===p.id);if(x&&x.qty===""){x.qty=String(p.qty);x.unit=p.unit;x.quantityOrigin="propuesta aceptada";x.quantityReason=p.reason}}
+ for(const p of proposals){const x=d.lines.find(y=>y.id===p.id);if(x&&(x.qty===""||x.quantityOrigin==="revisar superficie")){x.qty=String(p.qty);x.unit=p.unit;x.quantityOrigin="propuesta aceptada";x.quantityReason=p.reason}}
  flushSave();linesHTML();renderEstimates();note(proposals.length+" cantidades aplicadas. Podés corregirlas en cualquier momento.","success");
 }
 function renderEstimates(){
@@ -179,6 +179,7 @@ function renderEstimates(){
 function positive(v){return Number.isFinite(Number(v))&&String(v).trim()!==""&&Number(v)>0&&Number(v)<=100000?Number(v):NaN}
 function calcFromMeasures(unit,values){
  const l=positive(values.length),w=positive(values.width),count=positive(values.count);
+ if(!Number.isInteger(count)||count<=0)return {error:"El número de elementos debe ser entero y mayor que cero."};
  if(unit!=="m²"&&unit!=="m³")return {error:"Este cálculo requiere una unidad de m² o m³."};
  if(!Number.isFinite(l)||!Number.isFinite(w)||!Number.isFinite(count))return {error:"Completá largo, ancho y número de elementos con datos positivos."};
  let result=l*w*count;
@@ -344,14 +345,14 @@ function linesHTML(){
    };
    c.onchange=()=>{updateLine(x,c.dataset.key,c.value);flushSave()};
   });
-  row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(t=>t.id!==x.id);flushSave();linesHTML()};
+  row.querySelector("[data-remove]").onclick=()=>{d.lines=d.lines.filter(t=>t.id!==x.id);flushSave();linesHTML();renderEstimates()};
   row.querySelector("[data-calc-check]").onclick=()=>calculateLine(row,x);
  });
  totalsUI();
 }
 function addLine(){
  const d=get();if(!d)return;
- d.lines.push(item("","","","","","Otros"));flushSave();linesHTML();note("");
+ d.lines.push(item("","","","","","Otros"));flushSave();linesHTML();renderEstimates();note("");
  const rows=$("ocFormLines").querySelectorAll("[data-row]");
  rows[rows.length-1]?.querySelector('[data-key="name"]')?.focus();
 }
@@ -409,6 +410,7 @@ function createPayload(d){
  const first=$("ocFTitle"),client=$("ocFClient");
  if(!d.title.trim()){note("Ingresá el nombre del trabajo.","error");first.focus();return null}
  if(!d.client.trim()){note("Ingresá el nombre del cliente.","error");client.focus();return null}
+ if(d.lines.some(x=>x.quantityOrigin==="revisar superficie")){note("Cambiaste las medidas. Revisá y confirmá las cantidades calculadas antes de guardar el presupuesto completo.","error");return null}
  if(!d.lines.length){note("Agregá al menos un material o trabajo.","error");$("ocFormAddLine").focus();return null}
  for(let i=0;i<d.lines.length;i++){
   const line=d.lines[i];
@@ -644,7 +646,10 @@ function init(bridge){
    if(key==="title")showDrafts();
    if(key==="measurements"){
     d.areaConfirmed=false;d.areaSource="";d.areaPurpose="";
-    renderEstimates();
+    for(const line of d.lines)if(line.quantityOrigin==="propuesta aceptada"){
+      line.quantityOrigin="revisar superficie";line.quantityReason="Cambiaron las medidas; confirmá de nuevo o corregí la cantidad";
+    }
+    linesHTML();renderEstimates();
    }
    scheduleSave();
    if(key==="taxRate"||key==="discountRate")totalsUI();
