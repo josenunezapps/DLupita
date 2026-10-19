@@ -79,17 +79,139 @@ function updatePickerCount(){$("ocPickerConfirm").textContent="Agregar seleccion
 function commitPicker(){
  const d=get();if(!d)return;
  const entries=pickEntries(),selected=entries.filter(x=>pickerSelection.has(x.key));
- for(const x of selected)d.lines.push(item(x.name,x.unit,"",x.cost,x.price,x.category));
+ for(const x of selected){
+  const line=item(x.name,x.unit||unitHint(x.name),"",x.cost,x.price,x.category);
+  if(!x.unit&&line.unit)line.unitIsSuggested=true;
+  d.lines.push(line);
+ }
  if(!selected.length)return;
  flushSave();closePicker();linesHTML();
  note(selected.length+" trabajo"+(selected.length===1?" agregado":"s agregados")+". Completá cantidades y precios antes de generar el PDF.","success");
  $("ocFormLines").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
+
+/* Cómputo preliminar verificado: sin valores técnicos ni coeficientes inventados.
+ * La superficie debe ser confirmada por el usuario y las propuestas requieren aceptación.
+ */
+const unitHints={
+ "Limpieza del terreno":"m²","Replanteo de la obra":"m²",
+ "Excavaciones":"m³","Movimiento de suelo":"m³",
+ "Hormigonado de bases":"m³","Fundaciones":"m³",
+ "Hormigonado de bases y fundaciones":"m³",
+ "Mampostería":"m²","Revoques":"m²","Pintura interior":"m²",
+ "Pintura exterior":"m²","Revestimientos y pisos":"m²",
+ "Contrapisos y carpetas":"m²","Demolición de sectores":"m²",
+ "Pisos y revestimientos":"m²","Impermeabilización":"m²"
+};
+function unitHint(name){return unitHints[String(name||"").trim()]||""}
+function parseArea(input){
+ const t=String(input||"").toLowerCase().replace(/\s/g," ");
+ const decimal=x=>Number(x.replace(",","."));
+ let m=t.match(/(\d{1,5}(?:[.,]\d{1,3})?)\s*(?:m(?:etros?)?)?\s*(?:x|×|por)\s*(\d{1,5}(?:[.,]\d{1,3})?)/);
+ if(m){
+  const l=decimal(m[1]),w=decimal(m[2]),area=l*w;
+  return l>0&&w>0&&area<=100000?{area:Math.round(area*100)/100,formula:m[1]+" × "+m[2]}:null;
+ }
+ m=t.match(/(?:^|\s)(\d{1,6}(?:[.,]\d{1,3})?)\s*(?:m\s*(?:2|²)|metros?\s*cuadrados?)/);
+ if(m){
+  const area=decimal(m[1]);return area>0&&area<=100000?{area:Math.round(area*100)/100,formula:"Superficie informada"}:null;
+ }
+ return null;
+}
+function surfaceCandidates(d){
+ const measured=d&&parseArea(d.measurements);
+ if(!measured||d.areaConfirmed!==true||d.areaSource!==d.measurements||!["build","land"].includes(d.areaPurpose))return [];
+ return d.lines.filter(line=>line&&line.qty==="").flatMap(line=>{
+  const type=d.areaPurpose;
+  if(type==="land"&&line.name==="Limpieza del terreno"){
+   return [{id:line.id,qty:measured.area,unit:"m²",formula:measured.formula,reason:"Superficie de terreno que confirmaste que se va a limpiar"}];
+  }
+  if(type==="build"&&line.name==="Replanteo de la obra"){
+   return [{id:line.id,qty:measured.area,unit:"m²",formula:measured.formula,reason:"Superficie construida confirmada; aplicable solo si este trabajo se presupuesta por m²"}];
+  }
+  return [];
+ });
+}
+function confirmArea(){
+ const d=get(),measured=d&&parseArea(d.measurements),purpose=$("ocAreaPurpose").value;
+ if(!d||!measured||!["build","land","other"].includes(purpose))return note("Indicá medidas válidas y elegí qué superficie representan.","error");
+ d.areaPurpose=purpose;d.areaConfirmed=true;d.areaSource=d.measurements;
+ flushSave();renderEstimates();note("Superficie confirmada. Revisá las propuestas antes de aplicarlas.","success");
+}
+function acceptQuantity(id){
+ const d=get(),proposal=d&&surfaceCandidates(d).find(x=>x.id===id);
+ if(!proposal)return;
+ const line=d.lines.find(x=>x.id===id);if(!line||line.qty!=="")return;
+ line.qty=String(proposal.qty);line.unit=proposal.unit;line.quantityOrigin="propuesta aceptada";
+ line.quantityReason=proposal.reason;flushSave();linesHTML();renderEstimates();
+}
+function acceptAllQuantities(){
+ const d=get();if(!d)return;
+ const proposals=surfaceCandidates(d);
+ if(!proposals.length)return;
+ if(!confirm("¿Aplicar las "+proposals.length+" cantidades propuestas? Revisalas después antes de emitir el presupuesto."))return;
+ for(const p of proposals){const x=d.lines.find(y=>y.id===p.id);if(x&&x.qty===""){x.qty=String(p.qty);x.unit=p.unit;x.quantityOrigin="propuesta aceptada";x.quantityReason=p.reason}}
+ flushSave();linesHTML();renderEstimates();note(proposals.length+" cantidades aplicadas. Podés corregirlas en cualquier momento.","success");
+}
+function renderEstimates(){
+ const d=get(),box=$("ocEstimates"),summary=$("ocSurfaceResult");
+ if(!d){box.classList.add("hidden");return}
+ const measured=parseArea(d.measurements);
+ box.classList.toggle("hidden",!measured);
+ if(!measured)return;
+ const valid=d.areaConfirmed&&d.areaSource===d.measurements;
+ summary.innerHTML='<strong>'+safe(measured.area.toLocaleString("es-AR"))+' m²</strong><span> Calculado a partir de '+safe(measured.formula)+'. No equivale automáticamente a superficie de terreno, muros o excavación.</span>';
+ $("ocAreaPurpose").value=valid?d.areaPurpose||"":"";
+ $("ocAreaConfirm").classList.toggle("hidden",!!valid);
+ $("ocAreaRecheck").classList.toggle("hidden",!valid);
+ const proposals=valid?surfaceCandidates(d):[];
+ $("ocAreaChoices").classList.toggle("hidden",!!valid);
+ const result=$("ocEstimateSuggestions");
+ if(!valid){result.innerHTML='<p class="oc-calc-muted">Confirmá primero qué área representan esas medidas. Todavía no se aplicó ninguna cantidad.</p>';return}
+ result.innerHTML=proposals.length?
+ '<div class="oc-calc-suggestions"><div class="oc-calc-title"><strong>Propuestas para revisar</strong><button type="button" id="ocAcceptAll" class="btn btn-secondary btn-sm">Aceptar todas ('+proposals.length+')</button></div>'+
+ proposals.map(x=>'<div class="oc-calc-suggestion"><div><strong>'+safe(d.lines.find(y=>y.id===x.id)?.name||"")+'</strong><small>'+safe(x.reason)+' · '+safe(x.formula)+'</small></div><span>'+safe(x.qty.toLocaleString("es-AR"))+' m²</span><button type="button" data-accept="'+safe(x.id)+'" class="btn btn-primary btn-sm">Aceptar</button></div>').join("")+
+ '</div>':'<p class="oc-calc-muted">No hay cantidades nuevas para completar automáticamente con esta superficie. Las que dependen de planos y medidas específicas quedan pendientes.</p>';
+ result.querySelectorAll("[data-accept]").forEach(btn=>btn.onclick=()=>acceptQuantity(btn.dataset.accept));
+ const all=$("ocAcceptAll");if(all)all.onclick=acceptAllQuantities;
+}
+function positive(v){return Number.isFinite(Number(v))&&String(v).trim()!==""&&Number(v)>0&&Number(v)<=100000?Number(v):NaN}
+function calcFromMeasures(unit,values){
+ const l=positive(values.length),w=positive(values.width),count=positive(values.count);
+ if(unit!=="m²"&&unit!=="m³")return {error:"Este cálculo requiere una unidad de m² o m³."};
+ if(!Number.isFinite(l)||!Number.isFinite(w)||!Number.isFinite(count))return {error:"Completá largo, ancho y número de elementos con datos positivos."};
+ let result=l*w*count;
+ if(unit==="m³"){
+  const h=positive(values.height);
+  if(!Number.isFinite(h))return {error:"Para calcular m³ también necesitás la profundidad o altura real."};
+  result*=h;
+ }
+ const deduction=values.deduction===""?0:Number(values.deduction);
+ if(!Number.isFinite(deduction)||deduction<0||deduction>=result)return {error:"La superficie o volumen a descontar no es válido."};
+ result-=deduction;
+ if(!Number.isFinite(result)||result<=0||result>999999999)return {error:"La cantidad calculada está fuera del rango admitido."};
+ return {value:Math.round(result*1000)/1000,explanation:unit==="m²"?"Largo × ancho × número de superficies":"Largo × ancho × profundidad × número de elementos"};
+}
+function calculateLine(row,line){
+ const form=row.querySelector("[data-calc-form]");if(!form)return;
+ const values={length:form.querySelector('[data-measure="length"]').value,width:form.querySelector('[data-measure="width"]').value,height:form.querySelector('[data-measure="height"]').value,count:form.querySelector('[data-measure="count"]').value,deduction:form.querySelector('[data-measure="deduction"]').value};
+ const result=calcFromMeasures(line.unit,values),message=row.querySelector("[data-calc-result]");
+ if(result.error){message.textContent=result.error;return}
+ message.textContent=result.value.toLocaleString("es-AR")+" "+line.unit+" · "+result.explanation;
+ const apply=row.querySelector("[data-calc-apply]");apply.disabled=false;
+ apply.onclick=()=>{
+   if(!confirm("¿Usar "+result.value.toLocaleString("es-AR")+" "+line.unit+" para «"+line.name+"»? Podés corregirlo después."))return;
+   line.qty=String(result.value);line.quantityOrigin="cálculo aceptado";
+   line.quantityReason=result.explanation+" con medidas ingresadas por el profesional";
+   flushSave();linesHTML();renderEstimates();
+ };
+}
+
 const drafts=()=>api.business().formDrafts||(api.business().formDrafts=[]);
 const get=()=>drafts().find(d=>d.id===activeId)||null;
 const empty=()=>({
- id:"B-"+uid(),workType:"",title:"",client:"",phone:"",location:"",measurements:"",floors:"",
+ id:"B-"+uid(),areaPurpose:"",areaConfirmed:false,areaSource:"",workType:"",title:"",client:"",phone:"",location:"",measurements:"",floors:"",
  scopeType:"Ambos",scope:"",payment:"",discountRate:"0",taxRate:"0",validity:"15",
  delivery:"",notes:"",lines:[],savedQuoteId:null,created:date(),updated:date()
 });
@@ -100,6 +222,7 @@ function fromLegacy(source){
  const a=source.answers||{};
  const result=empty();
  result.legacyId=source.id;
+ result.areaPurpose="";result.areaConfirmed=false;result.areaSource="";
  result.workType="";
  result.title=String(a.description||"");
  result.client=String(a.client||"");
@@ -217,7 +340,10 @@ function addLine(){
  rows[rows.length-1]?.querySelector('[data-key="name"]')?.focus();
 }
 function updateLine(line,key,value){
- if(!line)return;line[key]=String(value);scheduleSave();totalsUI();
+ if(!line)return;
+ line[key]=String(value);
+ if(key==="qty"){line.quantityOrigin="manual";line.quantityReason="";renderEstimates()}
+ scheduleSave();totalsUI();
 }
 function totalsUI(){
  const d=get();if(!d)return;
@@ -253,7 +379,7 @@ function fill(){
  const mapping={title:"ocFTitle",client:"ocFClient",phone:"ocFPhone",location:"ocFLocation",measurements:"ocFMeasures",floors:"ocFFloors",scopeType:"ocFScopeType",scope:"ocFScope",payment:"ocFPayment",discountRate:"ocFDiscount",taxRate:"ocFTax",validity:"ocFValidity",delivery:"ocFDelivery",notes:"ocFNotes"};
  for(const [field,id] of Object.entries(mapping))$(id).value=d[field]??"";
  renderTypes();
- linesHTML();$("ocFormSave").textContent=d.savedQuoteId?"Actualizar presupuesto":"Guardar presupuesto completo";
+ linesHTML();renderEstimates();$("ocFormSave").textContent=d.savedQuoteId?"Actualizar presupuesto":"Guardar presupuesto completo";
  $("ocFormActions").classList.toggle("hidden",!d.savedQuoteId);
 }
 function render(){
@@ -471,6 +597,10 @@ function init(bridge){
    const d=get();if(!d)return;
    d[key]=$(id).value;
    if(key==="title")showDrafts();
+   if(key==="measurements"){
+    d.areaConfirmed=false;d.areaSource="";d.areaPurpose="";
+    renderEstimates();
+   }
    scheduleSave();
    if(key==="taxRate"||key==="discountRate")totalsUI();
   };
