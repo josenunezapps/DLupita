@@ -137,8 +137,15 @@ APP.actions.fsCloseDrawer=()=>{state.drawer='';render()};
 APP.actions.fsEquipment=id=>{APP.actions.viewEq(id)};
 APP.actions.fsChooseOrder=id=>{state.selected=id;render()};
 APP.actions.fsFilterOrders=id=>{state.orderFilter=id;state.selected='';render()};
-APP.actions.fsMore=()=>{document.getElementById('modal-root').innerHTML='<button class="fsDrawerBackdrop" data-action="fsCloseMore" aria-label="Cerrar menú"></button><div class="fsDrawer" style="top:auto;bottom:0;width:100%;max-height:85vh;border-radius:24px 24px 0 0"><h2>Más secciones</h2>'+navs.filter(x=>['inicio','historial','informes'].includes(x[0])).map(x=>'<button class="fsBtn" style="width:100%;margin-top:10px" data-action="fsMorePage" data-id="'+x[0]+'">'+svg(x[2])+' '+x[1]+'</button>').join('')+button('Cerrar','fsCloseMore')+'</div>'};
-APP.actions.fsCloseMore=()=>{document.getElementById('modal-root').innerHTML=''};
+APP.actions.fsMore=()=>{
+ const root=document.getElementById('modal-root');
+ root.innerHTML='<button type="button" class="fsMoreMask" data-action="fsCloseMore" aria-label="Cerrar menú de secciones"></button>'+
+ '<section class="fsMoreSheet" role="dialog" aria-modal="true" aria-label="Más secciones"><div class="fsMoreHandle"></div><div class="fsMoreHeader"><div><span>MENÚ DE NAVEGACIÓN</span><h2>Más secciones</h2></div><button type="button" class="fsMoreX" data-action="fsCloseMore" aria-label="Cerrar">×</button></div>'+
+ '<div class="fsMoreItems">'+navs.filter(x=>['inicio','historial','informes'].includes(x[0])).map(x=>'<button type="button" class="fsMoreItem" data-action="fsMorePage" data-id="'+x[0]+'"><span class="fsMoreItemIcon">'+svg(x[2])+'</span><span class="fsMoreItemText"><strong>'+h(x[1])+'</strong><small>'+(x[0]==='inicio'?'Agenda y planificación del trabajo':x[0]==='historial'?'Servicios realizados y fichas técnicas':'Descargas, informes y respaldos')+'</small></span><span class="fsMoreArrow">›</span></button>').join('')+'</div></section>';
+ document.body.classList.add('fsMoreOpen');
+ const closeBtn=root.querySelector('.fsMoreX');if(closeBtn)closeBtn.focus();
+};
+APP.actions.fsCloseMore=()=>{document.getElementById('modal-root').innerHTML='';document.body.classList.remove('fsMoreOpen')};
 APP.actions.fsMorePage=id=>{APP.actions.fsCloseMore();goto(id)};
 APP.actions.fsNewOrder=id=>{
  if(!db.equipment.length){notify('Primero registrá un equipo.');APP.actions.newEq();return}
