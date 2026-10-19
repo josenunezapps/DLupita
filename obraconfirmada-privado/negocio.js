@@ -100,7 +100,7 @@ function cloneQuote(q){
  const fresh={...original,title:original.title+" (copia)",id:quoteId,created:now,updated:now,projectId:null,demo:false,history:[{number:1,at:now,snapshot:JSON.parse(JSON.stringify({...original,company:companySnapshot()}))}]};
  qs().unshift(fresh);
  if(!api.save()){qs().shift();return info("No se pudo duplicar el presupuesto.")}
- render();loadQuote(fresh.id);info("Se creó una copia independiente del presupuesto.");
+ render();if(window.OCAssistant?.editQuote)window.OCAssistant.editQuote(fresh);else loadQuote(fresh.id);info("Se creó una copia independiente del presupuesto.");
 }
 function removeQuote(q){
  if(!q)return;
@@ -113,7 +113,7 @@ function removeQuote(q){
 function renderQuotes(){
  const div=$("ocQuotes"),all=qs();
  div.innerHTML=all.length?'<div class="tablewrap"><table class="table"><thead><tr><th>Presupuesto</th><th>Cliente</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>'+all.map(q=>'<tr><td><b>'+safe(q.title)+'</b><small>'+safe(q.id)+(q.demo?" · EJEMPLO":"")+'</small></td><td>'+safe(q.client)+'</td><td>'+cash(totals(q.lines||[],q.taxRate,q.discountRate).price)+'</td><td>'+safe(q.status)+'</td><td><div class="oc-tools"><button type="button" data-q="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Editar</button><button type="button" data-clone="'+safe(q.id)+'" class="btn btn-secondary btn-sm">Duplicar</button><button type="button" data-delete="'+safe(q.id)+'" class="btn btn-danger btn-sm">Eliminar</button></div></td></tr>').join("")+'</tbody></table></div>':'<div class="empty">No hay presupuestos todavía.</div>';
- div.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>loadQuote(b.dataset.q));
+ div.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{const q=qs().find(x=>x.id===b.dataset.q);if(q&&window.OCAssistant?.editQuote)window.OCAssistant.editQuote(q);else loadQuote(b.dataset.q)});
  div.querySelectorAll("[data-clone]").forEach(b=>b.onclick=()=>cloneQuote(qs().find(q=>q.id===b.dataset.clone)));
  div.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>removeQuote(qs().find(q=>q.id===b.dataset.delete)));
 }
@@ -258,9 +258,10 @@ function installUI(){
 }
 function init(bridge){
 api=bridge;installUI();
+$("ocQuoteEditor").style.display="none";
 $("ocImportExamples").onclick=importExamples;
 $("ocRemoveExamples").onclick=removeExamples;
-$("ocNewQuote").onclick=()=>{newQuote();api.show("presupuestos")};
+$("ocNewQuote").onclick=()=>{if(window.OCAssistant?.begin)window.OCAssistant.begin();else{newQuote();api.show("presupuestos")}};
 $("ocAddLine").onclick=()=>{lines.push({id:id(),name:"",unit:"u",qty:1,cost:0,price:0});renderLines()};
 $("ocAddCatalog").onclick=()=>{const c=cat().find(x=>x.id===$("ocCatalogSelect").value);if(c){lines.push({id:id(),name:c.name,unit:c.unit,qty:1,cost:c.cost,price:c.price});renderLines()}};
 $("ocTax").oninput=renderSummary;$("ocDiscount").oninput=renderSummary;
@@ -386,5 +387,6 @@ async function shareQuote(q,channel){
  if(channel==="whatsapp")window.open("https://wa.me/?text="+encodeURIComponent("Te comparto el presupuesto "+q.id+" de "+q.title+". Adjunto el PDF descargado."),"_blank","noopener,noreferrer");
  if(channel==="gmail")window.open("https://mail.google.com/mail/?view=cm&fs=1&su="+encodeURIComponent("Presupuesto "+q.id+" - "+q.title)+"&body="+encodeURIComponent("Hola, adjunto el presupuesto en PDF.\n\nSaludos."),"_blank","noopener,noreferrer");
 }
-window.OCBusiness={init,render,renderProject,totals,createQuoteFromAgent,shareQuote,csvQuote,openQuote:loadQuote,downloadQuote:pdf};
+function convertById(id){const q=qs().find(x=>x.id===id);if(!q)return info("No encontramos ese presupuesto.");editing=id;convert()}
+window.OCBusiness={init,render,renderProject,totals,createQuoteFromAgent,shareQuote,csvQuote,openQuote:loadQuote,downloadQuote:pdf,convertById};
 })();
