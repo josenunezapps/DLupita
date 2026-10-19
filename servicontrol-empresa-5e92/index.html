@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#087b6d">
+<meta name="theme-color" content="#0a2f3c">
 <meta name="description" content="ServiControl Empresarial, gestión de mantenimientos y servicios técnicos.">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>ServiControl · Zenix AR</title>
@@ -883,6 +883,7 @@ body{background:var(--jb-bg)!important;color:var(--jb-ink)!important;font-family
 @media(max-width:900px){#root .jb-shell{display:block}#root .jb-rail{display:none}#root .jb-top{padding:0 18px;height:61px}#root .jb-dateChip{display:none}#root .jb-container{padding:23px 15px 95px}#root .jb-mobileNav{position:fixed;bottom:0;left:0;right:0;z-index:29;background:white;border-top:1px solid #e2e8ef;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));box-shadow:0 -5px 25px #1d3a4c12}#root .jb-mobileNav button{width:20%;min-width:0;border:0;background:transparent;display:grid;justify-items:center;gap:4px;color:#8ca0b2;font-size:10px;font-weight:750;padding:5px 0;border-radius:8px}#root .jb-mobileNav button.active{color:#2563e9;background:#eef4ff}#root .jb-mobileNav button svg{height:20px;width:20px}#root .jb-pagehead h1{font-size:25px}#root .jb-weekDays,#root .jb-calendarGrid{overflow:auto}#root .jb-overviewGrid{display:block}#root .jb-sideStack{margin-top:17px}#root .jb-dayHead{padding:10px 1px}#root .jb-calEvent{padding:7px 4px}}
 @media(max-width:610px){#root .jb-overview{gap:9px}#root .jb-metric{padding:15px}#root .jb-metric strong{font-size:25px}#root .jb-pagehead{display:block}#root .jb-headActions{margin-top:16px}#root .jb-headActions .jb-btn{flex:1}#root .jb-calendarGrid,#root .jb-weekDays{min-width:590px}#root .jb-calendarViewport{overflow-x:auto}#root .jb-agendaControls{padding:13px;gap:9px}#root .jb-monthLabel{font-size:13px}#root .jb-infoGrid{grid-template-columns:1fr}#root .jb-monthGrid{min-width:590px}#root .jb-cardTitle{padding:16px}#root .jb-jobDetail{padding:17px}#root .jb-table td,#root .jb-table th{padding:12px}#root .jb-workSplit{display:block}#root .jb-workSplit .jb-card{margin-bottom:15px}#root .jb-detailRow{grid-template-columns:100px 1fr}#root .jb-logo{padding:0}#root .jb-pagehead p{font-size:12px}}
 </style>
+<link rel="stylesheet" href="./jobber-agenda-v4.css?v=4">
 </head>
 <body>
 <div id="root"></div>
@@ -1348,5 +1349,6 @@ document.addEventListener('input',e=>{
 render();
 })();
 </script>
+<script src="./jobber-agenda-v4.js?v=4" defer></script>
 </body>
 </html>
