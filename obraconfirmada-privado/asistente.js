@@ -350,56 +350,84 @@ function init(bridge){
  .oc-form-delete{font-size:12px;color:#9c4a3e;background:none;border:0;text-decoration:underline;cursor:pointer;margin-left:auto;padding:10px}
  @media(max-width:1100px){.oc-form-linegrid{grid-template-columns:repeat(3,minmax(0,1fr))}.oc-form-name{grid-column:span 2}}
  @media(max-width:720px){.oc-form-page{padding:18px 14px}.oc-form-card{padding:16px 13px}.oc-form-grid{grid-template-columns:1fr}.oc-form-span2{grid-column:auto}.oc-form-linegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-form-name{grid-column:span 2}.oc-form-summary b{font-size:15px}.oc-form-head-actions{width:100%}.oc-form-head-actions .btn{flex:1}}
- `;
+ 
+.oc-worktype-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:8px 0 20px}
+.oc-type-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:7px;padding:15px;border:1px solid #dfe6ed;border-radius:13px;background:#f8fafb;color:#24384e;cursor:pointer;min-width:0}
+.oc-type-card strong{font-size:13px}.oc-type-card small{font-size:11px;color:#718293;line-height:1.4}.oc-type-card.is-active{border:2px solid #d98748;background:#fff6ed;padding:14px}
+.oc-type-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:#f1e3d6;color:#ba6b37;font-size:24px}
+.oc-form-basic{margin-top:8px}.oc-form-advanced{border-top:1px solid #e7ecef;margin-top:20px;padding-top:14px}.oc-form-advanced summary{cursor:pointer;color:#8b542e;font-size:12px;font-weight:750;padding:6px 0;list-style-position:inside}.oc-form-advanced>.oc-form-grid{margin-top:15px}
+.oc-simple-line{display:grid;grid-template-columns:minmax(160px,2fr) minmax(90px,.7fr) minmax(85px,.6fr) minmax(135px,1fr) minmax(115px,.85fr) 26px;align-items:center;gap:10px;background:#f9fafb;border:1px solid #e4ebf0;border-radius:12px;padding:12px 13px;margin:11px 0}
+.oc-simple-name{min-width:0}.oc-simple-name strong{display:block;overflow-wrap:anywhere;font-size:12px;color:#23364c}.oc-simple-name small{display:block;color:#7d8d9d;font-size:10px;margin-top:6px}.oc-simple-line .oc-form-field span{font-size:10px}.oc-simple-line .oc-form-field input{min-height:38px;padding:7px 8px}
+.oc-simple-amount{display:flex;flex-direction:column;gap:5px;text-align:right}.oc-simple-amount small{font-size:10px;color:#8492a0}.oc-simple-amount strong{font-size:12px}.oc-simple-remove{font-size:20px!important;padding:0 4px!important;text-decoration:none!important}
+.oc-simple-rowdetail{grid-column:1/-1;border-top:1px solid #e8edf2;padding-top:8px}.oc-simple-rowdetail summary{font-size:11px;color:#7c8691;cursor:pointer}.oc-simple-rowdetail .oc-form-grid{margin-top:12px}
+.oc-form-advanced-summary{margin-top:16px}.oc-form-summary .oc-form-grand small:last-child{margin-top:7px;opacity:.88}
+.oc-pick-overlay{position:fixed;inset:0;z-index:1600;background:rgba(19,34,50,.65);display:flex;align-items:center;justify-content:center;padding:16px}
+.oc-pick-overlay.hidden{display:none!important}
+.oc-pick-dialog{display:flex;flex-direction:column;gap:16px;width:min(670px,100%);max-height:min(91dvh,820px);background:#fff;padding:22px;border-radius:18px;box-shadow:0 28px 90px #14223644}
+.oc-pick-head{display:flex;justify-content:space-between;gap:15px}.oc-pick-head h2{margin:5px 0;font-size:22px}.oc-pick-head p{font-size:12px;color:#7b8996;margin:0}.oc-pick-close{border:0;background:#f0f3f6;border-radius:9px;width:38px;height:38px;flex:none;font-size:25px;color:#263a4c}
+.oc-pick-list{overflow-y:auto;min-height:100px;padding:0 5px 0 0}.oc-pick-group h4{position:sticky;top:0;background:#fff;font-size:12px;color:#b06b3c;padding:8px 0;margin:7px 0;border-bottom:1px solid #edf0f2}
+.oc-pick-choice{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:10px;cursor:pointer}.oc-pick-choice:hover{background:#f7f9fb}.oc-pick-choice input{accent-color:#d98748;width:18px;height:18px;flex:none}.oc-pick-choice strong{font-size:13px;display:block;color:#263a4c}.oc-pick-choice small{font-size:11px;color:#8594a0;display:block;margin-top:4px}
+.oc-pick-actions{display:flex;justify-content:flex-end;gap:9px;border-top:1px solid #edf0f3;padding-top:15px}
+@media(max-width:850px){.oc-worktype-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-simple-line{grid-template-columns:repeat(2,minmax(0,1fr))}.oc-simple-name{grid-column:1/-1}.oc-simple-amount{text-align:left}.oc-simple-rowdetail{grid-column:1/-1}.oc-simple-remove{grid-row:1;grid-column:2;justify-self:end}}
+@media(max-width:440px){.oc-pick-dialog{padding:14px}.oc-form-page{padding:15px}.oc-pick-actions{flex-wrap:wrap}.oc-pick-actions>.btn{flex:1}}
+`;
  const style=document.createElement("style");style.textContent=css;document.head.append(style);
  const nav=document.querySelector(".sidenav");
  const button=document.createElement("button");button.type="button";button.className="nav-item";button.dataset.nav="asistente";button.textContent="Crear presupuesto";button.onclick=()=>api.show("asistente");
  nav.insertBefore(button,nav.querySelector('[data-nav="presupuestos"]'));
  const markup=String.raw`
- <section class="page hidden" id="page-asistente">
- <div class="card oc-form-page">
-  <div class="oc-form-header"><div><span class="eyebrow">PRESUPUESTOS</span><h2>Nuevo presupuesto</h2><p>Completá los datos, agregá los trabajos y guardá tu presupuesto.</p></div>
-   <div class="oc-form-head-actions"><button type="button" id="ocFormNew" class="btn btn-primary">+ Nuevo presupuesto</button><button type="button" id="ocFormGoManual" class="btn btn-secondary">Abrir editor completo</button></div></div>
-  <div id="ocFormSaved" class="oc-form-saved hidden"><h3>Continuar presupuestos</h3><div id="ocFormSavedList" class="oc-form-draftlist"></div></div>
-  <div id="ocFormBlank" class="oc-form-empty"><strong>Prepará tu próximo presupuesto</strong><p>Todos los importes los indicás vos. Podés guardar y seguir más tarde.</p><button type="button" id="ocFormStart" class="btn btn-primary">Comenzar</button></div>
-  <form id="ocBudgetForm" class="hidden" novalidate>
-  <div class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">1</span><div><h3>Datos de la obra</h3><p>Información general y del cliente</p></div></div>
-   <div class="oc-form-grid">
-    <label class="oc-form-field"><span>Nombre del trabajo *</span><input id="ocFTitle" maxlength="100" required placeholder="Ej.: Construcción de vivienda"></label>
-    <label class="oc-form-field"><span>Cliente *</span><input id="ocFClient" maxlength="90" required placeholder="Nombre del cliente"></label>
-    <label class="oc-form-field"><span>Teléfono del cliente (opcional)</span><input id="ocFPhone" maxlength="30" type="tel" placeholder="Número de contacto"></label>
-    <label class="oc-form-field"><span>Localidad</span><input id="ocFLocation" maxlength="100" placeholder="Lugar de la obra"></label>
-    <label class="oc-form-field"><span>Medidas o superficie (dato informativo)</span><input id="ocFMeasures" maxlength="120" placeholder="Ej.: 23 × 15 m o 140 m²"></label>
-    <label class="oc-form-field"><span>Cantidad de plantas</span><input id="ocFFloors" type="number" min="1" max="100" step="1" placeholder="Ej.: 1"></label>
-    <label class="oc-form-field"><span>¿Qué incluye?</span><select id="ocFScopeType"><option>Ambos</option><option>Solo materiales</option><option>Solo mano de obra</option></select></label>
-    <label class="oc-form-field oc-form-span2"><span>Descripción y alcance</span><textarea id="ocFScope" maxlength="2500" rows="3" placeholder="Describí los trabajos incluidos..."></textarea></label>
+<section class="page hidden" id="page-asistente">
+<div class="card oc-form-page">
+ <div class="oc-form-header"><div><span class="eyebrow">PRESUPUESTOS</span><h2>Preparar presupuesto</h2><p>Elegí los trabajos, completá los importes y guardá. Podés dejarlo a medias y continuar después.</p></div>
+ <div class="oc-form-head-actions"><button type="button" id="ocFormNew" class="btn btn-primary">+ Nuevo presupuesto</button><button type="button" id="ocFormGoQuotes" class="btn btn-secondary">Mis presupuestos</button></div></div>
+ <section id="ocFormSaved" class="oc-form-saved hidden"><h3>Tus presupuestos en preparación</h3><div id="ocFormSavedList" class="oc-form-draftlist"></div></section>
+ <div id="ocFormBlank" class="oc-form-empty"><strong>Empezá en segundos</strong><p>Elegí el tipo de trabajo y los conceptos. No es necesario cargar todos los datos para guardar un borrador.</p><button type="button" id="ocFormStart" class="btn btn-primary">Crear presupuesto</button></div>
+ <form id="ocBudgetForm" class="hidden" novalidate>
+  <section class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">1</span><div><h3>¿Qué trabajo vas a presupuestar?</h3><p>Elegí una opción para ver trabajos habituales. Después podés agregar cualquiera.</p></div></div><div id="ocWorkTypeCards" class="oc-worktype-grid"></div>
+   <div class="oc-form-grid oc-form-basic">
+    <label class="oc-form-field"><span>Nombre de la obra *</span><input id="ocFTitle" maxlength="100" placeholder="Ej.: Construcción de vivienda"></label>
+    <label class="oc-form-field"><span>Cliente *</span><input id="ocFClient" maxlength="90" placeholder="Nombre del cliente"></label>
+    <label class="oc-form-field"><span>Medidas o superficie (opcional)</span><input id="ocFMeasures" maxlength="120" placeholder="Ej.: 23 × 15 metros"></label>
+    <label class="oc-form-field"><span>Localidad (opcional)</span><input id="ocFLocation" maxlength="100" placeholder="Ciudad o localidad"></label>
    </div>
-  </div>
-  <div class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">2</span><div><h3>Materiales y trabajos</h3><p>Agregá tantos conceptos como necesites. Las cantidades y precios no se completan automáticamente.</p></div></div>
-   <div class="oc-form-tools"><button type="button" id="ocFormAddLine" class="btn btn-secondary">+ Agregar concepto</button><select id="ocFormCatalog" aria-label="Seleccionar un concepto del catálogo"></select><button type="button" id="ocFormAddCatalog" class="btn btn-secondary">Agregar del catálogo</button></div>
+   <details class="oc-form-advanced"><summary>Más datos de la obra (opcional)</summary><div class="oc-form-grid">
+    <label class="oc-form-field"><span>Teléfono</span><input id="ocFPhone" maxlength="30" type="tel" placeholder="Contacto"></label>
+    <label class="oc-form-field"><span>Cantidad de plantas</span><input id="ocFFloors" type="number" min="1" max="100" step="1" placeholder="Ej.: 1"></label>
+    <label class="oc-form-field"><span>El presupuesto incluye</span><select id="ocFScopeType"><option>Ambos</option><option>Solo materiales</option><option>Solo mano de obra</option></select></label>
+    <label class="oc-form-field oc-form-span2"><span>Descripción de los trabajos</span><textarea id="ocFScope" maxlength="2500" rows="2" placeholder="Detalle adicional"></textarea></label>
+   </div></details>
+  </section>
+  <section class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">2</span><div><h3>Seleccioná materiales y trabajos</h3><p>Podés elegir varios de una sola vez o escribir uno personalizado.</p></div></div>
+   <div class="oc-form-tools"><button type="button" id="ocFormPick" class="btn btn-primary">+ Seleccionar trabajos</button><button type="button" id="ocFormAddLine" class="btn btn-secondary">+ Agregar personalizado</button></div>
    <div id="ocFormLines"></div>
    <datalist id="ocUnitOptions"><option value="m²"></option><option value="m³"></option><option value="ml"></option><option value="u"></option><option value="gl"></option><option value="jornal"></option><option value="hora"></option></datalist>
-  </div>
-  <div class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">3</span><div><h3>Condiciones del presupuesto</h3><p>Elegí cómo se presentará al cliente</p></div></div>
-   <div class="oc-form-grid">
-    <label class="oc-form-field oc-form-span2"><span>Condiciones de pago</span><input id="ocFPayment" maxlength="180" placeholder="Ej.: 50 % de anticipo y saldo al finalizar"></label>
-    <label class="oc-form-field"><span>Descuento (%)</span><input id="ocFDiscount" type="number" min="0" max="100" step="any"></label>
-    <label class="oc-form-field"><span>Impuestos (%)</span><input id="ocFTax" type="number" min="0" max="100" step="any"></label>
-    <label class="oc-form-field"><span>Validez del presupuesto (días)</span><input id="ocFValidity" type="number" min="1" max="365" step="1"></label>
-    <label class="oc-form-field"><span>Plazo de ejecución</span><input id="ocFDelivery" maxlength="120" placeholder="Si está definido"></label>
-    <label class="oc-form-field oc-form-span2"><span>Observaciones para el cliente</span><textarea id="ocFNotes" maxlength="1200" rows="3" placeholder="Condiciones, exclusiones, aclaraciones..."></textarea></label>
-   </div>
-  </div>
-  <div class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">4</span><div><h3>Resumen</h3><p>Los precios internos no aparecen en el PDF del cliente</p></div></div>
+  </section>
+  <section class="oc-form-card"><div class="oc-form-cardhead"><span class="oc-form-num">3</span><div><h3>Total del presupuesto</h3><p>Se actualiza a medida que completás cantidades y precios.</p></div></div>
    <div class="oc-form-summary">
-    <div><small>Subtotal</small><b id="ocFormSubtotal">$0</b></div>
-    <div><small>Descuento</small><b id="ocFormDiscountTotal">$0</b></div>
-    <div><small>Impuestos</small><b id="ocFormTaxTotal">$0</b></div>
-    <div class="oc-form-grand"><small>Total al cliente</small><b id="ocFormTotal">$0</b></div>
-    <div><small>Ganancia bruta (uso interno)</small><b id="ocFormProfit">Pendiente</b></div>
+    <div><small>Subtotal calculado</small><b id="ocFormSubtotal">$0</b></div>
+    <div class="oc-form-grand"><small>Total al cliente</small><b id="ocFormTotal">$0</b><small id="ocFormTotalCaption">Puede haber importes pendientes</small></div>
    </div>
    <p id="ocFormPending" class="oc-form-status"></p>
-   <div class="oc-form-actions"><button id="ocFormSave" type="submit" class="btn btn-primary">Guardar en Mis presupuestos</button><span class="subtle">Tus avances se guardan automáticamente.</span></div>
+   <details class="oc-form-advanced" id="ocFormAdvanced">
+    <summary>Condiciones, impuestos y costos internos (opcional)</summary>
+    <div class="oc-form-grid">
+     <label class="oc-form-field oc-form-span2"><span>Forma de pago</span><input id="ocFPayment" maxlength="180" placeholder="Ej.: anticipo y saldo al terminar"></label>
+     <label class="oc-form-field"><span>Descuento (%)</span><input id="ocFDiscount" type="number" min="0" max="100" step="any"></label>
+     <label class="oc-form-field"><span>Impuestos (%)</span><input id="ocFTax" type="number" min="0" max="100" step="any"></label>
+     <label class="oc-form-field"><span>Validez (días)</span><input id="ocFValidity" type="number" min="1" max="365" step="1"></label>
+     <label class="oc-form-field"><span>Plazo de ejecución</span><input id="ocFDelivery" maxlength="120" placeholder="Si está definido"></label>
+     <label class="oc-form-field oc-form-span2"><span>Observaciones para el cliente</span><textarea id="ocFNotes" maxlength="1200" rows="2" placeholder="Aclaraciones o exclusiones"></textarea></label>
+    </div>
+    <div class="oc-form-summary oc-form-advanced-summary">
+     <div><small>Descuento</small><b id="ocFormDiscountTotal">$0</b></div><div><small>Impuestos</small><b id="ocFormTaxTotal">$0</b></div>
+     <div><small>Ganancia bruta (solo empresario)</small><b id="ocFormProfit">Pendiente</b></div>
+    </div>
+   </details>
+   <div class="oc-form-actions">
+    <button id="ocFormSaveDraft" type="button" class="btn btn-secondary">Guardar borrador</button>
+    <button id="ocFormSave" type="submit" class="btn btn-primary">Guardar presupuesto completo</button>
+   </div>
+   <p class="subtle">Podés guardar incompleto y seguir otro día. El PDF se habilita cuando el presupuesto está completo.</p>
    <p id="ocFormNotice" class="oc-form-status" role="status" aria-live="polite"></p>
    <div id="ocFormActions" class="oc-form-actions oc-form-actions-footer hidden">
     <button id="ocFormPdf" class="btn btn-secondary" type="button">Descargar PDF</button>
@@ -407,13 +435,21 @@ function init(bridge){
     <button id="ocFormShare" class="btn btn-secondary" type="button">Compartir PDF</button>
     <button id="ocFormWa" class="btn btn-secondary" type="button">WhatsApp</button>
     <button id="ocFormGmail" class="btn btn-secondary" type="button">Gmail</button>
-    <button id="ocFormOpen" class="btn btn-secondary" type="button">Editar en Mis presupuestos</button>
+    <button id="ocFormOpen" class="btn btn-secondary" type="button">Convertir en obra</button>
    </div>
-  </div>
-  </form>
-  <div class="oc-form-actions"><button type="button" id="ocFormDelete" class="oc-form-delete hidden">Eliminar este formulario</button></div>
- </div></section>
- `;
+  </section>
+ </form>
+ <div class="oc-form-actions"><button type="button" id="ocFormDelete" class="oc-form-delete hidden">Eliminar este borrador</button></div>
+</div>
+<div id="ocPickerOverlay" class="oc-pick-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="ocPickerTitle">
+ <div class="oc-pick-dialog">
+  <div class="oc-pick-head"><div><span class="eyebrow">TRABAJOS</span><h2 id="ocPickerTitle">Seleccionar trabajos</h2><p>Marcá todos los que quieras. Nada se agrega hasta confirmar.</p></div><button type="button" id="ocPickerClose" class="oc-pick-close" aria-label="Cerrar selección">×</button></div>
+  <label class="oc-form-field"><span>Buscar</span><input id="ocPickerSearch" type="search" autocomplete="off" placeholder="Ej.: mampostería, pintura, electricidad"></label>
+  <div id="ocPickerList" class="oc-pick-list"></div>
+  <div class="oc-pick-actions"><button type="button" id="ocPickerCancel" class="btn btn-secondary">Cancelar</button><button type="button" id="ocPickerConfirm" class="btn btn-primary" disabled>Agregar seleccionados (0)</button></div>
+ </div>
+</div>
+</section>`;
  const tmp=document.createElement("div");tmp.innerHTML=markup;
  const config=$("page-config");config.parentNode.insertBefore(tmp.firstElementChild,config);
  const keys={ocFTitle:"title",ocFClient:"client",ocFPhone:"phone",ocFLocation:"location",ocFMeasures:"measurements",ocFFloors:"floors",ocFScopeType:"scopeType",ocFScope:"scope",ocFPayment:"payment",ocFDiscount:"discountRate",ocFTax:"taxRate",ocFValidity:"validity",ocFDelivery:"delivery",ocFNotes:"notes"};
