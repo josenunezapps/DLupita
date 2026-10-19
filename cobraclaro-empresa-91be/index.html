@@ -359,6 +359,12 @@ tbody tr:hover{box-shadow:inset 0 0 0 999px rgba(79,107,255,.028)}
   .accountFoot .btn{flex:1 1 100%}
 }
 </style>
+<style>
+.floatMask{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(12,22,39,.58);backdrop-filter:blur(6px)}
+.rowActions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.accountModal{max-width:min(940px,100%);width:100%;max-height:calc(100vh - 36px);overflow:auto}
+@media(max-width:650px){.floatMask{padding:8px}.accountModal{max-height:calc(100vh - 16px)}}
+</style>
 </head>
 <body>
 <div id="root"></div>
