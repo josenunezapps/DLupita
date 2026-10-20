@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070511"><meta name="robots" content="noindex,nofollow,noarchive">
+<title>Zenix AR — Nova, tu asistente digital | Concepto interactivo</title>
+<meta name="description" content="Demostración interactiva de Zenix AR con una mascota robot 3D y acciones vinculadas a servicios digitales.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070511;--purple:#9c55ff;--violet:#c19aff;--cyan:#8de9fb;--text:#fcfbff;--muted:#aba9c1;--line:rgba(204,180,255,.15)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#070511;color:var(--text);font-family:'DM Sans',Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button,a{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}button:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+::selection{background:#a15aff;color:#fff}
+#backdrop{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 40% 47% at 71% 35%,#38135e5e 0,transparent 100%),radial-gradient(ellipse 45% 30% at 80% 70%,#17245179 0,transparent 100%),linear-gradient(145deg,#0b0717,#070511 50%,#050813)}
+#backdrop:after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(190,153,242,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(190,153,242,.025) 1px,transparent 1px);background-size:55px 55px;mask-image:radial-gradient(ellipse at 68% 45%,#000,transparent 65%)}
+#backdrop:before{content:'';position:absolute;left:55%;top:21%;width:31vw;height:31vw;background:radial-gradient(circle,#9e57ff35,transparent 68%);filter:blur(35px)}
+#robotStage{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}#robot3d{width:100%;height:100%;display:block}
+#robotFallback{position:absolute;width:340px;max-width:80vw;right:13%;top:22%;opacity:0;transition:opacity .5s;pointer-events:none}#robotFallback.show{opacity:1}
+#robotFallback .rf-head{height:175px;border:11px solid #d3d8ed;border-radius:72px;box-shadow:inset 0 0 22px #e2e4ff8c,0 14px 60px #a152fc55;background:linear-gradient(130deg,#05030e,#1a0d33);position:relative}
+#robotFallback .rf-head:before,#robotFallback .rf-head:after{content:'';position:absolute;top:44px;width:44px;height:28px;border-radius:50% 50% 0 0;border-top:9px solid #c38aff;filter:drop-shadow(0 0 10px #ae5fff)}#robotFallback .rf-head:before{left:55px}#robotFallback .rf-head:after{right:55px}
+#robotFallback .rf-mouth{position:absolute;width:25px;height:14px;border-bottom:5px solid #ca9bff;left:50%;bottom:25px;transform:translateX(-50%);border-radius:50%}
+#robotFallback .rf-body{height:167px;width:193px;border-radius:75px 75px 55px 55px;background:linear-gradient(135deg,#fbfaff,#a0aaca);border:8px solid #cbd1e5;margin:0 auto;display:grid;place-items:center;box-shadow:0 0 75px #8d64e444}.rf-body i{width:75px;height:75px;border:9px solid #6f528f;border-radius:20px;background:#0d0c20;color:#bd86ff;font:900 48px 'Space Grotesk';text-align:center;line-height:55px;font-style:normal;text-shadow:0 0 18px #9951ff}
+.top{position:fixed;left:0;right:0;top:0;z-index:40;height:84px;padding:0 clamp(20px,5vw,84px);display:flex;align-items:center;justify-content:space-between;gap:16px;background:linear-gradient(to bottom,#080612db,#08061242,transparent);backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:center;gap:13px}.brandmark{width:47px;height:47px;display:grid;place-items:center;border-radius:15px;background:radial-gradient(circle at 30% 25%,#7845c8,#280c56 70%);border:1px solid #935af8;box-shadow:0 0 16px #8d4fff80,inset 0 0 8px #9c66f7b0;color:#fff;font:800 28px 'Space Grotesk';transform:rotate(-5deg)}.brand-copy b{font-size:27px;letter-spacing:-.08em;font-weight:800}.brand-copy b em{color:#ae7cff;font-style:normal}.brand-copy small{display:block;margin-top:-2px;color:#aca2c5;font-size:9px;letter-spacing:.31em;text-transform:uppercase}
+.nav{display:flex;align-items:center;gap:38px}.nav a{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d4cce2;font-weight:700}.nav a:hover{color:white}.nav a.cta-link{color:#fff;border-radius:999px;border:1px solid #bf8cff80;background:#854acb29;padding:14px 21px}
+.menu-btn{display:none;border:1px solid var(--line);border-radius:13px;width:45px;height:45px;color:white;background:#ffffff11;font-size:22px}
+.mobile-menu{position:fixed;z-index:39;left:0;right:0;top:74px;padding:14px 20px 25px;background:#080612f7;border:1px solid var(--line);display:none;flex-direction:column}.mobile-menu a{padding:14px 5px;font-size:18px;border-bottom:1px solid var(--line)}.mobile-menu.open{display:flex}
+.progress{position:fixed;top:0;left:0;z-index:50;width:100%;height:2px;background:linear-gradient(90deg,var(--purple),var(--cyan));transform:scaleX(0);transform-origin:left}
+main{position:relative;z-index:5;pointer-events:none}main>*{pointer-events:none}main a,main button{pointer-events:auto}
+.hero{min-height:100svh;display:flex;align-items:center;padding:142px clamp(22px,7vw,116px) 78px;position:relative}
+.hero-content{width:min(1280px,100%);margin:auto}.hero-copy{max-width:min(580px,49vw)}.eyebrow{font-size:11px;letter-spacing:.19em;text-transform:uppercase;color:#d4b9ff;font-weight:800}.eyebrow:before{content:'';width:7px;height:7px;border-radius:50%;background:#c68dff;box-shadow:0 0 15px #ad65fc;display:inline-block;margin-right:13px}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif}h1{font-size:clamp(62px,7.7vw,119px);font-weight:700;letter-spacing:-.088em;line-height:.92;margin:27px 0 28px}h1 span{display:block}h1 .gradient,.grad{background:linear-gradient(105deg,#fcf9ff,#dcbbff 38%,#a76eff 80%);background-clip:text;-webkit-background-clip:text;color:transparent}
+.hero-copy p{font-size:clamp(16px,1.55vw,19px);line-height:1.76;color:#bbb5cf;margin:0;max-width:500px}.hero-copy strong{color:#faf5ff}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:13px;min-height:55px;padding:0 23px;border-radius:14px;white-space:nowrap;font-size:13px;font-weight:800;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-3px)}.btn.primary{background:linear-gradient(110deg,#a85cff,#7942e5);box-shadow:0 12px 35px #7234d94f;color:#fff;border:1px solid #c39dff99}.btn.secondary{border:1px solid #e5d6ff4d;background:#ffffff08;color:#eee5ff}
+.hero-chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:43px}.hero-chips span{border:1px solid rgba(181,148,230,.25);border-radius:99px;padding:9px 12px;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#bbb6d0;background:#ffffff04}
+.robot-label{position:absolute;right:5%;bottom:12%;z-index:7;border:1px solid #c99bff47;border-radius:16px;background:#0f0b22cc;backdrop-filter:blur(8px);padding:13px 17px;display:flex;align-items:center;gap:11px}.robot-label .dot{width:10px;height:10px;background:#cb90ff;box-shadow:0 0 19px #bb66ff;border-radius:50%}.robot-label strong{display:block;font-size:12px}.robot-label small{display:block;color:#aeadc5;font-size:10px;letter-spacing:.1em;margin-top:3px}
+.scroll-hint{position:absolute;bottom:32px;left:7%;color:#9287ad;font-size:10px;letter-spacing:.17em;text-transform:uppercase}
+.marquee{overflow:hidden;position:relative;border-top:1px solid #ffffff17;border-bottom:1px solid #ffffff17;background:#0b081bd9;padding:20px 0}.marquee-track{width:max-content;display:flex;gap:38px;animation:flow 35s linear infinite}.marquee-track span{font-size:12px;text-transform:uppercase;letter-spacing:.24em;font-weight:700;color:#cbb8ee}.marquee-track em{font-style:normal;color:#a75cf8}@keyframes flow{to{transform:translateX(-50%)}}
+.section{min-height:100svh;padding:138px clamp(22px,7vw,116px) 125px;position:relative}.section .inner{max-width:1260px;margin:auto}.kicker{color:#d7b9ff;text-transform:uppercase;letter-spacing:.22em;font-size:11px;font-weight:800;margin-bottom:23px}.section h2{font-size:clamp(48px,6.2vw,91px);line-height:.98;letter-spacing:-.07em;font-weight:600;margin:0 0 25px}.section .lede{max-width:500px;color:#b2aac8;font-size:17px;line-height:1.75}
+.service-area{max-width:680px}.service-tabs{display:grid;gap:10px;margin-top:33px}.service-button{display:flex;align-items:center;text-align:left;gap:17px;padding:17px 21px;min-height:85px;width:100%;border-radius:18px;background:#141026bb;border:1px solid #ffffff17;color:#fff;transition:.25s;backdrop-filter:blur(15px)}.service-button:hover{border-color:#b47cffaa;background:#201233dd}.service-button[aria-pressed=true]{border-color:#c089ffba;background:linear-gradient(110deg,#351950bb,#130f25d9);box-shadow:inset 4px 0 #a563ff,0 0 34px #a65dff19}.service-ico{width:48px;height:48px;display:grid;place-items:center;font-size:25px;border-radius:14px;background:#ad76ff25;border:1px solid #ae85ed52;color:#ddb9ff;flex:none}.service-button strong{font-size:18px;display:block;letter-spacing:-.03em}.service-button small{font-size:12px;display:block;margin-top:5px;color:#aaa2c4}.service-button .arrow{font-size:26px;color:#c994fb;margin-left:auto}
+.preview{margin-top:24px;padding:25px;border-radius:20px;border:1px solid #b77fff54;background:linear-gradient(145deg,#27173cdd,#0c1124df);max-width:680px;min-height:195px;backdrop-filter:blur(15px);box-shadow:0 20px 75px #0006}.preview .topline{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#d4b0ff;display:flex;justify-content:space-between;gap:16px}.preview h3{font-size:30px;letter-spacing:-.05em;margin:19px 0 7px}.preview p{font-size:14px;color:#b7b4cc;line-height:1.6;max-width:530px;margin:0}.preview .example{margin-top:20px;display:inline-block;padding:11px 14px;background:#9450de32;border:1px solid #c28bfa72;border-radius:9px;font-size:12px;color:#e0c8ff}
+.section-about{min-height:75svh}.about-copy{max-width:710px}.about-copy p{font-size:18px;line-height:1.8;color:#bcb6cf;max-width:580px}.about-stats{display:flex;gap:50px;margin-top:38px}.about-stats strong{font-family:'Space Grotesk';font-size:36px;display:block}.about-stats small{font-size:11px;color:#a8a0c0;text-transform:uppercase;letter-spacing:.14em}
+.contact{min-height:88svh;display:flex;align-items:center}.contact-inner{max-width:1260px;width:100%;margin:auto}.contact-copy{max-width:650px}.contact h2{font-size:clamp(62px,8.5vw,125px)}.contact .lede{margin-bottom:28px}.contact .btn{font-size:14px}
+footer{position:relative;z-index:10;background:#080612b0;border-top:1px solid #ffffff19;padding:30px clamp(22px,7vw,116px);display:flex;align-items:center;gap:24px;justify-content:space-between;flex-wrap:wrap;color:#9d95b3;font-size:12px}footer a{color:#c0a0ec}footer a:hover{color:#fff}.demo{position:fixed;z-index:30;bottom:12px;left:12px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#c9b2ed;background:#0f0a20bb;padding:8px 10px;border:1px solid #c39dff42;border-radius:8px;pointer-events:none}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:1000px){.nav{gap:19px}.hero-copy{max-width:49vw}.service-area{max-width:56vw}.section h2{font-size:clamp(43px,6vw,78px)}}
+@media(max-width:760px){.top{height:70px;padding:0 17px}.brandmark{width:39px;height:39px;font-size:24px}.brand-copy b{font-size:23px}.brand-copy small{font-size:8px}.nav{display:none}.menu-btn{display:block}.hero{min-height:1120px;padding:590px 20px 80px;align-items:flex-start}.hero-content{margin:0}.hero-copy{max-width:100%}.eyebrow{font-size:10px}h1{font-size:clamp(56px,12vw,85px);margin:19px 0 18px}.hero-copy p{max-width:none;font-size:15px}.actions{margin-top:22px}.btn{min-height:50px;padding:0 16px;font-size:12px}.hero-chips{margin-top:25px}.hero-chips span{font-size:9px;padding:8px 9px}.robot-label{top:495px;right:16px;bottom:auto;padding:9px 12px}.scroll-hint{display:none}.marquee{padding:15px 0}.marquee-track span{font-size:10px}.section{min-height:auto;padding:115px 18px 125px}.section h2{font-size:clamp(48px,10vw,65px)}.section .lede{font-size:15px}.service-area{max-width:100%}.service-tabs{margin-top:30px}.service-button{min-height:78px;padding:13px}.service-button strong{font-size:16px}.service-button small{font-size:11px}.service-ico{width:42px;height:42px;font-size:21px}.preview{padding:19px}.preview h3{font-size:24px}.section-about{padding-top:90px;padding-bottom:120px}.about-stats{gap:20px}.about-stats strong{font-size:28px}.contact{padding-top:145px;min-height:680px}.contact h2{font-size:clamp(55px,12vw,80px)}.contact-copy{max-width:100%}#robotFallback{left:50%;right:auto;top:140px;transform:translateX(-50%);width:255px}#robotFallback .rf-head{height:134px;border-radius:58px}#robotFallback .rf-body{width:155px;height:135px}.demo{bottom:7px;left:7px;font-size:8px;padding:6px 8px}}
+@media(max-width:375px){.hero{padding-top:540px;min-height:1070px}h1{font-size:52px}.actions .btn{font-size:11px;padding:0 13px}.robot-label{top:458px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="backdrop"></div>
+<div id="robotStage"><canvas id="robot3d" aria-label="Robot 3D interactivo de Zenix AR"></canvas><div id="robotFallback" aria-hidden="true"><div class="rf-head"><div class="rf-mouth"></div></div><div class="rf-body"><i>Z</i></div></div></div>
+<div class="progress" id="progress"></div>
+<header class="top"><a class="brand" href="#inicio" aria-label="Zenix AR, ir al inicio"><span class="brandmark">Z</span><span class="brand-copy"><b>zenix <em>AR</em></b><small>Soluciones digitales</small></span></a><nav class="nav" aria-label="Navegación principal"><a href="#servicios">Servicios</a><a href="#nosotros">Nosotros</a><a href="#contacto" class="cta-link">Hablemos ↗</a></nav><button id="menuBtn" class="menu-btn" type="button" aria-label="Abrir menú" aria-expanded="false">☰</button></header>
+<nav id="mobileMenu" class="mobile-menu" aria-label="Menú móvil"><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a></nav>
+<main>
+<section class="hero" id="inicio" data-scene="home"><div class="hero-content"><div class="hero-copy reveal"><div class="eyebrow">Zenix AR presenta · Experiencia interactiva</div><h1>Tu negocio.<span class="gradient">Otra dimensión.</span></h1><p>Una presencia digital que no pasa desapercibida. <strong>Diseñamos webs, aplicaciones y herramientas</strong> para que tu negocio se vea profesional y funcione mejor.</p><div class="actions"><a class="btn primary" href="#servicios">Conocé lo que hacemos ↗</a><a class="btn secondary" href="#contacto">Hablemos</a></div><div class="hero-chips"><span>Diseño web</span><span>Apps para negocios</span><span>Soluciones a medida</span></div></div></div><div class="robot-label"><span class="dot"></span><span><strong id="robotState">ZENO · Listo para ayudarte</strong><small id="robotAction">Te está dando la bienvenida</small></span></div><div class="scroll-hint">Deslizá para descubrir ↓</div></section>
+<div class="marquee" aria-hidden="true"><div class="marquee-track"><span>PÁGINAS WEB <em>✦</em> APLICACIONES WEB <em>✦</em> CATÁLOGOS DIGITALES <em>✦</em> SOLUCIONES A MEDIDA <em>✦</em></span><span>PÁGINAS WEB <em>✦</em> APLICACIONES WEB <em>✦</em> CATÁLOGOS DIGITALES <em>✦</em> SOLUCIONES A MEDIDA <em>✦</em></span></div></div>
+<section class="section" id="servicios" data-scene="services"><div class="inner"><div class="service-area reveal"><div class="kicker">01 / Elegí qué querés crear</div><h2>Un robot.<br>Una <span class="grad">misión.</span></h2><p class="lede">Tocá una función y mirá cómo Zeno cambia su expresión, mueve los brazos y activa el panel para presentarte ese servicio.</p><div class="service-tabs" role="group" aria-label="Servicios interactivos"><button class="service-button" type="button" data-mode="web" aria-pressed="true"><span class="service-ico">▣</span><span><strong>Páginas web</strong><small>Tu vidriera digital, disponible siempre</small></span><span class="arrow">↗</span></button><button class="service-button" type="button" data-mode="apps" aria-pressed="false"><span class="service-ico">▦</span><span><strong>Aplicaciones web</strong><small>Herramientas para gestionar tu negocio</small></span><span class="arrow">↗</span></button><button class="service-button" type="button" data-mode="automation" aria-pressed="false"><span class="service-ico">✧</span><span><strong>Soluciones a medida</strong><small>Catálogos, formularios e integraciones</small></span><span class="arrow">↗</span></button></div><div class="preview" aria-live="polite"><div class="topline"><span id="previewNum">01 / SERVICIO SELECCIONADO</span><span>DEMO VISUAL ↗</span></div><h3 id="previewTitle">Páginas que sorprenden.</h3><p id="previewDescription">Un sitio atractivo, rápido y adaptado al celular. Mostrá tus servicios y facilitá que tus clientes te encuentren.</p><span class="example" id="previewExample">Zeno está presentando una página web</span></div></div></div></section>
+<section class="section section-about" id="nosotros" data-scene="about"><div class="inner"><div class="about-copy reveal"><div class="kicker">02 / El estudio</div><h2>Ideas humanas.<br><span class="grad">Tecnología útil.</span></h2><p>Somos Zenix AR. Desde Ushuaia desarrollamos soluciones digitales pensadas para comercios y emprendedores que quieren dar el próximo paso.</p><p>El robot es nuestra mascota conceptual para esta experiencia: no es un asistente de IA real. Su misión acá es mostrarte de una forma distinta lo que hacemos.</p><div class="about-stats"><div><strong>100%</strong><small>Diseño a medida</small></div><div><strong>24/7</strong><small>Presencia online</small></div></div></div></div></section>
+<section class="section contact" id="contacto" data-scene="contact"><div class="contact-inner"><div class="contact-copy reveal"><div class="kicker">03 / Tu próximo proyecto</div><h2>¿Creamos algo <span class="grad">increíble?</span></h2><p class="lede">Zeno ya está saludándote. Contanos tu idea y vemos cómo hacerla realidad.</p><a class="btn primary" href="https://wa.me/5492901471353?text=Hola%20Zenix%20AR%2C%20vi%20la%20demo%20del%20robot%203D%20y%20quiero%20hacer%20una%20consulta" target="_blank" rel="noopener">Escribir por WhatsApp ↗</a></div></div></section>
+</main>
+<footer><span>© 2026 Zenix AR · Ushuaia, Argentina</span><a href="https://zenix.com.ar" target="_blank" rel="noopener">Ir a la web oficial ↗</a><span>Diseñamos experiencias digitales.</span></footer>
+<div class="demo">Vista previa · Diseño experimental</div>
+<script>
+(()=>{const menu=document.getElementById('mobileMenu'),button=document.getElementById('menuBtn');button.addEventListener('click',()=>{const open=!menu.classList.contains('open');menu.classList.toggle('open',open);button.textContent=open?'×':'☰';button.setAttribute('aria-expanded',String(open))});menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menu.classList.remove('open');button.textContent='☰';button.setAttribute('aria-expanded','false')}));const progress=document.getElementById('progress');function onScroll(){const max=document.documentElement.scrollHeight-innerHeight;progress.style.transform='scaleX('+(max?Math.min(1,scrollY/max):0)+')'}addEventListener('scroll',onScroll,{passive:true});onScroll();if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'))})();
+const data={web:{number:'01 / WEB',title:'Páginas que sorprenden.',description:'Un sitio atractivo, rápido y adaptado al celular. Mostrá tus servicios y facilitá que tus clientes te encuentren.',example:'Zeno abre una pantalla de sitio web'},apps:{number:'02 / APLICACIONES',title:'Herramientas que trabajan.',description:'Una app para organizar productos, consultas, presupuestos y tareas de tu negocio en un solo lugar.',example:'Zeno muestra un panel de gestión'},automation:{number:'03 / A MEDIDA',title:'Tu idea, nuestra misión.',description:'Catálogos con WhatsApp, formularios, reservas y herramientas especiales adaptadas a cómo trabajás.',example:'Zeno conecta tus procesos'}};
+const modeTexts={home:['ZENO · Listo para ayudarte','Te está dando la bienvenida'],web:['ZENO · Modo diseño web','Presentando una página web'],apps:['ZENO · Modo aplicaciones','Mostrando un panel de gestión'],automation:['ZENO · Modo soluciones','Conectando funciones'],about:['ZENO · Conociendo Zenix','Escuchando tu proyecto'],contact:['ZENO · ¡Hablemos!','Te invita a dar el próximo paso']};
+let currentMode='home',lastUserMode='web', manualUntil=0;
+function changeMode(mode,user=false){if(user)manualUntil=Date.now()+6000;if(currentMode===mode && !user)return;currentMode=mode;const [state,action]=modeTexts[mode]||modeTexts.home;document.getElementById('robotState').textContent=state;document.getElementById('robotAction').textContent=action;document.dispatchEvent(new CustomEvent('zenix-mode',{detail:{mode}}));}
+function chooseService(mode){lastUserMode=mode;const item=data[mode];document.getElementById('previewNum').textContent=item.number;document.getElementById('previewTitle').textContent=item.title;document.getElementById('previewDescription').textContent=item.description;document.getElementById('previewExample').textContent=item.example;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));changeMode(mode,true)}
+document.querySelectorAll('.service-button').forEach(b=>b.addEventListener('click',()=>chooseService(b.dataset.mode)));
+function checkSection(){if(Date.now()<manualUntil)return;let candidate='home',best=Infinity;for(const sec of document.querySelectorAll('[data-scene]')){const r=sec.getBoundingClientRect(),d=Math.abs((r.top+r.bottom)/2-innerHeight*.54);if(r.bottom>innerHeight*.2 && r.top<innerHeight*.8 && d<best){candidate=sec.dataset.scene;best=d}}if(candidate==='services')candidate=lastUserMode;changeMode(candidate)}addEventListener('scroll',checkSection,{passive:true});addEventListener('resize',checkSection);chooseService('web');currentMode='home';changeMode('home');manualUntil=0;checkSection();
+</script>
+<script>setTimeout(()=>{if(!document.documentElement.classList.contains('robot-ready')){document.getElementById('robotFallback').classList.add('show');document.getElementById('robot3d').style.display='none'}},5200);</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+const canvas=document.getElementById('robot3d'), fallback=document.getElementById('robotFallback');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+try{
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<760?1.35:1.75));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.33;
+const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(36,1,.1,70);
+const lightA=new THREE.DirectionalLight(0xece8ff,3.7);lightA.position.set(-4,8,9);scene.add(lightA);
+const lightB=new THREE.DirectionalLight(0xb077ff,3.8);lightB.position.set(4,2,-2);scene.add(lightB);
+const fill=new THREE.PointLight(0x9eeaff,55,25);fill.position.set(2,1,7);scene.add(fill);
+scene.add(new THREE.AmbientLight(0xafaac8,1.2));
+const white=new THREE.MeshPhysicalMaterial({color:0xe7e7f9,metalness:.2,roughness:.18,clearcoat:1,clearcoatRoughness:.09});
+const trim=new THREE.MeshPhysicalMaterial({color:0xaeb3cb,metalness:.61,roughness:.21,clearcoat:1});
+const purple=new THREE.MeshStandardMaterial({color:0x7741bd,metalness:.42,roughness:.24,emissive:0x7129e5,emissiveIntensity:.9});
+const violetGlow=new THREE.MeshBasicMaterial({color:0xd6a6ff,transparent:true,opacity:.9});
+const black=new THREE.MeshPhysicalMaterial({color:0x080515,metalness:.28,roughness:.09,clearcoat:1,clearcoatRoughness:.03});
+const pad=new THREE.MeshStandardMaterial({color:0x191527,metalness:.34,roughness:.25});
+const glass=new THREE.MeshPhysicalMaterial({color:0x130d29,metalness:.32,roughness:.13,transparent:true,opacity:.75,clearcoat:1});
+function ball(parent,mat,pos,scale,seg=48){const m=new THREE.Mesh(new THREE.SphereGeometry(1,seg,32),mat);m.position.set(...pos);m.scale.set(...scale);parent.add(m);return m}
+function rounded(parent,mat,dim,pos,r=.2){const g=new RoundedBoxGeometry(...dim,5,r),m=new THREE.Mesh(g,mat);m.position.set(...pos);parent.add(m);return m}
+function tube(parent,mat,a,b,r=.13){const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),dir=B.clone().sub(A),m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,dir.length(),24),mat);m.position.copy(A).add(B).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());parent.add(m);return m}
+const botRoot=new THREE.Group();scene.add(botRoot);
+const bot=new THREE.Group();botRoot.add(bot);
+const torso=new THREE.Group();torso.position.y=-.55;bot.add(torso);
+ball(torso,white,[0,0,0],[1.1,1.22,.73]);
+ball(torso,trim,[0,-.73,.05],[.9,.43,.66]);
+ball(torso,white,[0,.71,-.03],[.89,.6,.68]);
+const chest=rounded(torso,black,[.78,.88,.15],[0,.2,.75],.23);chest.rotation.x=-.04;
+const chestBorder=rounded(torso,purple,[.88,.98,.065],[0,.19,.84],.25);chestBorder.position.z=.73;chest.position.z=.79;
+const chestTop=rounded(torso,black,[.68,.78,.13],[0,.19,.855],.2);
+function canvasTex(kind){const c=document.createElement('canvas');c.width=1024;c.height=640;const x=c.getContext('2d');const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;return {canvas:c,ctx:x,texture}}
+const badgeTex=canvasTex('badge');const bz=badgeTex.ctx;bz.clearRect(0,0,1024,640);bz.textAlign='center';bz.textBaseline='middle';bz.shadowColor='#a54aff';bz.shadowBlur=72;bz.fillStyle='#caa4ff';bz.font='900 440px sans-serif';bz.fillText('Z',512,342);badgeTex.texture.needsUpdate=true;
+const badgeMaterial=new THREE.MeshBasicMaterial({map:badgeTex.texture,transparent:true,depthWrite:false,side:THREE.DoubleSide});
+const badge=new THREE.Mesh(new THREE.PlaneGeometry(.61,.62),badgeMaterial);badge.position.set(0,.19,.94);torso.add(badge);
+const neck=ball(bot,pad,[0,.52,0],[.39,.26,.36]);
+const headPivot=new THREE.Group();headPivot.position.set(0,1.51,0);bot.add(headPivot);
+const headShell=ball(headPivot,white,[0,0,0],[1.3,.98,.83],64);
+// La pantalla negra curva y el borde violeta imitan una cara robótica amable, no un casco humano.
+ball(headPivot,purple,[0,-.05,.61],[1.135,.785,.31],64);
+ball(headPivot,black,[0,-.04,.65],[1.075,.728,.28],64);
+const faceTex=canvasTex('face');
+const faceMat=new THREE.MeshBasicMaterial({map:faceTex.texture,transparent:true,depthWrite:false,side:THREE.DoubleSide,toneMapped:false});
+const face=new THREE.Mesh(new THREE.PlaneGeometry(1.84,1.03),faceMat);face.position.set(0,-.07,.935);headPivot.add(face);
+function drawFace(expression='home',blink=false){const {ctx:c,canvas,texture}=faceTex;c.clearRect(0,0,canvas.width,canvas.height);c.save();c.lineCap='round';c.lineJoin='round';c.strokeStyle='#cba0ff';c.lineWidth=43;c.shadowColor='#a75fff';c.shadowBlur=47;
+function happy(cx){c.beginPath();c.moveTo(cx-108,310);c.bezierCurveTo(cx-96,203,cx+78,195,cx+103,305);c.stroke()}
+function openEye(cx){c.beginPath();c.ellipse(cx,295,49,67,0,0,Math.PI*2);c.stroke();c.beginPath();c.fillStyle='#e3c7ff';c.arc(cx+8,283,11,0,Math.PI*2);c.fill()}
+function narrow(cx){c.beginPath();c.moveTo(cx-85,297);c.quadraticCurveTo(cx,270,cx+85,297);c.stroke()}
+if(blink){narrow(310);narrow(710)}else if(expression==='apps'||expression==='automation'){openEye(310);openEye(710)}else if(expression==='contact'){happy(310);narrow(710)}else{happy(310);happy(710)}
+c.lineWidth=20;c.beginPath();c.moveTo(455,425);c.quadraticCurveTo(512,473,572,426);c.stroke();if(expression==='contact'){c.beginPath();c.moveTo(270,468);c.lineTo(298,468);c.stroke()}c.restore();texture.needsUpdate=true}
+drawFace();
+// Auriculares laterales redondeados en blanco y violeta.
+for(const side of [-1,1]){
+ const cup=new THREE.Group();cup.position.set(side*1.24,.01,0);headPivot.add(cup);
+ const base=ball(cup,pad,[side*.11,0,0],[.22,.47,.46]);
+ ball(cup,white,[side*.20,0,0],[.19,.43,.43]);
+ const hoop=new THREE.Mesh(new THREE.TorusGeometry(.35,.055,14,64),purple);hoop.rotation.y=Math.PI/2;hoop.position.x=side*.36;cup.add(hoop);
+ ball(cup,purple,[side*.39,0,0],[.034,.16,.16]);
+}
+// Piecitas superiores y brillo que da una silueta reconocible.
+const band=new THREE.Mesh(new THREE.TorusGeometry(1.05,.07,12,85,Math.PI),trim);band.rotation.z=0;band.position.y=.07;band.scale.y=1.05;headPivot.add(band);band.position.z=-.2;
+const shoulderL=ball(bot,purple,[-1.01,-.09,0],[.31,.36,.35]);const shoulderR=ball(bot,purple,[1.01,-.09,0],[.31,.36,.35]);
+function makeArm(side){const arm=new THREE.Group();arm.position.set(side*1.08,-.05,0);bot.add(arm);
+ const pivot=new THREE.Group();arm.add(pivot);
+ ball(pivot,white,[side*.05,-.32,0],[.32,.59,.35]);
+ const elbow=new THREE.Group();elbow.position.set(side*.1,-.79,0);pivot.add(elbow);
+ ball(elbow,pad,[0,0,0],[.27,.27,.27]);
+ ball(elbow,white,[0,-.39,.03],[.27,.52,.31]);
+ const wrist=new THREE.Group();wrist.position.set(0,-.89,.08);elbow.add(wrist);
+ const cuff=ball(wrist,purple,[0,.06,0],[.31,.19,.33]);
+ const palm=ball(wrist,pad,[0,-.2,.065],[.33,.27,.34]);
+ for(let i=-1;i<=1;i++) ball(wrist,pad,[i*.2,-.36,.20],[.11,.22,.13]);
+ const thumb=ball(wrist,pad,[side*.33,-.18,.16],[.13,.18,.15]);
+ return{arm,pivot,elbow,wrist};
+}
+const left=makeArm(-1),right=makeArm(1);
+// Piernas cortas: robot pequeño, con volumen amigable.
+for(const side of [-1,1]){
+ const leg=new THREE.Group();leg.position.set(side*.55,-1.41,0);bot.add(leg);
+ ball(leg,white,[0,-.33,0],[.43,.64,.48]);ball(leg,pad,[0,-.83,.12],[.37,.25,.57]);ball(leg,white,[0,-.87,.23],[.46,.24,.64]);
+}
+// Plataforma con iluminación tenue (sin rotación decorativa).
+const baseGroup=new THREE.Group();baseGroup.position.y=-2.85;scene.add(baseGroup);
+const baseMat=new THREE.MeshStandardMaterial({color:0x161126,metalness:.55,roughness:.26,transparent:true,opacity:.75});
+const baseDisk=new THREE.Mesh(new THREE.CylinderGeometry(2.8,2.98,.13,76),baseMat);baseGroup.add(baseDisk);
+const rim=new THREE.Mesh(new THREE.TorusGeometry(2.72,.027,9,110),purple);rim.rotation.x=Math.PI/2;rim.position.y=.08;baseGroup.add(rim);
+// Panel holográfico con contenido real de los servicios, no movimiento arbitrario.
+const holo=new THREE.Group();botRoot.add(holo);holo.position.set(1.75,.14,1.2);
+const holoPlane=new THREE.Mesh(new THREE.PlaneGeometry(2.5,1.7),new THREE.MeshBasicMaterial({color:0xb979f8,transparent:true,opacity:.05,side:THREE.DoubleSide,depthWrite:false}));holo.add(holoPlane);
+const holoTexture=canvasTex('holo');const holoMat=new THREE.MeshBasicMaterial({map:holoTexture.texture,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide,toneMapped:false});
+const holoFront=new THREE.Mesh(new THREE.PlaneGeometry(2.5,1.7),holoMat);holoFront.position.z=.02;holo.add(holoFront);
+function drawHolo(mode){const c=holoTexture.ctx;c.clearRect(0,0,1024,640);c.fillStyle='rgba(11,5,30,.83)';c.fillRect(25,25,974,590);c.strokeStyle='#bb7cff';c.lineWidth=7;c.strokeRect(25,25,974,590);c.fillStyle='#ccaaff';c.font='bold 34px Arial';c.fillText('ZENIX / '+({web:'SITIO WEB',apps:'PANEL DE GESTIÓN',automation:'A MEDIDA',contact:'HABLEMOS'}[mode]||'EXPERIENCIA'),65,95);c.fillStyle='rgba(210,190,252,.37)';c.fillRect(65,115,885,3);if(mode==='web'){c.fillStyle='#e4d8ff';c.font='bold 76px Arial';c.fillText('Tu negocio',65,230);c.fillText('online.',65,312);c.fillStyle='#a369ff';c.fillRect(65,365,290,68);c.fillStyle='#fff';c.font='bold 29px Arial';c.fillText('VER SERVICIOS',82,409);c.fillStyle='#b7a9d5';c.font='24px Arial';c.fillText('Inicio  •  Catálogo  •  Contacto',65,515)}else if(mode==='apps'){c.fillStyle='#ffffff';c.font='bold 60px Arial';c.fillText('Tu panel',65,230);['Productos','Consultas','Presupuestos'].forEach((label,i)=>{c.fillStyle=i===1?'#5f338e':'#302047';c.fillRect(65,275+i*83,880,65);c.fillStyle='#f4e4ff';c.font='29px Arial';c.fillText(label,95,320+i*83);c.fillText('✓',865,320+i*83)})}else if(mode==='contact'){c.fillStyle='#e6d3ff';c.font='bold 78px Arial';c.fillText('¡Hablemos!',65,290);c.font='35px Arial';c.fillText('Tu idea puede empezar hoy.',65,365);c.fillStyle='#9f5fff';c.fillRect(65,430,580,80);c.fillStyle='#fff';c.font='bold 32px Arial';c.fillText('ENVIAR UN MENSAJE ↗',90,485)}else{c.fillStyle='#e8d9ff';c.font='bold 62px Arial';c.fillText('Todo conectado.',65,260);['Catálogo','WhatsApp','Formulario'].forEach((x,i)=>{c.fillStyle='#9e63ed';c.fillRect(68+i*300,328,270,115);c.fillStyle='#fff';c.font='26px Arial';c.fillText(x,82+i*300,397)})}holoTexture.texture.needsUpdate=true}
+drawHolo('web');
+const mouse={x:0,y:0};addEventListener('pointermove',e=>{mouse.x=e.clientX/innerWidth*2-1;mouse.y=e.clientY/innerHeight*2-1},{passive:true});
+let mode='home',modeSince=performance.now(),visible=true,blinkTime=0;
+function setMode(next){if(next===mode)return;mode=next;modeSince=performance.now();drawFace(next);if(['web','apps','automation','contact'].includes(next))drawHolo(next);}
+document.addEventListener('zenix-mode',event=>setMode(event.detail.mode));
+function resize(){const w=innerWidth,h=innerHeight,mobile=w<760;renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.3:1.7));renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();camera.position.set(0,mobile?0:0,11.75);camera.lookAt(0,0,0);botRoot.position.x=mobile?0:2.33;botRoot.position.y=mobile?1.54:0;botRoot.scale.setScalar(mobile?.73:1);baseGroup.position.x=botRoot.position.x;baseGroup.position.y=botRoot.position.y-2.85*botRoot.scale.x;baseGroup.scale.setScalar(botRoot.scale.x);}
+addEventListener('resize',resize,{passive:true});resize();document.documentElement.classList.add('robot-ready');
+const clock=new THREE.Clock();let active=true;
+function lerp(a,b,k){return a+(b-a)*k}
+function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.06),elapsed=performance.now()/1000,age=(performance.now()-modeSince)/1000;
+const progress=document.documentElement.scrollHeight-innerHeight;const scrollRatio=progress>0?scrollY/progress:0;
+// No hay giros automáticos: solo respiración y acciones por modo.
+if(!reduced){torso.scale.y=lerp(torso.scale.y,1+Math.sin(elapsed*1.3)*.011,.08);}
+const targetHeadYaw=mode==='home'?mouse.x*.12:mode==='contact'?-.06:mode==='apps'?.14:.25;
+const targetHeadPitch=mode==='home'?-mouse.y*.065:mode==='contact'?-.08:0;
+headPivot.rotation.y=lerp(headPivot.rotation.y,targetHeadYaw,.065);headPivot.rotation.x=lerp(headPivot.rotation.x,targetHeadPitch,.055);
+let rz=-.12,lz=.12,rx=0,lx=0,re=-.08,le=.08,bodyY=0,bodyZ=0,holoOpacity=0;
+if(mode==='web'){rz=1.05;rx=-.28;re=-.52;bodyY=.1;holoOpacity=.96}
+if(mode==='apps'){lz=-.95;lx=-.18;le=.48;bodyY=-.1;holoOpacity=.96}
+if(mode==='automation'){rz=.7;lz=-.7;rx=-.25;lx=-.25;re=-.35;le=.35;holoOpacity=.96}
+if(mode==='about'){rz=.28;lz=-.28;bodyY=-.03}
+if(mode==='contact'){rz=2.35+(!reduced&&age<2?Math.sin(elapsed*9)*.11:0);rx=-.12;re=-.33;bodyZ=-.08;holoOpacity=.91}
+right.pivot.rotation.z=lerp(right.pivot.rotation.z,rz,.075);left.pivot.rotation.z=lerp(left.pivot.rotation.z,lz,.075);
+right.pivot.rotation.x=lerp(right.pivot.rotation.x,rx,.075);left.pivot.rotation.x=lerp(left.pivot.rotation.x,lx,.075);
+right.elbow.rotation.z=lerp(right.elbow.rotation.z,re,.08);left.elbow.rotation.z=lerp(left.elbow.rotation.z,le,.08);
+bot.rotation.y=lerp(bot.rotation.y,bodyY,.05);bot.rotation.z=lerp(bot.rotation.z,bodyZ,.05);
+holoMat.opacity=lerp(holoMat.opacity,innerWidth<760?holoOpacity*.33:holoOpacity,.09);holoPlane.material.opacity=holoMat.opacity*.1;
+holo.position.x=lerp(holo.position.x,mode==='apps'?-1.75:1.75,.055);holo.position.y=lerp(holo.position.y,mode==='contact'?.72:.14,.06);
+// El robot aparece grande en portada, se mantiene en servicios y se retira del contenido narrativo para facilitar la lectura.
+const section=document.getElementById('nosotros').getBoundingClientRect();const contact=document.getElementById('contacto').getBoundingClientRect();
+let opacity=1;if(section.top<innerHeight*.72 && contact.top>innerHeight*.85)opacity=innerWidth<760?.16:.48;
+if(innerWidth<760 && scrollY>innerHeight*.8 && contact.top>innerHeight*.8){opacity=.17}
+if(contact.top<innerHeight*.8)opacity=innerWidth<760?.33:1;
+canvas.style.opacity=String(lerp(Number(canvas.style.opacity||1),opacity,.06));
+if(!reduced){if(elapsed>blinkTime+7){blinkTime=elapsed;drawFace(mode,true)}if(elapsed>blinkTime+.17 && elapsed<blinkTime+.35)drawFace(mode,false)}
+renderer.render(scene,camera);
+}
+tick();
+}catch(e){console.warn('WebGL no disponible; vista simplificada',e);canvas.style.display='none';fallback.classList.add('show')}
+</script>
+</body></html>
