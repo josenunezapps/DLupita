@@ -39,7 +39,7 @@ h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(58px,10vw,110px);line-
 .hero-side{justify-self:end;width:min(430px,100%);display:grid;gap:14px}.feature-card{padding:18px 18px 16px;border:1px solid var(--line);border-radius:20px;background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 20px 50px rgba(0,0,0,.22)}.feature-card strong{display:block;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#dbe3ff}.feature-card p{margin:9px 0 0;font-size:14px;line-height:1.65;color:#afbad5}
 .panel{width:min(1180px,calc(100% - 36px));margin:0 auto 34px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(10,13,27,.84),rgba(7,9,18,.78));backdrop-filter:blur(15px);border-radius:28px;box-shadow:0 24px 65px rgba(0,0,0,.28)}
 .function-panel{padding:28px 28px 24px}.function-head{display:flex;justify-content:space-between;gap:18px;align-items:end}.function-head h2,.story-head h2,.cta-head h2{font-family:"Space Grotesk",sans-serif;letter-spacing:-.06em;line-height:.94;margin:10px 0 0;font-size:clamp(38px,6vw,74px)}.function-head p,.story-head p,.cta-head p{max-width:370px;color:var(--muted);line-height:1.72;margin:0}
-.function-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}.function-card{padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(255,255,255,.03);transition:border-color .25s,transform .25s,background .25s;cursor:pointer}.function-card:hover{transform:translateY(-4px);border-color:rgba(121,229,255,.28)}.function-card.active{background:linear-gradient(180deg,rgba(121,229,255,.09),rgba(167,139,250,.09));border-color:rgba(167,139,250,.48)}.function-card strong{display:block;font-size:20px;letter-spacing:-.03em}.function-card span{display:block;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#b2bad5;margin-bottom:10px}.function-card p{margin:0;color:#a9b3cf;line-height:1.6;font-size:14px}
+.function-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}.function-card{text-align:left;padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(255,255,255,.03);transition:border-color .25s,transform .25s,background .25s;cursor:pointer}.function-card:hover{transform:translateY(-4px);border-color:rgba(121,229,255,.28)}.function-card.active{background:linear-gradient(180deg,rgba(121,229,255,.09),rgba(167,139,250,.09));border-color:rgba(167,139,250,.48)}.function-card strong{display:block;font-size:20px;letter-spacing:-.03em}.function-card span{display:block;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#b2bad5;margin-bottom:10px}.function-card p{margin:0;color:#a9b3cf;line-height:1.6;font-size:14px}
 .story-panel{padding:28px}.story-head{display:flex;justify-content:space-between;gap:28px;align-items:end}.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.story-card{padding:22px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(255,255,255,.028)}.story-card b{display:block;font-size:12px;color:#98e7ff;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}.story-card h3{margin:0 0 10px;font-size:22px;letter-spacing:-.04em}.story-card p{margin:0;color:#a6afca;line-height:1.65}
 .cta-panel{padding:34px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px}.cta-actions{display:flex;flex-wrap:wrap;gap:12px}.cta-note{margin-top:10px;font-size:12px;color:#93a0c4}
 .spacer{height:34svh}
@@ -192,7 +192,7 @@ try {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(38, 1, .1, 100);
-  camera.position.set(0, 1.7, 11.8);
+  camera.position.set(0, 1.45, 15.4);
   const root = new THREE.Group(); scene.add(root);
   root.position.y = -.8;
 
@@ -287,9 +287,9 @@ try {
     camera.updateProjectionMatrix();
     const mobile = matchMedia('(max-width:760px)').matches;
     state.mobile = mobile;
-    camera.position.set(0, mobile ? 1.5 : 1.8, mobile ? 13.5 : 11.8);
+    camera.position.set(0, mobile ? 1.1 : 1.45, mobile ? 16.2 : 15.4);
     root.position.x = mobile ? 0 : 0; root.position.y = mobile ? -1.15 : -.75;
-    root.scale.setScalar(mobile ? .88 : 1);
+    root.scale.setScalar(mobile ? .68 : 1);
   }
   addEventListener('resize', resize, { passive:true }); resize();
 
