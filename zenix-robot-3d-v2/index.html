@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070811">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Zenix AR — Robot Core · Demo</title>
+<meta name="description" content="Propuesta experimental para Zenix AR con robot 3D central e interacciones ligadas a funciones concretas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070811;--bg2:#0c1020;--text:#f4f7ff;--muted:#a1abc7;--line:rgba(255,255,255,.12);
+  --violet:#a78bfa;--cyan:#79e5ff;--panel:rgba(10,13,27,.72);--good:#9af0a9;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at top,#131936 0,#070811 45%,#05070d 100%);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button{font:inherit}button{cursor:pointer}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 22%,rgba(122,229,255,.12),transparent 28%),radial-gradient(circle at 50% 30%,rgba(167,139,250,.14),transparent 34%);z-index:-3}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.38),transparent 80%);z-index:-2;opacity:.6}
+.topbar{position:fixed;top:0;left:0;right:0;height:78px;padding:0 clamp(18px,5vw,72px);display:flex;align-items:center;justify-content:space-between;gap:18px;z-index:40;background:linear-gradient(to bottom,rgba(6,8,17,.86),rgba(6,8,17,.25),transparent);backdrop-filter:blur(12px)}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:38px;height:38px;border-radius:12px;border:1px solid rgba(167,139,250,.55);display:grid;place-items:center;box-shadow:0 0 24px rgba(167,139,250,.18), inset 0 0 20px rgba(121,229,255,.12)}
+.logo:before{content:"Z";font-family:"Space Grotesk",sans-serif;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:20px}
+.brand strong{display:block;font-family:"Space Grotesk",sans-serif;letter-spacing:.08em;font-size:20px}.brand small{display:block;color:#b8bfd8;font-size:10px;letter-spacing:.28em;text-transform:uppercase;margin-top:4px}
+.nav{display:flex;align-items:center;gap:24px}.nav a{font-size:12px;color:#c2c8dd;letter-spacing:.12em;text-transform:uppercase}.nav .cta-link{padding:12px 18px;border:1px solid rgba(167,139,250,.38);border-radius:999px;background:rgba(167,139,250,.07);color:#fff}
+.nav-toggle,.mobile-menu{display:none}
+.progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--violet),var(--cyan));z-index:60}
+#stageWrap{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none;z-index:0}
+#robotCanvas{width:100%;height:100%;display:block}
+.stage-overlay{position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(circle at center,transparent 0,transparent 34%,rgba(3,5,12,.2) 67%,rgba(3,5,12,.65) 100%)}
+.hud{position:fixed;left:clamp(18px,4vw,48px);bottom:26px;display:grid;gap:8px;z-index:22;pointer-events:none}.hud span{display:inline-flex;align-items:center;gap:8px;width:max-content;padding:7px 10px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(8,10,20,.56);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#aeb6d0}.hud span:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+main{position:relative;z-index:5}
+.hero{min-height:100svh;display:flex;align-items:center;padding:120px clamp(18px,6vw,80px) 80px}.hero-inner{width:min(1300px,100%);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.hero-copy{max-width:560px}.eyebrow,.section-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#b6bdd8}.eyebrow{display:flex;align-items:center;gap:10px}.eyebrow:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(58px,10vw,110px);line-height:.88;letter-spacing:-.08em;margin:26px 0 22px;max-width:580px}h1 span{display:block;background:linear-gradient(110deg,#fff 20%,#cfb9ff 55%,#89e9ff 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy p{font-size:clamp(16px,1.7vw,19px);line-height:1.72;color:var(--muted);max-width:480px}.hero-copy p strong{color:#fff}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 22px;border-radius:16px;border:1px solid transparent;font-weight:700}.btn.primary{background:linear-gradient(135deg,#9a7cf6,#6fdff8);color:#08101a;box-shadow:0 14px 40px rgba(111,223,248,.18)}.btn.secondary{border-color:var(--line);background:rgba(255,255,255,.03);color:#fff}
+.hero-side{justify-self:end;width:min(430px,100%);display:grid;gap:14px}.feature-card{padding:18px 18px 16px;border:1px solid var(--line);border-radius:20px;background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 20px 50px rgba(0,0,0,.22)}.feature-card strong{display:block;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#dbe3ff}.feature-card p{margin:9px 0 0;font-size:14px;line-height:1.65;color:#afbad5}
+.panel{width:min(1180px,calc(100% - 36px));margin:0 auto 34px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(10,13,27,.84),rgba(7,9,18,.78));backdrop-filter:blur(15px);border-radius:28px;box-shadow:0 24px 65px rgba(0,0,0,.28)}
+.function-panel{padding:28px 28px 24px}.function-head{display:flex;justify-content:space-between;gap:18px;align-items:end}.function-head h2,.story-head h2,.cta-head h2{font-family:"Space Grotesk",sans-serif;letter-spacing:-.06em;line-height:.94;margin:10px 0 0;font-size:clamp(38px,6vw,74px)}.function-head p,.story-head p,.cta-head p{max-width:370px;color:var(--muted);line-height:1.72;margin:0}
+.function-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px}.function-card{padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(255,255,255,.03);transition:border-color .25s,transform .25s,background .25s;cursor:pointer}.function-card:hover{transform:translateY(-4px);border-color:rgba(121,229,255,.28)}.function-card.active{background:linear-gradient(180deg,rgba(121,229,255,.09),rgba(167,139,250,.09));border-color:rgba(167,139,250,.48)}.function-card strong{display:block;font-size:20px;letter-spacing:-.03em}.function-card span{display:block;font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#b2bad5;margin-bottom:10px}.function-card p{margin:0;color:#a9b3cf;line-height:1.6;font-size:14px}
+.story-panel{padding:28px}.story-head{display:flex;justify-content:space-between;gap:28px;align-items:end}.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.story-card{padding:22px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:rgba(255,255,255,.028)}.story-card b{display:block;font-size:12px;color:#98e7ff;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}.story-card h3{margin:0 0 10px;font-size:22px;letter-spacing:-.04em}.story-card p{margin:0;color:#a6afca;line-height:1.65}
+.cta-panel{padding:34px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px}.cta-actions{display:flex;flex-wrap:wrap;gap:12px}.cta-note{margin-top:10px;font-size:12px;color:#93a0c4}
+.spacer{height:34svh}
+footer{padding:28px clamp(18px,6vw,80px) 44px;display:flex;justify-content:space-between;gap:20px;color:#8e98b8;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}.reveal.visible{opacity:1;transform:translateY(0)}
+@media (max-width:980px){.hero-inner,.cta-panel,.function-head,.story-head{grid-template-columns:1fr;display:block}.hero-side{width:100%;justify-self:stretch;margin-top:18px}.function-grid,.story-grid{grid-template-columns:1fr 1fr}.cta-panel{display:block}.cta-actions{margin-top:18px}}
+@media (max-width:760px){.topbar{height:72px;padding:0 16px}.nav{display:none}.nav-toggle{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff}.mobile-menu{position:fixed;inset:72px 0 auto 0;display:flex;flex-direction:column;background:rgba(7,8,17,.96);backdrop-filter:blur(14px);padding:12px 16px 20px;gap:0;opacity:0;visibility:hidden;transform:translateY(-12px);transition:.25s;z-index:35}.mobile-menu.open{opacity:1;visibility:visible;transform:translateY(0)}.mobile-menu a{padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.08);font-size:18px}.hero{padding:106px 16px 70px}.hero-inner{display:block}.hero-copy{max-width:none}.hero-side{margin-top:14px}.function-panel,.story-panel,.cta-panel{padding:20px}.panel{width:min(100% - 20px,1180px)}.function-grid,.story-grid{grid-template-columns:1fr}.hud{left:10px;bottom:10px}.hud span{font-size:9px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <a class="brand" href="#inicio"><span class="logo"></span><span><strong>ZENIX</strong><small>AR / ROBOT CORE</small></span></a>
+  <nav class="nav"><a href="#funciones">Funciones</a><a href="#historia">Sistema</a><a href="#contacto" class="cta-link">Hablemos ↗</a></nav>
+  <button class="nav-toggle" id="menuBtn" aria-label="Abrir menú">☰</button>
+</header>
+<nav class="mobile-menu" id="mobileMenu"><a href="#inicio">Inicio</a><a href="#funciones">Funciones</a><a href="#historia">Sistema</a><a href="#contacto">Hablemos</a></nav>
+<div id="stageWrap"><canvas id="robotCanvas" aria-hidden="true"></canvas></div>
+<div class="stage-overlay" aria-hidden="true"></div>
+<div class="hud"><span id="modePill">modo: presencia</span><span id="actionPill">acción: seguimiento visual</span></div>
+<main>
+  <section class="hero" id="inicio" data-mode="hero">
+    <div class="hero-inner">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">Propuesta experimental · nueva dirección</div>
+        <h1>UN <span>ROBOT</span> COMO NÚCLEO VISUAL.</h1>
+        <p>Esta versión deja atrás la animación “porque sí”. El robot es la pieza central y <strong>cada movimiento responde a una función concreta</strong>: recibir, presentar, explicar y cerrar la experiencia.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#funciones">Ver funciones</a>
+          <a class="btn secondary" href="https://wa.me/5492901471353?text=Hola%20Zenix%2C%20quiero%20una%20web%20con%20robot%203D%20central" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+      <div class="hero-side reveal">
+        <article class="feature-card"><strong>Función 01 · Recibir</strong><p>En la entrada el robot permanece en modo presencia: respira, mira al visitante y transmite tecnología sin saturar.</p></article>
+        <article class="feature-card"><strong>Función 02 · Explicar</strong><p>Al entrar en las secciones de servicio el robot cambia de gesto y activa recursos visuales para reforzar el mensaje.</p></article>
+        <article class="feature-card"><strong>Función 03 · Cerrar</strong><p>En el contacto la acción cambia otra vez: el robot emite una señal de invitación clara, pensada para llevar a conversar.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel function-panel reveal" id="funciones" data-mode="services">
+    <div class="function-head">
+      <div>
+        <div class="section-label">01 · Funciones específicas</div>
+        <h2>Acá el robot no “se mueve”.<br>Acá <span style="color:var(--cyan)">actúa.</span></h2>
+      </div>
+      <p>Podés tocar cada tarjeta. Además, al hacer scroll el robot entra automáticamente en ese modo. La idea es que su lenguaje corporal acompañe lo que Zenix quiere contar.</p>
+    </div>
+    <div class="function-grid" id="functionGrid">
+      <button class="function-card active" data-robot-mode="hero"><span>Modo 01</span><strong>Presencia</strong><p>Respiración mínima y seguimiento visual. Sirve para la portada y el primer impacto.</p></button>
+      <button class="function-card" data-robot-mode="web"><span>Modo 02</span><strong>Web</strong><p>Levanta el brazo y despliega un panel holográfico. Se usa para presentar páginas web.</p></button>
+      <button class="function-card" data-robot-mode="apps"><span>Modo 03</span><strong>Apps</strong><p>Activa una interfaz lateral y gira el torso. Se usa para aplicaciones y herramientas.</p></button>
+      <button class="function-card" data-robot-mode="contact"><span>Modo 04</span><strong>Contacto</strong><p>Extiende la mano y emite una señal clara para invitar a escribir por WhatsApp.</p></button>
+    </div>
+  </section>
+
+  <section class="panel story-panel reveal" id="historia" data-mode="story">
+    <div class="story-head">
+      <div>
+        <div class="section-label">02 · Sistema visual</div>
+        <h2>El robot ordena<br>toda la experiencia.</h2>
+      </div>
+      <p>En lugar de llenar la pantalla de elementos que compiten entre sí, el sitio se organiza alrededor de una figura fuerte y reconocible.</p>
+    </div>
+    <div class="story-grid">
+      <article class="story-card"><b>Entrada</b><h3>Mirada al visitante</h3><p>El rostro responde de forma sutil al cursor o al tacto. Así la home se siente viva sin parecer un adorno.</p></article>
+      <article class="story-card"><b>Explicación</b><h3>Gestos con intención</h3><p>Los brazos, el torso y las luces cambian según el contenido que se está mostrando. Cada pose tiene una razón.</p></article>
+      <article class="story-card"><b>Cierre</b><h3>Llamado a la acción</h3><p>El final no es estático: el robot abre una señal más enérgica para marcar que es momento de avanzar y consultar.</p></article>
+    </div>
+  </section>
+
+  <section class="panel cta-panel reveal" id="contacto" data-mode="contact">
+    <div class="cta-head">
+      <div class="section-label">03 · Siguiente paso</div>
+      <h2>Si esta dirección te gusta,<br>la llevamos más lejos.</h2>
+      <p>Esto es una base conceptual. Se puede volver más futurista, más corporativa o más premium según el tipo de cliente que quieras atraer.</p>
+      <div class="cta-note">Demo experimental separada del sitio principal.</div>
+    </div>
+    <div class="cta-actions">
+      <a class="btn primary" href="https://wa.me/5492901471353?text=Hola%20Zenix%2C%20vi%20la%20version%20con%20robot%203D%20y%20quiero%20seguir%20por%20esa%20linea" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+      <a class="btn secondary" href="https://zenix.com.ar" target="_blank" rel="noopener">Sitio actual</a>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+</main>
+<footer><span>© 2026 Zenix AR · Ushuaia</span><span>Demo conceptual · Robot Core</span></footer>
+<script>
+(() => {
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (menuBtn) menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+  const progress = document.getElementById('progress');
+  const updateProgress = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const value = max > 0 ? scrollY / max : 0;
+    progress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, value)) + ')';
+  };
+  addEventListener('scroll', updateProgress, { passive: true }); addEventListener('resize', updateProgress); updateProgress();
+  const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+})();
+</script>
+<script type="module">
+const modePill = document.getElementById('modePill');
+const actionPill = document.getElementById('actionPill');
+const functionCards = [...document.querySelectorAll('.function-card')];
+const modeText = {
+  hero:['modo: presencia','acción: seguimiento visual'],
+  web:['modo: web','acción: despliegue holográfico'],
+  apps:['modo: apps','acción: interfaz lateral'],
+  story:['modo: explicación','acción: gesto narrativo'],
+  contact:['modo: contacto','acción: invitación a escribir']
+};
+let currentMode = 'hero';
+function setUI(mode){
+  const t = modeText[mode] || modeText.hero;
+  modePill.textContent = t[0]; actionPill.textContent = t[1];
+  functionCards.forEach(card => card.classList.toggle('active', card.dataset.robotMode === mode || (mode==='story' && card.dataset.robotMode==='apps')));
+}
+functionCards.forEach(card => card.addEventListener('click', () => {
+  const mode = card.dataset.robotMode; currentMode = mode; setUI(mode);
+  window.dispatchEvent(new CustomEvent('zenix:robot-mode', { detail: mode }));
+}));
+const modeSections = [...document.querySelectorAll('[data-mode]')];
+const sectionObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.intersectionRatio > .45) {
+      const mode = entry.target.dataset.mode;
+      currentMode = mode === 'services' ? 'web' : mode;
+      setUI(currentMode);
+      window.dispatchEvent(new CustomEvent('zenix:robot-mode', { detail: currentMode }));
+    }
+  })
+}, { threshold: [.45, .7] });
+modeSections.forEach(section => sectionObs.observe(section));
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canvas = document.getElementById('robotCanvas');
+try {
+  const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js');
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.35;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, 1, .1, 100);
+  camera.position.set(0, 1.7, 11.8);
+  const root = new THREE.Group(); scene.add(root);
+  root.position.y = -.8;
+
+  scene.add(new THREE.AmbientLight(0xa4b7ff, 1.45));
+  const key = new THREE.PointLight(0x93dfff, 60, 80); key.position.set(-4, 5, 8); scene.add(key);
+  const rim = new THREE.PointLight(0xb08cff, 80, 80); rim.position.set(5, 2, 4); scene.add(rim);
+  const floorGlow = new THREE.PointLight(0x75dfff, 30, 20); floorGlow.position.set(0, -2, 2); scene.add(floorGlow);
+
+  const metal = new THREE.MeshPhysicalMaterial({ color: 0xdce4ff, metalness: .85, roughness: .28, clearcoat: .55, clearcoatRoughness: .18, emissive: 0x111633, emissiveIntensity: .22 });
+  const darkMetal = new THREE.MeshPhysicalMaterial({ color: 0x1d2439, metalness: .88, roughness: .35, clearcoat: .2, emissive: 0x0e1022, emissiveIntensity: .5 });
+  const glowMat = new THREE.MeshStandardMaterial({ color: 0x8ae7ff, emissive: 0x59dfff, emissiveIntensity: 1.3, transparent: true, opacity: .92 });
+  const purpleMat = new THREE.MeshStandardMaterial({ color: 0xb79dff, emissive: 0x7a52f5, emissiveIntensity: .95, transparent: true, opacity: .9 });
+
+  const robot = new THREE.Group(); root.add(robot);
+  const torso = new THREE.Group(); robot.add(torso);
+  const chest = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.65, 1.25), metal); chest.position.y = 2.7; torso.add(chest);
+  const chestCore = new THREE.Mesh(new THREE.BoxGeometry(.74, .88, .09), glowMat); chestCore.position.set(0, 2.75, .69); torso.add(chestCore);
+  const chestPanelL = new THREE.Mesh(new THREE.BoxGeometry(.55, .88, .06), darkMetal); chestPanelL.position.set(-.54, 2.75, .69); torso.add(chestPanelL);
+  const chestPanelR = chestPanelL.clone(); chestPanelR.position.x = .54; torso.add(chestPanelR);
+  const waist = new THREE.Mesh(new THREE.BoxGeometry(1.5, .72, .92), darkMetal); waist.position.set(0, 1.45, 0); torso.add(waist);
+
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(.22, .26, .33, 18), darkMetal); neck.position.set(0, 4.18, 0); robot.add(neck);
+  const headGroup = new THREE.Group(); robot.add(headGroup); headGroup.position.set(0, 4.85, 0);
+  const head = new THREE.Mesh(new THREE.BoxGeometry(1.55, 1.3, 1.38), metal); headGroup.add(head);
+  const visor = new THREE.Mesh(new THREE.BoxGeometry(.98, .26, .08), glowMat); visor.position.set(0, .08, .71); headGroup.add(visor);
+  const eyeL = new THREE.Mesh(new THREE.SphereGeometry(.08, 16, 16), purpleMat); eyeL.position.set(-.26, .08, .77); headGroup.add(eyeL);
+  const eyeR = eyeL.clone(); eyeR.position.x = .26; headGroup.add(eyeR);
+  const antenna = new THREE.Group(); headGroup.add(antenna);
+  const antenBase = new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.32,12), darkMetal); antenBase.position.set(.48,.82,.02); antenna.add(antenBase);
+  const antenOrb = new THREE.Mesh(new THREE.SphereGeometry(.08,14,14), purpleMat); antenOrb.position.set(.48,1,.02); antenna.add(antenOrb);
+
+  const shoulderL = new THREE.Mesh(new THREE.SphereGeometry(.3, 18, 18), darkMetal); shoulderL.position.set(-1.45, 3.45, 0); robot.add(shoulderL);
+  const shoulderR = shoulderL.clone(); shoulderR.position.x = 1.45; robot.add(shoulderR);
+
+  function buildArm(side=1){
+    const group = new THREE.Group(); group.position.set(1.45*side, 3.45, 0);
+    const upperPivot = new THREE.Group(); group.add(upperPivot);
+    const upper = new THREE.Mesh(new THREE.BoxGeometry(.52,1.42,.52), metal); upper.position.y = -.73; upperPivot.add(upper);
+    const elbow = new THREE.Group(); elbow.position.y = -1.42; upperPivot.add(elbow);
+    const elbowJoint = new THREE.Mesh(new THREE.SphereGeometry(.2,16,16), darkMetal); elbow.add(elbowJoint);
+    const fore = new THREE.Mesh(new THREE.BoxGeometry(.45,1.26,.45), metal); fore.position.y = -.64; elbow.add(fore);
+    const handPivot = new THREE.Group(); handPivot.position.y = -1.26; elbow.add(handPivot);
+    const hand = new THREE.Mesh(new THREE.BoxGeometry(.48,.22,.78), darkMetal); hand.position.set(0,-.16,.03); handPivot.add(hand);
+    const palmGlow = new THREE.Mesh(new THREE.CircleGeometry(.16,24), glowMat); palmGlow.rotation.x = -Math.PI/2; palmGlow.position.set(0,-.03,.22); handPivot.add(palmGlow);
+    return { group, upperPivot, elbow, handPivot, palmGlow };
+  }
+  const armL = buildArm(-1), armR = buildArm(1); robot.add(armL.group); robot.add(armR.group);
+
+  function buildLeg(side=1){
+    const leg = new THREE.Group(); leg.position.set(.58*side, 1.12, 0);
+    const thigh = new THREE.Mesh(new THREE.BoxGeometry(.62,1.65,.7), metal); thigh.position.y = -.9; leg.add(thigh);
+    const knee = new THREE.Mesh(new THREE.SphereGeometry(.2,16,16), darkMetal); knee.position.y = -1.78; leg.add(knee);
+    const shin = new THREE.Mesh(new THREE.BoxGeometry(.54,1.52,.58), metal); shin.position.y = -2.62; leg.add(shin);
+    const foot = new THREE.Mesh(new THREE.BoxGeometry(.88,.28,1.25), darkMetal); foot.position.set(0,-3.46,.18); leg.add(foot); return leg;
+  }
+  robot.add(buildLeg(-1), buildLeg(1));
+
+  const platform = new THREE.Group(); root.add(platform); platform.position.y = -2.9;
+  const disc = new THREE.Mesh(new THREE.CylinderGeometry(2.85, 3.2, .22, 48), darkMetal); platform.add(disc);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(3.1, .05, 12, 80), glowMat); ring.rotation.x = Math.PI/2; ring.position.y = .15; platform.add(ring);
+  const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.34, .05, 12, 80), purpleMat); ring2.rotation.x = Math.PI/2; ring2.position.y = .32; platform.add(ring2);
+  const halo = new THREE.Mesh(new THREE.TorusGeometry(1.2, .03, 10, 60), purpleMat); halo.rotation.x = Math.PI/2; halo.position.set(0, 4.95, 0); root.add(halo);
+
+  const hologramGroup = new THREE.Group(); root.add(hologramGroup);
+  const holo1 = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 1.3), new THREE.MeshBasicMaterial({ color: 0x78e3ff, transparent:true, opacity:.18, side:THREE.DoubleSide }));
+  holo1.position.set(3.25, 3.4, -.35); hologramGroup.add(holo1);
+  const holo2 = new THREE.Mesh(new THREE.PlaneGeometry(1.3, .85), new THREE.MeshBasicMaterial({ color: 0xb18fff, transparent:true, opacity:.16, side:THREE.DoubleSide }));
+  holo2.position.set(-3.0, 4.0, .15); hologramGroup.add(holo2);
+  const holo3 = new THREE.Mesh(new THREE.RingGeometry(.3,.46,28), new THREE.MeshBasicMaterial({ color: 0x8fe6ff, transparent:true, opacity:.45, side:THREE.DoubleSide }));
+  holo3.position.set(0, 6.15, 0); holo3.rotation.x = Math.PI/2; hologramGroup.add(holo3);
+
+  const particlesGeo = new THREE.BufferGeometry();
+  const count = 240; const pos = new Float32Array(count*3);
+  for(let i=0;i<count;i++){ const a=Math.random()*Math.PI*2, r=3.4+Math.random()*4.5, y=Math.random()*8.2-.5; pos[i*3]=Math.cos(a)*r; pos[i*3+1]=y; pos[i*3+2]=Math.sin(a)*r; }
+  particlesGeo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const particles = new THREE.Points(particlesGeo, new THREE.PointsMaterial({ color:0x8fdfff,size:.05,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending }));
+  root.add(particles);
+
+  const state = { mode:'hero', targetHeadX:0, targetHeadY:0, mobile: matchMedia('(max-width:760px)').matches };
+  const pointer = { x:0, y:0 };
+  addEventListener('pointermove', e => {
+    pointer.x = (e.clientX / innerWidth) * 2 - 1;
+    pointer.y = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive:true });
+
+  window.addEventListener('zenix:robot-mode', e => { state.mode = e.detail; });
+  setUI('hero');
+
+  function resize(){
+    renderer.setSize(innerWidth, innerHeight, false);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    const mobile = matchMedia('(max-width:760px)').matches;
+    state.mobile = mobile;
+    camera.position.set(0, mobile ? 1.5 : 1.8, mobile ? 13.5 : 11.8);
+    root.position.x = mobile ? 0 : 0; root.position.y = mobile ? -1.15 : -.75;
+    root.scale.setScalar(mobile ? .88 : 1);
+  }
+  addEventListener('resize', resize, { passive:true }); resize();
+
+  function damp(current, target, amount){ return current + (target - current) * amount; }
+  const clock = new THREE.Clock();
+  function animate(){
+    const t = clock.getElapsedTime();
+    const s = reduced ? 0 : Math.sin(t*1.7)*.04;
+    const breathe = reduced ? 0 : Math.sin(t*2.2)*.03;
+    const lookX = state.mobile ? 0 : pointer.y * .18;
+    const lookY = state.mobile ? 0 : pointer.x * .33;
+
+    chest.scale.y = 1 + breathe * .7;
+    chestCore.scale.y = 1 + breathe * 1.5;
+    robot.position.y = damp(robot.position.y, breathe * .12, .08);
+    headGroup.rotation.x = damp(headGroup.rotation.x, lookX, .07);
+    headGroup.rotation.y = damp(headGroup.rotation.y, lookY, .07);
+    halo.rotation.z += .006;
+    ring.rotation.z += .005; ring2.rotation.z -= .004; particles.rotation.y += .0008;
+    chestPanelL.rotation.y = damp(chestPanelL.rotation.y, 0, .08);
+    chestPanelR.rotation.y = damp(chestPanelR.rotation.y, 0, .08);
+    hologramGroup.children.forEach((m,i)=>{ m.material.opacity = damp(m.material.opacity, 0, .08); m.rotation.y += 0.002 + i*0.0008; });
+    armL.upperPivot.rotation.z = damp(armL.upperPivot.rotation.z, .12, .08);
+    armR.upperPivot.rotation.z = damp(armR.upperPivot.rotation.z, -.12, .08);
+    armL.upperPivot.rotation.x = damp(armL.upperPivot.rotation.x, 0, .08);
+    armR.upperPivot.rotation.x = damp(armR.upperPivot.rotation.x, 0, .08);
+    armL.elbow.rotation.z = damp(armL.elbow.rotation.z, -.22, .08);
+    armR.elbow.rotation.z = damp(armR.elbow.rotation.z, .22, .08);
+    armL.handPivot.rotation.x = damp(armL.handPivot.rotation.x, 0, .08);
+    armR.handPivot.rotation.x = damp(armR.handPivot.rotation.x, 0, .08);
+    chestCore.material.emissiveIntensity = damp(chestCore.material.emissiveIntensity, 1.15 + Math.max(0,s), .08);
+    visor.material.emissiveIntensity = damp(visor.material.emissiveIntensity, 1.25, .08);
+    armL.palmGlow.material.emissiveIntensity = damp(armL.palmGlow.material.emissiveIntensity, .9, .08);
+    armR.palmGlow.material.emissiveIntensity = damp(armR.palmGlow.material.emissiveIntensity, .9, .08);
+
+    if(state.mode === 'web'){
+      chestPanelL.rotation.y = damp(chestPanelL.rotation.y, .72, .12);
+      chestPanelR.rotation.y = damp(chestPanelR.rotation.y, -.72, .12);
+      armR.upperPivot.rotation.z = damp(armR.upperPivot.rotation.z, -.55, .1);
+      armR.upperPivot.rotation.x = damp(armR.upperPivot.rotation.x, -.18, .08);
+      armR.elbow.rotation.z = damp(armR.elbow.rotation.z, .95, .08);
+      hologramGroup.children[0].material.opacity = damp(hologramGroup.children[0].material.opacity, .28, .08);
+      hologramGroup.children[0].position.x = damp(hologramGroup.children[0].position.x, 3.1, .08);
+      chestCore.material.emissiveIntensity = damp(chestCore.material.emissiveIntensity, 1.8, .08);
+      armR.palmGlow.material.emissiveIntensity = damp(armR.palmGlow.material.emissiveIntensity, 1.85, .08);
+    } else if(state.mode === 'apps' || state.mode === 'story'){
+      robot.rotation.y = damp(robot.rotation.y, -.15, .06);
+      armL.upperPivot.rotation.z = damp(armL.upperPivot.rotation.z, .42, .08);
+      armL.upperPivot.rotation.x = damp(armL.upperPivot.rotation.x, -.25, .08);
+      armL.elbow.rotation.z = damp(armL.elbow.rotation.z, -.88, .08);
+      armR.upperPivot.rotation.z = damp(armR.upperPivot.rotation.z, -.2, .08);
+      hologramGroup.children[1].material.opacity = damp(hologramGroup.children[1].material.opacity, .3, .08);
+      hologramGroup.children[2].material.opacity = damp(hologramGroup.children[2].material.opacity, .58, .08);
+      hologramGroup.children[1].position.x = damp(hologramGroup.children[1].position.x, -2.85, .08);
+      visor.material.emissiveIntensity = damp(visor.material.emissiveIntensity, 1.75, .08);
+      chestCore.material.emissiveIntensity = damp(chestCore.material.emissiveIntensity, 1.42, .08);
+      armL.palmGlow.material.emissiveIntensity = damp(armL.palmGlow.material.emissiveIntensity, 1.6, .08);
+    } else if(state.mode === 'contact'){
+      robot.rotation.y = damp(robot.rotation.y, 0, .06);
+      armR.upperPivot.rotation.z = damp(armR.upperPivot.rotation.z, -.32, .08);
+      armR.upperPivot.rotation.x = damp(armR.upperPivot.rotation.x, -.95, .08);
+      armR.elbow.rotation.z = damp(armR.elbow.rotation.z, .72, .08);
+      armR.handPivot.rotation.x = damp(armR.handPivot.rotation.x, -.45, .08);
+      armL.upperPivot.rotation.z = damp(armL.upperPivot.rotation.z, .18, .08);
+      chestPanelL.rotation.y = damp(chestPanelL.rotation.y, .22, .08);
+      chestPanelR.rotation.y = damp(chestPanelR.rotation.y, -.22, .08);
+      chestCore.material.emissiveIntensity = damp(chestCore.material.emissiveIntensity, 2.1 + Math.sin(t*5)*.35, .12);
+      armR.palmGlow.material.emissiveIntensity = damp(armR.palmGlow.material.emissiveIntensity, 2.2, .12);
+      hologramGroup.children[2].material.opacity = damp(hologramGroup.children[2].material.opacity, .86, .1);
+      hologramGroup.children[2].scale.setScalar(1 + Math.sin(t*4)*.12);
+    } else {
+      robot.rotation.y = damp(robot.rotation.y, 0, .06);
+    }
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+} catch (err) {
+  console.warn('No se pudo cargar la escena 3D', err);
+}
+</script>
+</body>
+</html>
