@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06070f">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Zenix AR — Experiencia inmersiva</title>
+<meta name="description" content="Zenix AR: diseño web, aplicaciones y soluciones digitales con una experiencia inmersiva e interactiva.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06070f;--bg2:#0b1020;--bg3:#111735;--text:#f4f7ff;--muted:#aab0ca;--line:rgba(255,255,255,.12);
+  --violet:#b19cff;--cyan:#86ebff;--cyan2:#65d6ff;--pink:#dc9cff;--panel:rgba(10,14,28,.72);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% 8%,#151b39 0,#070913 42%,#04050a 100%);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button,input{font:inherit}button{cursor:pointer}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-3;background:radial-gradient(circle at 12% 18%,rgba(177,156,255,.15),transparent 26%),radial-gradient(circle at 82% 18%,rgba(101,214,255,.11),transparent 28%),radial-gradient(circle at 50% 70%,rgba(19,34,82,.32),transparent 45%)}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:48px 48px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.38),transparent 85%);opacity:.6}
+#space{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:-1;pointer-events:none;opacity:0;transition:opacity .8s}
+#space.ready{opacity:1}
+.topbar{position:fixed;top:0;left:0;right:0;height:84px;padding:0 clamp(18px,5vw,64px);display:flex;align-items:center;justify-content:space-between;gap:20px;z-index:40;background:linear-gradient(to bottom,rgba(6,7,15,.86),rgba(6,7,15,.38),transparent);transition:background .25s,border-color .25s}.topbar.scrolled{background:rgba(6,7,15,.72);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.brand{display:flex;align-items:center;gap:12px;flex:none}.mark{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(177,156,255,.48);background:linear-gradient(145deg,rgba(177,156,255,.16),rgba(101,214,255,.08));box-shadow:0 0 22px rgba(177,156,255,.12),inset 0 0 14px rgba(255,255,255,.06)}.mark:before{content:"Z";font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:22px;background:linear-gradient(125deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}.brand b{display:block;font-family:"Space Grotesk",sans-serif;font-size:21px;letter-spacing:.07em;line-height:.95}.brand small{display:block;color:#b9bed6;font-size:9px;letter-spacing:.26em;margin-top:5px;text-transform:uppercase}
+.topnav{display:flex;align-items:center;gap:28px}.topnav a{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#bcc2db}.topnav .cta-link{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:999px;border:1px solid rgba(177,156,255,.34);background:rgba(177,156,255,.08);color:#fff}
+.nav-toggle,.mobile-nav{display:none}
+.progress{position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--violet),var(--cyan));z-index:50}
+main{position:relative;z-index:2}
+.section{padding:0 clamp(18px,6vw,76px)}
+.hero{min-height:100svh;display:flex;align-items:center;padding-top:118px;padding-bottom:80px}.hero-inner{width:min(1280px,100%);margin:auto;display:grid;grid-template-columns:1.1fr .9fr;gap:38px;align-items:center}
+.kicker,.index,.caps{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#b7bfdc}.kicker{display:flex;align-items:center;gap:10px}.kicker:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.hero-copy h1,.services-head h2,.work-head h2,.process-head h2,.cta-box h2{margin:0;font-family:"Space Grotesk",sans-serif;font-weight:500;letter-spacing:-.08em;line-height:.9}
+.hero-copy h1{font-size:clamp(58px,10vw,124px);margin-top:22px;max-width:700px}.hero-copy h1 span{display:block;background:linear-gradient(110deg,#fff 12%,#d7c5ff 54%,#87e9ff 88%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy p{margin:24px 0 0;max-width:500px;font-size:clamp(16px,1.8vw,19px);line-height:1.72;color:var(--muted)}.hero-copy p strong{color:#fff}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 22px;border-radius:16px;font-weight:700;border:1px solid transparent}.btn.primary{background:linear-gradient(135deg,var(--violet),var(--cyan));color:#0b1020;box-shadow:0 16px 35px rgba(101,214,255,.18)}.btn.secondary{background:rgba(255,255,255,.03);border-color:var(--line);color:#fff}
+.hero-meta{display:grid;gap:14px;justify-self:end;width:min(430px,100%)}.meta-card{padding:18px 18px 16px;border-radius:22px;border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(14px);box-shadow:0 20px 60px rgba(0,0,0,.22)}.meta-card b{display:block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#d8deff}.meta-card p{margin:10px 0 0;font-size:14px;line-height:1.62;color:#aeb7d2}
+.float-note{display:inline-flex;align-items:center;gap:12px;margin-top:24px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#bcc6e0}.float-note i{font-style:normal;color:var(--cyan)}
+.panel{width:min(1260px,100%);margin:0 auto;border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,rgba(10,14,29,.82),rgba(7,10,20,.72));backdrop-filter:blur(16px);box-shadow:0 26px 80px rgba(0,0,0,.26)}
+.services{padding-top:10px;padding-bottom:110px}.services-box{padding:28px}.services-head{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end}.services-head h2{font-size:clamp(42px,6vw,84px);margin-top:10px}.services-head p{max-width:380px;margin:0;color:var(--muted);line-height:1.7}
+.services-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px;margin-top:26px}.service-list{display:grid;gap:12px}.service-card{width:100%;text-align:left;padding:18px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#fff;transition:transform .2s,border-color .2s,background .2s}.service-card:hover{transform:translateY(-3px);border-color:rgba(134,235,255,.32)}.service-card.active{background:linear-gradient(180deg,rgba(134,235,255,.09),rgba(177,156,255,.09));border-color:rgba(177,156,255,.38)}.service-card span{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#b4bdd9}.service-card strong{display:block;font-size:28px;letter-spacing:-.05em;margin-top:10px;font-family:"Space Grotesk",sans-serif}.service-card p{margin:10px 0 0;color:#aab4cf;line-height:1.6}
+.service-stage{padding:22px;border-radius:26px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02))}.stage-top{display:flex;justify-content:space-between;gap:18px;align-items:start}.service-tag{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;border:1px solid rgba(177,156,255,.28);background:rgba(177,156,255,.1);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#dccfff}.service-tag:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}.metric{min-width:110px;text-align:right}.metric b{display:block;font-size:30px;line-height:.95;font-family:"Space Grotesk",sans-serif}.metric span{display:block;margin-top:6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#aab4cf}
+.service-stage h3{margin:18px 0 10px;font-size:clamp(30px,4vw,56px);letter-spacing:-.06em;font-family:"Space Grotesk",sans-serif;line-height:.95}.service-stage p{margin:0;color:var(--muted);line-height:1.75;font-size:16px;max-width:620px}.chip-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.chip{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:12px;color:#d5ddf7}
+.stage-preview{margin-top:24px;display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.mock-card{min-height:220px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(145deg,#151b35,#0f1530);padding:20px;position:relative;overflow:hidden}.mock-card.small{background:linear-gradient(145deg,#101524,#0c1222)}.mock-card:before{content:"";position:absolute;inset:auto -16% -30% auto;width:220px;height:220px;background:radial-gradient(circle,rgba(134,235,255,.16),transparent 68%);pointer-events:none}.mock-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#c0c7e4}.browser{margin-top:16px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(5,7,15,.48);overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.25)}.browser-bar{height:32px;padding:0 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.08)}.browser-bar i{display:block;width:10px;height:10px;border-radius:50%;background:#c8ceeb;opacity:.55}.browser-body{padding:18px 18px 16px}.browser-body b{display:block;font-size:30px;line-height:1;letter-spacing:-.05em;font-family:"Space Grotesk",sans-serif}.browser-body p{margin:12px 0 0;color:#acb6d0;line-height:1.55;font-size:14px}.browser-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.browser-cards span{display:block;height:58px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.08)}
+.info-list{display:grid;gap:10px;margin-top:16px}.info-item{display:flex;gap:12px;align-items:start;padding:12px 12px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}.info-item i{display:grid;place-items:center;width:28px;height:28px;border-radius:10px;background:rgba(177,156,255,.14);color:#fff;font-style:normal;font-size:14px}.info-item strong{display:block;font-size:13px;color:#eff2ff}.info-item span{display:block;font-size:13px;color:#a9b3ce;line-height:1.45;margin-top:3px}
+.work{padding-bottom:100px}.work-box{padding:28px}.work-head{display:flex;align-items:end;justify-content:space-between;gap:24px}.work-head h2{font-size:clamp(42px,6vw,80px);margin-top:10px}.work-head p{max-width:390px;margin:0;color:var(--muted);line-height:1.7}
+.work-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-top:26px}.project{padding:22px;border-radius:26px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);position:relative;overflow:hidden}.project.large{min-height:420px}.project.small{min-height:200px}.project .caps{color:#c0c8e2}.project h3{margin:12px 0 10px;font-family:"Space Grotesk",sans-serif;font-size:clamp(30px,3vw,42px);letter-spacing:-.05em;line-height:.96}.project p{margin:0;color:#aab4cf;line-height:1.68;max-width:420px}.project-visual{position:absolute;right:22px;bottom:22px}.desk-mock{width:min(430px,44vw);border-radius:18px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(160deg,#262d52,#121933);box-shadow:0 24px 60px rgba(0,0,0,.3);overflow:hidden;transform:perspective(1100px) rotateY(-16deg) rotateX(8deg)}.desk-top{height:28px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px;padding:0 12px}.desk-top i{display:block;width:9px;height:9px;border-radius:50%;background:#e5e9fb;opacity:.5}.desk-screen{padding:18px}.desk-screen b{display:block;font-size:28px;line-height:1;letter-spacing:-.05em;font-family:"Space Grotesk",sans-serif}.desk-screen .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.12);margin-top:12px}.desk-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;margin-top:14px}.desk-grid span{height:90px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05))}
+.phone-stack{display:flex;gap:16px;align-items:flex-end}.phone{width:128px;height:250px;border-radius:30px;border:6px solid #1a2237;background:linear-gradient(170deg,#273863,#182540);box-shadow:0 22px 50px rgba(0,0,0,.3);padding:16px;position:relative}.phone:before{content:"";position:absolute;top:8px;left:40px;width:42px;height:8px;border-radius:999px;background:#101726}.phone .mini{height:46px;border-radius:14px;background:rgba(255,255,255,.12);margin-top:18px}.phone .mini + .mini{margin-top:10px;height:36px}.phone .cta{margin-top:16px;height:38px;border-radius:14px;background:linear-gradient(135deg,var(--violet),var(--cyan));opacity:.9}
+.mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}.mini-stats article{padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.mini-stats b{display:block;font-size:24px;line-height:1;font-family:"Space Grotesk",sans-serif}.mini-stats span{display:block;margin-top:8px;font-size:12px;color:#a9b3ce;line-height:1.45}
+.process{padding-bottom:90px}.process-box{padding:28px}.process-head h2{font-size:clamp(42px,6vw,78px);margin-top:10px}.process-head p{max-width:520px;margin:14px 0 0;color:var(--muted);line-height:1.72}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}.step{padding:20px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}.step b{display:block;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#92ebff}.step h3{margin:18px 0 10px;font-size:26px;letter-spacing:-.05em;font-family:"Space Grotesk",sans-serif}.step p{margin:0;color:#aab4cf;line-height:1.66}
+.cta{padding-bottom:84px}.cta-box{padding:34px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}.cta-box h2{font-size:clamp(48px,7vw,96px)}.cta-box p{max-width:520px;margin:18px 0 0;color:var(--muted);line-height:1.72}.cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
+footer{padding:24px clamp(18px,6vw,76px) 38px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;color:#9097b5;font-size:12px;letter-spacing:.08em;text-transform:uppercase}.footer-links{display:flex;gap:18px;flex-wrap:wrap}.footer-links a:hover{color:#fff}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .75s,transform .75s}.reveal.visible{opacity:1;transform:none}
+@media(max-width:980px){.hero-inner,.services-grid,.work-grid,.cta-box{grid-template-columns:1fr;display:block}.hero-meta{margin-top:22px;justify-self:stretch;width:100%}.services-head,.work-head{display:block}.services-head p,.work-head p{margin-top:16px}.stage-preview{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.cta-actions{justify-content:flex-start;margin-top:20px}.work-grid{display:grid;grid-template-columns:1fr}.project-visual{position:relative;right:auto;bottom:auto;margin-top:22px}.desk-mock{width:100%;max-width:420px}}
+@media(max-width:760px){.topbar{height:72px;padding:0 16px}.topnav{display:none}.nav-toggle{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#fff}.mobile-nav{display:flex;position:fixed;top:72px;left:0;right:0;z-index:36;flex-direction:column;background:rgba(6,7,15,.96);backdrop-filter:blur(16px);padding:10px 16px 18px;opacity:0;visibility:hidden;transform:translateY(-12px);transition:.25s}.mobile-nav.open{opacity:1;visibility:visible;transform:none}.mobile-nav a{padding:14px 4px;border-bottom:1px solid rgba(255,255,255,.08);font-size:18px}.hero{padding-top:98px}.hero-inner{display:block}.hero-copy h1{font-size:clamp(52px,15vw,90px)}.hero-actions{display:grid}.btn{width:100%}.panel,.hero-inner{width:min(100%,1260px)}.services-box,.work-box,.process-box,.cta-box{padding:20px}.service-stage h3{font-size:34px}.work-head h2,.services-head h2,.process-head h2,.cta-box h2{font-size:clamp(40px,10vw,62px)}.steps{grid-template-columns:1fr}.desk-mock{transform:none}.phone-stack{justify-content:flex-start}.footer{padding:22px 16px 34px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<canvas id="space" aria-hidden="true"></canvas>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header class="topbar" id="topbar">
+  <a href="#inicio" class="brand" aria-label="Zenix AR, inicio"><span class="mark"></span><span><b>ZENIX</b><small>AR / DIGITAL STUDIO</small></span></a>
+  <nav class="topnav" aria-label="Navegación principal"><a href="#servicios">Servicios</a><a href="#experiencias">Proyectos</a><a href="#proceso">Proceso</a><a href="#contacto" class="cta-link">Hablemos ↗</a></nav>
+  <button class="nav-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+</header>
+<nav class="mobile-nav" id="mobileNav" aria-label="Navegación móvil"><a href="#servicios">Servicios</a><a href="#experiencias">Proyectos</a><a href="#proceso">Proceso</a><a href="#contacto">Hablemos</a></nav>
+<main>
+  <section class="section hero" id="inicio" data-scene="hero">
+    <div class="hero-inner">
+      <div class="hero-copy reveal">
+        <div class="kicker">Experiencia inmersiva · versión 1.1</div>
+        <h1>UNA WEB QUE <span>SE SIENTE</span> TECNOLOGÍA.</h1>
+        <p>Zenix AR diseña páginas web, aplicaciones y soluciones digitales con una presencia visual mucho más fuerte. <strong>No es solo estética:</strong> cada interacción está pensada para mostrar mejor lo que hacés y convertir visitas en consultas.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#servicios">Explorar servicios</a>
+          <a class="btn secondary" href="https://wa.me/5492901471353?text=Hola%20Zenix%2C%20quiero%20una%20web%20con%20este%20estilo" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+        </div>
+        <div class="float-note"><i>•</i> El objeto central cambia según el servicio seleccionado</div>
+      </div>
+      <div class="hero-meta reveal">
+        <article class="meta-card"><b>Visual con propósito</b><p>La escena 3D no gira porque sí: responde a las secciones y al servicio que elegís para mostrar capacidades distintas.</p></article>
+        <article class="meta-card"><b>Más comercial</b><p>Sumamos ejemplos de entregables, portfolio más claro y una estructura pensada para que la visita termine en consulta.</p></article>
+        <article class="meta-card"><b>Más identidad Zenix</b><p>Todo se unifica con una dirección visual más consistente en tipografía, luces, paneles y tono de mensaje.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section services" id="servicios" data-scene="services">
+    <div class="panel services-box reveal">
+      <div class="services-head">
+        <div>
+          <div class="index">01 / Servicios interactivos</div>
+          <h2>Elegí un servicio y mirá cómo <span style="color:var(--cyan)">cambia la escena.</span></h2>
+        </div>
+        <p>La portada ahora conecta mejor con lo que vende Zenix. Al tocar o pasar por cada servicio, la información y la composición cambian para explicar mejor qué recibe el cliente.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-list" id="serviceList">
+          <button class="service-card active" data-service="web"><span>01 · Servicio</span><strong>Páginas web</strong><p>Sitios profesionales, rápidos y pensados para vender mejor.</p></button>
+          <button class="service-card" data-service="apps"><span>02 · Servicio</span><strong>Aplicaciones web</strong><p>Herramientas para pedidos, catálogos, turnos o procesos internos.</p></button>
+          <button class="service-card" data-service="software"><span>03 · Servicio</span><strong>Software a medida</strong><p>Soluciones especiales para negocios que necesitan algo propio.</p></button>
+          <button class="service-card" data-service="catalogos"><span>04 · Servicio</span><strong>Catálogos digitales</strong><p>Productos ordenados, consultas por WhatsApp y mejor presentación.</p></button>
+        </div>
+        <div class="service-stage">
+          <div class="stage-top">
+            <span class="service-tag" id="serviceTag">Servicio activo · páginas web</span>
+            <div class="metric"><b id="serviceMetric">24/7</b><span id="serviceMetricLabel">presencia online</span></div>
+          </div>
+          <h3 id="serviceTitle">Páginas que dejan huella.</h3>
+          <p id="serviceDesc">Un sitio profesional puede mostrar tus servicios, generar confianza y captar clientes sin depender de que vos estés respondiendo todo el día.</p>
+          <div class="chip-row" id="serviceChips"></div>
+          <div class="stage-preview">
+            <div class="mock-card">
+              <div class="mock-label" id="previewLabel">Vista de entrega</div>
+              <div class="browser">
+                <div class="browser-bar"><i></i><i></i><i></i></div>
+                <div class="browser-body">
+                  <b id="previewHeadline">Una presencia más premium.</b>
+                  <p id="previewText">Diseño visual fuerte, estructura clara y mejor percepción de marca desde el primer vistazo.</p>
+                  <div class="browser-cards"><span></span><span></span><span></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mock-card small">
+              <div class="mock-label">Lo que recibe el cliente</div>
+              <div class="info-list" id="benefitsList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section work" id="experiencias" data-scene="showcase">
+    <div class="panel work-box reveal">
+      <div class="work-head">
+        <div>
+          <div class="index">02 / Proyectos y conceptos</div>
+          <h2>No solo hablamos.<br>También <span style="color:var(--violet)">lo mostramos.</span></h2>
+        </div>
+        <p>El portfolio ahora ocupa un lugar más fuerte. No está para “rellenar”: está para ayudar a imaginar cómo podría verse una solución hecha por Zenix para un negocio real.</p>
+      </div>
+      <div class="work-grid">
+        <article class="project large">
+          <div class="caps">Concepto principal · Web corporativa</div>
+          <h3>Un sitio que se siente sólido desde el primer segundo.</h3>
+          <p>Una dirección visual fuerte, mensajes claros y módulos pensados para convertir mejor. Ideal para negocios que necesitan verse más profesionales y recibir consultas con más frecuencia.</p>
+          <div class="project-visual">
+            <div class="desk-mock">
+              <div class="desk-top"><i></i><i></i><i></i></div>
+              <div class="desk-screen"><b>Zenix Experience</b><div class="bar"></div><div class="desk-grid"><span></span><span></span></div></div>
+            </div>
+          </div>
+        </article>
+        <div style="display:grid;gap:18px">
+          <article class="project small">
+            <div class="caps">Concepto secundario · App web</div>
+            <h3>Herramientas que ordenan el trabajo.</h3>
+            <p>Dashboards, paneles y flujos para llevar tareas, consultas o pedidos de manera más simple.</p>
+            <div class="project-visual"><div class="phone-stack"><div class="phone"><div class="mini"></div><div class="mini"></div><div class="mini"></div><div class="cta"></div></div><div class="phone"><div class="mini"></div><div class="mini"></div><div class="cta"></div></div></div></div>
+          </article>
+          <article class="project small">
+            <div class="caps">Resultado esperado</div>
+            <h3>Mejor imagen. Más confianza. Más consultas.</h3>
+            <div class="mini-stats"><article><b>+ presencia</b><span>Una identidad digital mucho más clara y profesional.</span></article><article><b>+ orden</b><span>Información, productos y procesos mejor organizados.</span></article></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section process" id="proceso" data-scene="process">
+    <div class="panel process-box reveal">
+      <div class="process-head">
+        <div class="index">03 / Cómo trabajamos</div>
+        <h2>Diseño fuerte.<br>Proceso claro.</h2>
+        <p>La página no solo tiene que impresionar: también tiene que transmitir que detrás hay una forma concreta de trabajar. Por eso sumamos un proceso simple, serio y entendible.</p>
+      </div>
+      <div class="steps">
+        <article class="step"><b>Paso 01</b><h3>Escuchamos</h3><p>Entendemos qué necesitás mostrar, vender u ordenar para definir una solución que tenga sentido para tu negocio.</p></article>
+        <article class="step"><b>Paso 02</b><h3>Diseñamos</h3><p>Armamos la propuesta visual, la estructura y el enfoque para que la experiencia se vea distinta y funcione mejor.</p></article>
+        <article class="step"><b>Paso 03</b><h3>Entregamos</h3><p>Publicamos, ajustamos y dejamos una herramienta lista para ayudarte a dar una mejor imagen o resolver un problema real.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta" id="contacto" data-scene="contact">
+    <div class="panel cta-box reveal">
+      <div>
+        <div class="index">04 / Próximo paso</div>
+        <h2>Hagamos que tu negocio se vea a la altura.</h2>
+        <p>Si te interesa esta dirección —más inmersiva, más premium y más útil comercialmente— podemos convertirla en una página real para Zenix o usarla como base para proyectos de clientes.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn primary" href="https://wa.me/5492901471353?text=Hola%20Zenix%2C%20vi%20la%20nueva%20version%20inmersiva%20y%20quiero%20hacer%20una%20consulta" target="_blank" rel="noopener">Hablar por WhatsApp</a>
+        <a class="btn secondary" href="https://zenix.com.ar" target="_blank" rel="noopener">Ver sitio actual</a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div>© 2026 Zenix AR · Ushuaia, Argentina</div>
+  <div class="footer-links"><a href="#inicio">Volver arriba</a><a href="https://zenix.com.ar" target="_blank" rel="noopener">Sitio oficial ↗</a><a href="https://wa.me/5492901471353" target="_blank" rel="noopener">WhatsApp ↗</a></div>
+</footer>
+<script>
+(() => {
+  const topbar=document.getElementById('topbar');
+  const progress=document.getElementById('progress');
+  const toggle=document.getElementById('menuToggle');
+  const mobileNav=document.getElementById('mobileNav');
+  if(toggle){toggle.addEventListener('click',()=>{const open=!mobileNav.classList.contains('open');mobileNav.classList.toggle('open',open);toggle.textContent=open?'×':'☰';toggle.setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';});}
+  mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileNav.classList.remove('open');toggle.textContent='☰';toggle.setAttribute('aria-expanded','false');document.body.style.overflow='';}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){mobileNav.classList.remove('open');toggle.textContent='☰';toggle.setAttribute('aria-expanded','false');document.body.style.overflow='';}});
+  function updateScroll(){const max=document.documentElement.scrollHeight-innerHeight;const p=max>0?Math.max(0,Math.min(1,scrollY/max)):0;progress.style.transform='scaleX('+p+')';topbar.classList.toggle('scrolled',scrollY>24);}addEventListener('scroll',updateScroll,{passive:true});addEventListener('resize',updateScroll);updateScroll();
+  if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));}else{document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));}
+})();
+</script>
+<script type="module">
+const serviceData={
+  web:{tag:'Servicio activo · páginas web',metric:'24/7',metricLabel:'presencia online',title:'Páginas que dejan huella.',desc:'Un sitio profesional puede mostrar tus servicios, generar confianza y captar clientes sin depender de que vos estés respondiendo todo el día.',chips:['Diseño premium','Versión móvil','WhatsApp directo','Más confianza'],previewLabel:'Vista de entrega',previewHeadline:'Una presencia más premium.',previewText:'Diseño visual fuerte, estructura clara y mejor percepción de marca desde el primer vistazo.',benefits:[['01','Imagen profesional y moderna'],['02','Servicios mejor presentados'],['03','Canal directo para consultas']],scene:'web'},
+  apps:{tag:'Servicio activo · aplicaciones web',metric:'+ orden',metricLabel:'procesos y paneles',title:'Herramientas que hacen avanzar.',desc:'Cuando un negocio necesita algo más que una web informativa, entran las aplicaciones: paneles, catálogos autogestionables, pedidos o flujos internos.',chips:['Panel de control','Datos centralizados','Tareas más simples','Escalable'],previewLabel:'Concepto funcional',previewHeadline:'Una app para trabajar mejor.',previewText:'Interfaces más limpias, módulos claros y flujos pensados para resolver tareas diarias.',benefits:[['01','Panel privado para administrar'],['02','Pedidos, consultas o stock'],['03','Menos pasos manuales']],scene:'apps'},
+  software:{tag:'Servicio activo · software a medida',metric:'100%',metricLabel:'hecho para tu caso',title:'Soluciones hechas a medida.',desc:'Si el negocio necesita algo propio, el enfoque cambia: analizamos el problema, definimos una estructura y construimos una herramienta específica.',chips:['Lógica propia','Procesos especiales','Escenarios complejos','Mayor control'],previewLabel:'Resolución a medida',previewHeadline:'No todo entra en una plantilla.',previewText:'Cuando hace falta algo distinto, Zenix puede pensar una solución especial para ese flujo o necesidad.',benefits:[['01','Modelado del problema real'],['02','Pantallas adaptadas al uso'],['03','Más control sobre el proceso']],scene:'software'},
+  catalogos:{tag:'Servicio activo · catálogos digitales',metric:'+ consultas',metricLabel:'mejor exhibición',title:'Productos mejor presentados.',desc:'Un catálogo digital ayuda a mostrar productos, organizar categorías y recibir consultas de forma más práctica, sobre todo cuando WhatsApp es el cierre natural.',chips:['Categorías claras','Consulta por WhatsApp','Mejor visibilidad','Carga simple'],previewLabel:'Catálogo interactivo',previewHeadline:'Mostrar bien también vende.',previewText:'Una forma más prolija y útil de exhibir productos, servicios o variantes sin perder tiempo.',benefits:[['01','Productos ordenados por rubro'],['02','Búsqueda y navegación simple'],['03','Mensaje preparado para consultar']],scene:'catalogos'}
+};
+const cards=[...document.querySelectorAll('.service-card')];
+const refs={tag:document.getElementById('serviceTag'),metric:document.getElementById('serviceMetric'),metricLabel:document.getElementById('serviceMetricLabel'),title:document.getElementById('serviceTitle'),desc:document.getElementById('serviceDesc'),chips:document.getElementById('serviceChips'),previewLabel:document.getElementById('previewLabel'),previewHeadline:document.getElementById('previewHeadline'),previewText:document.getElementById('previewText'),benefits:document.getElementById('benefitsList')};
+const sceneState={service:'web',section:'hero'};
+function setService(key){const item=serviceData[key]||serviceData.web;sceneState.service=item.scene;cards.forEach(c=>c.classList.toggle('active',c.dataset.service===key));refs.tag.textContent=item.tag;refs.metric.textContent=item.metric;refs.metricLabel.textContent=item.metricLabel;refs.title.textContent=item.title;refs.desc.textContent=item.desc;refs.previewLabel.textContent=item.previewLabel;refs.previewHeadline.textContent=item.previewHeadline;refs.previewText.textContent=item.previewText;refs.chips.innerHTML=item.chips.map(x=>'<span class="chip">'+x+'</span>').join('');refs.benefits.innerHTML=item.benefits.map(([n,t])=>'<div class="info-item"><i>'+n+'</i><div><strong>'+t+'</strong><span>Enfoque pensado para que el resultado se vea mejor y funcione mejor.</span></div></div>').join('');window.dispatchEvent(new CustomEvent('zenix:service',{detail:item.scene}));}
+cards.forEach(card=>{card.addEventListener('mouseenter',()=>setService(card.dataset.service));card.addEventListener('click',()=>setService(card.dataset.service));});setService('web');
+if('IntersectionObserver' in window){const secObs=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting&&entry.intersectionRatio>.45){sceneState.section=entry.target.dataset.scene;window.dispatchEvent(new CustomEvent('zenix:section',{detail:sceneState.section}));}})},{threshold:[.45,.65]});document.querySelectorAll('[data-scene]').forEach(el=>secObs.observe(el));}
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;const canvas=document.getElementById('space');
+try{const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js');const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.42;const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(44,1,.1,140);camera.position.set(0,0,11.2);const root=new THREE.Group();scene.add(root);const core=new THREE.Group();root.add(core);const ambient=new THREE.AmbientLight(0x98a5ff,1.25);scene.add(ambient);const l1=new THREE.PointLight(0x83e8ff,88);l1.position.set(-4,2,5);scene.add(l1);const l2=new THREE.PointLight(0xc495ff,96);l2.position.set(4,-1,4);scene.add(l2);const l3=new THREE.PointLight(0x6f7cff,50);l3.position.set(0,5,-4);scene.add(l3);
+const knotMat=new THREE.MeshPhysicalMaterial({color:0xb9b3ff,metalness:.72,roughness:.16,clearcoat:1,clearcoatRoughness:.09,emissive:0x2a246d,emissiveIntensity:.55});const orbMat=new THREE.MeshPhysicalMaterial({color:0x8de8ff,metalness:.18,roughness:.06,transparent:true,opacity:.72,emissive:0x2951c4,emissiveIntensity:.72,clearcoat:1});const ringMat1=new THREE.MeshBasicMaterial({color:0x83e8ff,transparent:true,opacity:.64,blending:THREE.AdditiveBlending,depthWrite:false});const ringMat2=new THREE.MeshBasicMaterial({color:0xc39dff,transparent:true,opacity:.48,blending:THREE.AdditiveBlending,depthWrite:false});const planeMatA=new THREE.MeshBasicMaterial({color:0x8de8ff,transparent:true,opacity:.16,side:THREE.DoubleSide});const planeMatB=new THREE.MeshBasicMaterial({color:0xc39dff,transparent:true,opacity:.14,side:THREE.DoubleSide});
+const knot=new THREE.Mesh(new THREE.TorusKnotGeometry(1.38,.28,190,18,2,3),knotMat);core.add(knot);const orb=new THREE.Mesh(new THREE.IcosahedronGeometry(.72,6),orbMat);core.add(orb);const wire=new THREE.Mesh(new THREE.IcosahedronGeometry(.94,2),new THREE.MeshBasicMaterial({color:0xc6d1ff,wireframe:true,transparent:true,opacity:.18,depthWrite:false}));core.add(wire);const ring1=new THREE.Mesh(new THREE.TorusGeometry(2.12,.012,6,220),ringMat1);ring1.rotation.set(.45,.1,.22);core.add(ring1);const ring2=new THREE.Mesh(new THREE.TorusGeometry(2.54,.012,6,220),ringMat2);ring2.rotation.set(.9,.2,.6);core.add(ring2);const ring3=new THREE.Mesh(new THREE.TorusGeometry(2.92,.012,6,220),ringMat1.clone());ring3.material.opacity=.34;ring3.rotation.set(.25,.72,.12);core.add(ring3);
+const panelGroup=new THREE.Group();root.add(panelGroup);const panel1=new THREE.Mesh(new THREE.PlaneGeometry(2.3,1.45),planeMatA);const panel2=new THREE.Mesh(new THREE.PlaneGeometry(1.45,2.2),planeMatB);const panel3=new THREE.Mesh(new THREE.PlaneGeometry(1.15,1.15),new THREE.MeshBasicMaterial({color:0xd8b4ff,transparent:true,opacity:.18,side:THREE.DoubleSide}));panelGroup.add(panel1,panel2,panel3);panel1.position.set(3.1,.3,.2);panel2.position.set(-2.8,-.2,.25);panel3.position.set(0,2.35,0);const halo=new THREE.Mesh(new THREE.RingGeometry(.42,.6,40),new THREE.MeshBasicMaterial({color:0x8de8ff,transparent:true,opacity:.34,side:THREE.DoubleSide}));halo.position.set(0,0,0);panelGroup.add(halo);
+const particlesGeo=new THREE.BufferGeometry();const count=1600;const arr=new Float32Array(count*3),cols=new Float32Array(count*3);for(let i=0;i<count;i++){const j=i*3,theta=Math.random()*Math.PI*2,u=Math.random()*2-1,r=6+Math.random()*36;const s=Math.sqrt(1-u*u);arr[j]=r*s*Math.cos(theta);arr[j+1]=r*s*Math.sin(theta);arr[j+2]=r*u;const c=new THREE.Color().setHSL(.59+Math.random()*.16,.45,.62+Math.random()*.24);cols[j]=c.r;cols[j+1]=c.g;cols[j+2]=c.b;}particlesGeo.setAttribute('position',new THREE.BufferAttribute(arr,3));particlesGeo.setAttribute('color',new THREE.BufferAttribute(cols,3));const particles=new THREE.Points(particlesGeo,new THREE.PointsMaterial({size:.05,vertexColors:true,transparent:true,opacity:.58,depthWrite:false,blending:THREE.AdditiveBlending}));scene.add(particles);
+const pointer={x:0,y:0};addEventListener('pointermove',e=>{pointer.x=e.clientX/innerWidth*2-1;pointer.y=e.clientY/innerHeight*2-1},{passive:true});let section='hero',service='web';window.addEventListener('zenix:service',e=>service=e.detail);window.addEventListener('zenix:section',e=>section=e.detail);
+let w=0,h=0;function resize(){w=innerWidth;h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();const mobile=w<760;camera.position.set(0, mobile ? 0.15 : 0, mobile ? 12.6 : 11.2);}addEventListener('resize',resize,{passive:true});resize();canvas.classList.add('ready');const clock=new THREE.Clock();const cA=new THREE.Color();const cB=new THREE.Color();function damp(a,b,t){return a+(b-a)*t;}function animate(){const t=clock.getElapsedTime();const mobile=w<760;const pageP=Math.min(scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight),1);const heroLift = section==='hero' ? 0 : section==='services' ? 0.15 : section==='showcase' ? 0.28 : section==='process' ? 0.38 : 0.48;root.position.x=damp(root.position.x,mobile?0:2.4-heroLift*1.3,.05);root.position.y=damp(root.position.y,mobile?-.1+heroLift*-.22:.15+heroLift*-.2,.05);root.scale.setScalar(damp(root.scale.x, mobile ? 0.78 : 1.05, .05));root.rotation.y=damp(root.rotation.y,(mobile?0:pointer.x*.18)+pageP*.7,.03);root.rotation.x=damp(root.rotation.x,(mobile?0:-pointer.y*.1)+pageP*.2,.03);knot.rotation.x+=.0055;knot.rotation.y+=.0062;orb.rotation.y-=.01;wire.rotation.x+=.0038;ring1.rotation.y+=.004;ring2.rotation.x+=.0032;ring3.rotation.z-=.0026;particles.rotation.y+=.00025;halo.rotation.z+=.01;
+let accent=0x8de8ff,accent2=0xc39dff,p1={x:3.15,y:.35,z:.25,rx:0,ry:-.3,sx:1,sy:1,op:.18},p2={x:-2.75,y:-.25,z:.18,rx:0,ry:.35,sx:1,sy:1,op:.14},p3={x:0,y:2.25,z:0,rx:Math.PI/2,ry:0,sx:1,sy:1,op:.16},scale=1.02;
+ if(service==='web'){accent=0x8de8ff;accent2=0xc39dff;p1={x:3.2,y:.28,z:.3,rx:0,ry:-.22,sx:1.12,sy:1.02,op:.24};p2={x:-2.6,y:-.18,z:.18,rx:0,ry:.38,sx:.84,sy:1.24,op:.1};p3={x:0,y:2.25,z:0,rx:Math.PI/2,ry:0,sx:1.28,sy:1.28,op:.14};scale=1.05;}
+ if(service==='apps'){accent=0x91f0ff;accent2=0x9fafff;p1={x:2.82,y:.15,z:.5,rx:0,ry:-.52,sx:.8,sy:1.5,op:.2};p2={x:-2.92,y:-.38,z:.22,rx:0,ry:.22,sx:.72,sy:1.72,op:.18};p3={x:0,y:2.42,z:0,rx:Math.PI/2,ry:0,sx:.9,sy:.9,op:.18};scale=.98;}
+ if(service==='software'){accent=0xc8a2ff;accent2=0x7bddff;p1={x:3.35,y:.05,z:.12,rx:.22,ry:-.45,sx:1.25,sy:.85,op:.18};p2={x:-3.12,y:.48,z:-.1,rx:-.15,ry:.5,sx:1.05,sy:1.05,op:.18};p3={x:.35,y:2.1,z:.22,rx:Math.PI/3,ry:.4,sx:1.2,sy:1.2,op:.22};scale=1.08;}
+ if(service==='catalogos'){accent=0x7edfff;accent2=0xe2a8ff;p1={x:3.3,y:.65,z:.22,rx:0,ry:-.2,sx:.72,sy:.72,op:.18};p2={x:-2.85,y:.1,z:.18,rx:0,ry:.32,sx:.72,sy:.72,op:.18};p3={x:0,y:2.45,z:.05,rx:Math.PI/2,ry:0,sx:1.65,sy:1.65,op:.22};scale=1.02;}
+ cA.setHex(accent); cB.setHex(accent2); knot.material.color.lerp(cB,.05); knot.material.emissive.lerp(cB,.05); orb.material.color.lerp(cA,.06); orb.material.emissive.lerp(cA,.06); ring1.material.color.lerp(cA,.08); ring2.material.color.lerp(cB,.08); ring3.material.color.lerp(cA,.08);
+ panel1.material.color.lerp(cA,.06); panel2.material.color.lerp(cB,.06); panel3.material.color.lerp(cB,.06);
+ panel1.position.x=damp(panel1.position.x,p1.x,.08);panel1.position.y=damp(panel1.position.y,p1.y,.08);panel1.position.z=damp(panel1.position.z,p1.z,.08);panel1.rotation.x=damp(panel1.rotation.x,p1.rx,.08);panel1.rotation.y=damp(panel1.rotation.y,p1.ry,.08);panel1.scale.x=damp(panel1.scale.x,p1.sx,.08);panel1.scale.y=damp(panel1.scale.y,p1.sy,.08);panel1.material.opacity=damp(panel1.material.opacity,p1.op,.08);
+ panel2.position.x=damp(panel2.position.x,p2.x,.08);panel2.position.y=damp(panel2.position.y,p2.y,.08);panel2.position.z=damp(panel2.position.z,p2.z,.08);panel2.rotation.x=damp(panel2.rotation.x,p2.rx,.08);panel2.rotation.y=damp(panel2.rotation.y,p2.ry,.08);panel2.scale.x=damp(panel2.scale.x,p2.sx,.08);panel2.scale.y=damp(panel2.scale.y,p2.sy,.08);panel2.material.opacity=damp(panel2.material.opacity,p2.op,.08);
+ panel3.position.x=damp(panel3.position.x,p3.x,.08);panel3.position.y=damp(panel3.position.y,p3.y,.08);panel3.position.z=damp(panel3.position.z,p3.z,.08);panel3.rotation.x=damp(panel3.rotation.x,p3.rx,.08);panel3.rotation.y=damp(panel3.rotation.y,p3.ry,.08);panel3.scale.x=damp(panel3.scale.x,p3.sx,.08);panel3.scale.y=damp(panel3.scale.y,p3.sy,.08);panel3.material.opacity=damp(panel3.material.opacity,p3.op,.08);
+ core.scale.setScalar(damp(core.scale.x,scale,.06));if(section==='contact'){knot.material.emissiveIntensity=damp(knot.material.emissiveIntensity,.78,.05);orb.material.emissiveIntensity=damp(orb.material.emissiveIntensity,1.2,.05);halo.material.opacity=damp(halo.material.opacity,.56,.06);panel3.material.opacity=damp(panel3.material.opacity,.3,.05);}else if(section==='showcase'){halo.material.opacity=damp(halo.material.opacity,.38,.05);orb.material.emissiveIntensity=damp(orb.material.emissiveIntensity,.9,.05);knot.material.emissiveIntensity=damp(knot.material.emissiveIntensity,.62,.05);}else{knot.material.emissiveIntensity=damp(knot.material.emissiveIntensity,.55,.05);orb.material.emissiveIntensity=damp(orb.material.emissiveIntensity,.72,.05);halo.material.opacity=damp(halo.material.opacity,.32,.05);}camera.position.x=damp(camera.position.x,mobile?0:pointer.x*.16,.03);camera.position.y=damp(camera.position.y, (mobile ? 0.05 : -pointer.y * 0.13) + (section==='hero' ? 0.04 : 0), .03);renderer.render(scene,camera);if(!reduced)requestAnimationFrame(animate);}animate();}catch(err){console.warn('No se pudo inicializar la experiencia 3D',err);canvas.style.display='none';}
+</script>
+</body>
+</html>
