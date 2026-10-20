@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05050e">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Zenix AR — Dentro del sistema · Concepto inmersivo 3D</title>
+<meta name="description" content="Explorá una nueva experiencia de Zenix AR: un viaje 3D por el código, la arquitectura y los sistemas conectados.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05050e;--ink:#f5f1ff;--muted:#aaa8c5;--purple:#b4a1ff;--cyan:#8de9ff;--border:rgba(217,210,255,.17)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:var(--bg);color:var(--ink);font:400 16px/1.55 'Space Grotesk',Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}button,a{font:inherit}a{color:inherit;text-decoration:none}button{cursor:pointer}a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+::selection{background:#a997f9;color:#06050e}body:before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 70% 35%,#382b6a39,transparent 47%),radial-gradient(ellipse at 50% 86%,#03477627,transparent 57%)}body:after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;background:linear-gradient(90deg,transparent 98%,#ffffff0b 99%),linear-gradient(transparent 98%,#ffffff0b 99%);background-size:72px 72px}
+#scene-host{position:fixed;inset:0 0 0 auto;width:65vw;overflow:hidden;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,#6c52ad17,transparent 64%)}#world{display:block;width:100%;height:100%;opacity:0;transition:opacity .55s}#world.ready{opacity:1}
+#fallback{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle,#29204b1c,transparent 70%)}#fallback .ring{position:absolute;display:block;width:min(64%,340px);aspect-ratio:1;border:3px solid #aa94ff;border-radius:50%;box-shadow:0 0 25px #ae8dff99,inset 0 0 40px #8ceaff47;transform:perspective(700px) rotateY(32deg) rotateX(-20deg)}#fallback .ring:nth-child(2){width:min(47%,250px);border-color:#86eaff;transform:perspective(700px) rotateX(35deg) rotateY(-30deg);opacity:.85}#fallback strong{position:relative;font:700 clamp(42px,9vw,95px) 'Space Grotesk',sans-serif;letter-spacing:-.07em;color:#b8a6ff;text-shadow:0 0 42px #8e69ff90}
+header{position:fixed;z-index:50;left:0;top:0;right:0;height:86px;padding:0 clamp(20px,5vw,80px);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#060510eb,#06051022);transition:background .25s}header.scrolled{background:#080714df;backdrop-filter:blur(17px);border-bottom:1px solid #ffffff12}.brand{display:flex;gap:13px;align-items:center}.brandicon{width:42px;height:42px;border:1px solid #b3a0ff80;display:grid;place-items:center;border-radius:13px;transform:rotate(-9deg);box-shadow:inset 0 0 18px #a883ff34,0 0 16px #7250dd28}.brandicon b{font-weight:700;font-size:25px;color:#d4c3ff;transform:rotate(9deg)}.brandtext strong{font:700 21px/1 'Space Grotesk';letter-spacing:.11em;display:block}.brandtext small{font:10px 'DM Mono',monospace;letter-spacing:.14em;color:#b4abc9;display:block;margin-top:7px}.headnav{display:flex;gap:27px;align-items:center}.headnav a{font:11px 'DM Mono',monospace;letter-spacing:.1em;color:#bdb5d3;text-transform:uppercase;transition:color .2s}.headnav a:hover{color:white}.headnav .contact-link{border:1px solid #b7a4ff77;border-radius:99px;padding:12px 20px;color:#fff}
+.menu-toggle{display:none;border:1px solid var(--border);background:#121020b3;width:44px;height:44px;border-radius:50%;color:var(--ink);font-size:23px}.progress{position:fixed;z-index:80;top:0;left:0;height:2px;width:100%;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,#a989ff,#79e9ff);box-shadow:0 0 16px #79e9ff7a}
+.chapter-nav{position:fixed;z-index:7;right:3vw;top:50%;transform:translateY(-50%);display:grid;gap:13px;pointer-events:auto}.chapter-nav a{width:8px;height:8px;border:1px solid #bcb2df9e;border-radius:50%;display:block;background:transparent;transition:transform .25s,background .25s}.chapter-nav a.active{background:var(--cyan);box-shadow:0 0 15px #79e9ff;transform:scale(1.5)}
+main{position:relative;z-index:3}.chapter{position:relative;min-height:100svh;display:flex;align-items:center;padding:130px clamp(22px,8vw,140px) 105px;scroll-margin-top:0}.chapter:after{content:'';position:absolute;bottom:0;left:8vw;width:84vw;height:1px;background:linear-gradient(90deg,#b7aaf32d,transparent 68%)}.copy{position:relative;z-index:3;width:min(500px,40vw)}.eyebrow{font:11px 'DM Mono',monospace;letter-spacing:.11em;text-transform:uppercase;color:#b8b1d3;display:flex;gap:11px;align-items:center}.eyebrow:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px #8de9ffb8;flex:none}h1,h2{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-.078em;line-height:.94;margin:24px 0 26px}h1{font-size:clamp(63px,8vw,122px)}h2{font-size:clamp(57px,7.15vw,106px)}h1 span,h2 span{color:#c2b0ff}p{font-size:clamp(16px,1.6vw,18px);color:var(--muted);line-height:1.71;max-width:430px}p strong{color:#f0eafb;font-weight:500}.chapter-code{font:11px 'DM Mono',monospace;letter-spacing:.16em;color:#86dbf4;margin-top:26px;display:flex;align-items:center;gap:12px}.chapter-code:before{content:'';width:27px;height:1px;background:#86dbf4}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:27px}.action{display:inline-flex;align-items:center;justify-content:center;gap:20px;padding:0 23px;min-height:54px;border-radius:999px;border:1px solid #b9a5ff70;background:#ac8dff20;color:#f3ebff;font-size:12px;font-weight:600;transition:transform .2s,background .2s}.action:hover{transform:translateY(-2px);background:#aa92ff32}.action.strong{background:#cebaff;color:#100b1b;border-color:#cebaff}.action.strong:hover{background:#e0d4ff}.tiny{margin-top:26px;font:10px 'DM Mono',monospace;letter-spacing:.16em;color:#8c88a7;text-transform:uppercase}.tiny i{font-style:normal;color:#a9eaff}.panel-note{margin-top:28px;padding:17px 18px;max-width:400px;border:1px solid #b9a5ff3b;border-radius:16px;background:#0c0a1daf;backdrop-filter:blur(11px)}.panel-note small{display:block;font:10px 'DM Mono',monospace;color:#91e5fa;letter-spacing:.14em;margin-bottom:7px}.panel-note span{font-size:14px;line-height:1.55;color:#beb8d3}
+.reveal{opacity:0;transform:translateY(23px);transition:transform .7s,opacity .7s}.reveal.visible{opacity:1;transform:none}footer{position:relative;z-index:5;border-top:1px solid var(--border);padding:26px clamp(22px,5vw,80px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;background:#060610ed;color:#9992b2;font:10px 'DM Mono',monospace;letter-spacing:.08em}.footer-links{display:flex;gap:23px;flex-wrap:wrap}.footer-links a:hover{color:#fff}
+@media(max-width:840px){header{height:74px;padding:0 20px}.headnav{display:none;position:fixed;left:0;right:0;top:74px;padding:10px 21px 20px;background:#080712f7;backdrop-filter:blur(18px);flex-direction:column;align-items:stretch;gap:0;border-bottom:1px solid #ffffff16}.headnav.open{display:flex}.headnav a{padding:14px 0;font-size:13px;border-bottom:1px solid #ffffff13}.headnav .contact-link{border:0;border-radius:0;padding:14px 0}.menu-toggle{display:grid;place-items:center}.chapter-nav{display:none}#scene-host{inset:74px 0 auto 0;width:100%;height:48svh}#fallback .ring{width:min(57%,320px)}.chapter{min-height:110svh;padding:60svh 22px 70px;align-items:flex-start}.chapter:after{left:22px;width:calc(100% - 44px)}.copy{width:min(100%,630px)}h1{font-size:clamp(55px,10.8vw,78px)}h2{font-size:clamp(52px,10.2vw,76px)}p{font-size:15px;max-width:560px;margin-bottom:0}.panel-note{margin-top:20px}.tiny{margin-top:20px}}
+@media(max-width:480px){#scene-host{height:45svh;top:74px}.chapter{padding-top:57svh;min-height:105svh;padding-bottom:60px}h1{font-size:clamp(55px,12.3vw,70px)}h2{font-size:clamp(51px,11.7vw,69px)}h1,h2{margin:18px 0 18px}.eyebrow{font-size:10px}.action{min-height:48px;padding:0 18px;font-size:11px}.copy p{font-size:14px;line-height:1.7}.tiny{line-height:1.8}.chapter-code{font-size:10px;line-height:1.7}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header id="header">
+ <a href="#inicio" class="brand" aria-label="Zenix AR inicio"><span class="brandicon"><b>Z</b></span><span class="brandtext"><strong>ZENIX</strong><small>AR / DIGITAL STUDIO</small></span></a>
+ <nav class="headnav" id="nav" aria-label="Secciones"><a href="#codigo">Código</a><a href="#arquitectura">Arquitectura</a><a href="#conexiones">Conexiones</a><a href="#contacto" class="contact-link">Hablemos ↗</a></nav>
+ <button id="toggle" class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+</header>
+<div id="scene-host" aria-label="Viaje tridimensional por un sistema tecnológico">
+ <div id="fallback" aria-hidden="true"><span class="ring"></span><span class="ring"></span><strong>Z</strong></div><canvas id="world" aria-hidden="true"></canvas>
+</div>
+<nav class="chapter-nav" aria-label="Navegación de capítulos"><a href="#inicio" class="active" aria-label="Inicio"></a><a href="#codigo" aria-label="Código"></a><a href="#arquitectura" aria-label="Arquitectura"></a><a href="#conexiones" aria-label="Conexiones"></a><a href="#contacto" aria-label="Contacto"></a></nav>
+<main>
+ <section id="inicio" class="chapter" data-act="0"><div class="copy reveal"><div class="eyebrow">UNA EXPERIENCIA DIGITAL DIFERENTE</div><h1>ENTRÁ EN EL <span>SISTEMA.</span></h1><p>El software no es una imagen quieta. Es un mundo de ideas, estructuras y conexiones. <strong>Explorá cómo toma forma la tecnología.</strong></p><div class="actions"><a class="action strong" href="#codigo">EXPLORAR EL SISTEMA ↘</a><a class="action" href="#contacto">HABLEMOS ↗</a></div><div class="tiny">01 / 05 · <i>DESLIZÁ PARA AVANZAR POR EL PORTAL ↓</i></div></div></section>
+ <section id="codigo" class="chapter" data-act="1"><div class="copy reveal"><div class="eyebrow">01 / INSTRUCCIONES</div><h2>EL CÓDIGO <span>COBRA VIDA.</span></h2><p>Detrás de cada herramienta existen instrucciones trabajando juntas. <strong>La cámara atraviesa flujos de código</strong> que llegan desde distintas direcciones.</p><div class="panel-note"><small>FLUJO DE DATOS / SOURCE</small><span>Las líneas luminosas representan instrucciones que se procesan y viajan por el sistema.</span></div><div class="chapter-code">SEGUÍ AVANZANDO PARA CONSTRUIR</div></div></section>
+ <section id="arquitectura" class="chapter" data-act="2"><div class="copy reveal"><div class="eyebrow">02 / ARQUITECTURA</div><h2>PIEZAS QUE <span>ENCAJAN.</span></h2><p>Una aplicación se construye con partes que cumplen funciones distintas. <strong>Interfaz, datos, acceso y servicios</strong> se ensamblan en un mismo espacio.</p><div class="panel-note"><small>ARQUITECTURA MODULAR / BUILD</small><span>Los módulos se unen cuando llegás a esta sección, como las piezas de un software real.</span></div><div class="chapter-code">UN SISTEMA QUE SE CONSTRUYE</div></div></section>
+ <section id="conexiones" class="chapter" data-act="3"><div class="copy reveal"><div class="eyebrow">03 / CONEXIONES</div><h2>TODO ESTÁ <span>CONECTADO.</span></h2><p>Las aplicaciones útiles intercambian información. <strong>Los datos viajan de un módulo a otro</strong> para que pedidos, clientes y herramientas funcionen coordinados.</p><div class="panel-note"><small>DATA NETWORK / LIVE</small><span>Los pulsos aparecen solamente cuando entrás a esta etapa de la experiencia.</span></div><div class="chapter-code">LOS DATOS TIENEN UN DESTINO</div></div></section>
+ <section id="contacto" class="chapter" data-act="4"><div class="copy reveal"><div class="eyebrow">04 / ZENIX AR</div><h2>LAS IDEAS SE VUELVEN <span>REALES.</span></h2><p>De una idea a una solución digital que tu negocio puede usar. <strong>Webs, aplicaciones y herramientas creadas para trabajar mejor.</strong></p><div class="actions"><a class="action strong" href="https://wa.me/5492901471353?text=Hola%20Zenix%2C%20vi%20la%20experiencia%203D%20y%20quiero%20consultar%20por%20un%20proyecto" target="_blank" rel="noopener">CONSULTAR POR WHATSAPP ↗</a></div><div class="tiny">ZENIX AR · DESDE USHUAIA PARA EL MUNDO</div></div></section>
+</main>
+<footer><span>© 2026 ZENIX AR / SOFTWARE & EXPERIENCES</span><div class="footer-links"><a href="https://zenix.com.ar" target="_blank" rel="noopener">SITIO OFICIAL ↗</a><a href="#inicio">VOLVER ARRIBA ↑</a></div><span>DEMO EXPERIMENTAL · SITIO OFICIAL SIN CAMBIOS</span></footer>
+<script>
+(()=>{
+ const toggle=document.getElementById('toggle'),nav=document.getElementById('nav'),header=document.getElementById('header'),prog=document.getElementById('progress');
+ function closeNav(){nav.classList.remove('open');toggle.setAttribute('aria-expanded','false');toggle.textContent='☰';document.body.style.overflow=''}
+ toggle.addEventListener('click',()=>{const open=!nav.classList.contains('open');nav.classList.toggle('open',open);toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'×':'☰';document.body.style.overflow=open?'hidden':''});
+ nav.querySelectorAll('a').forEach(x=>x.addEventListener('click',closeNav));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeNav()});
+ const chapters=[...document.querySelectorAll('.chapter')],dots=[...document.querySelectorAll('.chapter-nav a')];let active=-1;
+ function scroll(){const max=document.documentElement.scrollHeight-innerHeight;prog.style.transform=`scaleX(${Math.max(0,Math.min(1,max>0?scrollY/max:0))})`;header.classList.toggle('scrolled',scrollY>20);
+  const mark=scrollY+innerHeight*.48;let n=0,best=Infinity;chapters.forEach((el,i)=>{const mid=el.offsetTop+el.offsetHeight*.5,d=Math.abs(mid-mark);if(d<best){best=d;n=i}});if(n!==active){active=n;dots.forEach((d,i)=>d.classList.toggle('active',i===n));}
+ }
+ addEventListener('scroll',scroll,{passive:true});addEventListener('resize',scroll);scroll();
+ if('IntersectionObserver' in window){const obs=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}}},{threshold:.1});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+})();
+</script>
+<script type="module">
+(async()=>{
+ const canvas=document.getElementById('world'),fallback=document.getElementById('fallback'),host=document.getElementById('scene-host');
+ try{
+ const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js');
+ const gl=new THREE.WebGLRenderer({canvas,alpha:true,antialias:innerWidth>800,powerPreference:'low-power'});gl.setClearColor(0,0);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.5;
+ const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x05050e,.014);
+ const camera=new THREE.PerspectiveCamera(52,1,.1,150);camera.position.set(0,0,11);
+ scene.add(new THREE.AmbientLight(0x849bd8,1.25));const blueLight=new THREE.PointLight(0x78e6ff,72,45);blueLight.position.set(-4,2,6);scene.add(blueLight);const purpleLight=new THREE.PointLight(0xb492ff,88,48);purpleLight.position.set(4,-1,-2);scene.add(purpleLight);
+ const matMetal=new THREE.MeshPhysicalMaterial({color:0x222d50,metalness:.92,roughness:.19,clearcoat:.85});
+ const matDark=new THREE.MeshStandardMaterial({color:0x10182e,metalness:.7,roughness:.27});
+ const matV=new THREE.MeshStandardMaterial({color:0xb9a3ff,metalness:.33,roughness:.15,emissive:0x7555ce,emissiveIntensity:1.15});
+ const matB=new THREE.MeshStandardMaterial({color:0x89eaff,metalness:.22,roughness:.2,emissive:0x2b9ed1,emissiveIntensity:1.25});
+ const basic=(color,opacity=1)=>new THREE.MeshBasicMaterial({color,transparent:opacity<1,opacity,depthWrite:opacity>=1,side:THREE.DoubleSide});
+ const parts=[0,-15.6,-31.2,-46.8,-62.4];const frames=[];
+ // The tunnel links all chapters and creates a physical route for the camera.
+ const tunnel=new THREE.Group();scene.add(tunnel);
+ const lightRings=[];for(let i=0;i<26;i++){
+   const z=2-i*3.12,rad=3.2+Math.sin(i*.75)*.18;
+   const mesh=new THREE.Mesh(new THREE.TorusGeometry(rad,i%4===0?.073:.033,8,72),basic(i%3===0?0xc5a5ff:0x78dfff,i%4===0?.45:.27));mesh.position.z=z;mesh.rotation.z=i*.12;tunnel.add(mesh);lightRings.push(mesh);
+   for(let j=0;j<8;j++){const a=(j/8)*Math.PI*2+i*.15;const tube=new THREE.Mesh(new THREE.BoxGeometry(.03,.18,.08),basic(i%2===0?0xc6a6ff:0x6edfff,.5));tube.position.set(Math.cos(a)*rad,Math.sin(a)*rad,z);tube.rotation.z=a-Math.PI/2;tunnel.add(tube)}
+ }
+ for(let i=0;i<12;i++){const a=i/12*Math.PI*2;const rail=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,76,5),basic(i%3===0?0xaf99ff:0x6bdcff,.16));rail.rotation.x=Math.PI/2;rail.position.set(Math.cos(a)*3.6,Math.sin(a)*3.6,-34);tunnel.add(rail)}
+ const portal=new THREE.Group();portal.position.z=parts[0];scene.add(portal);frames.push(portal);
+ const rings=[];for(let i=0;i<4;i++){
+  const rr=new THREE.Mesh(new THREE.TorusGeometry(2.0+i*.37,.065-i*.008,12,90),new THREE.MeshStandardMaterial({color:i%2===0?0xaf98ff:0x86e7ff,metalness:.5,roughness:.14,emissive:i%2===0?0x7254ca:0x1784b8,emissiveIntensity:1.35,transparent:true,opacity:.82}));rr.position.z=-i*.52;rr.rotation.set(.13+i*.08,i*.21,i*.31);portal.add(rr);rings.push(rr);
+ }
+ const portalCore=new THREE.Mesh(new THREE.IcosahedronGeometry(.92,2),new THREE.MeshPhysicalMaterial({color:0xbca6ff,metalness:.25,roughness:.11,transparent:true,opacity:.8,clearcoat:1,emissive:0x6254bc,emissiveIntensity:.75}));portalCore.position.z=-.42;portal.add(portalCore);
+ const coreWire=new THREE.Mesh(new THREE.IcosahedronGeometry(1.14,1),new THREE.MeshBasicMaterial({color:0x8ceaff,wireframe:true,transparent:true,opacity:.52,depthWrite:false}));coreWire.position.z=-.42;portal.add(coreWire);
+ // Original code fragments float at distinct depths; no flat full-screen mockup.
+ function labelTexture(lines,color='#b9d9ff'){
+  const c=document.createElement('canvas');c.width=768;c.height=256;const x=c.getContext('2d');x.clearRect(0,0,768,256);x.fillStyle='rgba(12,15,38,.87)';x.fillRect(0,0,768,256);x.fillStyle=color;x.font='bold 34px monospace';lines.forEach((v,i)=>x.fillText(v,30,65+i*61));x.strokeStyle='rgba(141,230,255,.37)';x.lineWidth=4;x.strokeRect(4,4,760,248);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;return tex;
+ }
+ const code=new THREE.Group();code.position.z=parts[1];scene.add(code);frames.push(code);
+ const snippets=[['function build(app) {','  return deploy(app);','}'],['const project = {','  type: "web",','  ready: true','}'],['import { zenix }','from "./core";','connect(zenix);'],['<Interface />','<Users />','<Services />'],['await api.start();','const status = "ok";','render(status);'],['type Build = {','  output: "ready"','};']];
+ const cards=[];for(let i=0;i<snippets.length;i++){
+  const tx=new THREE.Mesh(new THREE.PlaneGeometry(2.7,.9),new THREE.MeshBasicMaterial({map:labelTexture(snippets[i],i%2?'#aeb6ff':'#84eaff'),transparent:true,depthWrite:false,side:THREE.DoubleSide}));
+  const a=i/6*Math.PI*2;tx.position.set(Math.cos(a)*2.4,Math.sin(a)*1.75,(i%3-1)*1.18);tx.rotation.y=(i%2?-.25:.25);tx.rotation.x=(i%3-1)*.16;code.add(tx);cards.push({mesh:tx,start:tx.position.clone(),i});
+ }
+ const codePulses=[];for(let i=0;i<48;i++){const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.047,0),basic(i%3?0x87eaff:0xc2a4ff,.94));const x=(i%8-3.5)*.33,y=(Math.floor(i/8)-2.5)*.4;mesh.position.set(x,y,2.4+(i%4)*.6);code.add(mesh);codePulses.push({mesh,i,x,y});}
+ // Software architecture: real three-dimensional modules with layered translucent labels.
+ const arch=new THREE.Group();arch.position.z=parts[2];scene.add(arch);frames.push(arch);
+ const mods=[];const modData=[['UI',-1.6,.9,.7,0x9d8aff],['API',1.45,1.15,-.85,0x79dfff],['DATA',0,-1.1,.25,0xa3b2ff],['AUTH',-1.68,-1.13,-.85,0x8beaff],['APP',1.65,-1.02,.8,0xbba7ff]];
+ const edgeBasic=new THREE.LineBasicMaterial({color:0x9be7ff,transparent:true,opacity:.6});
+ modData.forEach(([name,x,y,z,color],i)=>{
+  const g=new THREE.Group();const block=new THREE.Mesh(new THREE.BoxGeometry(1.6,1.08,.65),matMetal);g.add(block);
+  const tint=new THREE.Mesh(new THREE.BoxGeometry(1.43,.91,.035),basic(color,.12));tint.position.z=.35;g.add(tint);
+  const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.65,1.13,.69)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.9}));g.add(e);
+  const panel=new THREE.Mesh(new THREE.PlaneGeometry(1.28,.42),new THREE.MeshBasicMaterial({map:labelTexture([name], '#d9e5ff'),transparent:true,depthWrite:false}));panel.scale.set(1,.94,1);panel.position.z=.38;g.add(panel);
+  g.position.set(x,y,z);arch.add(g);mods.push({g,x,y,z,i});
+ });
+ const linkLines=new THREE.Group();arch.add(linkLines);for(let i=1;i<modData.length;i++){
+  const a=new THREE.Vector3(modData[0][1],modData[0][2],modData[0][3]);const b=new THREE.Vector3(modData[i][1],modData[i][2],modData[i][3]);const mid=a.clone().add(b).multiplyScalar(.5);mid.z+=.8;
+  const curve=new THREE.QuadraticBezierCurve3(a,mid,b);linkLines.add(new THREE.Mesh(new THREE.TubeGeometry(curve,20,.018,5,false),basic(i%2?0x87eaff:0xb5a0ff,.48)));
+ }
+ // Spatial network: glowing physical nodes and curved routes with real data packets.
+ const network=new THREE.Group();network.position.z=parts[3];scene.add(network);frames.push(network);
+ const nodes=[[-2.3,1.35,1.05],[1.9,1.25,-.7],[-2.5,-1.2,-.55],[2.15,-1.28,.85],[0,2.25,-1.35],[0,-2.2,1.1],[0,0,0],[-3.18,.05,-1.3],[3.1,.17,-1.5]];
+ const netNodes=[];nodes.forEach((a,i)=>{const g=new THREE.Group();g.position.set(...a);g.add(new THREE.Mesh(new THREE.IcosahedronGeometry(i===6?.43:.29,1),i===6?matV:matB));const torus=new THREE.Mesh(new THREE.TorusGeometry(i===6?.65:.48,.023,7,45),basic(i===6?0xc4a4ff:0x86eaff,.72));g.add(torus);network.add(g);netNodes.push(g)});
+ const routes=[];for(let i=0;i<8;i++){
+  const a=new THREE.Vector3(...nodes[6]),b=new THREE.Vector3(...nodes[i]);const bend=a.clone().add(b).multiplyScalar(.5);bend.z+=.7;
+  const curve=new THREE.QuadraticBezierCurve3(a,bend,b);const track=new THREE.Mesh(new THREE.TubeGeometry(curve,28,.016,5,false),basic(i%2?0x8eeaff:0xb79aff,.5));network.add(track);
+  const pulse=new THREE.Mesh(new THREE.SphereGeometry(.075,10,10),basic(0xd7f7ff,1));network.add(pulse);routes.push({curve,pulse,i});
+ }
+ // Final destination: extruded three-dimensional Zenix glyph, with distinct bevels.
+ const brand=new THREE.Group();brand.position.z=parts[4];scene.add(brand);frames.push(brand);
+ const shape=new THREE.Shape();shape.moveTo(-1.55,1.45);shape.lineTo(1.55,1.45);shape.lineTo(1.55,.93);shape.lineTo(-.65,-.92);shape.lineTo(1.55,-.92);shape.lineTo(1.55,-1.45);shape.lineTo(-1.55,-1.45);shape.lineTo(-1.55,-.87);shape.lineTo(.62,.92);shape.lineTo(-1.55,.92);shape.lineTo(-1.55,1.45);
+ const glyph=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:.64,steps:1,bevelEnabled:true,bevelSegments:3,bevelThickness:.09,bevelSize:.08}),new THREE.MeshPhysicalMaterial({color:0xbca5ff,metalness:.7,roughness:.12,emissive:0x6049d2,emissiveIntensity:.56,clearcoat:1,clearcoatRoughness:.04}));glyph.position.z=-.32;brand.add(glyph);
+ const brandRing=new THREE.Mesh(new THREE.TorusGeometry(2.64,.054,8,90),new THREE.MeshStandardMaterial({color:0x8de7ff,emissive:0x3996dd,emissiveIntensity:1.45,transparent:true,opacity:.85}));brandRing.rotation.set(.2,-.3,.06);brand.add(brandRing);
+ const brandRing2=new THREE.Mesh(new THREE.TorusGeometry(3.1,.028,8,90),basic(0xc0a2ff,.45));brandRing2.rotation.set(-.31,.35,.18);brand.add(brandRing2);
+ const sparks=[];for(let i=0;i<60;i++){const a=i*2.3999,r=1.75+Math.sqrt(i/60)*2.1;const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.028+(i%3)*.01,0),basic(i%2?0x82eaff:0xbf9eff,.6));mesh.position.set(Math.cos(a)*r,Math.sin(a)*r,((i*7)%13-6)*.12);brand.add(mesh);sparks.push(mesh)}
+ // Sparse atmospheric particles, deterministic and low-impact for Android.
+ const pg=new THREE.BufferGeometry(),count=340,p=new Float32Array(count*3);for(let i=0;i<count;i++){const a=i*2.39996,r=4+Math.sqrt((i*19%347)/347)*12;p[i*3]=Math.cos(a)*r;p[i*3+1]=Math.sin(a)*r;p[i*3+2]=3-((i*37)%79)}pg.setAttribute('position',new THREE.BufferAttribute(p,3));scene.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0x8dbdff,size:.047,transparent:true,opacity:.42,depthWrite:false})));
+ let w=0,h=0,frame=0,done=false,last=performance.now(),elapsed=0,scrollStage=0,mobile=false,rendered=false;
+ const mouse={x:0,y:0};addEventListener('pointermove',e=>{mouse.x=(e.clientX/innerWidth-.5)*2;mouse.y=(e.clientY/innerHeight-.5)*2},{passive:true});
+ function resize(){const b=host.getBoundingClientRect();w=Math.max(1,Math.round(b.width));h=Math.max(1,Math.round(b.height));mobile=innerWidth<=840;gl.setPixelRatio(Math.min(devicePixelRatio,mobile?1.05:1.5));gl.setSize(w,h,false);camera.aspect=w/h;camera.fov=mobile?57:52;camera.updateProjectionMatrix()}
+ addEventListener('resize',resize,{passive:true});resize();
+ const chapters=[...document.querySelectorAll('.chapter')];const v3=(a,b,t)=>a+(b-a)*t;
+ function progress(){const mark=scrollY+innerHeight*.5;const centers=chapters.map(c=>c.offsetTop+c.offsetHeight*.5);let stage=0;for(let i=0;i<centers.length-1;i++){if(mark>=centers[i])stage=i+Math.min(1,(mark-centers[i])/(centers[i+1]-centers[i]));}scrollStage=Math.min(4,stage)}addEventListener('scroll',progress,{passive:true});progress();
+ function animate(now){if(done)return;try{
+  const dt=Math.min(.065,Math.max(0,(now-last)/1000));last=now;elapsed+=dt;const phase=scrollStage;
+  // Camera physically flies into the digital tunnel as the page scrolls.
+  const tz=11-phase*15.6;camera.position.z=v3(camera.position.z,tz,.065);
+  camera.position.x=v3(camera.position.x,mobile?0:(mouse.x*.22 + Math.sin(phase*.72)*.24),.05);
+  camera.position.y=v3(camera.position.y,mobile?0:(-mouse.y*.16+Math.sin(phase*.9)*.18),.05);
+  camera.lookAt(camera.position.x*.14,camera.position.y*.14,camera.position.z-12);
+  // Ring activity follows the portal entry, it does not create aimless full-body spinning.
+  for(let i=0;i<rings.length;i++){
+    const target=phase<.8?(.04+i*.08)*phase:0;
+    rings[i].rotation.z=v3(rings[i].rotation.z,target,.045);
+  }
+  const codeActive=Math.max(0,1-Math.abs(phase-1)*1.6);
+  codePulses.forEach(({mesh,i,x,y})=>{const travel=codeActive>0?(elapsed*.9+i*.073)%1:0;mesh.position.set(x*(1-travel*.55),y*(1-travel*.5),2.5-travel*4);mesh.visible=codeActive>.25;});
+  cards.forEach(({mesh,start,i})=>{mesh.position.x=v3(mesh.position.x,start.x+(codeActive>.2?Math.sin(i*1.7)*.16:0),.08);});
+  // Architecture modules assemble as chapter 2 becomes active.
+  const assembly=Math.max(0,Math.min(1,(phase-1.25)*1.2));
+  mods.forEach(({g,x,y,z,i})=>{g.position.set(v3(g.position.x,x+(1-assembly)*Math.cos(i*2)*1.05,.07),v3(g.position.y,y+(1-assembly)*Math.sin(i*1.8)*.7,.07),v3(g.position.z,z+(1-assembly)*2,.07));g.rotation.y=v3(g.rotation.y,(1-assembly)*(i%2?.2:-.2),.08)});
+  // Pulses travel only when the network is in focus.
+  routes.forEach(({curve,pulse,i})=>{pulse.visible=phase>2.6&&phase<3.6;const t=(elapsed*.23+i*.137)%1;pulse.position.copy(curve.getPoint(t))});
+  // Z emerges at the end with meaningful deployment motion.
+  const deploy=Math.max(0,Math.min(1,(phase-3.2)/.75));brand.scale.setScalar(v3(brand.scale.x,.5+deploy*.5,.08));glyph.rotation.y=v3(glyph.rotation.y,(1-deploy)*-.36,.05);brandRing.rotation.z=v3(brandRing.rotation.z,deploy*.18,.05);
+  gl.render(scene,camera);
+  if(!rendered){rendered=true;fallback.style.display='none';canvas.classList.add('ready');}
+ }catch(e){console.error('Escena 3D no disponible',e);canvas.style.display='none';fallback.style.display='grid';done=true;return}requestAnimationFrame(animate)}
+ requestAnimationFrame(animate);
+ document.addEventListener('visibilitychange',()=>{last=performance.now()});
+ }catch(e){console.warn('Se muestra el diseño de respaldo',e);canvas.style.display='none';fallback.style.display='grid'}
+})();
+</script>
+</body>
+</html>
