@@ -123,6 +123,7 @@ try{
  const nodeShell=new THREE.MeshStandardMaterial({color:0x182340,metalness:.45,roughness:.25});
  netNodes.forEach((node,i)=>{node.add(block(i? .5:.78,i? .37:.7,i?.32:.45,nodeShell,0,0,-.16));node.add(block(i?.37:.58,.035,.022,i?blue:violet,0,-.09,.22));node.children[0].position.z=.24;node.children[1].position.z=.39;});
  const networkArcs=[];
+ const networkGrid=new THREE.GridHelper(10.6,16,0x547fa3,0x3a476e);networkGrid.rotation.x=Math.PI/2;networkGrid.position.z=-2.25;networkGrid.material.transparent=true;networkGrid.material.opacity=.13;net.add(networkGrid);
  [[1,5],[5,2],[2,8],[8,4],[4,6],[6,3],[3,7],[7,1]].forEach(([a,b],i)=>{
   const p=new THREE.Vector3(...coords[a]),q=new THREE.Vector3(...coords[b]),mid=p.clone().add(q).multiplyScalar(.5);mid.z+=.6+(i%2)*.22;
   const curve=new THREE.QuadraticBezierCurve3(p,mid,q);
@@ -166,6 +167,8 @@ try{
  else if(S===4){pose(chip,0,0,.5,.05,.1,0,1.06,1);pose(editor,-2.5,.8,-4,0,.4,0,.4,0);pose(dashboard,2.5,-.3,-4,0,-.5,0,.4,0);pose(net,0,0,-1,0,0,0,.62,.25)}
  else{pose(chip,.05,0,.7,.08,-.17,0,1.12,1);pose(editor,-3,1,-4,0,.3,0,.4,0);pose(dashboard,3,-1,-4,0,-.3,0,.4,0);pose(net,0,0,-1,0,0,0,.45,.1)}
  ring.material.opacity=lerp(ring.material.opacity,S>=4?.47:.14,.05);ring.scale.setScalar(lerp(ring.scale.x,S>=4?1.25:.85,.06));
+ // Keep spatial models visible in the narrow mobile camera.
+ root.scale.setScalar(lerp(root.scale.x,m?(S===3?.72:.86):1,.07));
  // Cursor is a subtle inspection tool, not an idle continuous rotation.
  root.rotation.y=lerp(root.rotation.y,m?(0):pointer.x*.095,.025);root.rotation.x=lerp(root.rotation.x,m?0:-pointer.y*.065,.025);
  // Compile in motion ONLY in the code phase.
