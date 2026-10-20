@@ -152,6 +152,13 @@ try{
  function pose(obj,x,y,z,rx,ry,rz,scale,op){obj.position.x=lerp(obj.position.x,x,.065);obj.position.y=lerp(obj.position.y,y,.065);obj.position.z=lerp(obj.position.z,z,.065);obj.rotation.x=lerp(obj.rotation.x,rx,.055);obj.rotation.y=lerp(obj.rotation.y,ry,.055);obj.rotation.z=lerp(obj.rotation.z,rz,.055);obj.scale.setScalar(lerp(obj.scale.x,scale,.07));const prev=obj.userData.opacity===undefined?1:obj.userData.opacity;obj.userData.opacity=lerp(prev,op,.1);obj.traverse(child=>{if(child.isMesh||child.isLine){if(child.material&&child.material.transparent!==undefined){if(child.userData.nativeOpacity===undefined)child.userData.nativeOpacity=child.material.opacity; child.material.transparent=true;child.material.opacity=child.userData.nativeOpacity*obj.userData.opacity;child.material.depthWrite=obj.userData.opacity>.88}}})}
  // For stage progression, do not spin objects for decoration. Compile data flows only in stage 1, network packets travel only in stage 3.
  const loop=(now)=>{if(!visible){requestAnimationFrame(loop);return}let dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stage=lerp(stage,target,reduce?.2:.035);let S=Math.round(stage),m=mobile();let cx=m?0:.05;
+  // Camera follows chapter actions, rather than drifting randomly.
+  const viewpoints=[[0,0,10.9],[-.28,.21,10.45],[.35,-.18,10.18],[-.28,.18,11.05],[.18,0,10.44],[0,.06,10.5]];
+  const v=viewpoints[Math.max(0,Math.min(5,S))];
+  cam.position.x=lerp(cam.position.x,(m?0:v[0])+(!m?pointer.x*.13:0),.035);
+  cam.position.y=lerp(cam.position.y,m?0:v[1],.035);
+  cam.position.z=lerp(cam.position.z,m?11.1:v[2],.035);
+  cam.lookAt(0,0,0);
  if(S===0){pose(chip,cx,.1,0,.18,-.32,-.11,1.03,1);pose(editor,-1.8,1.1,-2.8,.1,.25,-.08,.9,.16);pose(dashboard,2.6,-.5,-3.5,.12,-.4,0,.55,0);pose(net,0,0,-4,0,0,0,.2,0)}
  else if(S===1){pose(chip,.45,-.47,.5,.2,.13,-.07,.79,1);pose(editor,-1.05,1.02,-.8,.08,.16,.04,.97,1);pose(dashboard,2,-.45,-3,.1,-.2,0,.5,0);pose(net,0,0,-4,0,0,0,.2,0)}
  else if(S===2){pose(chip,2.03,-1.34,-1.4,.18,.05,.18,.44,.42);pose(editor,-3.3,1.3,-4,.1,.4,0,.52,0);pose(dashboard,-.05,.2,.35,.06,-.14,.02,1.08,1);pose(net,0,0,-4,0,0,0,.2,0)}
@@ -165,7 +172,26 @@ try{
  if(S===1){chip.children.forEach(x=>{if(x.type==='Line')x.material.opacity=.5+.34*Math.sin(clock*4)});logo.material.opacity=.85+.15*Math.sin(clock*3)}else{chip.children.forEach(x=>{if(x.type==='Line')x.material.opacity=.65});logo.material.opacity=1}
  // Network pings are packets between modules ONLY while the integration phase is on screen.
  packets.forEach(({mesh,a,b,index})=>{let t=(clock*.22+index*.137)%1;mesh.position.copy(a).lerp(b,t);mesh.visible=S===3;mesh.material.opacity= S===3 ? .8:0});
- netNodes.forEach((node,i)=>{node.children[1].rotation.z=0});
+ // Compiler transfers are visible only when the code chapter is active.
+  compileFlow.visible=S===1 && !reduce;
+  flowMotes.forEach(({mote,curve,index})=>{
+    if(S===1&&!reduce){const p=(clock*.23+index*.146)%1;mote.position.copy(curve.getPoint(p));mote.scale.setScalar(.62+Math.sin(p*Math.PI)*.9);}
+  });
+  // Floating dashboard tiles physically detach from the screen on deployment.
+  const showInterface=S===2;
+  uiCards.children.forEach((c,i)=>{
+    const x=-2.32+i*2.05,z=.65+i*.24;
+    c.position.x=lerp(c.position.x,showInterface?x:x*.75,.075);
+    c.position.z=lerp(c.position.z,showInterface?z:.17,.075);
+    c.rotation.y=lerp(c.rotation.y,showInterface?(i-1)*-.22:0,.06);
+  });
+  if(S===3&&!reduce){
+    const phase=(clock*.36)%1;
+    networkPulse.scale.setScalar(.55+phase*2.65);
+    networkPulse.material.opacity=(1-phase)*.52;
+  }else{networkPulse.material.opacity=0;}
+  netNodes.forEach((node,i)=>{node.children[1].rotation.z=S===3&&!reduce?Math.sin(clock*1.7+i)*.06:0});
+  deviceLight.intensity=lerp(deviceLight.intensity,S===1?42:S===2?55:S===3?62:28,.04);
  renderer.render(scene,cam);requestAnimationFrame(loop)};
  document.addEventListener('visibilitychange',()=>{visible=!document.hidden;last=performance.now()});fallback.style.display='none';cv.classList.add('ready');requestAnimationFrame(loop);
 }catch(e){console.warn('3D no disponible: se conserva la ilustración de respaldo',e);cv.style.display='none'}
