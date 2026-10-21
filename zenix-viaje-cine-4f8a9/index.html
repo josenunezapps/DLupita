@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#09070e">
+<meta name="description" content="Entrá al universo de Zenix AR. Un recorrido por las ideas, el diseño y las experiencias digitales.">
+<title>Zenix AR — Entrá a otra dimensión</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%23100a19'/%3E%3Cpath d='M12 13h24v6L21 29h15v6H12v-6l15-10H12z' fill='%23ceb0ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<a class="skip" href="#inicio">Ir al contenido</a>
+<div class="backdrop" aria-hidden="true"></div>
+<div class="world-wrap" aria-hidden="true"><canvas id="world"></canvas></div>
+<div class="vignette" aria-hidden="true"></div>
+<header class="header">
+  <a class="brand" href="#inicio" aria-label="Zenix AR, inicio"><svg viewBox="0 0 38 38" aria-hidden="true"><path d="M9 10h21v5L16 24h14v5H9v-5l14-9H9z"/></svg><span>zenix<small>AR</small></span></a>
+  <a class="edition" href="#web">Una nueva perspectiva digital</a>
+  <a class="contact-pill" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+</header>
+<main class="timeline" id="recorrido" aria-label="Recorrido por Zenix AR">
+  <div class="waypoint" id="inicio" style="--at:0"></div>
+  <div class="waypoint" id="web" style="--at:180"></div>
+  <div class="waypoint" id="apps" style="--at:350"></div>
+  <div class="waypoint" id="contacto" style="--at:500"></div>
+  <section class="story current" data-scene="0" aria-labelledby="title-0">
+    <div class="story-copy"><p class="eyebrow"><i></i> Bienvenido al universo Zenix</p><h1 id="title-0">Una idea.<br><em>Todo un universo.</em></h1><p class="description">Hay ideas que merecen otra dimensión.<br>Entrá. La tuya puede ser la próxima.</p><button class="primary" data-play>Empezar el viaje <span aria-hidden="true">↗</span></button><span class="gesture">O deslizá para explorar a tu ritmo <span aria-hidden="true">↓</span></span></div>
+  </section>
+  <section class="story" data-scene="1" aria-labelledby="title-1">
+    <div class="story-copy"><p class="eyebrow"><b>01 /</b> Una presencia que se siente</p><h2 id="title-1">Tu esencia.<br><em>En cada detalle.</em></h2><p class="description">Una web que toma forma alrededor de tu negocio. Desde la primera impresión hasta la próxima consulta.</p><a class="chapter-link" href="#apps">Seguí descubriendo <span aria-hidden="true">↓</span></a></div>
+  </section>
+  <section class="story right" data-scene="2" aria-labelledby="title-2">
+    <div class="story-copy"><p class="eyebrow"><b>02 /</b> Lo complejo, hecho simple</p><h2 id="title-2">Más cerca.<br><em>Más conectado.</em></h2><p class="description">Tu catálogo, tus consultas y tus herramientas. Experiencias pensadas para acompañarte todos los días.</p><a class="chapter-link" href="#contacto">Ahora imaginá la tuya <span aria-hidden="true">↓</span></a></div>
+  </section>
+  <section class="story final" data-scene="3" aria-labelledby="title-3">
+    <div class="story-copy"><p class="eyebrow"><i></i> Tu próxima idea empieza acá</p><h2 id="title-3">Lo imaginás.<br><em>Lo creamos.</em></h2><p class="description">De Ushuaia, a donde quieras llegar.<br>Contanos qué tenés en mente.</p><a class="primary" href="https://wa.me/5492901471353?text=Hola%20Zenix%20AR%2C%20vi%20el%20recorrido%203D%20y%20quiero%20consultar%20por%20mi%20proyecto." target="_blank" rel="noopener noreferrer">Hablemos de tu proyecto <span aria-hidden="true">↗</span></a><a class="domain" href="https://zenix.com.ar" target="_blank" rel="noopener noreferrer">zenix.com.ar <span aria-hidden="true">↗</span></a></div>
+  </section>
+</main>
+<nav class="chapters" aria-label="Capítulos del recorrido"><a href="#inicio" class="current" aria-current="location" aria-label="Inicio"><span>00</span><i></i></a><a href="#web" aria-label="Diseño web"><span>01</span><i></i></a><a href="#apps" aria-label="Aplicaciones"><span>02</span><i></i></a><a href="#contacto" aria-label="Contacto"><span>03</span><i></i></a></nav>
+<div class="bottom-bar"><div class="chapter-caption"><span id="chapter-number">00</span><i></i><span id="chapter-name">El origen</span></div><div class="playback"><button id="motion" aria-label="Pausar movimiento" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 5v10M14 5v10"/></svg></button><button id="tour" aria-pressed="false"><span class="play-symbol" aria-hidden="true">▷</span><span id="tour-label">Ver recorrido</span></button></div></div>
+<div class="progress" aria-hidden="true"><span id="progress"></span></div>
+<div class="loader" id="loader" role="status"><span class="loader-z">z</span><p>Abriendo otra dimensión</p><i></i></div>
+<div class="fallback-art" aria-hidden="true">Z</div>
+<noscript><style>.loader{display:none}.story{position:relative;opacity:1;visibility:visible;min-height:100vh;padding-top:150px}.timeline{height:auto}.story-copy{position:relative;top:auto;transform:none}.fallback-art{display:block}</style></noscript>
+<script>window.setTimeout(function(){if(!document.body.classList.contains('ready')){document.body.classList.add('fallback');document.getElementById('loader').hidden=true;}},15000);</script>
+<script type="module" src="./journey.js"></script>
+</body>
+</html>
