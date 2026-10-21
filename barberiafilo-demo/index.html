@@ -17,6 +17,7 @@
   --bg:#141312;--surface:#1d1c1a;--fg:#efece7;--muted:#a19c94;--line:#2f2d2a;
   --hero:#0c0b0a;--accent:#e2a94a;--accent-fg:#1a1306;--taken:#262421;color-scheme:dark}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body)}
 .inner{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
@@ -33,10 +34,10 @@ h1 em{font-style:normal;color:var(--brass)}
 .info small{display:block;color:var(--hero-muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .info b{font-size:16px}
 
-.layout{display:grid;gap:26px;padding-block:32px 40px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;padding-block:32px 40px}
 h2{font:600 16px var(--display);margin:0 0 12px;display:flex;gap:10px;align-items:center}
 h2 i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:13px}
-.steps{display:grid;gap:30px;min-width:0}
+.steps{display:grid;grid-template-columns:minmax(0,1fr);gap:30px;min-width:0}
 .opts{display:grid;gap:8px}
 .svc{display:flex;justify-content:space-between;gap:12px;text-align:left;width:100%;padding:15px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font:16px var(--body);cursor:pointer}
 .svc small{display:block;color:var(--muted);font-size:13px}
@@ -62,9 +63,21 @@ input{width:100%;padding:13px;border-radius:10px;border:1.5px solid var(--line);
 .hint{font-size:13px;color:var(--hero-muted);margin:0}
 .foot{font-size:13px;color:var(--muted);padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 
+.fields{display:grid;gap:14px}
+.banner{margin:0;padding:12px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:14px;color:var(--muted)}
+.banner a,.foot a{color:var(--accent);font-weight:700}
+.loading{color:var(--muted);font-size:14px;margin:4px 0}
+button.confirm{width:100%;border:0;font:700 16px var(--body);cursor:pointer}
+button.confirm:disabled{opacity:.4;cursor:not-allowed}
+.err{margin:0;color:#ffb4a3;font-weight:600;font-size:14px}
+#form,#done{display:grid;gap:14px}
+.check{width:48px;height:48px;border-radius:50%;background:var(--brass);color:#1a1306;display:grid;place-items:center;font-size:24px;font-weight:800}
+.ghost{background:transparent;border:1px solid rgba(255,255,255,.3);color:var(--hero-fg);padding:13px;border-radius:12px;font:600 15px var(--body);cursor:pointer}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+@media (min-width:900px){.fields{grid-template-columns:1fr 1fr}}
 @media (min-width:900px){
   .hero .inner{grid-template-columns:1.4fr 1fr;align-items:end;gap:56px;padding-block:64px 56px}
-  .layout{grid-template-columns:1fr 360px;gap:56px;padding-block:56px}
+  .layout{grid-template-columns:minmax(0,1fr) 360px;gap:56px;padding-block:56px}
   .summary{position:sticky;top:24px}
   .opts{grid-template-columns:1fr 1fr}
   .days{overflow:visible;flex-wrap:wrap}
@@ -90,27 +103,46 @@ input{width:100%;padding:13px;border-radius:10px;border:1.5px solid var(--line);
 
 <div class="inner layout">
   <div class="steps">
+    <p class="banner" id="banner" hidden>Modo demo: los turnos se guardan solo en este navegador. Abrí el <a href="panel/">panel del barbero</a> en otra pestaña y vas a ver aparecer tu reserva.</p>
     <section><h2><i>1</i>Servicio</h2><div class="opts" id="svcs"></div></section>
-    <section><h2><i>2</i>Día y hora</h2><div class="days" id="days"></div><div class="slots" id="slots"></div></section>
-    <section><h2><i>3</i>Tus datos</h2><label for="name">Nombre</label><input id="name" autocomplete="name" placeholder="Ej: Juan Pérez"></section>
+    <section><h2><i>2</i>Día y hora</h2><div class="days" id="days"></div><div class="slots" id="slots"><p class="loading">Cargando horarios…</p></div></section>
+    <section><h2><i>3</i>Tus datos</h2>
+      <div class="fields">
+        <div><label for="name">Nombre</label><input id="name" autocomplete="name" placeholder="Ej: Juan Pérez"></div>
+        <div><label for="phone">WhatsApp</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ej: 11 2345 6789"></div>
+      </div>
+    </section>
   </div>
-  <aside class="summary">
-    <h3>Tu turno</h3>
-    <dl id="sum"></dl>
-    <a class="confirm" id="confirm" aria-disabled="true" target="_blank" rel="noopener">Elegí un horario</a>
-    <p class="hint">Se abre WhatsApp con tu reserva lista para enviar. El turno queda tomado cuando la barbería responde.</p>
+  <aside class="summary" aria-live="polite">
+    <div id="form">
+      <h3>Tu turno</h3>
+      <dl id="sum"></dl>
+      <button class="confirm" id="confirm" disabled>Elegí un horario</button>
+      <p class="err" id="msg" hidden></p>
+      <p class="hint">El horario queda reservado al instante. La barbería te confirma por WhatsApp.</p>
+    </div>
+    <div id="done" hidden>
+      <div class="check">✓</div>
+      <h3>¡Turno reservado!</h3>
+      <dl id="doneSum"></dl>
+      <a class="confirm" id="notify" target="_blank" rel="noopener">Avisar a la barbería por WhatsApp</a>
+      <button class="ghost" id="again">Reservar otro turno</button>
+    </div>
   </aside>
 </div>
-<p class="inner foot">Negocio, servicios y horarios de ejemplo.</p>
+<p class="inner foot"><span>Negocio, servicios y horarios de ejemplo.</span> <a href="panel/">Soy el barbero → Panel</a></p>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="store.js"></script>
 <script>
-const WHATSAPP="5491100000000";
-const SVCS=[["Corte","30 min",12000],["Corte + barba","45 min",17000],["Barba y perfilado","20 min",8000],["Corte infantil","25 min",9500]];
-const HOURS=["10:00","10:30","11:00","11:30","12:00","12:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30"];
+const C=FILO, S=Store, SVCS=C.servicios, HOURS=C.horarios;
 const DN=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
-const st={svc:0,day:null,slot:null};
+const st={svc:0,day:null,slot:null,occ:new Set(),busy:false};
 const fmt=n=>"$"+n.toLocaleString("es-AR");
 const $=id=>document.getElementById(id);
+const digits=s=>s.replace(/\D/g,"");
+if(S.modo==="demo") $("banner").hidden=false;
 
 SVCS.forEach(([n,d,p],i)=>{
   const b=document.createElement("button"); b.className="svc"; b.setAttribute("aria-pressed",i===st.svc);
@@ -120,44 +152,72 @@ SVCS.forEach(([n,d,p],i)=>{
 });
 
 const today=new Date(); today.setHours(0,0,0,0);
-const days=[...Array(8)].map((_,i)=>{const d=new Date(today);d.setDate(d.getDate()+i);return d;});
-const busy=(d,h)=>((d.getDate()*7+h*13)%5)===0; // ocupados de ejemplo, estables por fecha
+const days=[...Array(C.diasAdelante)].map((_,i)=>{const d=new Date(today);d.setDate(d.getDate()+i);return d;});
 days.forEach((d,i)=>{
   const b=document.createElement("button"); b.className="day";
   b.innerHTML=`${i===0?"Hoy":DN[d.getDay()]}<b>${d.getDate()}</b>`;
-  b.disabled=d.getDay()===0; b.setAttribute("aria-pressed","false");
-  b.onclick=()=>{st.day=i;st.slot=null;[...$("days").children].forEach((x,j)=>x.setAttribute("aria-pressed",j===i));drawSlots();render();};
+  b.disabled=C.diasCerrados.includes(d.getDay()); b.setAttribute("aria-pressed","false");
+  b.onclick=()=>pickDay(i);
   $("days").appendChild(b);
 });
 
+async function pickDay(i,autoSlot){
+  st.day=i; st.slot=null;
+  [...$("days").children].forEach((x,j)=>x.setAttribute("aria-pressed",j===i));
+  $("slots").innerHTML=`<p class="loading">Cargando horarios…</p>`; render();
+  try{ st.occ=await S.ocupados(S.iso(days[i])); }
+  catch(e){ $("slots").innerHTML=`<p class="loading">No se pudieron cargar los horarios. Revisá tu conexión y tocá el día de nuevo.</p>`; return; }
+  drawSlots();
+  if(autoSlot){const f=[...$("slots").children].find(b=>!b.disabled); if(f) f.click();}
+  render();
+}
+
 function drawSlots(){
-  const box=$("slots"); box.innerHTML=""; if(st.day===null)return;
-  const d=days[st.day], now=new Date();
+  const box=$("slots"); box.innerHTML=""; const d=days[st.day], now=new Date();
   HOURS.forEach((h,hi)=>{
     const [hh,mm]=h.split(":").map(Number), t=new Date(d); t.setHours(hh,mm);
     const b=document.createElement("button"); b.className="slot"; b.textContent=h;
-    b.disabled=busy(d,hi)||t<now; b.setAttribute("aria-pressed",st.slot===hi);
-    b.onclick=()=>{st.slot=hi;drawSlots();render();};
+    b.disabled=st.occ.has(h)||t<now; b.setAttribute("aria-pressed",st.slot===hi);
+    b.onclick=()=>{st.slot=hi;[...box.children].forEach((x,j)=>x.setAttribute("aria-pressed",j===hi));render();};
     box.appendChild(b);
   });
+  if(![...box.children].some(b=>!b.disabled)) box.insertAdjacentHTML("beforeend",`<p class="loading" style="grid-column:1/-1">No quedan horarios libres este día. Probá con otro.</p>`);
 }
 
+const dayText=d=>d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+function sumHTML(){
+  const [sn,,sp]=SVCS[st.svc], d=st.day!==null?days[st.day]:null;
+  return `<dt>Servicio</dt><dd>${sn}</dd><dt>Día</dt><dd>${d?dayText(d):"—"}</dd><dt>Hora</dt><dd>${st.slot!==null?HOURS[st.slot]:"—"}</dd><dt>Total</dt><dd>${fmt(sp)}</dd>`;
+}
 function render(){
-  const [sn,,sp]=SVCS[st.svc], d=st.day!==null?days[st.day]:null, name=$("name").value.trim();
-  const dayTxt=d?d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"}):"—";
-  const hour=st.slot!==null?HOURS[st.slot]:"—";
-  $("sum").innerHTML=`<dt>Servicio</dt><dd>${sn}</dd><dt>Día</dt><dd>${dayTxt}</dd><dt>Hora</dt><dd>${hour}</dd><dt>Total</dt><dd>${fmt(sp)}</dd>`;
-  const ready=d&&st.slot!==null&&name, c=$("confirm");
-  c.setAttribute("aria-disabled",ready?"false":"true");
-  c.textContent=!d||st.slot===null?"Elegí un horario":!name?"Escribí tu nombre":"Confirmar por WhatsApp";
-  if(ready)c.href=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hola! Quiero reservar:\n• ${sn}\n• ${dayTxt} a las ${hour}\n• A nombre de ${name}`)}`;
+  $("sum").innerHTML=sumHTML();
+  const name=$("name").value.trim(), ph=digits($("phone").value);
+  const ready=st.day!==null&&st.slot!==null&&name&&ph.length>=8&&!st.busy, c=$("confirm");
+  c.disabled=!ready;
+  c.textContent=st.busy?"Reservando…":st.day===null||st.slot===null?"Elegí un horario":!name?"Escribí tu nombre":ph.length<8?"Escribí tu WhatsApp":"Reservar turno";
 }
-$("name").oninput=render;
+$("name").oninput=render; $("phone").oninput=render;
 
-const first=days.findIndex((d,i)=>i>0&&d.getDay()!==0);
-$("days").children[first].click();
-const free=[...$("slots").children].findIndex(b=>!b.disabled);
-if(free>=0)$("slots").children[free].click();
+$("confirm").onclick=async()=>{
+  const [sn,,sp]=SVCS[st.svc], d=days[st.day], hora=HOURS[st.slot], nombre=$("name").value.trim(), telefono=digits($("phone").value);
+  st.busy=true; $("msg").hidden=true; render();
+  let r; try{ r=await S.crearTurno({fecha:S.iso(d),hora,servicio:sn,precio:sp,nombre,telefono}); }catch(e){ r={ok:false,error:"red"}; }
+  st.busy=false;
+  if(r.ok){
+    $("doneSum").innerHTML=sumHTML();
+    $("notify").href=`https://wa.me/${C.whatsapp}?text=${encodeURIComponent(`Hola! Reservé un turno desde la web:\n• ${sn}\n• ${dayText(d)} a las ${hora}\n• A nombre de ${nombre}`)}`;
+    $("form").hidden=true; $("done").hidden=false;
+  }else{
+    $("msg").textContent=r.error==="ocupado"?"Alguien acaba de tomar ese horario. Elegí otro.":"No se pudo reservar. Revisá tu conexión e intentá de nuevo.";
+    $("msg").hidden=false;
+    if(r.error==="ocupado") await pickDay(st.day);
+    render();
+  }
+};
+$("again").onclick=()=>{$("done").hidden=true;$("form").hidden=false;pickDay(st.day,true);};
+
+const first=days.findIndex(d=>!C.diasCerrados.includes(d.getDay())&&!(d.getTime()===today.getTime()&&new Date().getHours()>=19));
+pickDay(first,true);
 </script>
 </body>
 </html>

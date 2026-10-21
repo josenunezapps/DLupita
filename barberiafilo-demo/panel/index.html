@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Panel Barbería Filo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;600;700&display=swap">
+<style>
+/* Layout: barra oscura + selector de día + resumen del día + agenda (turnos) y grilla de horarios para bloquear */
+:root{
+  --bg:#f4f3f1;--surface:#ffffff;--fg:#1c1b1a;--muted:#6d6a65;--line:#e1ded8;
+  --hero:#1c1b1a;--hero-fg:#f4f1ec;--hero-muted:#b3ada4;--accent:#a8741a;--brass:#e2a94a;--taken:#e9e6e1;
+  --ok:#1f8a4c;--ok-bg:#e3f4ea;--wait:#a8741a;--wait-bg:#f8eedb;--bad:#b4452f;--bad-bg:#f8e3de;
+  --display:"Unbounded",system-ui,sans-serif;--body:"Manrope",system-ui,sans-serif;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#141312;--surface:#1d1c1a;--fg:#efece7;--muted:#a19c94;--line:#2f2d2a;--hero:#0c0b0a;--accent:#e2a94a;--taken:#262421;
+  --ok:#6fd49a;--ok-bg:#16301f;--wait:#e2a94a;--wait-bg:#33280f;--bad:#ff9a85;--bad-bg:#3a1b15;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body)}
+.inner{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+
+.top{background:var(--hero);color:var(--hero-fg);padding-top:env(safe-area-inset-top,0px)}
+.top .long{display:none}@media (min-width:600px){.top .long{display:inline}}
+.top .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
+.brand{font:800 18px var(--display)}
+.brand em{font-style:normal;color:var(--brass)}
+.brand small{display:block;font:600 12px var(--body);color:var(--hero-muted);letter-spacing:.08em;text-transform:uppercase}
+.tbtn{background:transparent;border:1px solid rgba(255,255,255,.3);color:var(--hero-fg);padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none}
+
+.login{max-width:400px;margin:48px auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;display:grid;gap:14px}
+.login h1{font:800 22px var(--display);margin:0}
+label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+input{width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);font:16px var(--body)}
+.primary{background:var(--fg);color:var(--bg);border:0;padding:14px;border-radius:12px;font-weight:700}
+.err{color:var(--bad);font-weight:600;font-size:14px;margin:0}
+.note{font-size:14px;color:var(--muted);margin:0}
+
+.banner{margin:16px 0 0;padding:12px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:14px;color:var(--muted)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-block:18px 6px;scrollbar-width:none}
+.day{flex:0 0 64px;padding:10px 0;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font-weight:600;font-size:13px;text-align:center}
+.day b{display:block;font:600 20px var(--display)}
+.day[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.day.closed{opacity:.45}
+.day .n{display:block;font-size:11px;color:var(--accent);height:14px}
+.day[aria-pressed="true"] .n{color:var(--brass)}
+
+.dayhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-top:14px}
+.dayhead h2{font:800 clamp(22px,5vw,30px) var(--display);margin:0}
+.refresh{background:none;border:0;color:var(--accent);font-weight:700;font-size:14px;padding:4px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 24px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat small{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.stat b{font:800 clamp(20px,5vw,28px) var(--display);font-variant-numeric:tabular-nums}
+
+.cols{display:grid;gap:28px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+h3{font:600 15px var(--display);margin:0 0 12px}
+.list{display:grid;gap:10px;min-width:0}
+.turno{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--wait);border-radius:14px;padding:14px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:center}
+.turno.confirmado{border-left-color:var(--ok)}
+.turno.cancelado{border-left-color:var(--bad);opacity:.6}
+.turno .h{font:800 20px var(--display);font-variant-numeric:tabular-nums;grid-row:1 / span 2}
+.turno strong{display:block;overflow-wrap:anywhere}
+.turno small{color:var(--muted);font-size:13px;grid-column:2}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--wait-bg);color:var(--wait);white-space:nowrap}
+.confirmado .pill{background:var(--ok-bg);color:var(--ok)}
+.cancelado .pill{background:var(--bad-bg);color:var(--bad)}
+.acts{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.acts button,.acts a{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-weight:600;font-size:14px;text-decoration:none}
+.acts .ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.acts .warn{border-color:var(--bad);color:var(--bad)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:22px;color:var(--muted);text-align:center}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.cell{padding:10px 6px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.cell small{display:block;font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell.res{background:var(--ok-bg);border-color:transparent;cursor:default}
+.cell.res small{color:var(--ok)}
+.cell.blq{background:var(--taken);border-style:dashed;color:var(--muted);text-decoration:line-through}
+.cell:not(.res):hover{border-color:var(--accent)}
+.gridtools{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.gridtools h3{margin:0}
+.link{background:none;border:0;color:var(--accent);font-weight:700;font-size:14px;padding:0}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1.5px solid var(--line);background:var(--surface)}
+.legend .r{background:var(--ok-bg);border-color:transparent}
+.legend .b{background:var(--taken);border-style:dashed}
+
+@media (min-width:900px){
+  .cols{grid-template-columns:1.25fr 1fr;gap:40px;align-items:start}
+  .side{position:sticky;top:20px}
+  .days{flex-wrap:wrap;overflow:visible}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="inner">
+  <div class="brand"><small>Panel del barbero</small>Barbería <em>Filo</em></div>
+  <div style="display:flex;gap:8px">
+    <a class="tbtn" href="../" target="_blank" rel="noopener"><span class="long">Ver página de </span>turnos</a>
+    <button class="tbtn" id="logout" hidden>Salir</button>
+  </div>
+</div></header>
+
+<form class="login" id="login" hidden>
+  <h1>Entrar al panel</h1>
+  <div><label for="email">Email</label><input id="email" type="email" autocomplete="username" required></div>
+  <div><label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="current-password" required></div>
+  <button class="primary" id="go">Entrar</button>
+  <p class="err" id="lerr" hidden></p>
+  <p class="note" id="lnote"></p>
+</form>
+
+<main id="app" hidden><div class="inner">
+  <p class="banner" id="banner" hidden>Modo demo: los turnos se guardan solo en este navegador. Hacé una reserva en la página de turnos y aparece acá.</p>
+  <div class="days" id="days"></div>
+  <div class="dayhead"><h2 id="dtitle"></h2><button class="refresh" id="refresh">Actualizar</button></div>
+  <div class="stats">
+    <div class="stat"><small>Turnos</small><b id="sCount">0</b></div>
+    <div class="stat"><small>Sin confirmar</small><b id="sPend">0</b></div>
+    <div class="stat"><small>A cobrar</small><b id="sMoney">$0</b></div>
+  </div>
+  <div class="cols">
+    <section><h3>Agenda</h3><div class="list" id="list"></div></section>
+    <section class="side">
+      <div class="gridtools"><h3>Horarios</h3><button class="link" id="blockDay">Bloquear día</button></div>
+      <div class="grid" id="grid"></div>
+      <div class="legend"><span><i></i>Libre (tocá para bloquear)</span><span><i class="r"></i>Reservado</span><span><i class="b"></i>Bloqueado</span></div>
+    </section>
+  </div>
+</div></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="../config.js"></script>
+<script src="../store.js"></script>
+<script>
+const C=FILO, S=Store, HOURS=C.horarios;
+const DN=["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+const $=id=>document.getElementById(id);
+const fmt=n=>"$"+(n||0).toLocaleString("es-AR");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=new Date(); today.setHours(0,0,0,0);
+const days=[...Array(C.diasAdelante)].map((_,i)=>{const d=new Date(today);d.setDate(d.getDate()+i);return d;});
+let sel=0, data={t:[],b:[]};
+
+function waNum(t){let d=String(t).replace(/\D/g,"");if(d.startsWith("0"))d=d.slice(1);if(d.length===10)d="549"+d;return d;}
+const dayText=d=>d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
+
+async function init(){
+  if(S.modo==="demo"){$("banner").hidden=false;$("lnote").textContent="Modo demo: escribí cualquier email y contraseña.";}
+  (await S.sesion()) ? showApp() : showLogin();
+}
+function showLogin(){$("login").hidden=false;$("app").hidden=true;$("logout").hidden=true;}
+function showApp(){$("login").hidden=true;$("app").hidden=false;$("logout").hidden=false;drawDays();load();}
+
+$("login").onsubmit=async e=>{
+  e.preventDefault(); $("go").disabled=true; $("lerr").hidden=true;
+  const r=await S.login($("email").value.trim(),$("pass").value);
+  $("go").disabled=false;
+  if(r.ok) showApp(); else {$("lerr").textContent=r.error;$("lerr").hidden=false;}
+};
+$("logout").onclick=async()=>{await S.logout();showLogin();};
+
+function drawDays(){
+  const box=$("days"); box.innerHTML="";
+  days.forEach((d,i)=>{
+    const b=document.createElement("button"); b.className="day"+(C.diasCerrados.includes(d.getDay())?" closed":"");
+    b.setAttribute("aria-pressed",i===sel);
+    b.innerHTML=`${i===0?"Hoy":DN[d.getDay()]}<b>${d.getDate()}</b><span class="n" id="n${i}"></span>`;
+    b.onclick=()=>{sel=i;[...box.children].forEach((x,j)=>x.setAttribute("aria-pressed",j===i));load();};
+    box.appendChild(b);
+  });
+  // cantidad de turnos por día (en segundo plano)
+  days.forEach(async(d,i)=>{try{const t=await S.turnos(S.iso(d));const n=t.filter(x=>x.estado!=="cancelado").length;$("n"+i).textContent=n?`${n} turno${n>1?"s":""}`:"";}catch(e){}});
+}
+
+async function load(){
+  const d=days[sel], f=S.iso(d);
+  {const t=dayText(d);$("dtitle").textContent=t[0].toUpperCase()+t.slice(1);}
+  try{ const [t,b]=await Promise.all([S.turnos(f),S.bloqueos(f)]); data={t,b}; }
+  catch(e){ $("list").innerHTML=`<div class="empty">No se pudo cargar la agenda. Revisá la conexión y tocá Actualizar.</div>`; return; }
+  const act=data.t.filter(x=>x.estado!=="cancelado");
+  $("sCount").textContent=act.length;
+  $("sPend").textContent=act.filter(x=>x.estado==="pendiente").length;
+  $("sMoney").textContent=fmt(act.reduce((a,x)=>a+(x.precio||0),0));
+  const n=$("n"+sel); if(n) n.textContent=act.length?`${act.length} turno${act.length>1?"s":""}`:"";
+  drawList(); drawGrid();
+}
+
+function drawList(){
+  const box=$("list"), d=days[sel];
+  if(C.diasCerrados.includes(d.getDay())&&!data.t.length){box.innerHTML=`<div class="empty">Este día la barbería está cerrada.</div>`;return;}
+  if(!data.t.length){box.innerHTML=`<div class="empty">No hay turnos para este día todavía.</div>`;return;}
+  box.innerHTML="";
+  data.t.forEach(t=>{
+    const el=document.createElement("div"); el.className="turno "+t.estado;
+    const label={pendiente:"Sin confirmar",confirmado:"Confirmado",cancelado:"Cancelado"}[t.estado];
+    const msg=t.estado==="cancelado"
+      ?`Hola ${t.nombre}! Tuvimos que cancelar tu turno del ${dayText(d)} a las ${t.hora} en ${C.nombre}. Respondé este mensaje y te damos otro horario.`
+      :`Hola ${t.nombre}! Te confirmamos tu turno en ${C.nombre} el ${dayText(d)} a las ${t.hora} (${t.servicio}). Te esperamos en ${C.direccion}.`;
+    el.innerHTML=`<span class="h">${t.hora}</span><strong>${esc(t.nombre)}</strong><span class="pill">${label}</span>
+      <small>${esc(t.servicio)} · ${fmt(t.precio)} · ${esc(t.telefono)}</small>
+      <div class="acts"></div>`;
+    const acts=el.querySelector(".acts");
+    const btn=(txt,cls,fn)=>{const b=document.createElement("button");b.textContent=txt;if(cls)b.className=cls;b.onclick=fn;acts.appendChild(b);return b;};
+    if(t.estado==="pendiente") btn("Confirmar","ok",()=>setEstado(t,"confirmado"));
+    if(t.estado!=="cancelado"){
+      const c=btn("Cancelar","warn",()=>{
+        if(c.dataset.sure){setEstado(t,"cancelado");return;}
+        c.dataset.sure="1";c.textContent="¿Seguro? Tocá de nuevo";
+        setTimeout(()=>{c.dataset.sure="";c.textContent="Cancelar";},3500);
+      });
+    } else btn("Reactivar","",()=>setEstado(t,"pendiente"));
+    const a=document.createElement("a"); a.href=`https://wa.me/${waNum(t.telefono)}?text=${encodeURIComponent(msg)}`;
+    a.target="_blank"; a.rel="noopener"; a.textContent=t.estado==="cancelado"?"Avisar cancelación":"Escribirle por WhatsApp"; acts.appendChild(a);
+    box.appendChild(el);
+  });
+}
+
+async function setEstado(t,e){
+  const r=await S.setEstado(t.id,e);
+  if(r&&r.ok===false&&e==="pendiente") alertBox("Ese horario ya está ocupado por otro turno.");
+  load();
+}
+function alertBox(txt){$("list").insertAdjacentHTML("afterbegin",`<div class="empty" style="color:var(--bad)">${txt}</div>`);}
+
+function drawGrid(){
+  const box=$("grid"); box.innerHTML="";
+  const res={}; data.t.filter(x=>x.estado!=="cancelado").forEach(x=>res[x.hora]=x);
+  const free=HOURS.filter(h=>!res[h]&&!data.b.includes(h));
+  $("blockDay").textContent=free.length?"Bloquear día":"Desbloquear día";
+  HOURS.forEach(h=>{
+    const b=document.createElement("button"), r=res[h], blq=data.b.includes(h);
+    b.className="cell"+(r?" res":blq?" blq":"");
+    b.innerHTML=`${h}<small>${r?esc(r.nombre):blq?"Bloqueado":"Libre"}</small>`;
+    if(r){b.setAttribute("aria-disabled","true");b.title="Reservado";}
+    else b.onclick=async()=>{b.disabled=true;await S.bloquear(S.iso(days[sel]),h,!blq);load();};
+    box.appendChild(b);
+  });
+}
+$("blockDay").onclick=async()=>{
+  const f=S.iso(days[sel]), res=new Set(data.t.filter(x=>x.estado!=="cancelado").map(x=>x.hora));
+  const free=HOURS.filter(h=>!res.has(h)&&!data.b.includes(h));
+  if(free.length) await Promise.all(free.map(h=>S.bloquear(f,h,true)));
+  else await Promise.all(data.b.map(h=>S.bloquear(f,h,false)));
+  load();
+};
+$("refresh").onclick=()=>{drawDays();load();};
+setInterval(()=>{if(!document.hidden&&!$("app").hidden)load();},30000);
+window.addEventListener("storage",()=>{if(!$("app").hidden)load();}); // modo demo: refresca al reservar en otra pestaña
+init();
+</script>
+</body>
+</html>
