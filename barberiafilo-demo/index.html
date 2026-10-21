@@ -52,6 +52,18 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .confirm[aria-disabled="true"]{opacity:.4;pointer-events:none}
 .hint{font-size:13px;opacity:.75;margin:0}
 .foot{font-size:13px;color:var(--muted);text-align:center}
+/* Compu: pasos a la izquierda, resumen fijo a la derecha */
+@media (min-width:900px){
+  .wrap{max-width:1080px;grid-template-columns:1.5fr 1fr;column-gap:40px;align-items:start;padding-block:48px 56px}
+  .wrap>:nth-child(1){grid-column:1 / -1}
+  .wrap>:nth-child(2),.wrap>:nth-child(3),.wrap>:nth-child(4){grid-column:1}
+  .wrap>:nth-child(5){grid-column:2;grid-row:2 / span 3;position:sticky;top:24px}
+  .wrap>:nth-child(6){grid-column:1 / -1}
+  h1{font-size:60px}
+  .opts{grid-template-columns:1fr 1fr}
+  .days{overflow:visible;flex-wrap:wrap}
+  .svc:hover,.day:not(:disabled):hover,.slot:not(:disabled):hover{border-color:var(--accent)}
+}
 </style>
 </head>
 <body>

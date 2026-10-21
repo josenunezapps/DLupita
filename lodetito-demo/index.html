@@ -52,6 +52,16 @@ button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .send{flex:1;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:13px 16px;border-radius:12px;background:var(--accent);color:var(--accent-fg);font-weight:600;text-decoration:none}
 .send[aria-disabled="true"]{opacity:.45;pointer-events:none}
 .foot{text-align:center;color:var(--muted);font-size:13px;margin-top:24px}
+/* Compu: carta en dos columnas y barra de pedido centrada */
+@media (min-width:900px){
+  .gut{max-width:1100px}
+  header{padding-block:48px 16px}
+  h1{font-size:72px}
+  main.gut{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;align-items:start}
+  .tabs{justify-content:center}
+  .bar .gut{max-width:720px}
+  .qty button:hover,.mode button:hover,.tabs button:hover{filter:brightness(1.1)}
+}
 </style>
 </head>
 <body>
