@@ -1,0 +1,20 @@
+ZENIX · Experiencia 3D (propuesta)
+
+Qué es
+  Página 3D inmersiva (Three.js / WebGL). El scroll mueve la cámara a través de 6 escenas:
+  1 Entrada (portal) · 2 Desarrollo de software · 3 Compilación · 4 Estadísticas (datos DEMO)
+  5 Sistemas conectados · 6 Cierre + botón "Hablemos por WhatsApp".
+
+Cómo publicarla en otra ruta (por ejemplo zenix.com.ar/claude)
+  Copiar la carpeta completa tal cual (index.html, css/, js/, vendor/, assets/). Todas las rutas son relativas.
+  Antes de publicarla de forma oficial, borrar la línea <meta name="robots" content="noindex, nofollow"> de index.html.
+
+Sin servicios externos: no usa CDNs, fuentes remotas, claves ni APIs. Three.js r170 está incluido en vendor/ (licencia MIT).
+Si el dispositivo no tiene WebGL se muestra automáticamente una versión simple (2D) con el mismo botón de contacto.
+
+Parámetros de prueba en la URL
+  ?q=low | mid | high   fuerza el nivel de calidad (por defecto se detecta solo y baja si va lento)
+  ?nogl                 fuerza la versión sin 3D
+  ?debug                muestra fps, calidad y llamadas de dibujo
+
+Datos de la escena 4: son de demostración (están rotulados así en pantalla), no son métricas reales.
