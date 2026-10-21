@@ -21,7 +21,7 @@ export function buildEnvironment(renderer, scene, Q) {
   const pm = new THREE.PMREMGenerator(renderer);
   const envRT = pm.fromScene(envScene, 0.03);
   scene.environment = envRT.texture;
-  if ('environmentIntensity' in scene) scene.environmentIntensity = 0.75;
+  if ('environmentIntensity' in scene) scene.environmentIntensity = 0.9;
   pm.dispose();
   out.envRT = envRT;
 
@@ -115,6 +115,39 @@ export function buildEnvironment(renderer, scene, Q) {
   scene.add(pts);
   out.particles = pts; out.pMat = pMat;
 
+  // Haces atmosféricos físicos en espacio 3D (no filtros en pantalla): la cámara pasa entre ellos.
+  // La transparencia baja y el depth test hacen que respeten objetos y profundidad.
+  const shaftGeo = new THREE.CylinderGeometry(0.22, 5.2, 20, 20, 1, true);
+  const makeShaftMat = (color) => new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, depthTest: true, side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+    uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(color) } },
+    vertexShader: /* glsl */`
+      varying vec2 vUv; varying vec3 vW;
+      void main() { vUv = uv; vW = (modelMatrix * vec4(position, 1.)).xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
+    fragmentShader: /* glsl */`
+      varying vec2 vUv; varying vec3 vW; uniform float uTime; uniform vec3 uColor;
+      void main() {
+        float along = smoothstep(0., .18, vUv.y) * (1. - smoothstep(.66, 1., vUv.y));
+        float folds = .86 + .14 * sin(vW.z * .37 + vUv.x * 18. + uTime * .22);
+        float haze = along * folds * .09;
+        gl_FragColor = vec4(uColor * haze, haze);
+      }`,
+  });
+  const shaftMats = [makeShaftMat(PAL.violet), makeShaftMat(PAL.cyan)];
+  const stations = [-86, -122, -181, -238, -285, -316, -367, -410, -487, -530];
+  stations.forEach((z, i) => {
+    if (Q.detail === 'low' && i % 2) return;
+    for (const side of [-1, 1]) {
+      const shaft = new THREE.Mesh(shaftGeo, shaftMats[(i + (side > 0 ? 1 : 0)) % 2]);
+      shaft.position.set(side * (13 + (i % 3) * 2), 7.6, z);
+      shaft.rotation.z = side * .12;
+      shaft.renderOrder = 2;
+      scene.add(shaft);
+    }
+  });
+
   // --- Rig de luces que acompaña a la cámara (iluminación local consistente en todos los capítulos)
   const hemi = new THREE.HemisphereLight(0x8f6dff, 0x07030f, 0.55);
   const camLight = new THREE.PointLight(0xcfdcff, 60, 46, 1.4);
@@ -141,6 +174,8 @@ export function buildEnvironment(renderer, scene, Q) {
     backMat.uniforms.uTime.value = time;
     backMat.uniforms.uProg.value = prog;
     pMat.uniforms.uTime.value = time;
+    shaftMats[0].uniforms.uTime.value = time;
+    shaftMats[1].uniforms.uTime.value = time;
     back.position.copy(cam.position);
     camLight.position.copy(cam.position).add(lightOffset.set(0, 2.2, 3).applyQuaternion(cam.quaternion));
     rimLight.position.copy(cam.position).add(lightOffset.set(5.5, 3, -4).applyQuaternion(cam.quaternion));
