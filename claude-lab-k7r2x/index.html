@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0a09">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Claude Lab — A ver qué soy capaz de hacer</title>
+<meta name="description" content="Experimento: 3D en vivo, arte generativo, sintetizador y minijuego en un solo archivo.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{--bg:#0b0a09;--ink:#f4efe6;--dim:#a39a8d;--line:rgba(244,239,230,.14);--coral:#e07a55;--teal:#7fd6c2;--gold:#f0c674}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+::selection{background:var(--coral);color:#1a0e09}
+.mono{font-family:"DM Mono",ui-monospace,monospace}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px clamp(16px,4vw,40px);background:linear-gradient(rgba(11,10,9,.85),rgba(11,10,9,0))}
+.nav b{font-weight:600;letter-spacing:.01em;white-space:nowrap}
+.nav b i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--coral);margin-right:9px;box-shadow:0 0 14px var(--coral)}
+.nav ul{display:flex;gap:clamp(12px,2.4vw,28px);list-style:none;margin:0;padding:0;font-size:.88rem;color:var(--dim)}
+.nav ul a:hover{color:var(--ink)}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:grid;align-items:end;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:58%;background:linear-gradient(rgba(11,10,9,0),var(--bg) 92%);z-index:1;pointer-events:none}
+.hero-copy{position:relative;z-index:2;padding:0 clamp(18px,5vw,64px) clamp(34px,8vh,84px);max-width:900px;pointer-events:none}
+.hero-copy .actions,.hero-copy .actions *{pointer-events:auto}
+.eyebrow{margin:0 0 10px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--coral)}
+h1{margin:.1em 0 .25em;font-size:clamp(2.35rem,8.4vw,6.2rem);line-height:.95;letter-spacing:-.035em;font-weight:700}
+h2{margin:0 0 .35em;font-size:clamp(1.8rem,4.6vw,3.2rem);line-height:1.02;letter-spacing:-.03em;font-weight:700}
+.lead{margin:0 0 22px;max-width:56ch;color:#d8d1c4;font-size:clamp(1rem,2vw,1.2rem)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.hint{margin:0;font-size:.78rem;color:var(--dim)}
+.hint b{color:var(--gold);font-weight:500}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:rgba(244,239,230,.06);padding:.68em 1.15em;border-radius:999px;font-weight:500;font-size:.95rem;transition:background .2s,transform .2s,border-color .2s}
+.btn:hover{background:rgba(244,239,230,.13);border-color:rgba(244,239,230,.3)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--coral);border-color:transparent;color:#1a0e09;font-weight:600}
+.btn.primary:hover{background:#ec8a66}
+
+/* panels */
+.panel{border-top:1px solid var(--line)}
+.inner{max-width:1180px;margin:0 auto;padding:clamp(64px,10vw,128px) clamp(18px,5vw,48px)}
+.head{margin-bottom:clamp(24px,4vw,44px)}
+.head p:not(.eyebrow){margin:0;max-width:60ch;color:var(--dim);font-size:1.02rem}
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.in{opacity:1;transform:none}
+
+/* generative */
+.lab{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(20px,3.4vw,44px);align-items:start}
+.frame{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:18px;background:#0b0a09}
+#gen{aspect-ratio:1}
+.controls{display:grid;gap:4px}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin-bottom:14px;font-size:.92rem}
+.ctl output{font-family:"DM Mono",monospace;color:var(--gold)}
+.ctl input[type=range],.vol input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--coral)}
+.swatches{grid-column:1/-1;display:flex;gap:10px}
+.sw{width:36px;height:36px;border-radius:50%;border:2px solid transparent;padding:0;outline-offset:3px}
+.sw[aria-pressed=true]{border-color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+
+/* synth */
+.synth-bar{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin-bottom:16px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:none;border:0;padding:.55em 1em;font-size:.88rem;color:var(--dim)}
+.seg button[aria-pressed=true]{background:var(--coral);color:#1a0e09;font-weight:600}
+.oct{display:inline-flex;align-items:center;gap:8px;font-size:.9rem}
+.oct button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(244,239,230,.06);padding:0}
+.oct span{min-width:5.2ch;text-align:center;font-family:"DM Mono",monospace;color:var(--gold)}
+.vol{display:inline-flex;align-items:center;gap:10px;font-size:.9rem}
+.vol input{width:120px}
+#scope{margin-bottom:16px}
+.piano{position:relative;display:flex;height:clamp(150px,26vw,230px);user-select:none;-webkit-user-select:none;touch-action:none}
+.piano button{padding:0;border:0;display:flex;align-items:flex-end;justify-content:center;font:500 .74rem "DM Mono",monospace}
+.wk{flex:1;background:linear-gradient(#f4efe6,#d6cdbd);border-right:1px solid #0b0a09!important;border-radius:0 0 10px 10px;padding-bottom:10px!important;color:#6b6358}
+.wk.on{background:linear-gradient(#f6b79f,#e07a55)}
+.bk{position:absolute;top:0;height:60%;width:7%;transform:translateX(-50%);z-index:2;background:linear-gradient(#2b2623,#0b0a09);border:1px solid #000!important;border-radius:0 0 8px 8px;padding-bottom:8px!important;color:#8c8377}
+.bk.on{background:linear-gradient(#e07a55,#9c4529)}
+.note{margin:14px 0 0;font-size:.8rem;color:var(--dim)}
+
+/* game */
+#game{aspect-ratio:8/5;touch-action:none;cursor:crosshair}
+
+/* under the hood */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{border:1px solid var(--line);border-radius:16px;padding:20px;background:rgba(244,239,230,.03)}
+.card h3{margin:0 0 6px;font-size:1.02rem}
+.card p{margin:0;color:var(--dim);font-size:.92rem}
+footer{border-top:1px solid var(--line);padding:26px clamp(18px,5vw,48px);color:var(--dim);font-size:.78rem;text-align:center}
+
+@media (max-width:820px){.lab{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Principal">
+  <a href="#top"><b><i></i>Claude Lab</b></a>
+  <ul>
+    <li><a href="#generativo">Arte</a></li>
+    <li><a href="#sintetizador">Synth</a></li>
+    <li><a href="#juego">Juego</a></li>
+    <li><a href="#capo">Capó</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top" data-vis="hero">
+  <canvas id="hero-canvas" role="img" aria-label="Nube de partículas 3D que cambia de forma"></canvas>
+  <div class="hero-copy">
+    <p class="eyebrow mono">Experimento · ruta oculta · 21·10·2026</p>
+    <h1>A ver qué soy capaz de hacer.</h1>
+    <p class="lead">Una página hecha desde cero en un solo archivo: 3D en vivo, arte generativo, un sintetizador que suena de verdad y un minijuego. Tocá todo.</p>
+    <div class="actions">
+      <button class="btn primary" id="morph" type="button">Cambiar forma</button>
+      <a class="btn" href="#generativo">Ir al laboratorio ↓</a>
+    </div>
+    <p class="hint mono">Forma: <b id="shape-name">Esfera</b> · mové el mouse para girarla</p>
+  </div>
+</header>
+
+<section class="panel" id="generativo" data-vis="gen">
+  <div class="inner">
+    <div class="head reveal">
+      <p class="eyebrow mono">02 · Canvas 2D</p>
+      <h2>Laboratorio generativo</h2>
+      <p>Curvas tipo rosa superpuestas, dibujadas en vivo. Movés los parámetros y la forma responde. Si te sale una linda, bajala como PNG.</p>
+    </div>
+    <div class="lab reveal">
+      <canvas id="gen" class="frame" width="1000" height="1000" role="img" aria-label="Curvas generativas superpuestas"></canvas>
+      <div class="controls">
+        <div class="ctl"><label for="k">Lóbulos</label><output id="o-k" for="k"></output><input id="k" type="range" min="2" max="14" value="5"></div>
+        <div class="ctl"><label for="layers">Capas</label><output id="o-layers" for="layers"></output><input id="layers" type="range" min="1" max="14" value="8"></div>
+        <div class="ctl"><label for="twist">Torsión</label><output id="o-twist" for="twist"></output><input id="twist" type="range" min="0" max="100" value="40"></div>
+        <div class="ctl"><label for="width">Grosor</label><output id="o-width" for="width"></output><input id="width" type="range" min="2" max="40" value="12"></div>
+        <div class="ctl">
+          <span>Paleta</span><span></span>
+          <div class="swatches">
+            <button class="sw" type="button" data-pal="brasa" aria-pressed="true" aria-label="Paleta brasa" style="background:linear-gradient(135deg,hsl(8 88% 62%),hsl(48 88% 62%))"></button>
+            <button class="sw" type="button" data-pal="oceano" aria-pressed="false" aria-label="Paleta océano" style="background:linear-gradient(135deg,hsl(165 80% 62%),hsl(230 80% 62%))"></button>
+            <button class="sw" type="button" data-pal="aurora" aria-pressed="false" aria-label="Paleta aurora" style="background:linear-gradient(135deg,hsl(120 85% 64%),hsl(310 85% 64%))"></button>
+            <button class="sw" type="button" data-pal="tiza" aria-pressed="false" aria-label="Paleta tiza" style="background:linear-gradient(135deg,hsl(38 14% 90%),hsl(38 14% 55%))"></button>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="rand" type="button">Aleatorio</button>
+          <button class="btn" id="pause" type="button">Pausar</button>
+          <button class="btn" id="png" type="button">Bajar PNG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="sintetizador" data-vis="synth">
+  <div class="inner">
+    <div class="head reveal">
+      <p class="eyebrow mono">03 · Web Audio</p>
+      <h2>Sintetizador</h2>
+      <p>Osciladores reales, polifonía y un osciloscopio conectado al analizador de audio. Tocá con el mouse, el dedo o el teclado: A S D F G H J K son las blancas; W E T Y U, las negras.</p>
+    </div>
+    <div class="reveal">
+      <div class="synth-bar">
+        <div class="seg" role="group" aria-label="Forma de onda">
+          <button type="button" data-wave="sine" aria-pressed="false">Seno</button>
+          <button type="button" data-wave="triangle" aria-pressed="true">Triángulo</button>
+          <button type="button" data-wave="sawtooth" aria-pressed="false">Sierra</button>
+          <button type="button" data-wave="square" aria-pressed="false">Cuadrada</button>
+        </div>
+        <div class="oct" role="group" aria-label="Octava">
+          <button type="button" id="oct-down" aria-label="Bajar octava">−</button>
+          <span id="oct-val">Oct 0</span>
+          <button type="button" id="oct-up" aria-label="Subir octava">+</button>
+        </div>
+        <label class="vol">Volumen <input id="vol" type="range" min="0" max="100" value="50"></label>
+        <button class="btn" id="demo" type="button">Tocar una melodía</button>
+      </div>
+      <canvas id="scope" class="frame" width="1000" height="180" role="img" aria-label="Osciloscopio del sonido"></canvas>
+      <div class="piano" id="piano" role="group" aria-label="Teclado"></div>
+      <p class="note mono">El audio arranca con tu primer toque (así lo exigen los navegadores).</p>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="juego" data-vis="game">
+  <div class="inner">
+    <div class="head reveal">
+      <p class="eyebrow mono">04 · Canvas + lógica</p>
+      <h2>Esquivá y juntá</h2>
+      <p>Un minijuego sin librerías. Mové el mouse (o el dedo, o las flechas) para juntar los orbes turquesa y esquivar los bloques coral. Cada 12 segundos sube el nivel.</p>
+    </div>
+    <div class="reveal">
+      <canvas id="game" class="frame" width="800" height="500" role="img" aria-label="Minijuego: esquivá los bloques y juntá los orbes"></canvas>
+      <div class="row">
+        <button class="btn primary" id="g-start" type="button">Empezar</button>
+        <span class="hint mono" style="align-self:center">Mouse · dedo · flechas</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="capo">
+  <div class="inner">
+    <div class="head reveal">
+      <p class="eyebrow mono">05 · Bajo el capó</p>
+      <h2>Qué hay debajo</h2>
+      <p>Nada raro: web estándar, escrita a mano, pensada para que la puedas leer y modificar.</p>
+    </div>
+    <div class="cards reveal">
+      <div class="card"><h3>Un solo archivo</h3><p>HTML, CSS y JS juntos. Sin build ni dependencias locales.</p></div>
+      <div class="card"><h3>Three.js 0.169</h3><p>El 3D se carga desde jsDelivr, igual que en tus otras páginas Zenix. Si WebGL falla, hay un cielo 2D de respaldo.</p></div>
+      <div class="card"><h3>Web Audio</h3><p>Osciladores, envolvente, compresor y analizador. Nada de samples ni archivos de audio.</p></div>
+      <div class="card"><h3>Respeta tu sistema</h3><p>Con "reducir movimiento" activado, las animaciones automáticas se quedan quietas. Todo se pausa fuera de pantalla.</p></div>
+      <div class="card"><h3>Ruta oculta</h3><p>Carpeta con sufijo aleatorio, meta noindex y sin enlaces desde el index.</p></div>
+      <div class="card"><h3>No toca nada</h3><p>Es una carpeta nueva: ningún archivo existente fue modificado.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="mono">Claude Lab · hecho por Claude Sonnet 5.5 · octubre de 2026</footer>
+
+<script type="module">
+const $ = (s, r = document) => r.querySelector(s);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarse = matchMedia('(pointer: coarse)').matches || innerWidth < 720;
+const vis = { hero: true, gen: false, synth: false, game: false };
+let heroRender = null;
+
+/* ---------- visibilidad: pausa todo lo que no se ve ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { vis[e.target.dataset.vis] = e.isIntersecting; }), { rootMargin: '120px' });
+document.querySelectorAll('[data-vis]').forEach(el => io.observe(el));
+const rio = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); }
+}), { threshold: .12 });
+document.querySelectorAll('.reveal').forEach(el => rio.observe(el));
+
+/* ---------- 01 · HERO 3D ---------- */
+async function initHero() {
+  const canvas = $('#hero-canvas'), label = $('#shape-name');
+  let THREE, renderer;
+  try {
+    THREE = await import('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js');
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !coarse, powerPreference: 'high-performance' });
+  } catch (err) { return heroFallback(canvas, label); }
+
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, coarse ? 1.75 : 2));
+  renderer.setClearColor(0x000000, 0);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, 1, .1, 100);
+  const group = new THREE.Group(); scene.add(group);
+
+  const N = coarse ? 5500 : 13000;
+  const pos = new Float32Array(N * 3), tgt = new Float32Array(N * 3), col = new Float32Array(N * 3), spd = new Float32Array(N);
+  const h = k => { const s = Math.sin(k * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+  const PHI = .6180339887, PHI2 = .7548776662, TAU = Math.PI * 2;
+  for (let i = 0; i < N; i++) spd[i] = .018 + h(i) * .07;
+
+  const shapes = [
+    { name: 'Esfera', f: (i, n) => { const y = 1 - 2 * (i + .5) / n, r = Math.sqrt(1 - y * y), a = i * 2.399963; return [Math.cos(a) * r * 2.1, y * 2.1, Math.sin(a) * r * 2.1]; } },
+    { name: 'Toro', f: i => { const u = ((i * PHI) % 1) * TAU, v = ((i * PHI2) % 1) * TAU, R = 1.65, r = .7; return [(R + r * Math.cos(v)) * Math.cos(u), r * Math.sin(v) * 1.1, (R + r * Math.cos(v)) * Math.sin(u)]; } },
+    { name: 'Cubo', f: i => { const m = Math.floor(i / 6), a = ((m * PHI) % 1) * 2 - 1, b = ((m * PHI2) % 1) * 2 - 1, s = 1.75; const p = [[1, a, b], [-1, a, b], [a, 1, b], [a, -1, b], [a, b, 1], [a, b, -1]][i % 6]; return [p[0] * s, p[1] * s, p[2] * s]; } },
+    { name: 'Nudo', f: i => { const t = ((i * PHI) % 1) * TAU, r = Math.cos(3 * t) + 2.2, j = .44; return [r * Math.cos(2 * t) * .78 + (h(i) - .5) * j, r * Math.sin(2 * t) * .78 + (h(i + 7) - .5) * j, -Math.sin(3 * t) * 1.25 + (h(i + 13) - .5) * j]; } },
+    { name: 'Hélice', f: i => { const s = ((i * PHI) % 1) * 2 - 1, y = s * 2.5, a = s * Math.PI * 3.2, k = i % 3; if (k < 2) { const aa = a + k * Math.PI; return [Math.cos(aa) * 1.15, y, Math.sin(aa) * 1.15]; } const m = h(i) * 2 - 1; return [Math.cos(a) * 1.15 * m, y, Math.sin(a) * 1.15 * m]; } },
+    { name: 'Galaxia', f: i => { const r = Math.pow(h(i), .7) * 2.9, a = r * 1.9 + (i % 3) * (TAU / 3) + (h(i + 3) - .5) * .5 * (1.2 - r / 3); return [Math.cos(a) * r, (h(i + 9) - .5) * .35 * (1.4 - r / 3), Math.sin(a) * r]; } },
+  ];
+
+  // paleta coral → dorado → turquesa, en espacio lineal para que la salida sRGB se vea bien
+  const cA = new THREE.Color('#e07a55'), cB = new THREE.Color('#f0c674'), cC = new THREE.Color('#7fd6c2'), tmp = new THREE.Color();
+  const lut = new Float32Array(64 * 3);
+  for (let i = 0; i < 64; i++) {
+    const u = i / 63;
+    if (u < .5) tmp.lerpColors(cA, cB, u * 2); else tmp.lerpColors(cB, cC, (u - .5) * 2);
+    lut[i * 3] = tmp.r; lut[i * 3 + 1] = tmp.g; lut[i * 3 + 2] = tmp.b;
+  }
+
+  let idx = 0, kick = 0;
+  const setShape = (n, instant) => {
+    idx = (n + shapes.length) % shapes.length;
+    const f = shapes[idx].f;
+    for (let i = 0; i < N; i++) { const p = f(i, N); tgt[i * 3] = p[0]; tgt[i * 3 + 1] = p[1]; tgt[i * 3 + 2] = p[2]; }
+    if (instant) pos.set(tgt);
+    else for (let j = 0; j < pos.length; j++) pos[j] += (Math.random() - .5) * 1.1;
+    label.textContent = shapes[idx].name;
+    kick = 1;
+  };
+  setShape(0, true);
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setAttribute('color', new THREE.BufferAttribute(col, 3).setUsage(THREE.DynamicDrawUsage));
+
+  const spr = document.createElement('canvas'); spr.width = spr.height = 64;
+  const sx = spr.getContext('2d'), gr = sx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.35, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  sx.fillStyle = gr; sx.fillRect(0, 0, 64, 64);
+  const tex = new THREE.CanvasTexture(spr); tex.colorSpace = THREE.SRGBColorSpace;
+
+  const points = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: coarse ? .06 : .045, map: tex, vertexColors: true, transparent: true, opacity: .8,
+    depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true,
+  }));
+  points.frustumCulled = false;
+  group.add(points);
+
+  const resize = () => {
+    const w = canvas.clientWidth || 1, hh = canvas.clientHeight || 1;
+    renderer.setSize(w, hh, false);
+    camera.aspect = w / hh;
+    camera.position.z = 6.4 / Math.min(1, camera.aspect * 1.2);
+    group.position.y = camera.aspect < .8 ? 1.05 : .45;
+    camera.updateProjectionMatrix();
+  };
+  new ResizeObserver(resize).observe(canvas); resize();
+
+  let px = 0, py = 0, rx = 0, ry = 0, last = performance.now() / 1000;
+  $('#top').addEventListener('pointermove', e => { px = (e.clientX / innerWidth - .5) * 2; py = (e.clientY / innerHeight - .5) * 2; });
+  $('#top').addEventListener('pointerdown', () => { kick = 1; });
+
+  heroRender = ms => {
+    const t = ms / 1000, dt = Math.min(.05, t - last); last = t;
+    const f60 = dt * 60;
+    for (let i = 0, j = 0; i < N; i++, j += 3) {
+      const s = Math.min(1, spd[i] * f60);
+      pos[j] += (tgt[j] - pos[j]) * s;
+      pos[j + 1] += (tgt[j + 1] - pos[j + 1]) * s;
+      pos[j + 2] += (tgt[j + 2] - pos[j + 2]) * s;
+      const u = .5 + (pos[j + 1] * .9 + pos[j] * .5) / 5.2, k = (u <= 0 ? 0 : u >= 1 ? 63 : (u * 63) | 0) * 3;
+      col[j] = lut[k]; col[j + 1] = lut[k + 1]; col[j + 2] = lut[k + 2];
+    }
+    geo.attributes.position.needsUpdate = true;
+    geo.attributes.color.needsUpdate = true;
+    kick *= Math.pow(.02, dt);
+    rx += (py * .35 - rx) * Math.min(1, dt * 3);
+    ry += (px * .6 - ry) * Math.min(1, dt * 3);
+    group.rotation.x = rx + Math.sin(t * .3) * .08;
+    group.rotation.y = ry + (reduce ? 0 : t * .18);
+    group.scale.setScalar(1 + kick * .12 + Math.sin(t * .9) * .015);
+    renderer.render(scene, camera);
+  };
+
+  let timer = null;
+  const arm = () => { clearInterval(timer); if (!reduce) timer = setInterval(() => { if (vis.hero && !document.hidden) setShape(idx + 1); }, 6500); };
+  arm();
+  $('#morph').addEventListener('click', () => { setShape(idx + 1); arm(); });
+}
+
+function heroFallback(canvas, label) {
+  label.textContent = '2D (sin WebGL)';
+  $('#morph').hidden = true;
+  const g = canvas.getContext('2d'); if (!g) return;
+  const stars = Array.from({ length: 180 }, () => ({ x: Math.random(), y: Math.random(), z: .2 + Math.random() * .8 }));
+  const fit = () => { canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; };
+  new ResizeObserver(fit).observe(canvas); fit();
+  heroRender = () => {
+    g.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      s.y = (s.y + .0006 * s.z) % 1;
+      g.fillStyle = `rgba(244,239,230,${.2 + s.z * .6})`;
+      g.beginPath(); g.arc(s.x * canvas.width, s.y * canvas.height, s.z * 1.8, 0, 6.283); g.fill();
+    }
+  };
+}
+initHero().catch(() => heroFallback($('#hero-canvas'), $('#shape-name')));
+
+/* ---------- 02 · GENERATIVO ---------- */
+const gc = $('#gen'), gg = gc.getContext('2d');
+const PAL = {
+  brasa:  { a: 8,   b: 48,  s: 88, l: 62 },
+  oceano: { a: 165, b: 230, s: 80, l: 62 },
+  aurora: { a: 120, b: 310, s: 85, l: 64 },
+  tiza:   { a: 38,  b: 38,  s: 14, l: 82 },
+};
+const gs = { k: 5, layers: 8, twist: 40, width: 12, pal: 'brasa', paused: reduce, t: 0, dirty: true };
+
+function drawGen(t) {
+  const W = gc.width, H = gc.height, cx = W / 2, cy = H / 2, R = W * .44, steps = 900;
+  gg.globalCompositeOperation = 'source-over';
+  gg.fillStyle = '#0b0a09'; gg.fillRect(0, 0, W, H);
+  gg.globalCompositeOperation = 'lighter';
+  gg.lineJoin = 'round';
+  const p = PAL[gs.pal], px = W / 900;
+  for (let L = 0; L < gs.layers; L++) {
+    const f = gs.layers > 1 ? L / (gs.layers - 1) : 0;
+    const dir = L % 2 ? 1 : -1;
+    const rot = f * gs.twist * .045 + t * .12 * dir;
+    const amp = .5 - f * .18, base = 1 - f * .5;
+    gg.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const th = i / steps * Math.PI * 2;
+      const r = R * base * (1 - amp + amp * Math.cos(gs.k * th + f * gs.twist * .08 + t * .4 * dir));
+      const x = cx + Math.cos(th + rot) * r, y = cy + Math.sin(th + rot) * r;
+      i ? gg.lineTo(x, y) : gg.moveTo(x, y);
+    }
+    gg.closePath();
+    const hue = p.a + (p.b - p.a) * f, w = gs.width / 10 * (1.6 - f * .8) * px;
+    gg.strokeStyle = `hsla(${hue},${p.s}%,${p.l}%,.10)`; gg.lineWidth = w * 4; gg.stroke();   // halo
+    gg.strokeStyle = `hsla(${hue},${p.s}%,${p.l}%,.70)`; gg.lineWidth = w; gg.stroke();       // trazo
+  }
+}
+
+let gLast = 0;
+function genFrame(ms) {
+  const dt = Math.min(.05, (ms - gLast) / 1000); gLast = ms;
+  if (!gs.paused) { gs.t += dt; gs.dirty = true; }
+  if (gs.dirty) { gs.dirty = false; drawGen(gs.t); }
+}
+
+const setRange = (id, v) => { const el = $('#' + id); el.value = v; el.dispatchEvent(new Event('input')); };
+['k', 'layers', 'twist', 'width'].forEach(id => {
+  const el = $('#' + id), out = $('#o-' + id);
+  const upd = () => { gs[id] = +el.value; out.textContent = id === 'width' ? (el.value / 10).toFixed(1) : el.value; gs.dirty = true; };
+  el.addEventListener('input', upd); upd();
+});
+const pals = document.querySelectorAll('.sw');
+const setPal = name => { gs.pal = name; pals.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pal === name))); gs.dirty = true; };
+pals.forEach(b => b.addEventListener('click', () => setPal(b.dataset.pal)));
+$('#rand').addEventListener('click', () => {
+  setRange('k', 2 + Math.floor(Math.random() * 13));
+  setRange('layers', 3 + Math.floor(Math.random() * 12));
+  setRange('twist', Math.floor(Math.random() * 101));
+  setRange('width', 4 + Math.floor(Math.random() * 25));
+  setPal(Object.keys(PAL)[Math.floor(Math.random() * 4)]);
+});
+const pauseBtn = $('#pause');
+const syncPause = () => { pauseBtn.textContent = gs.paused ? 'Animar' : 'Pausar'; };
+pauseBtn.addEventListener('click', () => { gs.paused = !gs.paused; syncPause(); });
+syncPause();
+$('#png').addEventListener('click', () => {
+  drawGen(gs.t);
+  gc.toBlob(b => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b); a.download = 'claude-lab-generativo.png'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  });
+});
+
+/* ---------- 03 · SINTETIZADOR ---------- */
+const NOTES = [
+  { n: 'Do', k: 'a' }, { n: 'Do♯', k: 'w', b: 0 }, { n: 'Re', k: 's' }, { n: 'Re♯', k: 'e', b: 1 }, { n: 'Mi', k: 'd' },
+  { n: 'Fa', k: 'f' }, { n: 'Fa♯', k: 't', b: 3 }, { n: 'Sol', k: 'g' }, { n: 'Sol♯', k: 'y', b: 4 }, { n: 'La', k: 'h' },
+  { n: 'La♯', k: 'u', b: 5 }, { n: 'Si', k: 'j' }, { n: 'Do', k: 'k' },
+];
+const keyMap = new Map(NOTES.map((n, i) => [n.k, i]));
+const piano = $('#piano'), keyEls = [];
+NOTES.forEach((n, i) => {
+  const el = document.createElement('button');
+  el.type = 'button'; el.dataset.i = i;
+  el.className = n.b === undefined ? 'wk' : 'bk';
+  el.setAttribute('aria-label', 'Nota ' + n.n);
+  el.innerHTML = `<span>${n.k.toUpperCase()}</span>`;
+  if (n.b !== undefined) el.style.left = (n.b + 1) * 12.5 + '%';
+  piano.appendChild(el); keyEls[i] = el;
+});
+
+let ac, master, analyser, buf, wave = 'triangle', octave = 0, vol = .5;
+const active = new Map();
+function initAudio() {
+  if (ac) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  ac = new AC();
+  master = ac.createGain(); master.gain.value = vol * .6;
+  const comp = ac.createDynamicsCompressor();
+  analyser = ac.createAnalyser(); analyser.fftSize = 2048; buf = new Uint8Array(analyser.fftSize);
+  master.connect(comp); comp.connect(analyser); analyser.connect(ac.destination);
+}
+function noteOn(i) {
+  initAudio(); if (!ac) return;
+  if (ac.state === 'suspended') ac.resume();
+  if (active.has(i)) return;
+  const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime;
+  o.type = wave; o.frequency.value = 261.6256 * Math.pow(2, (i + octave * 12) / 12);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(.5, t + .012);
+  g.gain.setTargetAtTime(.32, t + .012, .15);
+  o.connect(g); g.connect(master); o.start(t);
+  active.set(i, { o, g });
+  keyEls[i].classList.add('on');
+}
+function noteOff(i) {
+  const a = active.get(i); if (!a) return;
+  active.delete(i);
+  const t = ac.currentTime;
+  a.g.gain.cancelScheduledValues(t);
+  a.g.gain.setTargetAtTime(0, t, .09);
+  a.o.stop(t + .7);
+  keyEls[i].classList.remove('on');
+}
+const releaseAll = () => [...active.keys()].forEach(noteOff);
+
+const pressed = new Map();
+piano.addEventListener('pointerdown', e => {
+  const k = e.target.closest('[data-i]'); if (!k) return;
+  try { k.releasePointerCapture(e.pointerId); } catch (err) {}
+  e.preventDefault();
+  const i = +k.dataset.i; noteOn(i); pressed.set(e.pointerId, i);
+});
+piano.addEventListener('pointerover', e => {
+  if (!(e.buttons & 1)) return;
+  const k = e.target.closest('[data-i]'); if (!k) return;
+  const i = +k.dataset.i, prev = pressed.get(e.pointerId);
+  if (prev === i) return;
+  if (prev !== undefined) noteOff(prev);
+  noteOn(i); pressed.set(e.pointerId, i);
+});
+const release = e => { const i = pressed.get(e.pointerId); if (i !== undefined) { noteOff(i); pressed.delete(e.pointerId); } };
+addEventListener('pointerup', release); addEventListener('pointercancel', release);
+
+addEventListener('keydown', e => {
+  if (!vis.synth || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+  const i = keyMap.get(e.key.toLowerCase());
+  if (i !== undefined) { e.preventDefault(); noteOn(i); return; }
+  const f = document.activeElement;
+  if ((e.key === ' ' || e.key === 'Enter') && keyEls.includes(f)) { e.preventDefault(); noteOn(+f.dataset.i); }
+});
+addEventListener('keyup', e => {
+  const i = keyMap.get(e.key.toLowerCase());
+  if (i !== undefined) { noteOff(i); return; }
+  const f = document.activeElement;
+  if ((e.key === ' ' || e.key === 'Enter') && keyEls.includes(f)) noteOff(+f.dataset.i);
+});
+addEventListener('blur', releaseAll);
+
+document.querySelectorAll('[data-wave]').forEach(b => b.addEventListener('click', () => {
+  wave = b.dataset.wave;
+  document.querySelectorAll('[data-wave]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+}));
+const setOct = d => { octave = clamp(octave + d, -1, 1); $('#oct-val').textContent = 'Oct ' + (octave > 0 ? '+' : '') + octave; };
+$('#oct-down').addEventListener('click', () => setOct(-1));
+$('#oct-up').addEventListener('click', () => setOct(1));
+$('#vol').addEventListener('input', e => { vol = e.target.value / 100; if (master) master.gain.value = vol * .6; });
+
+const riff = [0, 4, 7, 12, 7, 4, 0, 5, 9, 12, 9, 5, 2, 7, 11, 12, 11, 7, 2, 0];
+let demoBusy = false;
+$('#demo').addEventListener('click', () => {
+  if (demoBusy) return;
+  initAudio(); if (ac && ac.state === 'suspended') ac.resume();
+  demoBusy = true;
+  riff.forEach((i, n) => setTimeout(() => { noteOn(i); setTimeout(() => noteOff(i), 165); }, n * 200));
+  setTimeout(() => { demoBusy = false; }, riff.length * 200 + 300);
+});
+
+const sc = $('#scope'), sg = sc.getContext('2d');
+function drawScope(ms) {
+  const w = sc.width, h = sc.height, n = 1024;
+  sg.clearRect(0, 0, w, h);
+  sg.strokeStyle = 'rgba(244,239,230,.08)'; sg.lineWidth = 1; sg.beginPath();
+  for (let x = 0; x <= w; x += w / 10) { sg.moveTo(x, 0); sg.lineTo(x, h); }
+  sg.moveTo(0, h / 2); sg.lineTo(w, h / 2); sg.stroke();
+  sg.strokeStyle = '#e07a55'; sg.lineWidth = 3; sg.lineJoin = 'round'; sg.beginPath();
+  if (analyser) analyser.getByteTimeDomainData(buf);
+  for (let i = 0; i < n; i++) {
+    const x = i / (n - 1) * w;
+    const y = analyser ? buf[i] / 255 * h : h / 2 + Math.sin(i * .03 + ms * .002) * 5;
+    i ? sg.lineTo(x, y) : sg.moveTo(x, y);
+  }
+  sg.stroke();
+}
+
+/* ---------- 04 · JUEGO ---------- */
+const gcv = $('#game'), gx = gcv.getContext('2d'), GW = gcv.width, GH = gcv.height;
+let best = 0; try { best = +localStorage.getItem('claudelab_best') || 0; } catch (err) {}
+const G = { state: 'idle', x: GW / 2, y: GH * .75, tx: GW / 2, ty: GH * .75, items: [], fx: [], t: 0, lvl: 1, score: 0, lives: 3, spawn: 0, inv: 0, flash: 0 };
+const held = new Set();
+function startGame() {
+  Object.assign(G, { state: 'play', x: GW / 2, y: GH * .75, tx: GW / 2, ty: GH * .75, items: [], fx: [], t: 0, lvl: 1, score: 0, lives: 3, spawn: .4, inv: 0, flash: 0 });
+}
+const aim = e => {
+  const r = gcv.getBoundingClientRect();
+  G.tx = clamp((e.clientX - r.left) * GW / r.width, 14, GW - 14);
+  G.ty = clamp((e.clientY - r.top) * GH / r.height, 14, GH - 14);
+};
+gcv.addEventListener('pointermove', aim);
+gcv.addEventListener('pointerdown', e => { aim(e); if (G.state !== 'play') startGame(); });
+$('#g-start').addEventListener('click', startGame);
+const ARROWS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+addEventListener('keydown', e => { if (G.state === 'play' && vis.game && ARROWS.includes(e.key)) { e.preventDefault(); held.add(e.key); } });
+addEventListener('keyup', e => held.delete(e.key));
+
+function stepGame(dt) {
+  if (G.state !== 'play') return;
+  G.t += dt; G.score += dt * 3; G.lvl = 1 + Math.floor(G.t / 12);
+  const sp = 380 * dt;
+  if (held.has('ArrowLeft')) G.tx -= sp;
+  if (held.has('ArrowRight')) G.tx += sp;
+  if (held.has('ArrowUp')) G.ty -= sp;
+  if (held.has('ArrowDown')) G.ty += sp;
+  G.tx = clamp(G.tx, 14, GW - 14); G.ty = clamp(G.ty, 14, GH - 14);
+  const k = Math.min(1, dt * 14);
+  G.x += (G.tx - G.x) * k; G.y += (G.ty - G.y) * k;
+  G.spawn -= dt;
+  if (G.spawn <= 0) {
+    G.spawn = Math.max(.2, .62 - G.lvl * .045);
+    const good = Math.random() < .3;
+    G.items.push({ x: 20 + Math.random() * (GW - 40), y: -24, vy: (120 + G.lvl * 24) * (.8 + Math.random() * .5), r: good ? 9 : 12 + Math.random() * 9, good, a: Math.random() * 6.28 });
+  }
+  G.inv = Math.max(0, G.inv - dt); G.flash = Math.max(0, G.flash - dt);
+  for (let i = G.items.length - 1; i >= 0; i--) {
+    const it = G.items[i]; it.y += it.vy * dt; it.a += dt * 2;
+    if (Math.hypot(it.x - G.x, it.y - G.y) < it.r + (it.good ? 15 : 10)) {
+      if (it.good) { G.score += 10; G.fx.push({ x: it.x, y: it.y, r: 6, life: 1, c: '127,214,194' }); }
+      else if (G.inv <= 0) {
+        G.lives--; G.inv = 1; G.flash = .25; G.fx.push({ x: it.x, y: it.y, r: 10, life: 1, c: '224,122,85' });
+        if (G.lives <= 0) {
+          G.state = 'over';
+          if (G.score > best) { best = Math.floor(G.score); try { localStorage.setItem('claudelab_best', best); } catch (err) {} }
+        }
+      }
+      G.items.splice(i, 1); continue;
+    }
+    if (it.y > GH + 30) G.items.splice(i, 1);
+  }
+  for (let i = G.fx.length - 1; i >= 0; i--) { const f = G.fx[i]; f.r += dt * 90; f.life -= dt * 2; if (f.life <= 0) G.fx.splice(i, 1); }
+}
+
+function drawGame() {
+  const x = gx;
+  x.fillStyle = G.flash > 0 ? '#2a1410' : '#0e0c0a'; x.fillRect(0, 0, GW, GH);
+  x.strokeStyle = 'rgba(244,239,230,.05)'; x.lineWidth = 1; x.beginPath();
+  const off = (G.t * 40) % 50;
+  for (let i = 0; i <= GW; i += 50) { x.moveTo(i, 0); x.lineTo(i, GH); }
+  for (let j = -50 + off; j <= GH; j += 50) { x.moveTo(0, j); x.lineTo(GW, j); }
+  x.stroke();
+
+  for (const it of G.items) {
+    x.save(); x.translate(it.x, it.y);
+    if (it.good) {
+      x.fillStyle = '#7fd6c2'; x.shadowColor = '#7fd6c2'; x.shadowBlur = 16;
+      x.beginPath(); x.arc(0, 0, it.r, 0, 6.283); x.fill();
+    } else {
+      x.rotate(it.a); x.fillStyle = '#e07a55'; x.shadowColor = '#e07a55'; x.shadowBlur = 14;
+      x.fillRect(-it.r / 1.4, -it.r / 1.4, it.r * 1.4, it.r * 1.4);
+    }
+    x.restore();
+  }
+  for (const f of G.fx) {
+    x.strokeStyle = `rgba(${f.c},${Math.max(0, f.life)})`; x.lineWidth = 2;
+    x.beginPath(); x.arc(f.x, f.y, f.r, 0, 6.283); x.stroke();
+  }
+
+  const blink = G.inv > 0 && Math.floor(G.inv * 14) % 2 === 0;
+  x.save();
+  x.globalAlpha = blink ? .35 : 1; x.strokeStyle = '#f4efe6'; x.lineWidth = 2.5; x.shadowColor = '#f0c674'; x.shadowBlur = 20;
+  x.beginPath(); x.arc(G.x, G.y, 13, 0, 6.283); x.stroke();
+  x.fillStyle = 'rgba(240,198,116,.35)'; x.fill();
+  x.restore();
+
+  x.font = '500 17px "DM Mono", monospace'; x.textBaseline = 'alphabetic';
+  x.fillStyle = '#f4efe6'; x.textAlign = 'left'; x.fillText('PUNTOS ' + Math.floor(G.score), 18, 30);
+  x.fillStyle = '#a39a8d'; x.fillText('NIVEL ' + G.lvl, 18, 52);
+  x.textAlign = 'center'; x.fillText('RÉCORD ' + best, GW / 2, 30);
+  x.textAlign = 'right'; x.fillStyle = '#e07a55'; x.fillText('♥'.repeat(Math.max(0, G.lives)), GW - 18, 30);
+
+  if (G.state !== 'play') {
+    x.fillStyle = 'rgba(11,10,9,.66)'; x.fillRect(0, 0, GW, GH);
+    x.textAlign = 'center'; x.fillStyle = '#f4efe6';
+    x.font = '700 40px "Space Grotesk", sans-serif';
+    x.fillText(G.state === 'over' ? 'Fin del juego · ' + Math.floor(G.score) + ' pts' : 'Esquivá y juntá', GW / 2, GH / 2 - 8);
+    x.font = '500 18px "DM Mono", monospace'; x.fillStyle = '#f0c674';
+    x.fillText(G.state === 'over' ? 'Tocá para reintentar' : 'Tocá o hacé clic para empezar', GW / 2, GH / 2 + 30);
+  }
+}
+let gLast2 = 0;
+function gameFrame(ms) { const dt = Math.min(.05, (ms - gLast2) / 1000); gLast2 = ms; stepGame(dt); drawGame(); }
+
+/* ---------- loop maestro ---------- */
+function frame(ms) {
+  requestAnimationFrame(frame);
+  if (document.hidden) return;
+  if (vis.hero && heroRender) heroRender(ms);
+  if (vis.gen) genFrame(ms);
+  if (vis.synth) drawScope(ms);
+  if (vis.game) gameFrame(ms);
+}
+drawGen(0); drawScope(0); drawGame();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
