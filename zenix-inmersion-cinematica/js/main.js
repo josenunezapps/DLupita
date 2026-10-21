@@ -185,7 +185,8 @@ function frame(now, once = false) {
   const { fov, roll } = sampleCamera(prog, camPos, camLook);
   // Compensación para pantallas verticales: se amplía el FOV para que el encuadre siga abarcando lo importante.
   const aspect = camera.aspect;
-  let vfov = fov + Math.abs(kick) * 5;
+  // Respiración óptica ligada a la velocidad real de desplazamiento.
+  let vfov = fov + Math.abs(kick) * 3.8;
   if (aspect < 1) vfov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(vfov) / 2) * Math.min(1.9, 0.92 / aspect)));
   camera.fov = Math.min(88, vfov);
 
@@ -194,12 +195,12 @@ function frame(now, once = false) {
   pointer.y += (pointer.ty - pointer.y) * (1 - Math.exp(-dt * 3));
   camera.position.copy(camPos);
   const breathe = reduced ? 0 : 1;
-  camera.position.x += Math.sin(time * 0.35) * 0.04 * breathe;
-  camera.position.y += Math.cos(time * 0.29) * 0.035 * breathe;
+  camera.position.x += Math.sin(time * 0.35) * 0.04 * breathe - kick * 0.12;
+  camera.position.y += Math.cos(time * 0.29) * 0.035 * breathe + Math.abs(kick) * 0.07;
   camera.up.set(0, 1, 0);
   camera.lookAt(camLook);
-  camera.rotateZ(roll);
-  camera.rotateY(-pointer.x * 0.035);
+  camera.rotateZ(roll - kick * 0.008);
+  camera.rotateY(-pointer.x * 0.035 - kick * 0.004);
   camera.rotateX(-pointer.y * 0.022);
   if (Q.aspect < 0.85) {
     // En vertical, desplaza el encuadre hacia arriba para dejar el tercio inferior libre para el texto.
@@ -217,6 +218,8 @@ function frame(now, once = false) {
   visibility(prog);
   const state = { p: prog, dt, time, camera, look: camLook, Q, kick };
   env.update(camera, camLook, time, prog, dt);
+  // Atmósfera por profundidad: un leve aumento de niebla al ganar velocidad da escala real.
+  env.fog.density = 0.0105 + Math.abs(kick) * 0.0012;
   for (const s of scenes) if (s.group.visible) s.update(state);
 
   { // En el cierre se atenúan las luces del rig para no quemar el logo
@@ -229,7 +232,8 @@ function frame(now, once = false) {
     const fin = clamp((prog - 0.86) / 0.1);
     bloom.strength = 0.42 + 0.25 * (1 - clamp(prog / 0.14)) + 0.0 * fin;
   }
-  renderer.toneMappingExposure = 1.0;
+  // Adaptación de exposición muy sutil, sin cambiar la paleta visual original.
+  renderer.toneMappingExposure = 0.99 + .055 * Math.sin(prog * Math.PI) + .018 * Math.abs(kick);
 
   if (!lost) {
     if (composer) composer.render(dt); else renderer.render(scene, camera);
