@@ -37,6 +37,17 @@ Desde ahí, cada 15 minutos Supabase busca los turnos que empiezan en 2 horas y 
 
 En **iPhone** los avisos solo funcionan si el cliente agregó la página a la pantalla de inicio (iOS 16.4 o más nuevo). En Android y en la compu funcionan directo.
 
+## Instalar el panel como app (celular del barbero)
+
+El panel se instala como una app, gratis y sin Play Store:
+
+- **Android (Chrome):** abrir el link del panel y tocar **Instalar app** arriba (o menú ⋮ → **Instalar aplicación**).
+- **iPhone (Safari):** abrir el link del panel, tocar **Compartir** y después **Agregar a inicio**.
+
+Queda con ícono dorado propio, se abre a pantalla completa y sigue abriendo aunque se corte la conexión un momento. Los turnos siempre se traen en vivo cuando hay internet.
+
+La página de turnos también se puede instalar (ícono oscuro). En iPhone es necesario para que el cliente reciba los avisos push.
+
 ## Para otra barbería
 
-Copiar la carpeta, cambiar `config.js` (y el nombre en los títulos) y crear un proyecto de Supabase nuevo para ese cliente.
+Copiar la carpeta, cambiar `config.js` (y el nombre en los títulos y en los dos `manifest.webmanifest`) y crear un proyecto de Supabase nuevo para ese cliente.

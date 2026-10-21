@@ -1,0 +1,17 @@
+{
+  "name": "Barbería Filo · Turnos",
+  "short_name": "Filo Turnos",
+  "description": "Reservá tu turno en Barbería Filo y recibí el aviso antes.",
+  "lang": "es-AR",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1c1b1a",
+  "theme_color": "#1c1b1a",
+  "icons": [
+    { "src": "icons/cliente-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/cliente-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/cliente-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

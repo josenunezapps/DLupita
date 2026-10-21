@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#1c1b1a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="../icons/panel-64.png">
+<link rel="apple-touch-icon" href="../icons/panel-apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Panel Filo">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Panel Barbería Filo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Manrope:wght@400;600;700&display=swap">
@@ -112,6 +120,12 @@ h3{font:600 15px var(--display);margin:0 0 12px}
 .row2{display:flex;gap:10px}
 .row2 button{flex:1;background:transparent;border:1px solid var(--line);color:var(--fg);padding:12px;border-radius:12px;font-weight:600}
 @media (min-width:600px){.sheet{align-items:center}.sheet .box{border-radius:20px}}
+.install{background:var(--brass);color:#1a1306;border:0;padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px}
+.tip{display:flex;gap:12px;align-items:flex-start;margin:16px 0 0;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:14px}
+.tip img{width:40px;height:40px;border-radius:10px;flex:none}
+.tip p{margin:0;flex:1}
+.tip button{background:none;border:0;color:var(--muted);font-size:20px;line-height:1;padding:0 4px}
+@media (display-mode:standalone){.top .tbtn.web{display:none}}
 @media (min-width:900px){
   .cols{grid-template-columns:1.25fr 1fr;gap:40px;align-items:start}
   .side{position:sticky;top:20px}
@@ -123,10 +137,17 @@ h3{font:600 15px var(--display);margin:0 0 12px}
 <header class="top"><div class="inner">
   <div class="brand"><small>Panel del barbero</small>Barbería <em>Filo</em></div>
   <div style="display:flex;gap:8px">
-    <a class="tbtn" href="../" target="_blank" rel="noopener"><span class="long">Ver página de turnos</span><span class="short">Turnos</span></a>
+    <button class="install" id="install" hidden>Instalar app</button>
+    <a class="tbtn web" href="../" target="_blank" rel="noopener"><span class="long">Ver página de turnos</span><span class="short">Turnos</span></a>
     <button class="tbtn" id="logout" hidden>Salir</button>
   </div>
 </div></header>
+
+<div class="inner"><div class="tip" id="tip" hidden>
+  <img src="../icons/panel-192.png" alt="">
+  <p id="tipText"></p>
+  <button id="tipClose" aria-label="Cerrar">×</button>
+</div></div>
 
 <form class="login" id="login" hidden>
   <h1>Entrar al panel</h1>
@@ -330,6 +351,26 @@ $("rSkip").onclick=()=>{const t=rQueue[rPos];if(t)t._skip=true;nextPos();drawShe
 $("rClose").onclick=()=>{$("sheet").hidden=true;load();};
 $("sheet").onclick=e=>{if(e.target.id==="sheet")$("rClose").click();};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheet").hidden)$("rClose").click();});
+// ---------- app instalable ----------
+const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+let installEvt=null;
+const tipSeen=()=>{try{return localStorage.getItem("filo_tip_v1")==="1"}catch(e){return false}};
+function showTip(txt){if(standalone||tipSeen())return;$("tipText").innerHTML=txt;$("tip").hidden=false;}
+$("tipClose").onclick=()=>{$("tip").hidden=true;try{localStorage.setItem("filo_tip_v1","1")}catch(e){}};
+window.addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault(); installEvt=e; $("install").hidden=false;
+  showTip("<b>Instalá el panel como app</b> y abrilo desde el inicio del celular, como WhatsApp.");
+});
+$("install").onclick=async()=>{
+  if(!installEvt) return; installEvt.prompt();
+  const r=await installEvt.userChoice; installEvt=null; $("install").hidden=true;
+  if(r.outcome==="accepted") $("tip").hidden=true;
+};
+window.addEventListener("appinstalled",()=>{$("install").hidden=true;$("tip").hidden=true;});
+if(/iPhone|iPad|iPod/.test(navigator.userAgent)&&!standalone)
+  showTip("<b>Instalá el panel en tu iPhone:</b> tocá el botón Compartir de Safari y después <b>Agregar a inicio</b>.");
+
 init();
 </script>
 </body>
