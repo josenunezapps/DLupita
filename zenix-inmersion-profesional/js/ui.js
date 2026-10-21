@@ -15,6 +15,10 @@ export class UI {
     this.loaderLabel = document.getElementById('loader-label');
     this.noticeEl = document.getElementById('notice');
     this.dots = [];
+    // Evita repetir escrituras DOM si el resultado visual del fotograma no cambió.
+    this._panelStyles = new WeakMap();
+    this._finaleStyles = null;
+    this._lastBarScale = null;
     this.max = 1;
     this.manual = false;
     this.buildNav();
@@ -88,19 +92,33 @@ export class UI {
       const vin = a < 0 ? 1 : smooth(a, b, p);
       const vout = 1 - smooth(c, d, p);
       const v = vin * vout;
-      el.style.opacity = v.toFixed(3);
-      el.style.transform = `translate3d(0, ${((1 - vin) * 26 - (1 - vout) * 18).toFixed(1)}px, 0)`;
-      el.style.visibility = v > 0.01 ? 'visible' : 'hidden';
-      el.setAttribute('aria-hidden', v > 0.3 ? 'false' : 'true');
+      const opacity = v.toFixed(3);
+      const transform = `translate3d(0, ${((1 - vin) * 26 - (1 - vout) * 18).toFixed(1)}px, 0)`;
+      const visibility = v > 0.01 ? 'visible' : 'hidden';
+      const ariaHidden = v > 0.3 ? 'false' : 'true';
+      let prev = this._panelStyles.get(el);
+      if (!prev) { prev = {}; this._panelStyles.set(el, prev); }
+      if (opacity !== prev.opacity) { el.style.opacity = opacity; prev.opacity = opacity; }
+      if (transform !== prev.transform) { el.style.transform = transform; prev.transform = transform; }
+      if (visibility !== prev.visibility) { el.style.visibility = visibility; prev.visibility = visibility; }
+      if (ariaHidden !== prev.ariaHidden) { el.setAttribute('aria-hidden', ariaHidden); prev.ariaHidden = ariaHidden; }
     }
     // Cierre: título y llamado a la acción aparecen con la revelación del logo
     if (this.finale) {
       const t = smooth(0.935, 0.975, p);
       const cta = smooth(0.965, 0.995, p);
-      this.finale.style.opacity = t.toFixed(3);
-      this.finale.style.visibility = t > 0.01 ? 'visible' : 'hidden';
-      this.finale.style.setProperty('--cta', cta.toFixed(3));
-      this.finale.classList.toggle('cta-on', cta > 0.55);
+      const state = {
+        opacity: t.toFixed(3),
+        visibility: t > 0.01 ? 'visible' : 'hidden',
+        cta: cta.toFixed(3),
+        on: cta > 0.55,
+      };
+      const prev = this._finaleStyles || {};
+      if (state.opacity !== prev.opacity) this.finale.style.opacity = state.opacity;
+      if (state.visibility !== prev.visibility) this.finale.style.visibility = state.visibility;
+      if (state.cta !== prev.cta) this.finale.style.setProperty('--cta', state.cta);
+      if (state.on !== prev.on) this.finale.classList.toggle('cta-on', state.on);
+      this._finaleStyles = state;
     }
     // Navegación y progreso
     let idx = 0;
@@ -111,6 +129,9 @@ export class UI {
       if (this.counter) this.counter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(CHAPTERS.length).padStart(2, '0')}`;
       this.root.dataset.chapter = CHAPTERS[idx].id;
     }
-    if (this.bar) this.bar.style.transform = `scaleY(${p.toFixed(4)})`;
+    if (this.bar) {
+      const scale = `scaleY(${p.toFixed(4)})`;
+      if (scale !== this._lastBarScale) { this.bar.style.transform = scale; this._lastBarScale = scale; }
+    }
   }
 }
