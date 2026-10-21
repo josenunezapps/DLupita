@@ -1,0 +1,33 @@
+name: Importar correccion fina Zenix 3D
+on:
+  push:
+    paths:
+      - '.github/workflows/zenix-correccion-fina-import-once.yml'
+permissions:
+  contents: write
+jobs:
+  importar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Copiar archivo sin modificaciones
+        env:
+          SOURCE_ZIP: https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4d158dd4-63b9-470c-8c8c-bc8b9ce9c27e.zip
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --silent --show-error "$SOURCE_ZIP" -o /tmp/zenix-import.zip
+          echo "2df2e440cba3c9ba72697ee64f6e470c332a02c8c45fbacfc1ce756b399ebbd6  /tmp/zenix-import.zip" | sha256sum -c -
+          mkdir -p /tmp/zenix-original
+          unzip -qq /tmp/zenix-import.zip -d /tmp/zenix-original
+          test -f /tmp/zenix-original/zenix-inmersion-cinematica-correccion-fina/index.html
+          test -f /tmp/zenix-original/zenix-inmersion-cinematica-correccion-fina/vendor/three.module.min.js
+          if test -e zenix-inmersion-cinematica-correccion-fina; then
+            echo "Ruta ya existente: no sobrescribo archivos" >&2
+            exit 1
+          fi
+          cp -a /tmp/zenix-original/zenix-inmersion-cinematica-correccion-fina ./zenix-inmersion-cinematica-correccion-fina
+          git add -- zenix-inmersion-cinematica-correccion-fina
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Publicar correccion fina Zenix 3D exactamente desde ZIP"
+          git push origin HEAD:main
