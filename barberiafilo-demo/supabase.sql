@@ -10,8 +10,12 @@ create table if not exists public.turnos (
   nombre text not null check (char_length(nombre) between 1 and 80),
   telefono text not null check (char_length(telefono) between 8 and 20),
   estado text not null default 'pendiente' check (estado in ('pendiente','confirmado','cancelado')),
+  recordado boolean not null default false,
   creado timestamptz not null default now()
 );
+
+-- Si ya habías creado la tabla antes, esto agrega la columna nueva.
+alter table public.turnos add column if not exists recordado boolean not null default false;
 
 create table if not exists public.bloqueos (
   fecha date not null,

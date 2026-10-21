@@ -44,6 +44,7 @@
     },
     async turnos(f) { return dT().filter(t => t.fecha === f).sort((a, b) => a.hora.localeCompare(b.hora)); },
     async setEstado(id, e) { sT(dT().map(t => t.id === id ? { ...t, estado: e } : t)); return { ok: true }; },
+    async recordado(id) { sT(dT().map(t => t.id === id ? { ...t, recordado: true } : t)); return { ok: true }; },
     async bloqueos(f) { return dB().filter(b => b.fecha === f).map(b => b.hora); },
     async bloquear(f, h, on) {
       const b = dB().filter(x => !(x.fecha === f && x.hora === h));
@@ -71,6 +72,7 @@
       if (error) throw error; return data;
     },
     async setEstado(id, e) { const { error } = await sb.from("turnos").update({ estado: e }).eq("id", id); return { ok: !error, error: error?.message }; },
+    async recordado(id) { const { error } = await sb.from("turnos").update({ recordado: true }).eq("id", id); return { ok: !error, error: error?.message }; },
     async bloqueos(f) {
       const { data, error } = await sb.from("bloqueos").select("hora").eq("fecha", f);
       if (error) throw error; return data.map(r => r.hora);

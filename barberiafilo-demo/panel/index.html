@@ -27,7 +27,7 @@ button{font:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 
 .top{background:var(--hero);color:var(--hero-fg);padding-top:env(safe-area-inset-top,0px)}
-.top .long{display:none}@media (min-width:600px){.top .long{display:inline}}
+.top .long{display:none}@media (min-width:600px){.top .long{display:inline}.top .short{display:none}}
 .top .inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:16px}
 .brand{font:800 18px var(--display)}
 .brand em{font-style:normal;color:var(--brass)}
@@ -92,6 +92,26 @@ h3{font:600 15px var(--display);margin:0 0 12px}
 .legend .r{background:var(--ok-bg);border-color:transparent}
 .legend .b{background:var(--taken);border-style:dashed}
 
+.dayhead .tools{display:flex;align-items:center;gap:14px}
+.remind{background:var(--brass);color:#1a1306;border:0;padding:9px 14px;border-radius:999px;font-weight:700;font-size:14px}
+.remind:disabled{opacity:.45;cursor:not-allowed}
+.tag{font-size:12px;font-weight:700;color:var(--ok)}
+.sheet{position:fixed;inset:0;background:rgba(10,9,8,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet .box{background:var(--surface);color:var(--fg);width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;padding:22px;padding-bottom:calc(22px + env(safe-area-inset-bottom,0px));padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));display:grid;gap:14px}
+.sheet h3{font:800 20px var(--display);margin:0}
+.sheet .sub{margin:0;color:var(--muted);font-size:14px}
+.bar{height:8px;border-radius:999px;background:var(--taken);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.rlist{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rlist li{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;background:var(--bg);font-size:15px}
+.rlist li.now{outline:2px solid var(--brass)}
+.rlist li.sent{color:var(--muted)}
+.rlist li b{font-variant-numeric:tabular-nums}
+.preview{background:var(--ok-bg);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-wrap}
+.send{display:block;text-align:center;background:#1f8a4c;color:#fff;text-decoration:none;font-weight:700;padding:15px;border-radius:12px}
+.row2{display:flex;gap:10px}
+.row2 button{flex:1;background:transparent;border:1px solid var(--line);color:var(--fg);padding:12px;border-radius:12px;font-weight:600}
+@media (min-width:600px){.sheet{align-items:center}.sheet .box{border-radius:20px}}
 @media (min-width:900px){
   .cols{grid-template-columns:1.25fr 1fr;gap:40px;align-items:start}
   .side{position:sticky;top:20px}
@@ -103,7 +123,7 @@ h3{font:600 15px var(--display);margin:0 0 12px}
 <header class="top"><div class="inner">
   <div class="brand"><small>Panel del barbero</small>Barbería <em>Filo</em></div>
   <div style="display:flex;gap:8px">
-    <a class="tbtn" href="../" target="_blank" rel="noopener"><span class="long">Ver página de </span>turnos</a>
+    <a class="tbtn" href="../" target="_blank" rel="noopener"><span class="long">Ver página de turnos</span><span class="short">Turnos</span></a>
     <button class="tbtn" id="logout" hidden>Salir</button>
   </div>
 </div></header>
@@ -120,7 +140,7 @@ h3{font:600 15px var(--display);margin:0 0 12px}
 <main id="app" hidden><div class="inner">
   <p class="banner" id="banner" hidden>Modo demo: los turnos se guardan solo en este navegador. Hacé una reserva en la página de turnos y aparece acá.</p>
   <div class="days" id="days"></div>
-  <div class="dayhead"><h2 id="dtitle"></h2><button class="refresh" id="refresh">Actualizar</button></div>
+  <div class="dayhead"><h2 id="dtitle"></h2><div class="tools"><button class="refresh" id="refresh">Actualizar</button><button class="remind" id="remind">Recordar turnos</button></div></div>
   <div class="stats">
     <div class="stat"><small>Turnos</small><b id="sCount">0</b></div>
     <div class="stat"><small>Sin confirmar</small><b id="sPend">0</b></div>
@@ -135,6 +155,23 @@ h3{font:600 15px var(--display);margin:0 0 12px}
     </section>
   </div>
 </div></main>
+
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="rTitle">
+  <div class="box">
+    <h3 id="rTitle">Recordar turnos</h3>
+    <p class="sub" id="rSub"></p>
+    <div class="bar"><i id="rBar" style="width:0"></i></div>
+    <ul class="rlist" id="rList"></ul>
+    <div id="rNext">
+      <div class="preview" id="rMsg"></div>
+      <a class="send" id="rSend" target="_blank" rel="noopener" style="margin-top:12px">Enviar por WhatsApp</a>
+      <p class="sub" style="margin-top:8px">Se abre WhatsApp con el mensaje listo. Tocá enviar y volvé acá para el siguiente.</p>
+    </div>
+    <p class="sub" id="rDone" hidden>Listo, avisaste a todos. 👍</p>
+    <div class="row2"><button id="rSkip">Saltar</button><button id="rClose">Cerrar</button></div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="../config.js"></script>
@@ -190,7 +227,7 @@ async function load(){
   $("sPend").textContent=act.filter(x=>x.estado==="pendiente").length;
   $("sMoney").textContent=fmt(act.reduce((a,x)=>a+(x.precio||0),0));
   const n=$("n"+sel); if(n) n.textContent=act.length?`${act.length} turno${act.length>1?"s":""}`:"";
-  drawList(); drawGrid();
+  drawList(); drawGrid(); updRemindBtn();
 }
 
 function drawList(){
@@ -204,7 +241,7 @@ function drawList(){
     const msg=t.estado==="cancelado"
       ?`Hola ${t.nombre}! Tuvimos que cancelar tu turno del ${dayText(d)} a las ${t.hora} en ${C.nombre}. Respondé este mensaje y te damos otro horario.`
       :`Hola ${t.nombre}! Te confirmamos tu turno en ${C.nombre} el ${dayText(d)} a las ${t.hora} (${t.servicio}). Te esperamos en ${C.direccion}.`;
-    el.innerHTML=`<span class="h">${t.hora}</span><strong>${esc(t.nombre)}</strong><span class="pill">${label}</span>
+    el.innerHTML=`<span class="h">${t.hora}</span><strong>${esc(t.nombre)} ${t.recordado&&t.estado!=="cancelado"?'<span class="tag">· Recordado ✓</span>':""}</strong><span class="pill">${label}</span>
       <small>${esc(t.servicio)} · ${fmt(t.precio)} · ${esc(t.telefono)}</small>
       <div class="acts"></div>`;
     const acts=el.querySelector(".acts");
@@ -252,8 +289,47 @@ $("blockDay").onclick=async()=>{
   load();
 };
 $("refresh").onclick=()=>{drawDays();load();};
-setInterval(()=>{if(!document.hidden&&!$("app").hidden)load();},30000);
+setInterval(()=>{if(!document.hidden&&!$("app").hidden&&$("sheet").hidden)load();},30000);
 window.addEventListener("storage",()=>{if(!$("app").hidden)load();}); // modo demo: refresca al reservar en otra pestaña
+// ---------- recordatorios ----------
+let rQueue=[], rPos=0, rSent=0;
+function pendientesRecordar(){
+  const now=new Date(), d=days[sel];
+  return data.t.filter(t=>{
+    if(t.estado==="cancelado"||t.recordado) return false;
+    const [hh,mm]=t.hora.split(":").map(Number), when=new Date(d); when.setHours(hh,mm);
+    return when>now;
+  });
+}
+function cuando(){return sel===0?"hoy":sel===1?"mañana":"el "+dayText(days[sel]);}
+function rMsg(t){return `Hola ${t.nombre}! Te recordamos tu turno en ${C.nombre} ${cuando()} a las ${t.hora} (${t.servicio}). Si no podés venir, avisanos respondiendo este mensaje. ¡Te esperamos!`;}
+function updRemindBtn(){
+  const n=pendientesRecordar().length, b=$("remind");
+  b.disabled=!n; b.textContent=n?`Recordar turnos (${n})`:"Todos recordados";
+}
+function drawSheet(){
+  const total=rQueue.length;
+  $("rSub").textContent=`${rSent} de ${total} enviados · turnos de ${cuando()}`;
+  $("rBar").style.width=total?(rSent/total*100)+"%":"0";
+  $("rList").innerHTML=rQueue.map((t,i)=>`<li class="${t._sent?"sent":i===rPos?"now":""}"><span><b>${t.hora}</b> · ${esc(t.nombre)}</span><span>${t._sent?"Enviado ✓":t._skip?"Saltado":i===rPos?"Siguiente":""}</span></li>`).join("");
+  const t=rQueue[rPos], done=!t;
+  $("rNext").hidden=done; $("rDone").hidden=!done; $("rSkip").hidden=done;
+  if(done){$("rDone").textContent=rSent?`Listo, enviaste ${rSent} recordatorio${rSent>1?"s":""}.`:"No quedó ningún recordatorio por enviar.";return;}
+  $("rMsg").textContent=rMsg(t);
+  $("rSend").href=`https://wa.me/${waNum(t.telefono)}?text=${encodeURIComponent(rMsg(t))}`;
+  $("rSend").textContent=`Enviar a ${t.nombre.split(" ")[0]} por WhatsApp`;
+}
+function nextPos(){rPos++;while(rQueue[rPos]&&(rQueue[rPos]._sent||rQueue[rPos]._skip))rPos++;}
+$("remind").onclick=()=>{rQueue=pendientesRecordar().map(t=>({...t}));rPos=0;rSent=0;drawSheet();$("sheet").hidden=false;};
+$("rSend").onclick=()=>{
+  const t=rQueue[rPos]; if(!t) return;
+  t._sent=true; rSent++; S.recordado(t.id);
+  setTimeout(()=>{nextPos();drawSheet();},400); // deja que se abra WhatsApp antes de pasar al siguiente
+};
+$("rSkip").onclick=()=>{const t=rQueue[rPos];if(t)t._skip=true;nextPos();drawSheet();};
+$("rClose").onclick=()=>{$("sheet").hidden=true;load();};
+$("sheet").onclick=e=>{if(e.target.id==="sheet")$("rClose").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheet").hidden)$("rClose").click();});
 init();
 </script>
 </body>
