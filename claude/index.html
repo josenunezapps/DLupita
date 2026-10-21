@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06070f">
+<!-- Propuesta de diseño. Quitar la línea noindex al publicarla en zenix.com.ar/claude -->
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Zenix AR — Ideas digitales hechas para servir</title>
+<meta name="description" content="Zenix AR desarrolla sitios web, aplicaciones Android, extensiones y automatizaciones. Software con propósito desde Ushuaia.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{
+  --bg:#06070f;--ink:#f3f4ff;--dim:#9a9fbb;--mute:#6c7190;
+  --line:rgba(176,186,255,.14);--glass:rgba(255,255,255,.035);
+  --violet:#8b6cff;--blue:#4f7cff;--cyan:#5fe0ff;--lilac:#c9bcff;
+  --grad:linear-gradient(100deg,#c9bcff 0%,#8fa8ff 45%,#5fe0ff 100%);
+  --r:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 520px at 82% -60px,rgba(94,70,255,.26),transparent 62%),radial-gradient(760px 460px at -8% 160px,rgba(40,120,255,.16),transparent 62%)}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+::selection{background:var(--violet);color:#fff}
+.mono{font-family:"DM Mono",ui-monospace,monospace}
+.gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,5vw,48px)}
+#sp{position:fixed;inset:0 0 auto 0;height:2px;z-index:60;background:var(--grad);transform:scaleX(0);transform-origin:0 50%}
+
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:.8em 1.35em;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-weight:500;font-size:.98rem;line-height:1.2;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s}
+.btn:hover{background:rgba(255,255,255,.1);border-color:rgba(200,210,255,.35)}
+.btn:active{transform:scale(.97)}
+.btn.p{border:0;background:linear-gradient(100deg,#7a5cff,#4f7cff);color:#fff;font-weight:600;box-shadow:0 10px 36px -10px rgba(110,90,255,.8)}
+.btn.p:hover{box-shadow:0 14px 44px -8px rgba(110,100,255,.95);transform:translateY(-1px)}
+.btn.big{padding:1em 1.8em;font-size:1.05rem}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav.stuck{background:rgba(6,7,15,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.brand svg{width:30px;height:30px}
+.brand small{display:block;font:400 .66rem "DM Mono",monospace;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;line-height:1}
+.nav ul{display:flex;gap:clamp(14px,2.6vw,32px);list-style:none;margin:0;padding:0;font-size:.92rem;color:var(--dim)}
+.nav ul a{transition:color .2s}.nav ul a:hover{color:var(--ink)}
+.nav .btn{padding:.55em 1.05em;font-size:.88rem}
+@media(max-width:760px){.nav ul{display:none}}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding:110px 0 70px}
+#net{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(6,7,15,.88) 0%,rgba(6,7,15,.55) 45%,rgba(6,7,15,0) 80%)}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:180px;z-index:1;pointer-events:none;background:linear-gradient(rgba(6,7,15,0),var(--bg))}
+.hero-in{position:relative;z-index:2;pointer-events:none}
+.hero-in a,.hero-in .btn{pointer-events:auto}
+.tag{display:inline-flex;align-items:center;gap:10px;margin:0 0 22px;padding:.5em 1em;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--lilac)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+h1{margin:0 0 .3em;font-size:clamp(2.3rem,9.4vw,6.6rem);line-height:.93;letter-spacing:-.045em;font-weight:700;max-width:16ch}
+h2{margin:0 0 .4em;font-size:clamp(1.9rem,4.8vw,3.3rem);line-height:1.02;letter-spacing:-.035em;font-weight:700}
+h3{margin:0 0 .3em;font-size:1.25rem;line-height:1.15;letter-spacing:-.02em}
+.lead{margin:0 0 30px;max-width:54ch;color:#cfd2ea;font-size:clamp(1.02rem,2.1vw,1.26rem)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:34px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0;font-size:.78rem;color:var(--dim)}
+.chips li{padding:.35em .8em;border:1px solid var(--line);border-radius:8px}
+
+/* secciones */
+.sec{padding:clamp(70px,11vw,140px) 0;border-top:1px solid var(--line)}
+.shead{margin-bottom:clamp(30px,5vw,56px);max-width:760px}
+.eyebrow{margin:0 0 12px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--violet)}
+.shead p:not(.eyebrow){margin:0;color:var(--dim);font-size:1.06rem;max-width:58ch}
+.fine{margin:26px 0 0;font-size:.74rem;color:var(--mute);text-align:center}
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+/* simulador */
+.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);grid-template-areas:"g ph" "t ph";gap:28px clamp(24px,5vw,72px);align-items:start}
+.g{grid-area:g;display:flex;align-items:center;gap:22px}
+.t{grid-area:t}
+.ph-wrap{grid-area:ph;display:flex;justify-content:center}
+.ring{position:relative;flex:none;width:124px;height:124px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+.ring .tr{stroke:rgba(255,255,255,.08)}
+.ring .fl{stroke:url(#lg);stroke-dasharray:326.73;stroke-dashoffset:326.73;transition:stroke-dashoffset .7s cubic-bezier(.2,.7,.2,1)}
+.ring .gn{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font-weight:700;font-size:2rem;line-height:1}
+.ring .gn span{font:400 .78rem "DM Mono",monospace;color:var(--mute);margin-top:4px}
+.gmsg{margin:0 0 4px;font-size:1.12rem;font-weight:500;line-height:1.3;min-height:2.6em}
+.glab{font-size:.72rem;color:var(--mute);letter-spacing:.05em;text-transform:uppercase}
+.tg{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}
+.tg button{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--glass);transition:border-color .25s,background .25s}
+.tg button:hover{border-color:rgba(200,210,255,.3)}
+.tg button[aria-checked=true]{border-color:rgba(95,224,255,.45);background:rgba(95,224,255,.06)}
+.swt{position:relative;flex:none;width:40px;height:23px;border-radius:99px;background:rgba(255,255,255,.12);transition:background .25s}
+.swt i{position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .25s}
+[aria-checked=true] .swt{background:linear-gradient(100deg,#7a5cff,#4f7cff)}
+[aria-checked=true] .swt i{transform:translateX(17px)}
+.tx b{display:block;font-weight:600;font-size:.97rem;line-height:1.25}
+.tx small{display:block;color:var(--dim);font-size:.82rem;line-height:1.3}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.phone{position:relative;width:min(100%,292px);border-radius:40px;border:8px solid #171b34;background:#0b0e1f;padding:16px 13px 20px;box-shadow:0 40px 90px -30px rgba(94,70,255,.55),0 0 0 1px rgba(200,210,255,.12)}
+.phone::before{content:"";display:block;width:70px;height:6px;border-radius:9px;background:#171b34;margin:-6px auto 12px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.biz{font-weight:700;font-size:1.02rem;letter-spacing:-.01em}
+.bar em{font-style:normal;font-size:.6rem;letter-spacing:.1em;padding:.25em .6em;border:1px solid var(--line);border-radius:6px;color:var(--mute)}
+.scr{display:grid;gap:9px}
+.blk{display:grid;width:100%;text-align:left;background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;border-radius:14px}
+.blk>span{grid-area:1/1;transition:opacity .38s ease,transform .38s ease}
+.ask{display:flex;align-items:center;gap:11px;padding:12px 13px;border:1.5px dashed rgba(255,130,150,.45);border-radius:14px;color:#ffb3bf;font-size:.9rem;font-weight:500}
+.ask .q{flex:none;width:24px;height:24px;border-radius:50%;background:rgba(255,130,150,.16);display:grid;place-items:center;font-weight:700}
+.ask small{display:block;font:400 .66rem "DM Mono",monospace;color:#d7889a;opacity:.85;margin-top:1px}
+.ans{display:block;padding:11px 13px;border-radius:14px;background:rgba(95,224,255,.07);border:1px solid rgba(95,224,255,.28);opacity:0;transform:translateY(8px);pointer-events:none}
+.blk.on .ans{opacity:1;transform:none}
+.blk.on .ask{opacity:0;transform:translateY(-8px);pointer-events:none}
+.ans .h{display:block;font-weight:600;font-size:.95rem;line-height:1.25}
+.ans .p{display:block;color:var(--dim);font-size:.78rem;margin-top:3px;line-height:1.35}
+.ans .rx{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;padding:2px 0}
+.ans .rx i{font-style:normal;color:var(--cyan);font-family:"DM Mono",monospace;font-size:.76rem}
+.ans .map{display:block;height:56px;border-radius:9px;overflow:hidden;margin-bottom:7px;background:#10152c}
+.ans .map svg{display:block;width:100%;height:100%}
+.ans .wab{display:block;text-align:center;padding:.65em;border-radius:99px;background:linear-gradient(100deg,#7a5cff,#4f7cff);font-weight:600;font-size:.9rem}
+.ans .pills{display:flex;flex-wrap:wrap;gap:5px}
+.ans .pills i{font-style:normal;font-size:.7rem;padding:.22em .65em;border-radius:99px;border:1px solid rgba(95,224,255,.35);color:var(--cyan)}
+
+/* servicios */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;display:flex;align-items:center;gap:10px;padding:.75em 1.2em;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--dim);font-weight:500;white-space:nowrap;transition:all .25s}
+.tabs button b{font:400 .72rem "DM Mono",monospace;color:var(--mute)}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected=true]{background:linear-gradient(100deg,rgba(122,92,255,.3),rgba(79,124,255,.24));border-color:rgba(160,150,255,.55);color:#fff}
+.pn{display:none;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:center;padding:clamp(22px,4vw,44px);border:1px solid var(--line);border-radius:28px;background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
+.pn.on{display:grid;animation:fadein .5s ease both}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}}
+.pn h3{font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.03em}
+.pn p{margin:0 0 18px;color:var(--dim);font-size:1.04rem}
+.pn ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.pn li{display:flex;gap:12px;align-items:flex-start;font-size:.97rem;color:#d4d7ee}
+.pn li::before{content:"";flex:none;width:9px;height:9px;margin-top:.5em;background:var(--grad);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.vis{display:flex;justify-content:center;align-items:center;min-height:330px;position:relative}
+/* visual android */
+.ph{position:relative;width:190px;height:340px;border-radius:30px;border:7px solid #171b34;background:#0c0f20;padding:16px 12px;display:flex;flex-direction:column;gap:10px;box-shadow:0 30px 80px -24px rgba(94,70,255,.6)}
+.ph .top{height:10px;width:56px;border-radius:9px;background:rgba(255,255,255,.14);margin:0 auto 4px}
+.li{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;background:rgba(255,255,255,.04);animation:hl 6s ease-in-out infinite}
+.li i{width:30px;height:30px;flex:none;border-radius:9px;background:var(--grad)}
+.li b,.li u{display:block;height:7px;border-radius:4px;background:rgba(255,255,255,.28)}
+.li b{width:84px}.li u{width:54px;margin-top:6px;background:rgba(255,255,255,.12)}
+.li:nth-child(3){animation-delay:2s}.li:nth-child(4){animation-delay:4s}
+@keyframes hl{0%,26%,100%{background:rgba(255,255,255,.04);transform:none}8%,18%{background:rgba(139,108,255,.28);transform:scale(1.04)}}
+.ph .nav2{margin-top:auto;display:flex;justify-content:space-around;padding-top:10px;border-top:1px solid var(--line)}
+.ph .nav2 i{width:18px;height:18px;border-radius:6px;background:rgba(255,255,255,.18)}
+.ph .nav2 i:first-child{background:var(--violet)}
+.fl1,.fl2{position:absolute;padding:.5em .95em;border-radius:99px;border:1px solid var(--line);background:rgba(12,15,32,.92);font:500 .74rem "DM Mono",monospace;color:var(--lilac);animation:float 5s ease-in-out infinite}
+.fl1{left:2%;top:18%}.fl2{right:0;bottom:16%;animation-delay:-2.5s}
+@keyframes float{50%{transform:translateY(-9px)}}
+/* visual ext */
+.bw{width:100%;max-width:440px;border:1px solid var(--line);border-radius:16px;background:#0c0f21;overflow:hidden;box-shadow:0 30px 80px -30px rgba(79,124,255,.5)}
+.bw-bar{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.bw-bar i{width:9px;height:9px;border-radius:50%;background:#2b3058}
+.bw-bar .url{flex:1;margin:0 8px;padding:.3em .8em;border-radius:99px;background:rgba(255,255,255,.05);font-size:.7rem;color:var(--mute)}
+.bw-bar svg{width:20px;height:20px}
+.bw-body{padding:18px;display:grid;gap:16px}
+.flow{display:flex;align-items:center}
+.node{flex:none;padding:.55em .95em;border-radius:12px;border:1px solid rgba(160,150,255,.5);background:rgba(122,92,255,.14);font:500 .74rem "DM Mono",monospace}
+.node.b{border-color:rgba(95,224,255,.5);background:rgba(95,224,255,.1)}
+.wire{flex:1;height:2px;min-width:14px;background:repeating-linear-gradient(90deg,var(--cyan) 0 6px,transparent 6px 12px);background-size:12px 2px;animation:dash 1s linear infinite;opacity:.8}
+@keyframes dash{to{background-position:12px 0}}
+.popx{border:1px solid var(--line);border-radius:14px;padding:6px 14px;background:rgba(255,255,255,.03)}
+.rw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;font-size:.88rem;border-bottom:1px solid var(--line)}
+.rw:last-child{border:0}
+.ms{position:relative;width:34px;height:20px;border-radius:99px;background:rgba(255,255,255,.14);flex:none}
+.ms::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff}
+.ms.on{background:linear-gradient(100deg,#7a5cff,#4f7cff)}.ms.on::after{left:17px}
+/* visual web */
+.bw-body.web{padding:14px}
+.bk{border-radius:10px;background:linear-gradient(135deg,rgba(139,108,255,.4),rgba(79,124,255,.22));opacity:0;animation:pop 6s ease-in-out infinite}
+.bk:nth-child(1){height:16px;width:46%}
+.bk:nth-child(2){height:74px;animation-delay:.25s}
+.bk.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:none;height:54px;animation-delay:.5s}
+.bk.cols i{border-radius:10px;background:rgba(95,224,255,.14);border:1px solid rgba(95,224,255,.25)}
+.bk:nth-child(4){height:30px;width:38%;background:linear-gradient(100deg,#7a5cff,#4f7cff);animation-delay:.75s}
+@keyframes pop{0%{opacity:0;transform:translateY(12px)}10%,88%{opacity:1;transform:none}100%{opacity:0}}
+/* visual mejoras */
+.fixbox{position:relative;width:100%;max-width:460px;aspect-ratio:4/3;border-radius:20px;overflow:hidden;border:1px solid var(--line);--x:50%;user-select:none;-webkit-user-select:none}
+.lay{position:absolute;inset:0;padding:14px}
+.lay.bef{background:#1a1523}
+.lay.aft{background:linear-gradient(160deg,#0e1330,#0a0c1f);clip-path:inset(0 0 0 var(--x))}
+.lay .lb{position:absolute;top:10px;font:500 .64rem "DM Mono",monospace;letter-spacing:.08em;text-transform:uppercase;padding:.25em .7em;border-radius:99px;background:rgba(0,0,0,.4);z-index:2}
+.bef .lb{left:10px;color:#ffb3bf}.aft .lb{right:10px;color:var(--cyan)}
+.bef .x{position:absolute;border-radius:4px}
+.bef .x.t{height:5px;background:rgba(255,255,255,.35)}
+.aft .hd{height:12px;width:34%;border-radius:6px;background:rgba(255,255,255,.28);margin:30px 0 12px}
+.aft .hero2{height:30%;border-radius:12px;background:linear-gradient(135deg,rgba(139,108,255,.45),rgba(79,124,255,.3));margin-bottom:12px}
+.aft .three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;height:22%;margin-bottom:12px}
+.aft .three i{border-radius:10px;background:rgba(95,224,255,.12);border:1px solid rgba(95,224,255,.25)}
+.aft .cb{height:26px;width:40%;border-radius:99px;background:linear-gradient(100deg,#7a5cff,#4f7cff)}
+.handle{position:absolute;top:0;bottom:0;left:var(--x);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 18px rgba(255,255,255,.8);pointer-events:none;z-index:3}
+.handle::after{content:"⇆";position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#fff;color:#0b0e1f;display:grid;place-items:center;font-weight:700}
+.fixbox input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;z-index:4}
+
+/* proceso */
+.steps{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,3vw,36px)}
+.steps::before,.steps::after{content:"";position:absolute;left:0;top:19px;height:2px;border-radius:2px}
+.steps::before{right:0;background:var(--line)}
+.steps::after{width:calc(var(--p,0)*100%);background:var(--grad);box-shadow:0 0 14px rgba(120,150,255,.7)}
+.st{position:relative;padding-top:56px}
+.st::before{content:"";position:absolute;top:8px;left:0;width:24px;height:24px;background:#10142b;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);transition:background .4s}
+.st.on::before{background:var(--grad)}
+.st .num{font-size:.74rem;color:var(--mute);letter-spacing:.1em}
+.st h3{font-size:1.5rem;margin:.15em 0 .35em}
+.st p{margin:0 0 12px;color:var(--dim);font-size:.96rem}
+.st em{font-style:normal;display:inline-block;font-size:.72rem;color:var(--cyan);padding:.35em .8em;border:1px solid rgba(95,224,255,.3);border-radius:8px}
+.st{opacity:.45;transition:opacity .5s}.st.on{opacity:1}
+@media(max-width:860px){
+  .steps{grid-template-columns:1fr;gap:34px;padding-left:44px}
+  .steps::before,.steps::after{top:0;left:11px;width:2px}
+  .steps::before{bottom:0;right:auto;height:auto}
+  .steps::after{height:calc(var(--p,0)*100%);width:2px}
+  .st{padding-top:0}.st::before{top:4px;left:-44px}
+}
+
+/* valores */
+.vals{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.vc{position:relative;padding:26px;border:1px solid var(--line);border-radius:22px;background:var(--glass);overflow:hidden;--mx:50%;--my:0%}
+.vc::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx) var(--my),rgba(139,108,255,.22),transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.vc:hover::before{opacity:1}
+.vc svg{width:34px;height:34px;margin-bottom:16px}
+.vc h3{font-size:1.3rem}
+.vc p{margin:0;color:var(--dim);font-size:.95rem}
+
+/* cta */
+.ctab{position:relative;padding:clamp(28px,6vw,72px);border:1px solid rgba(160,150,255,.35);border-radius:32px;background:radial-gradient(700px 320px at 85% 0%,rgba(110,90,255,.28),transparent 65%),linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));overflow:hidden}
+.ctab p.sub{margin:0 0 24px;color:var(--dim);max-width:52ch;font-size:1.05rem}
+.needs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.need{padding:.65em 1.15em;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:500;font-size:.94rem;transition:all .2s}
+.need:hover{border-color:rgba(200,210,255,.4)}
+.need[aria-pressed=true]{background:linear-gradient(100deg,rgba(122,92,255,.4),rgba(79,124,255,.3));border-color:rgba(170,160,255,.7);color:#fff}
+.inp{width:100%;max-width:560px;padding:.9em 1.1em;margin-bottom:20px;border-radius:14px;border:1px solid var(--line);background:rgba(6,7,15,.6);outline-offset:2px}
+.inp::placeholder{color:var(--mute)}
+.ctab .fine{text-align:left;margin-top:16px}
+.nl{display:block;margin-bottom:8px;font-size:.84rem;color:var(--dim)}
+
+footer{border-top:1px solid var(--line);padding:46px 0 54px}
+.foot{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:30px}
+.foot p{margin:.4em 0 0;color:var(--dim);font-size:.9rem}
+.foot h4{margin:0 0 10px;font:500 .72rem "DM Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:.92rem;color:var(--dim)}
+.foot ul a:hover{color:var(--ink)}
+.legal{margin-top:34px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;font-size:.74rem;color:var(--mute)}
+
+@media(max-width:860px){
+  .sim{grid-template-columns:1fr;grid-template-areas:"g" "ph" "t"}
+  .pn.on{grid-template-columns:1fr}
+  .foot{grid-template-columns:1fr 1fr}.foot>div:first-child{grid-column:1/-1}
+}
+@media(max-width:480px){
+  .g{gap:14px}.ring{width:96px;height:96px}.ring .gn{font-size:1.6rem}.gmsg{font-size:1rem}
+  .vis{min-height:300px}
+  .tag{font-size:.64rem;letter-spacing:.05em;padding:.5em .9em}
+  .fl1{top:3%;left:0}.fl2{bottom:3%;right:0}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .bk{opacity:1!important}
+  .js .rv{opacity:1;transform:none}
+  .st{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9bcff"/><stop offset="1" stop-color="#5fe0ff"/></linearGradient>
+    <symbol id="logo" viewBox="0 0 48 48">
+      <polygon points="24,3 42,13.5 42,34.5 24,45 6,34.5 6,13.5" fill="rgba(139,108,255,.14)" stroke="url(#lg)" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M17 17.5h14l-14 13h14" fill="none" stroke="url(#lg)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+<div id="sp"></div>
+
+<nav class="nav" id="nav" aria-label="Principal">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Zenix AR, inicio"><svg><use href="#logo"/></svg><span>Zenix AR<small>Desarrollo de software</small></span></a>
+    <ul>
+      <li><a href="#evaluando">Idea</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <a class="btn p" href="#contacto">Hablemos</a>
+  </div>
+</nav>
+
+<header class="hero" id="inicio">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <p class="tag mono"><i class="dot"></i>Software con propósito · Ushuaia, Argentina</p>
+    <h1>Ideas digitales hechas para <span class="gt">servir.</span></h1>
+    <p class="lead">Sitios web, apps Android, extensiones y automatizaciones que hacen que tu negocio se entienda a la primera, inspire confianza y trabaje por vos.</p>
+    <div class="cta">
+      <a class="btn p big" href="#contacto">Hablemos de tu proyecto</a>
+      <a class="btn big" href="#evaluando">Mirá tu negocio desde afuera ↓</a>
+    </div>
+    <ul class="chips mono"><li>Web</li><li>Android</li><li>Extensiones</li><li>Automatización</li></ul>
+  </div>
+</header>
+
+<main>
+<!-- 01 -->
+<section class="sec" id="evaluando">
+  <div class="wrap">
+    <div class="shead rv">
+      <p class="eyebrow mono">01 · Antes del primer mensaje</p>
+      <h2>Ya te están <span class="gt">evaluando.</span></h2>
+      <p>Tu cliente te busca antes de escribirte. Si no encuentra respuestas, no pregunta: sigue de largo. Probalo: respondé cada pregunta y mirá cómo cambia lo que ve.</p>
+    </div>
+    <div class="sim rv" id="sim">
+      <div class="g">
+        <div class="ring"><svg viewBox="0 0 124 124" aria-hidden="true"><circle class="tr" cx="62" cy="62" r="52"/><circle class="fl" id="ringfl" cx="62" cy="62" r="52"/></svg><div class="gn"><b id="gn">0</b><span>de 6</span></div></div>
+        <div><p class="gmsg" id="gmsg" aria-live="polite">Tu cliente tiene que escribirte para saber todo.</p><div class="glab mono">Preguntas respondidas sin que te escriban</div></div>
+      </div>
+      <div class="t">
+        <ul class="tg" id="tg"></ul>
+        <div class="row"><button class="btn" id="all" type="button">Responder todo</button><button class="btn" id="none" type="button">Reiniciar</button></div>
+      </div>
+      <div class="ph-wrap">
+        <div class="phone" aria-label="Vista de un negocio de ejemplo en el celular">
+          <div class="bar"><span class="biz">Panadería Los Álamos</span><em class="mono">EJEMPLO</em></div>
+          <div class="scr">
+            <button class="blk" type="button" data-q="que" aria-pressed="false"><span class="ask"><span class="q">?</span><span>¿Qué hacen?<small>tocá para responder</small></span></span><span class="ans"><span class="h">Pan artesanal, todos los días.</span><span class="p">Panificados, facturas y tortas por encargo.</span></span></button>
+            <button class="blk" type="button" data-q="donde" aria-pressed="false"><span class="ask"><span class="q">?</span><span>¿Dónde están?<small>tocá para responder</small></span></span><span class="ans"><span class="map"><svg viewBox="0 0 200 56" preserveAspectRatio="xMidYMid slice"><path d="M0 40h200M0 16h200M50 0v56M130 0v56M90 0l40 56" stroke="#242b52" stroke-width="3" fill="none"/><path d="M24 8c-4 0-7 3-7 7 0 5 7 12 7 12s7-7 7-12c0-4-3-7-7-7z" transform="translate(76 4)" fill="#8b6cff"/><circle cx="100" cy="15" r="2.6" fill="#fff"/></svg></span><span class="p">Calle Ejemplo 123</span></span></button>
+            <button class="blk" type="button" data-q="cuando" aria-pressed="false"><span class="ask"><span class="q">?</span><span>¿Cuándo atienden?<small>tocá para responder</small></span></span><span class="ans"><span class="rx"><span>Lun a Vie</span><i>7:00 – 20:00</i></span><span class="rx"><span>Sábados</span><i>8:00 – 14:00</i></span></span></button>
+            <button class="blk" type="button" data-q="cuanto" aria-pressed="false"><span class="ask"><span class="q">?</span><span>¿Cuánto cuesta?<small>tocá para responder</small></span></span><span class="ans"><span class="rx"><span>Pan de campo</span><i>desde $2.500</i></span><span class="rx"><span>Docena de facturas</span><i>desde $6.000</i></span></span></button>
+            <button class="blk" type="button" data-q="como" aria-pressed="false"><span class="ask"><span class="q">?</span><span>¿Cómo los contacto?<small>tocá para responder</small></span></span><span class="ans"><span class="wab">Pedir por WhatsApp</span></span></button>
+            <button class="blk" type="button" data-q="confia" aria-pressed="false"><span class="ask"><span class="q">?</span><span>¿Son de confianza?<small>tocá para responder</small></span></span><span class="ans"><span class="pills"><i>Teléfono</i><i>Mapa</i><i>Instagram</i><i>Email</i></span><span class="p">Datos reales y verificables.</span></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="fine mono">Negocio de ejemplo, ficticio. Textos y precios son ilustrativos.</p>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="sec" id="servicios">
+  <div class="wrap">
+    <div class="shead rv">
+      <p class="eyebrow mono">02 · Qué podemos construir con vos</p>
+      <h2>Diseño, producto y tecnología en <span class="gt">una sola experiencia.</span></h2>
+      <p>Cuatro formas de ayudarte, un mismo criterio: que lo que construimos sirva.</p>
+    </div>
+    <div class="rv">
+      <div class="tabs" role="tablist" aria-label="Servicios">
+        <button role="tab" id="t0" aria-selected="true" aria-controls="p0" type="button"><b>01</b>Apps Android</button>
+        <button role="tab" id="t1" aria-selected="false" aria-controls="p1" tabindex="-1" type="button"><b>02</b>Extensiones y flujos</button>
+        <button role="tab" id="t2" aria-selected="false" aria-controls="p2" tabindex="-1" type="button"><b>03</b>Páginas y apps web</button>
+        <button role="tab" id="t3" aria-selected="false" aria-controls="p3" tabindex="-1" type="button"><b>04</b>Mejoras</button>
+      </div>
+
+      <div class="pn on" role="tabpanel" id="p0" aria-labelledby="t0">
+        <div><h3>Aplicaciones Android</h3><p>Desde un prototipo funcional hasta una app lista para publicar.</p>
+          <ul><li>Prototipo funcional para validar la idea antes de invertir de más</li><li>Interfaz pensada para usarse en el celular, con una mano</li><li>App lista para publicar y para seguir creciendo</li></ul></div>
+        <div class="vis" aria-hidden="true">
+          <div class="ph"><div class="top"></div><div class="li"><i></i><span><b></b><u></u></span></div><div class="li"><i></i><span><b></b><u></u></span></div><div class="li"><i></i><span><b></b><u></u></span></div><div class="nav2"><i></i><i></i><i></i></div></div>
+          <span class="fl1">prototipo</span><span class="fl2">lista para publicar</span>
+        </div>
+      </div>
+
+      <div class="pn" role="tabpanel" id="p1" aria-labelledby="t1">
+        <div><h3>Extensiones y automatizaciones</h3><p>Extensiones de navegador y flujos que se encargan de lo repetitivo.</p>
+          <ul><li>Extensiones de navegador hechas a medida</li><li>Flujos que automatizan tareas repetitivas</li><li>Menos copiar y pegar, más tiempo para lo importante</li></ul></div>
+        <div class="vis" aria-hidden="true">
+          <div class="bw"><div class="bw-bar"><i></i><i></i><i></i><span class="url mono">tu-sitio.com</span><svg><use href="#logo"/></svg></div>
+            <div class="bw-body"><div class="flow"><span class="node">Evento</span><span class="wire"></span><span class="node b">Regla</span><span class="wire"></span><span class="node">Acción</span></div>
+              <div class="popx"><div class="rw"><span>Autocompletar datos</span><i class="ms on"></i></div><div class="rw"><span>Avisar por mail</span><i class="ms on"></i></div><div class="rw"><span>Exportar a planilla</span><i class="ms"></i></div></div></div></div>
+        </div>
+      </div>
+
+      <div class="pn" role="tabpanel" id="p2" aria-labelledby="t2">
+        <div><h3>Páginas y aplicaciones web</h3><p>Sitios y aplicaciones orientados a generar confianza y contacto.</p>
+          <ul><li>Sitios que explican tu propuesta en segundos</li><li>Aplicaciones web con el foco puesto en el contacto</li><li>Claros y ágiles en el celular, donde te buscan</li></ul></div>
+        <div class="vis" aria-hidden="true">
+          <div class="bw"><div class="bw-bar"><i></i><i></i><i></i><span class="url mono">tu-negocio.com.ar</span></div>
+            <div class="bw-body web"><div class="bk"></div><div class="bk"></div><div class="bk cols"><i></i><i></i><i></i></div><div class="bk"></div></div></div>
+        </div>
+      </div>
+
+      <div class="pn" role="tabpanel" id="p3" aria-labelledby="t3">
+        <div><h3>Mejoras sobre lo que ya tenés</h3><p>No hace falta empezar de cero: ordenamos, corregimos y sumamos.</p>
+          <ul><li>Correcciones de lo que no funciona como debería</li><li>Rediseños que ordenan lo que ya existe</li><li>Nuevas funciones sobre tu proyecto actual</li></ul></div>
+        <div class="vis">
+          <div class="fixbox" id="fix">
+            <div class="lay bef" aria-hidden="true"><span class="lb">antes</span>
+              <i class="x" style="left:8%;top:22%;width:46%;height:20%;background:#c0463f;transform:rotate(-4deg)"></i>
+              <i class="x" style="left:50%;top:30%;width:40%;height:14%;background:#d9a441;transform:rotate(3deg)"></i>
+              <i class="x" style="left:14%;top:52%;width:30%;height:24%;background:#3d7a6a;transform:rotate(2deg)"></i>
+              <i class="x t" style="left:52%;top:56%;width:34%"></i><i class="x t" style="left:50%;top:63%;width:22%"></i><i class="x t" style="left:56%;top:70%;width:38%"></i>
+              <i class="x" style="left:70%;top:80%;width:22%;height:9%;background:#6a4dbd;transform:rotate(-6deg)"></i></div>
+            <div class="lay aft" aria-hidden="true"><span class="lb">después</span><div class="hd"></div><div class="hero2"></div><div class="three"><i></i><i></i><i></i></div><div class="cb"></div></div>
+            <div class="handle" aria-hidden="true"></div>
+            <input id="fixr" type="range" min="4" max="96" value="50" aria-label="Comparar antes y después">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="sec" id="proceso">
+  <div class="wrap">
+    <div class="shead rv">
+      <p class="eyebrow mono">03 · Forma de trabajo</p>
+      <h2>Cuatro pasos, <span class="gt">sin vueltas.</span></h2>
+      <p>Siempre sabés en qué etapa estamos y qué viene después.</p>
+    </div>
+    <ol class="steps rv" id="steps">
+      <li class="st"><span class="num mono">01</span><h3>Entender</h3><p>Charlamos sobre tu negocio, tus clientes y lo que querés lograr. Salimos con un alcance claro.</p><em class="mono">Recibís: alcance y prioridades</em></li>
+      <li class="st"><span class="num mono">02</span><h3>Diseñar</h3><p>Armamos una maqueta antes de programar, para decidir mirando algo concreto.</p><em class="mono">Recibís: prototipo para aprobar</em></li>
+      <li class="st"><span class="num mono">03</span><h3>Construir</h3><p>Desarrollamos por etapas y te mostramos avances reales, no promesas.</p><em class="mono">Recibís: versiones funcionales</em></li>
+      <li class="st"><span class="num mono">04</span><h3>Probar</h3><p>Lo probamos en dispositivos y navegadores reales y corregimos antes de publicar.</p><em class="mono">Recibís: producto listo</em></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="sec" id="valores">
+  <div class="wrap">
+    <div class="shead rv">
+      <p class="eyebrow mono">04 · Lo que nos guía</p>
+      <h2>Lo que guía <span class="gt">cada proyecto.</span></h2>
+    </div>
+    <div class="vals rv">
+      <div class="vc"><svg viewBox="0 0 48 48" fill="none" stroke="url(#lg)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="24" r="6"/><path d="M4 24c5-9 12-14 20-14s15 5 20 14c-5 9-12 14-20 14S9 33 4 24z"/></svg><h3>Claridad</h3><p>Que se entienda a la primera, sin vueltas ni tecnicismos.</p></div>
+      <div class="vc"><svg viewBox="0 0 48 48" fill="none" stroke="url(#lg)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 4l16 6v12c0 10-7 18-16 22C15 40 8 32 8 22V10z"/><path d="M17 24l5 5 9-10"/></svg><h3>Confianza</h3><p>Lo que ve tu cliente tiene que coincidir con lo que sos.</p></div>
+      <div class="vc"><svg viewBox="0 0 48 48" fill="none" stroke="url(#lg)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M28 4L10 27h12l-2 17 18-23H26z"/></svg><h3>Utilidad</h3><p>Cada pantalla y cada función existe porque resuelve algo.</p></div>
+      <div class="vc"><svg viewBox="0 0 48 48" fill="none" stroke="url(#lg)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 4l17 10v20L24 44 7 34V14z"/><path d="M7 14l17 10 17-10M24 24v20"/></svg><h3>Producto real</h3><p>Algo que se usa, se prueba y se publica. No una maqueta más.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sec" id="contacto">
+  <div class="wrap">
+    <div class="ctab rv">
+      <p class="eyebrow mono">Contacto</p>
+      <h2>Hagamos realidad <span class="gt">tu proyecto.</span></h2>
+      <p class="sub">Elegí qué necesitás y te dejamos el mensaje armado. Se abre WhatsApp con todo listo; vos solo lo enviás.</p>
+      <div class="needs" role="group" aria-label="Qué necesitás">
+        <button class="need" type="button" aria-pressed="false" data-t="una página web">Una página web</button>
+        <button class="need" type="button" aria-pressed="false" data-t="una app Android">Una app Android</button>
+        <button class="need" type="button" aria-pressed="false" data-t="una extensión o automatización">Extensión o automatización</button>
+        <button class="need" type="button" aria-pressed="false" data-t="mejorar algo que ya tengo">Mejorar algo que ya tengo</button>
+      </div>
+      <label class="nl" for="note">Contanos en una línea (opcional)</label>
+      <input class="inp" id="note" type="text" maxlength="140" placeholder="Ej.: tengo una panadería" autocomplete="off">
+      <a class="btn p big" id="wa" href="https://wa.me/5492901471353" target="_blank" rel="noopener">Hablemos por WhatsApp</a>
+      <p class="fine mono">No se envía nada hasta que vos lo mandes desde WhatsApp.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a class="brand" href="#inicio"><svg><use href="#logo"/></svg><span>Zenix AR<small>Soluciones digitales</small></span></a><p>Desarrollo de software desde Ushuaia, Argentina.</p></div>
+      <div><h4>Explorar</h4><ul><li><a href="#evaluando">Idea</a></li><li><a href="#servicios">Servicios</a></li><li><a href="#proceso">Proceso</a></li><li><a href="#valores">Valores</a></li></ul></div>
+      <div><h4>Contacto</h4><ul><li><a href="#contacto">Escribinos</a></li><li><a href="https://wa.me/5492901471353" target="_blank" rel="noopener">WhatsApp</a></li></ul></div>
+    </div>
+    <div class="legal mono"><span>© 2026 Zenix AR — Soluciones Digitales</span><span>Propuesta de diseño hecha con Claude</span></div>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- aparición al hacer scroll ---------- */
+const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), { threshold: .1 });
+$$('.rv').forEach(el => rio.observe(el));
+
+/* ---------- barra de progreso, nav y proceso ---------- */
+const nav = $('#nav'), sp = $('#sp'), proc = $('#proceso'), stepsEl = $('#steps'), steps = $$('.st');
+function procProg() {
+  const r = stepsEl.getBoundingClientRect(), vh = innerHeight;
+  const p = clamp((vh * .85 - r.top) / (r.height + vh * .25), 0, 1);
+  proc.style.setProperty('--p', p.toFixed(3));
+  stepsEl.style.setProperty('--p', p.toFixed(3));
+  steps.forEach((s, i) => s.classList.toggle('on', p >= (i + .35) / steps.length));
+}
+let tick = false;
+function onScroll() {
+  if (tick) return; tick = true;
+  requestAnimationFrame(() => {
+    tick = false;
+    const h = document.documentElement, max = h.scrollHeight - h.clientHeight;
+    sp.style.transform = 'scaleX(' + (max > 0 ? h.scrollTop / max : 0) + ')';
+    nav.classList.toggle('stuck', h.scrollTop > 24);
+    procProg();
+  });
+}
+addEventListener('scroll', onScroll, { passive: true });
+addEventListener('resize', onScroll);
+onScroll();
+
+/* ---------- hero: red hexagonal ---------- */
+(() => {
+  const c = $('#net'), g = c && c.getContext('2d'); if (!g) return;
+  const hero = $('#inicio');
+  let W = 0, H = 0, step = 88, nodes = [], links = [], seen = true;
+  const m = { x: -9999, y: -9999 };
+  function build() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = c.clientWidth; H = c.clientHeight;
+    c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    step = W < 700 ? 64 : 88;
+    const rh = step * .866, cols = Math.ceil(W / step) + 3, rows = Math.ceil(H / rh) + 3;
+    nodes = []; links = [];
+    const idx = (r, q) => r * cols + q;
+    for (let r = 0; r < rows; r++) for (let q = 0; q < cols; q++) nodes.push({ bx: (q - 1) * step + (r % 2 ? step / 2 : 0), by: (r - 1) * rh, ph: Math.random() * 6.283, sp: .5 + Math.random() * .7, x: 0, y: 0 });
+    for (let r = 0; r < rows; r++) for (let q = 0; q < cols; q++) {
+      if (q + 1 < cols) links.push([idx(r, q), idx(r, q + 1)]);
+      if (r + 1 < rows) {
+        const a = r % 2 ? q : q - 1, b = r % 2 ? q + 1 : q;
+        if (a >= 0) links.push([idx(r, q), idx(r + 1, a)]);
+        if (b < cols) links.push([idx(r, q), idx(r + 1, b)]);
+      }
+    }
+  }
+  const LV = 7;
+  function draw(t) {
+    g.clearRect(0, 0, W, H);
+    const cx = W * .7, cy = H * .45, maxR = Math.hypot(W, H) * .8, wr = (t * .00022 * maxR * 1.4) % maxR;
+    const hot = (x, y) => {
+      const gp = Math.max(0, 1 - Math.hypot(x - m.x, y - m.y) / 210);
+      const gw = Math.max(0, 1 - Math.abs(Math.hypot(x - cx, y - cy) - wr) / 130);
+      return Math.min(1, gp + gw);
+    };
+    for (const n of nodes) { n.x = n.bx + Math.sin(t * .0007 * n.sp + n.ph) * 4; n.y = n.by + Math.cos(t * .0006 * n.sp + n.ph) * 4; n.h = hot(n.x, n.y); }
+    const bins = Array.from({ length: LV }, () => new Path2D());
+    for (const [i, j] of links) {
+      const a = nodes[i], b = nodes[j], k = Math.min(LV - 1, Math.floor(((a.h + b.h) / 2) * LV));
+      bins[k].moveTo(a.x, a.y); bins[k].lineTo(b.x, b.y);
+    }
+    g.lineWidth = 1;
+    bins.forEach((p, k) => { g.strokeStyle = 'rgba(' + (140 + k * 12) + ',' + (130 + k * 14) + ',255,' + (.17 + k * .08).toFixed(3) + ')'; g.stroke(p); });
+    for (const n of nodes) {
+      if (n.x < -10 || n.x > W + 10 || n.y < -10 || n.y > H + 10) continue;
+      g.fillStyle = n.h > .12 ? 'rgba(' + (150 + n.h * 100 | 0) + ',' + (200 + n.h * 50 | 0) + ',255,' + (.4 + n.h * .6).toFixed(2) + ')' : 'rgba(180,185,255,.45)';
+      g.beginPath(); g.arc(n.x, n.y, 1.4 + n.h * 3, 0, 6.283); g.fill();
+    }
+  }
+  build();
+  if (reduce) { draw(0); new ResizeObserver(() => { build(); draw(0); }).observe(c); return; }
+  new ResizeObserver(build).observe(c);
+  new IntersectionObserver(es => { seen = es[0].isIntersecting; }).observe(hero);
+  hero.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); m.x = e.clientX - r.left; m.y = e.clientY - r.top; });
+  hero.addEventListener('pointerleave', () => { m.x = m.y = -9999; });
+  (function loop(t) { requestAnimationFrame(loop); if (seen && !document.hidden) draw(t); })(0);
+})();
+
+/* ---------- simulador "Ya te están evaluando" ---------- */
+(() => {
+  const Q = [
+    { id: 'que', l: 'Qué hacés', s: 'Una propuesta clara en una frase' },
+    { id: 'donde', l: 'Dónde estás', s: 'Mapa y dirección a la vista' },
+    { id: 'cuando', l: 'Cuándo atendés', s: 'Días y horarios' },
+    { id: 'cuanto', l: 'Cuánto cuesta', s: 'Precios orientativos' },
+    { id: 'como', l: 'Cómo contactarte', s: 'WhatsApp en un toque' },
+    { id: 'confia', l: 'Si sos de confianza', s: 'Datos reales y verificables' },
+  ];
+  const MSG = [
+    'Tu cliente tiene que escribirte para saber todo.',
+    'Todavía hay muchas preguntas sin respuesta.',
+    'Ya se entiende algo, pero falta bastante.',
+    'A mitad de camino: tu cliente empieza a confiar.',
+    'Casi: falta poco para que tu negocio se explique solo.',
+    'Casi completo: una pregunta más y se explica solo.',
+    'Tu negocio se explica solo. Vos atendés a quien ya decidió.',
+  ];
+  const on = new Set(), tg = $('#tg'), ring = $('#ringfl'), C = 326.73;
+  const blks = $$('.blk');
+  Q.forEach(q => {
+    const li = document.createElement('li');
+    li.innerHTML = '<button type="button" role="switch" aria-checked="false" data-q="' + q.id + '"><span class="swt"><i></i></span><span class="tx"><b>' + q.l + '</b><small>' + q.s + '</small></span></button>';
+    tg.appendChild(li);
+  });
+  function render() {
+    const n = on.size;
+    $('#gn').textContent = n;
+    ring.style.strokeDashoffset = (C * (1 - n / 6)).toFixed(2);
+    $('#gmsg').textContent = MSG[n];
+    blks.forEach(b => { const v = on.has(b.dataset.q); b.classList.toggle('on', v); b.setAttribute('aria-pressed', String(v)); });
+    $$('button', tg).forEach(b => b.setAttribute('aria-checked', String(on.has(b.dataset.q))));
+  }
+  let timers = [];
+  const stop = () => { timers.forEach(clearTimeout); timers = []; };
+  function flip(id) { stop(); on.has(id) ? on.delete(id) : on.add(id); render(); }
+  tg.addEventListener('click', e => { const b = e.target.closest('button[data-q]'); if (b) flip(b.dataset.q); });
+  blks.forEach(b => b.addEventListener('click', () => flip(b.dataset.q)));
+  $('#all').addEventListener('click', () => { stop(); Q.forEach(q => on.add(q.id)); render(); });
+  $('#none').addEventListener('click', () => { stop(); on.clear(); render(); });
+  render();
+  if (!reduce) {
+    const io = new IntersectionObserver(es => {
+      if (!es[0].isIntersecting) return; io.disconnect();
+      Q.forEach((q, i) => timers.push(setTimeout(() => { on.add(q.id); render(); }, 900 + i * 650)));
+    }, { threshold: .5 });
+    io.observe($('.phone'));
+  }
+})();
+
+/* ---------- servicios (tabs) ---------- */
+(() => {
+  const tabs = $$('[role=tab]'), pns = $$('[role=tabpanel]');
+  function sel(i, focus) {
+    tabs.forEach((t, k) => { t.setAttribute('aria-selected', String(k === i)); t.tabIndex = k === i ? 0 : -1; });
+    pns.forEach((p, k) => p.classList.toggle('on', k === i));
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => sel(i));
+    t.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); sel((i + 1) % tabs.length, true); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); sel((i + tabs.length - 1) % tabs.length, true); }
+    });
+  });
+  const fix = $('#fix'), r = $('#fixr');
+  const setX = v => fix.style.setProperty('--x', v + '%');
+  r.addEventListener('input', () => setX(r.value)); setX(r.value);
+})();
+
+/* ---------- tarjetas de valores: brillo que sigue al puntero ---------- */
+$$('.vc').forEach(el => el.addEventListener('pointermove', e => {
+  const b = el.getBoundingClientRect();
+  el.style.setProperty('--mx', (e.clientX - b.left) + 'px'); el.style.setProperty('--my', (e.clientY - b.top) + 'px');
+}));
+
+/* ---------- armador de mensaje de WhatsApp ---------- */
+(() => {
+  const needs = $$('.need'), note = $('#note'), wa = $('#wa'), N = '5492901471353';
+  function upd() {
+    const sel = needs.filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.t);
+    let msg = 'Hola Zenix AR, vi su página y quiero hablar de un proyecto.';
+    if (sel.length) msg = 'Hola Zenix AR, vi su página. Me interesa ' + sel.join(', ').replace(/, ([^,]*)$/, ' y $1') + '.';
+    const extra = note.value.trim();
+    if (extra) msg += ' ' + extra.charAt(0).toUpperCase() + extra.slice(1) + (/[.!?]$/.test(extra) ? '' : '.');
+    wa.href = 'https://wa.me/' + N + '?text=' + encodeURIComponent(msg);
+  }
+  needs.forEach(b => b.addEventListener('click', () => { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); upd(); }));
+  note.addEventListener('input', upd); upd();
+})();
+})();
+</script>
+</body>
+</html>
