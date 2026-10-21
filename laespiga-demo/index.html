@@ -3,129 +3,156 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Panadería La Espiga</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;600&display=swap">
 <style>
-/* Layout: single column, local-business card stack; hero = nombre + estado abierto/cerrado en vivo */
+/* Layout: nav + portada verde a todo el ancho + 3 columnas (productos, horarios, reseñas) */
 :root{
   --bg:#f6f7f2;--surface:#ffffff;--fg:#1d2a22;--muted:#5b6b60;--line:#dfe4da;
-  --accent:#1f5c3d;--accent-fg:#ffffff;--gold:#c9962b;--ok:#1f8a4c;--off:#b4452f;
+  --hero:#1f5c3d;--hero-fg:#f3f7f2;--hero-muted:#bcd3c4;--accent:#1f5c3d;--accent-fg:#ffffff;
+  --gold:#e0b552;--ok:#7fe0a6;--off:#ffb4a3;
   --display:"Bricolage Grotesque",Georgia,serif;--body:"Figtree",system-ui,sans-serif;
+  color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+@media (prefers-color-scheme:dark){:root{
   --bg:#121814;--surface:#1a231d;--fg:#e8eee9;--muted:#9aaa9f;--line:#2a362e;
-  --accent:#5fbf8a;--accent-fg:#0d1a12;--gold:#e0b552;--ok:#5fd18e;--off:#ff8a72;color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#121814;--surface:#1a231d;--fg:#e8eee9;--muted:#9aaa9f;--line:#2a362e;
-  --accent:#5fbf8a;--accent-fg:#0d1a12;--gold:#e0b552;--ok:#5fd18e;--off:#ff8a72;color-scheme:dark}
+  --hero:#173f2b;--hero-fg:#eef5f0;--hero-muted:#a6c2b1;--accent:#5fbf8a;--accent-fg:#0d1a12;color-scheme:dark}}
 *{box-sizing:border-box}
+html,body{margin:0}
 body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body)}
-.wrap{max-width:640px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:18px}
-.demo{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-h1{font:800 clamp(40px,11vw,64px)/.95 var(--display);margin:6px 0 10px;text-wrap:balance}
-h2{font:800 22px/1.2 var(--display);margin:0 0 10px}
-.status{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.inner{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.nav{background:var(--hero);color:var(--hero-fg);padding-top:env(safe-area-inset-top,0px)}
+.nav .inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:16px}
+.logo{font:800 22px var(--display);text-decoration:none}
+.nav nav{display:none;gap:28px}
+.nav nav a{text-decoration:none;color:var(--hero-muted);font-weight:600}
+.nav nav a:hover{color:var(--hero-fg)}
+.pill{background:var(--hero-fg);color:var(--hero);padding:9px 16px;border-radius:999px;font-weight:600;text-decoration:none;font-size:14px}
+
+.hero{background:var(--hero);color:var(--hero-fg)}
+.hero .inner{display:grid;gap:28px;padding-block:24px 44px}
+.demo{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted)}
+h1{font:800 clamp(44px,11vw,96px)/.92 var(--display);margin:10px 0 16px;text-wrap:balance;letter-spacing:-.02em}
+.status{display:inline-flex;align-items:center;gap:8px;font-weight:600;background:rgba(255,255,255,.1);padding:6px 12px;border-radius:999px}
 .dot{width:10px;height:10px;border-radius:50%;background:var(--ok)}
 .closed .dot{background:var(--off)}
-.lead{color:var(--muted);margin:8px 0 0;max-width:46ch}
-.ctas{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:12px;font-weight:600;text-decoration:none;border:1.5px solid var(--accent);color:var(--accent)}
-.btn.primary{background:var(--accent);color:var(--accent-fg)}
-.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
-.rating{display:flex;align-items:baseline;gap:10px}
-.rating b{font:800 40px var(--display)}
-.stars{color:var(--gold);letter-spacing:2px}
-.list{list-style:none;padding:0;margin:0;display:grid;gap:0}
-.list li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.lead{color:var(--hero-muted);margin:16px 0 24px;max-width:46ch;font-size:18px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:15px 22px;border-radius:12px;font-weight:600;text-decoration:none;border:1.5px solid var(--hero-fg);color:var(--hero-fg);flex:1 1 180px}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#1d2a22}
+.btn:hover{filter:brightness(1.08)}
+
+.oven{background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:22px}
+.oven h2{font:800 20px var(--display);margin:0 0 4px}
+.oven p{margin:0 0 16px;color:var(--hero-muted);font-size:14px}
+.batches{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.batch{background:rgba(255,255,255,.08);border-radius:14px;padding:14px 10px;text-align:center}
+.batch b{display:block;font:800 26px var(--display);font-variant-numeric:tabular-nums}
+.batch span{font-size:13px;color:var(--hero-muted)}
+.batch.next{background:var(--gold);color:#1d2a22}
+.batch.next span{color:#1d2a22}
+
+main .inner{display:grid;gap:20px;padding-block:36px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;min-width:0}
+h3{font:800 22px/1.2 var(--display);margin:0 0 12px}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
 .list li:first-child{border-top:0}
 .price{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
 .hours li.today{color:var(--accent);font-weight:600}
+.rating{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rating b{font:800 44px var(--display)}
+.stars{color:var(--gold);letter-spacing:2px}
 .review{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 .review small{color:var(--muted)}
-.foot{font-size:13px;color:var(--muted);text-align:center}
-/* Compu: dos columnas, info a la izquierda y horarios/reseñas a la derecha */
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer .inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding-block:22px calc(22px + env(safe-area-inset-bottom,0px))}
+
 @media (min-width:900px){
-  .wrap{max-width:1100px;grid-template-columns:1.4fr 1fr;column-gap:32px;row-gap:24px;align-items:start;padding-block:48px 56px}
-  .wrap>:nth-child(1){grid-column:1;grid-row:1}
-  .wrap>:nth-child(2){grid-column:1;grid-row:2;max-width:520px}
-  .wrap>:nth-child(3){grid-column:1;grid-row:3}
-  .wrap>:nth-child(4){grid-column:2;grid-row:1 / span 2}
-  .wrap>:nth-child(5){grid-column:2;grid-row:3}
-  .wrap>:nth-child(6){grid-column:1 / -1}
-  h1{font-size:88px}
-  .lead{font-size:18px}
-  .card{padding:24px}
-  .btn:hover{filter:brightness(1.08)}
+  .nav nav{display:flex}
+  .hero .inner{grid-template-columns:1.35fr 1fr;align-items:center;gap:56px;padding-block:56px 80px}
+  .oven{padding:30px}
+  main .inner{grid-template-columns:1.2fr 1fr 1fr;align-items:start;padding-block:56px}
+  .btn{flex:0 0 auto}
 }
 </style>
 </head>
 <body>
+<header class="nav"><div class="inner">
+  <a class="logo" href="#">La Espiga</a>
+  <nav><a href="#productos">Productos</a><a href="#horarios">Horarios</a><a href="#resenas">Reseñas</a></nav>
+  <a class="pill wa" href="#" target="_blank" rel="noopener">Pedir</a>
+</div></header>
 
-<div class="wrap">
+<section class="hero"><div class="inner">
   <div>
     <div class="demo">Ejemplo · Web para comercios</div>
     <h1>Panadería La Espiga</h1>
     <div id="status" class="status"><span class="dot"></span><span id="statusText">Abierto ahora</span></div>
     <p class="lead">Pan de masa madre, facturas del día y tortas por encargo. Av. San Martín 1240, a media cuadra de la plaza.</p>
+    <div class="ctas">
+      <a class="btn primary wa" href="#" target="_blank" rel="noopener">Pedir por WhatsApp</a>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Av.+San+Mart%C3%ADn+1240" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
   </div>
+  <aside class="oven">
+    <h2>Horneadas de hoy</h2>
+    <p>Pasá a estas horas y te llevás todo recién salido.</p>
+    <div class="batches" id="batches"></div>
+  </aside>
+</div></section>
 
-  <div class="ctas">
-    <a class="btn primary" id="wa" href="#" target="_blank" rel="noopener">Pedir por WhatsApp</a>
-    <a class="btn" href="https://www.google.com/maps/search/?api=1&query=Av.+San+Mart%C3%ADn+1240" target="_blank" rel="noopener">Cómo llegar</a>
-  </div>
-
-  <section class="card">
-    <h2>Lo más pedido</h2>
+<main><div class="inner">
+  <section class="card" id="productos">
+    <h3>Lo más pedido</h3>
     <ul class="list">
       <li><span>Docena de medialunas de manteca</span><span class="price">$9.600</span></li>
       <li><span>Pan de masa madre (800 g)</span><span class="price">$6.200</span></li>
       <li><span>Chipá (½ kg)</span><span class="price">$7.800</span></li>
+      <li><span>Bizcochitos de grasa (½ kg)</span><span class="price">$5.400</span></li>
       <li><span>Torta rogel por encargo</span><span class="price">$28.000</span></li>
     </ul>
   </section>
-
-  <section class="card">
-    <h2>Horarios</h2>
+  <section class="card" id="horarios">
+    <h3>Horarios</h3>
     <ul class="list hours" id="hours"></ul>
   </section>
-
-  <section class="card">
-    <h2>Lo que dicen en Google</h2>
+  <section class="card" id="resenas">
+    <h3>Lo que dicen en Google</h3>
     <div class="rating"><b>4,8</b><span class="stars">★★★★★</span><span style="color:var(--muted)">312 reseñas</span></div>
     <div class="review">“Las medialunas más ricas del barrio, siempre calentitas a la mañana.”<br><small>Laura G. · hace 2 semanas</small></div>
     <div class="review">“Encargué una torta por WhatsApp y la tuvieron lista en el día.”<br><small>Martín R. · hace 1 mes</small></div>
   </section>
+</div></main>
 
-  <p class="foot">Negocio, precios y reseñas de ejemplo.</p>
-</div>
+<footer><div class="inner"><span>Panadería La Espiga · Av. San Martín 1240</span><span>Negocio, precios y reseñas de ejemplo</span></div></footer>
 
 <script>
 const WHATSAPP = "5491100000000"; // número del comercio
-const msg = "Hola! Vi su web y quiero hacer un pedido:";
-document.getElementById("wa").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola! Vi su web y quiero hacer un pedido:")}`;
+document.querySelectorAll(".wa").forEach(a=>a.href=waUrl);
 
-// [día, abre, cierra] en horas; 0 = domingo
-const H = [["Domingo",8,13],["Lunes",7,20],["Martes",7,20],["Miércoles",7,20],["Jueves",7,20],["Viernes",7,21],["Sábado",7,21]];
-const now = new Date(), d = now.getDay(), h = now.getHours() + now.getMinutes()/60;
-const ul = document.getElementById("hours");
-[1,2,3,4,5,6,0].forEach(i=>{
-  const li=document.createElement("li"); if(i===d) li.className="today";
-  li.innerHTML=`<span>${H[i][0]}</span><span class="price">${H[i][1]}:00 a ${H[i][2]}:00</span>`;
-  ul.appendChild(li);
-});
-const open = h>=H[d][1] && h<H[d][2];
-if(!open){
-  document.getElementById("status").classList.add("closed");
-  const next = h<H[d][1] ? `hoy a las ${H[d][1]}:00` : `mañana a las ${H[(d+1)%7][1]}:00`;
-  document.getElementById("statusText").textContent = `Cerrado · abre ${next}`;
-} else {
-  document.getElementById("statusText").textContent = `Abierto ahora · cierra a las ${H[d][2]}:00`;
-}
+// [día, abre, cierra]; 0 = domingo
+const H=[["Domingo",8,13],["Lunes",7,20],["Martes",7,20],["Miércoles",7,20],["Jueves",7,20],["Viernes",7,21],["Sábado",7,21]];
+const now=new Date(), d=now.getDay(), h=now.getHours()+now.getMinutes()/60;
+const ul=document.getElementById("hours");
+[1,2,3,4,5,6,0].forEach(i=>{const li=document.createElement("li");if(i===d)li.className="today";
+  li.innerHTML=`<span>${H[i][0]}${i===d?" (hoy)":""}</span><span class="price">${H[i][1]}:00 a ${H[i][2]}:00</span>`;ul.appendChild(li);});
+const open=h>=H[d][1]&&h<H[d][2];
+if(!open){document.getElementById("status").classList.add("closed");
+  const next=h<H[d][1]?`hoy a las ${H[d][1]}:00`:`mañana a las ${H[(d+1)%7][1]}:00`;
+  document.getElementById("statusText").textContent=`Cerrado · abre ${next}`;
+}else document.getElementById("statusText").textContent=`Abierto ahora · cierra a las ${H[d][2]}:00`;
+
+// horneadas: marca la próxima
+const B=[[7,"Medialunas"],[11,"Pan"],[17,"Facturas"]];
+const nextIdx=B.findIndex(b=>b[0]>h);
+B.forEach(([t,what],i)=>{const el=document.createElement("div");el.className="batch"+(i===nextIdx?" next":"");
+  el.innerHTML=`<b>${t}:00</b><span>${what}${i===nextIdx?" · próxima":""}</span>`;document.getElementById("batches").appendChild(el);});
 </script>
-
 </body>
 </html>
