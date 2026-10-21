@@ -65,7 +65,7 @@ export function buildDatacenter(ctx) {
     rz.forEach((z) => { if (cur && cur.z0 - z < 1.4) cur.z0 = z; else { cur = { z1: z, z0: z }; tramos.push(cur); } });
     tramos.forEach((t, i) => col.boxRaw([s * RX - 0.9, 0, t.z0 - 0.6], [s * RX + 0.9, RH + 0.3, t.z1 + 0.6], 'rack' + s + i));
   }
-  const ledCol = new THREE.Color(), ledTints = [new THREE.Color(0x8b5cff), new THREE.Color(0xe9e6ff), new THREE.Color(0x2b2a35), new THREE.Color(0x2b2a35), new THREE.Color(0x4fd3c4)];
+  const ledCol = new THREE.Color(), ledTints = [new THREE.Color(0x8b5cff), new THREE.Color(0xf1f1f4), new THREE.Color(0x2b2a35), new THREE.Color(0x2b2a35), new THREE.Color(0x4fd3c4)];
   let ledStep = -1;
   const hash = (n) => { const x = Math.sin(n * 127.1) * 43758.5453; return x - Math.floor(x); };
   const updateLeds = (step, act) => {
@@ -225,9 +225,9 @@ export function buildDatacenter(ctx) {
       const live = smooth(0.66, 0.7, p) * (1 - smooth(0.87, 0.9, p));
       const cx = s.camera.position.x, cz = s.camera.position.z;
       L.key.position.set(cx * 0.6, H - 1.5, cz - 4); L.key.target.position.set(cx * 0.4, 1.5, cz - 22);
-      L.key.color.set(0xe6e8ff); L.key.angle = 0.95; L.key.penumbra = 1; L.key.intensity = 520 * live;
-      L.acc1.position.set(DBX - 2, 12, DBZ + 4); L.acc1.color.set(0xe9e6ff); L.acc1.distance = 46; L.acc1.intensity = 70 * live * smooth(0.77, 0.8, p);
-      L.acc2.position.set(0, VY, VZ - 6); L.acc2.color.set(0xf1eeff); L.acc2.distance = 40; L.acc2.intensity = 260 * live * u2;
+      L.key.color.set(0xf1f1f4); L.key.angle = 0.95; L.key.penumbra = 1; L.key.intensity = 720 * live;
+      L.acc1.position.set(DBX - 2, 12, DBZ + 4); L.acc1.color.set(0xf1f1f4); L.acc1.distance = 46; L.acc1.intensity = 70 * live * smooth(0.77, 0.8, p);
+      L.acc2.position.set(0, VY, VZ - 6); L.acc2.color.set(0xf1f1f4); L.acc2.distance = 40; L.acc2.intensity = 260 * live * u2;
     },
   };
 }

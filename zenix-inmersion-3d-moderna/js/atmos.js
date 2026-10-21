@@ -10,8 +10,8 @@ const A = [
   { env: 'studio',     envI: 1.0, fog: rgb(0x0b0a10), fogDensity: 0.0060, hor: rgb(0x14141b), stars: 0.5, dust: 0.55, hemi: 0.30, camLight: 8,  exposure: 1.00, bloom: 0.18 },
   { env: 'industrial', envI: 1.0, fog: rgb(0x0a0a0f), fogDensity: 0.0085, hor: rgb(0x101116), stars: 0.0, dust: 0.70, hemi: 0.20, camLight: 8,  exposure: 1.00, bloom: 0.26 },
   { env: 'studio',     envI: 1.1, fog: rgb(0x0d0c13), fogDensity: 0.0045, hor: rgb(0x15151d), stars: 0.4, dust: 0.45, hemi: 0.40, camLight: 8,  exposure: 1.02, bloom: 0.16 },
-  { env: 'industrial', envI: 0.9, fog: rgb(0x06070d), fogDensity: 0.0100, hor: rgb(0x0d0e14), stars: 0.0, dust: 0.65, hemi: 0.34, camLight: 16,  exposure: 1.00, bloom: 0.26 },
-  { env: 'hall',       envI: 1.0, fog: rgb(0x050408), fogDensity: 0.0075, hor: rgb(0x121118), stars: 0.3, dust: 0.60, hemi: 0.12, camLight: 5,  exposure: 1.00, bloom: 0.34 },
+  { env: 'industrial', envI: 0.9, fog: rgb(0x06070d), fogDensity: 0.0100, hor: rgb(0x0d0e14), stars: 0.0, dust: 0.65, hemi: 0.45, camLight: 18,  exposure: 1.00, bloom: 0.26 },
+  { env: 'hall',       envI: 1.35, fog: rgb(0x050408), fogDensity: 0.0075, hor: rgb(0x121118), stars: 0.3, dust: 0.60, hemi: 0.34, camLight: 2,  exposure: 1.00, bloom: 0.34 },
 ];
 const W = 0.016;       // semiancho de la zona de mezcla alrededor de cada umbral
 const out = {};

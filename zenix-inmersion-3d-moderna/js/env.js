@@ -30,17 +30,17 @@ export function buildEnvironment(renderer, scene, Q) {
       [0xdfe6ff, 5.0, 12, 12, [-16, 24, 20]], [0x9aa3c8, 0.9, 70, 4, [0, 2, -32]], [0xcfd8ff, 2.0, 3, 24, [26, 10, -6]], [0xffffff, 1.2, 40, 3, [0, 4, 30]],
     ] }),
     // Estudio: caja de luz blanca difusa arriba, tiras laterales y un contraluz violeta contenido.
-    studio: makeEnv({ dome: [0x1b1a22, 0x121118, 0x07070a], panels: [
-      [0xffffff, 3.6, 30, 30, [0, 26, 0]], [0xffffff, 2.4, 3, 20, [-24, 8, 0]], [0xffe8d4, 1.8, 3, 18, [24, 6, 6]], [0x8b5cff, 3.0, 24, 2.5, [0, -3, -26]], [0xdcd8ff, 1.2, 30, 3, [0, 3, 28]],
+    studio: makeEnv({ dome: [0x1c1c20, 0x131316, 0x070708], panels: [
+      [0xffffff, 3.6, 30, 30, [0, 26, 0]], [0xffffff, 2.4, 3, 20, [-24, 8, 0]], [0xffe8d4, 1.8, 3, 18, [24, 6, 6]], [0x8b5cff, 1.1, 24, 2.5, [0, -3, -26]], [0xdcd8ff, 1.2, 30, 3, [0, 3, 28]],
     ] }),
     // Nave industrial: luminarias lineales en el techo, rebote frío del suelo y un acento violeta lateral.
-    industrial: makeEnv({ dome: [0x0f0e14, 0x0b0b10, 0x1a1d2b], panels: [
+    industrial: makeEnv({ dome: [0x0f0f12, 0x0b0b0d, 0x1b1c22], panels: [
       [0xffffff, 3.4, 2, 40, [-8, 24, 0]], [0xffffff, 3.4, 2, 40, [0, 24, 0]], [0xffffff, 3.4, 2, 40, [8, 24, 0]],
-      [0x8b5cff, 1.8, 2, 12, [-24, 4, 0]], [0x8b5cff, 1.8, 2, 12, [24, 4, 0]], [0xe9e8ff, 0.9, 30, 3, [0, 3, 28]],
+      [0x8b5cff, 0.8, 2, 12, [-24, 4, 0]], [0x8b5cff, 0.8, 2, 12, [24, 4, 0]], [0xe9e8ff, 0.9, 30, 3, [0, 3, 28]],
     ] }),
     // Sala final: negro profundo, gran caja de luz violeta-blanca cenital y dos tiras verticales para columnas pulidas.
     hall: makeEnv({ dome: [0x050408, 0x07060b, 0x020204], panels: [
-      [0xd6ccff, 3.4, 24, 24, [0, 30, -6]], [0xffffff, 2.6, 2.6, 28, [-22, 8, 0]], [0xffffff, 2.6, 2.6, 28, [22, 8, 0]], [0x8b5cff, 1.0, 44, 3, [0, 0, -30]], [0xcfc6ff, 1.0, 30, 3, [0, 3, 28]],
+      [0xd6ccff, 3.4, 24, 24, [0, 30, -6]], [0xffffff, 2.6, 2.6, 28, [-22, 8, 0]], [0xffffff, 2.6, 2.6, 28, [22, 8, 0]], [0xb4b2c8, 0.5, 44, 3, [0, 0, -30]], [0xcfc6ff, 1.0, 30, 3, [0, 3, 28]],
     ] }),
   };
   pm.dispose();
@@ -120,7 +120,7 @@ export function buildEnvironment(renderer, scene, Q) {
 
   // ---------- Rig de luces reales (cantidad constante para no recompilar shaders): relleno, luz de cámara, clave y dos acentos.
   const hemi = new THREE.HemisphereLight(0xc9c9d3, 0x0a0a0e, 0.25);
-  const camLight = new THREE.PointLight(0xe6e2ff, 10, 30, 1.6);
+  const camLight = new THREE.PointLight(0xf1f1f4, 10, 30, 1.6);
   const key = new THREE.SpotLight(0xffffff, 0, 140, 0.85, 0.9, 1.4);
   const acc1 = new THREE.PointLight(0xffffff, 0, 60, 1.6);
   const acc2 = new THREE.PointLight(0x8b5cff, 0, 60, 1.6);

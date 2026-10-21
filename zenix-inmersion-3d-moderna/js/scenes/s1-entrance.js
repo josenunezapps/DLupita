@@ -148,9 +148,9 @@ export function buildEntrance(ctx) {
       L.sun.position.set(-40, 60, 80); L.sun.target.position.set(0, 10, -30); L.sun.color.set(0xe4e8f6); L.sun.intensity = 2.6 * live;
       // La luz del interior se derrama sobre la explanada al abrirse las puertas
       L.key.position.set(0, 10, FZ - 14); L.key.target.position.set(0, 0, FZ + 36);
-      L.key.color.set(0xe9e4ff); L.key.angle = 0.7; L.key.penumbra = 1; L.key.intensity = 650 * (0.16 + 0.84 * u) * live;
+      L.key.color.set(0xf1f1f4); L.key.angle = 0.7; L.key.penumbra = 1; L.key.intensity = 650 * (0.16 + 0.84 * u) * live;
       L.acc1.intensity = 0;
-      L.acc2.position.set(0, 4, Math.max(cam.z - 6, -76)); L.acc2.color.set(0xe6e0ff); L.acc2.distance = 34;
+      L.acc2.position.set(0, 4, Math.max(cam.z - 6, -76)); L.acc2.color.set(0xf1f1f4); L.acc2.distance = 34;
       L.acc2.intensity = (p > 0.1 ? 120 * smooth(0.1, 0.125, p) : 0) * live;                               // luz interior al cruzar
     },
   };

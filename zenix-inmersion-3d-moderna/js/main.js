@@ -6,7 +6,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
-import { clamp, makeColliders, hitsCollider, FX } from './util.js';
+import { clamp, smooth, makeColliders, hitsCollider, FX } from './util.js';
 import { createMaterials } from './materials.js';
 import { buildEnvironment } from './env.js';
 import { sampleCamera } from './camera.js';
@@ -98,12 +98,12 @@ function buildComposer() {
   composer.addPass(new OutputPass());
   // Acabado cinematográfico: grano de película muy fino (rompe el banding de los degradados oscuros) y viñeta suave.
   grainPass = new ShaderPass({
-    uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: 0.022 }, uVig: { value: 0.32 } },
+    uniforms: { tDiffuse: { value: null }, uTime: { value: 0 }, uGrain: { value: 0.022 }, uVig: { value: 0.32 }, uSat: { value: 0.85 }, uTint: { value: new THREE.Vector3(1.03, 1.0, 0.95) } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }',
-    fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVig; varying vec2 vUv;
+    fragmentShader: `uniform sampler2D tDiffuse; uniform float uTime, uGrain, uVig, uSat; uniform vec3 uTint; varying vec2 vUv;
       float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233)) + uTime) * 43758.5453); }
       void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; vec2 q = vUv - .5; float v = 1. - uVig * smoothstep(.25, .85, length(q * vec2(1.1, 1.)));
-        c *= v; c += (h(vUv * 1024.) - .5) * uGrain; gl_FragColor = vec4(c, 1.); }`,
+        float l = dot(c, vec3(.2126, .7152, .0722)); c = mix(vec3(l), c, uSat) * uTint; c *= v; c += (h(vUv * 1024.) - .5) * uGrain; gl_FragColor = vec4(c, 1.); }`,
   });
   composer.addPass(grainPass);
 }
@@ -224,7 +224,14 @@ function frame(now, once = false) {
         view.width !== w || view.height !== h || view.offsetX !== 0 || view.offsetY !== offsetY) {
       camera.setViewOffset(w, h, 0, offsetY, w, h);
     }
-  } else if (camera.view && camera.view.enabled) camera.clearViewOffset();
+  } else {
+    // Composición editorial en horizontal: el sujeto se corre a la derecha y hacia arriba para que el texto (abajo a la izquierda) no lo tape.
+    const h = renderer.domElement.height, w = renderer.domElement.width;
+    const k = Q.aspect > 1.15 ? 1 : 0.4;
+    const ox = Math.round(-w * 0.085 * k * (1 - smooth(0.88, 0.93, prog))), oy = Math.round(h * 0.07 * k);
+    const view = camera.view;
+    if (!view || !view.enabled || view.fullWidth !== w || view.fullHeight !== h || view.offsetX !== ox || view.offsetY !== oy) camera.setViewOffset(w, h, ox, oy, w, h);
+  }
   camera.updateProjectionMatrix();
 
   visibility(prog);
@@ -235,7 +242,11 @@ function frame(now, once = false) {
   for (const s of scenes) if (s.group.visible) s.update(state);
 
   if (bloom) bloom.strength = atm.bloom;
-  if (grainPass) grainPass.uniforms.uTime.value = (time % 7) * 0.37;
+  if (grainPass) {
+    grainPass.uniforms.uTime.value = (time % 7) * 0.37;
+    const k = smooth(0.9, 0.95, prog);            // el final recupera todo el color del logo
+    grainPass.uniforms.uSat.value = 0.85 + 0.17 * k; grainPass.uniforms.uTint.value.set(1.03 - 0.03 * k, 1.0, 0.95 + 0.05 * k);
+  }
   renderer.toneMappingExposure = atm.exposure;
 
   if (!lost) {

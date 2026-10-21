@@ -249,10 +249,10 @@ export function buildFoundry(ctx) {
       const live = smooth(0.32, 0.355, p) * (1 - smooth(0.52, 0.55, p));
       const cz = clamp(s.camera.position.z - 6, ZB + 8, ZF - 6);
       L.key.position.set(0, 18, cz + 3); L.key.target.position.set(0, 1.5, cz - 10);
-      L.key.color.set(0xf2f0ff); L.key.angle = 1.0; L.key.penumbra = 1; L.key.intensity = 300 * live;
+      L.key.color.set(0xf1f1f4); L.key.angle = 1.0; L.key.penumbra = 1; L.key.intensity = 300 * live;
       const inChamber = smooth(MZ + 20, MZ + 6, s.camera.position.z) * (1 - smooth(MZ - 6, MZ - 20, s.camera.position.z));
       L.acc1.position.set(0, 6, MZ); L.acc1.color.set(0xcdb8ff); L.acc1.distance = 40; L.acc1.intensity = (20 + 90 * compile) * live;
-      L.acc2.position.set(0, 16, AZ); L.acc2.color.set(0xf4f0ff); L.acc2.distance = 50; L.acc2.intensity = 120 * live * smooth(0.44, 0.5, p);
+      L.acc2.position.set(0, 16, AZ); L.acc2.color.set(0xf1f1f4); L.acc2.distance = 50; L.acc2.intensity = 120 * live * smooth(0.44, 0.5, p);
     },
   };
 }

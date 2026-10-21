@@ -169,7 +169,7 @@ export function buildStudio(ctx) {
       const live = smooth(0.13, 0.16, p) * (1 - smooth(0.352, 0.372, p));
       const fx = Math.max(X0 + 4, Math.min(X1 - 4, s.look.x)), fz = Math.max(ZB + 6, Math.min(ZF - 4, s.look.z));
       L.key.position.set(fx * 0.4, 15, fz + 6); L.key.target.position.set(fx, 2.5, fz);
-      L.key.color.set(0xf4f1ff); L.key.angle = 0.9; L.key.penumbra = 1; L.key.intensity = 420 * live;
+      L.key.color.set(0xf1f1f4); L.key.angle = 0.9; L.key.penumbra = 1; L.key.intensity = 420 * live;
       const onA = p < 0.28;
       const tx = onA ? A.x + 4 : B.x - 4, tz = onA ? -106 : -137;
       L.acc1.position.set(tx, 5, tz); L.acc1.color.set(onA ? 0xcfdcff : 0xd8c8ff); L.acc1.distance = 34; L.acc1.intensity = 40 * live;

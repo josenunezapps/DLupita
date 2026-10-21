@@ -47,7 +47,7 @@ export function buildAnalytics(ctx) {
   }
 
   // ---------- Pedestal central
-  const pedMat = M.concrete.clone(); pedMat.color.set(0x4a4a53); pedMat.roughness = 0.5;
+  const pedMat = M.concrete.clone(); pedMat.color.set(0x383840); pedMat.roughness = 0.5;
   const ped = add(new THREE.CylinderGeometry(17, 17.4, 0.9, 72), pedMat, CX, 0.45, CZ);
   const pedStep = add(new THREE.CylinderGeometry(19.6, 20, 0.4, 72), M.graphiteDark, CX, 0.2, CZ);
   const pedRim = add(new THREE.TorusGeometry(17.05, 0.07, 6, 96), M.glowSoft.clone(), CX, 0.92, CZ, { cast: false });
@@ -60,7 +60,7 @@ export function buildAnalytics(ctx) {
   demo.rotation.x = -Math.PI / 2; demo.position.set(CX, TOP + 0.02, CZ + 12.6); g.add(demo);
 
   // ---------- Gráfico 1 · Columnas de cristal esmerilado (izquierda)
-  const place = (grp, th, r, y = TOP) => { grp.position.set(CX + Math.sin(th) * r, y, CZ + Math.cos(th) * r); grp.rotation.y = th; };
+  const place = (grp, th, r, y = TOP) => { grp.position.set(CX + Math.sin(th) * r, y, CZ + Math.cos(th) * r); grp.rotation.y = th + Math.PI; };   // las piezas miran hacia el centro, donde recorre la cámara
   const barsG = new THREE.Group(); place(barsG, -1.55, 11); g.add(barsG);
   const baseA = new THREE.Mesh(new RoundedBoxGeometry(9.6, 0.4, 4.2, 2, 0.1), M.graphite); baseA.position.y = 0.2; baseA.castShadow = sh; baseA.receiveShadow = sh; barsG.add(baseA);
   const vals = [3.1, 4.2, 3.8, 5.6, 6.4, 5.9, 7.6, 8.8], NB = vals.length;
@@ -198,14 +198,14 @@ export function buildAnalytics(ctx) {
         const v = Math.round(k.target * smoother(0.552 + i * 0.012, 0.605 + i * 0.012, p));
         if (v !== k.last) { k.last = v; k.draw(v); }
       });
-      gauges.forEach((gg, i) => { const lv = Math.max(0.001, gg.v * 6 * smoother(0.545 + i * 0.008, 0.6 + i * 0.008, p)); gg.fill.scale.y = lv; gg.fill.position.y = 0.4 + lv / 2; });
+      gauges.forEach((gg, i) => { const lv = Math.max(0.001, gg.v * 6 * smoother(0.655 + i * 0.008, 0.7 + i * 0.008, p)); gg.fill.scale.y = lv; gg.fill.position.y = 0.4 + lv / 2; });
       shaftMat.uniforms.uI.value = 0.3;
       // Luces reales: el óculo ilumina el pedestal; relleno suave desde la cámara
       const live = smooth(0.5, 0.53, p) * (1 - smooth(0.69, 0.72, p));
       L.key.position.set(CX, H - 2, CZ); L.key.target.position.set(CX, 0, CZ - 1);
-      L.key.color.set(0xf4f2ff); L.key.angle = 0.95; L.key.penumbra = 1; L.key.intensity = 420 * live;
-      L.acc1.position.set(s.camera.position.x * 0.5, 9, s.camera.position.z + 4); L.acc1.color.set(0xe9e6ff); L.acc1.distance = 50; L.acc1.intensity = 70 * live;
-      L.acc2.position.set(CX, 5, CZ - 22); L.acc2.color.set(0x9a76ff); L.acc2.distance = 50; L.acc2.intensity = 90 * live;
+      L.key.color.set(0xf1f1f4); L.key.angle = 0.95; L.key.penumbra = 1; L.key.intensity = 330 * live;
+      L.acc1.position.set(s.camera.position.x * 0.5, 9, s.camera.position.z + 4); L.acc1.color.set(0xf1f1f4); L.acc1.distance = 50; L.acc1.intensity = 50 * live;
+      L.acc2.position.set(CX, 5, CZ - 22); L.acc2.color.set(0xa58aff); L.acc2.distance = 50; L.acc2.intensity = 45 * live;
     },
   };
 }

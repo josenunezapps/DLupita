@@ -31,3 +31,8 @@ Degradación adaptativa automática si los FPS caen. Geometría repetida con `In
 ## Publicar
 Subir la carpeta completa a `…/DLupita/zenix-inmersion-3d-moderna/` (GitHub Pages sirve estático, sin build).
 Parámetros útiles: `?q=low|medium|high` fuerza la calidad; `?noadapt` desactiva la degradación adaptativa.
+
+## Segunda pasada (ajustes tras la primera revisión)
+- **Composición:** en horizontal el sujeto se desplaza a la derecha y arriba para que el texto no lo tape; en la sala de análisis la cámara ahora recorre el centro y las piezas miran hacia ella (ya no se tapan entre sí).
+- **Color:** menos tinte azul/violeta (entornos, luces y materiales neutros); ligero gradado final en media/alta. El violeta queda para el logo y los acentos.
+- **Luz:** exposición equilibrada entre escenas, brazos robóticos más oscuros, entrada a la sala final visible y sin la mancha especular en el suelo.

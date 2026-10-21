@@ -14,7 +14,7 @@ export function buildHall(ctx) {
   const d = new THREE.Object3D();
 
   // ---------- Suelo espejado (reflector real en gama alta; en el resto, copia especular del logo bajo un suelo translúcido)
-  const hallFloor = M.floorPolished.clone(); hallFloor.color.set(0x0c0c11); hallFloor.roughness = 0.12; hallFloor.normalScale = new THREE.Vector2(0.12, 0.12); hallFloor.roughnessMap = null; hallFloor.envMapIntensity = 0.7;
+  const hallFloor = M.floorPolished.clone(); hallFloor.color.set(0x0c0c11); hallFloor.roughness = 0.34; if ('specularIntensity' in hallFloor) hallFloor.specularIntensity = 0.45; if ('clearcoat' in hallFloor) hallFloor.clearcoat = 0; hallFloor.normalScale = new THREE.Vector2(0.12, 0.12); hallFloor.roughnessMap = null; hallFloor.envMapIntensity = 0.7;
   polishedFloor(ctx, g, { w: HW * 2, h: LEN, z: CZ, mat: hallFloor, opacity: Q.reflector ? 0.88 : 0.8, tint: 0x8a85a8, density: 0.05 });
   if (!Q.reflector) {
     // Sin reflector: el suelo es translúcido y deja ver la copia especular. Se reemplaza el material opaco por uno translúcido.
@@ -46,7 +46,8 @@ export function buildHall(ctx) {
   const oculusRim = new THREE.Mesh(new THREE.TorusGeometry(10.6, 0.22, 10, 96), M.aluminum); oculusRim.rotation.x = Math.PI / 2; oculusRim.position.set(0, H - 0.1, LZ); g.add(oculusRim);
 
   // ---------- Columnas monolíticas (dos hileras que enmarcan la perspectiva)
-  const NC = 6, colGeo = texBox(3.4, H - 1, 3.4, 0.18), cols = new THREE.InstancedMesh(colGeo, M.graphite, NC * 2);
+  const colMat = M.graphite.clone(); colMat.normalMap = null; colMat.roughnessMap = null; colMat.color.set(0x33333a); colMat.metalness = 0.55; colMat.roughness = 0.38;
+  const NC = 6, colGeo = new THREE.BoxGeometry(3.4, H - 1, 3.4), cols = new THREE.InstancedMesh(colGeo, colMat, NC * 2);
   const base = new THREE.InstancedMesh(texBox(4.4, 0.7, 4.4, 0.18), M.graphiteDark, NC * 2);
   let ci = 0;
   for (let k = 0; k < NC; k++) for (const s of [-1, 1]) {
@@ -182,7 +183,7 @@ export function buildHall(ctx) {
       const live = smooth(0.84, 0.88, p);
       L.key.position.set(0, H - 2, LZ + 3); L.key.target.position.set(0, LY - 3, LZ);
       L.key.color.set(0xe3dcff); L.key.angle = 0.5; L.key.penumbra = 1; L.key.intensity = 1100 * live * (0.35 + 0.65 * smooth(0.0, 0.8, R));
-      L.acc1.position.set(0, 7, LZ + 18); L.acc1.color.set(0xd9ceff); L.acc1.distance = 60; L.acc1.intensity = 150 * live * smooth(0.2, 1, R);
+      L.acc1.position.set(0, 26, LZ + 40); L.acc1.color.set(0xe8e6f4); L.acc1.distance = 130; L.acc1.intensity = 420 * live * (0.5 + 0.5 * smooth(0.2, 1, R));
       L.acc2.position.set(-9, 13, LZ - 10); L.acc2.color.set(0x8b5cff); L.acc2.distance = 60; L.acc2.intensity = 110 * live * smooth(0.3, 1, R);
     },
   };
