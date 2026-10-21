@@ -80,7 +80,8 @@ export function buildFoundry(ctx) {
     const t = add(texBox(3.6, 13, 15, 0.2), M.graphite, s * 6.4, 6.5, MZ);
     col.box(t, 'tower' + s, 0.05);
     // ranura de visión: vidrio oscuro con luz interior (se enciende al compilar)
-    const win = add(new THREE.BoxGeometry(0.1, 2.2, 11), M.glow ? M.glow : M.glowSoft.clone(), s * 4.55, 3.4, MZ, { cast: false });
+    const win = add(new THREE.BoxGeometry(0.1, 0.3, 11), M.glow ? M.glow : M.glowSoft.clone(), s * 4.55, 3.4, MZ, { cast: false });
+    win.material.color.setRGB(0.015, 0.012, 0.03);
     return win;
   });
   const bridge = add(texBox(16.4, 3.4, 15, 0.2), M.graphiteDark, 0, 11.7, MZ);
@@ -224,9 +225,9 @@ export function buildFoundry(ctx) {
       }
       rawShell.instanceMatrix.needsUpdate = true; rawCore.instanceMatrix.needsUpdate = true; pack.instanceMatrix.needsUpdate = true; seal.instanceMatrix.needsUpdate = true;
       // Compilador: el barrido recorre la cámara mientras compila; las ranuras se encienden
-      scanMat.opacity = 0.0 + 0.28 * smooth(0.37, 0.42, p) * (1 - smooth(0.49, 0.52, p));
+      scanMat.opacity = 0.11 * smooth(0.37, 0.42, p) * (1 - smooth(0.49, 0.52, p));
       scan.position.z = MZ + Math.sin(compile * Math.PI * 6) * 6.2;
-      towers.forEach((w) => { w.material.color.setScalar(0.25 + 0.75 * compile); });
+      towers.forEach((w) => { { const k = 0.01 + 0.2 * compile; w.material.color.setRGB(0.5 * k, 0.38 * k, k); } });
       flows.forEach((f) => { f.uniforms.uTime.value = t; f.uniforms.uAct.value = smooth(0.37, 0.4, p) * (1 - smooth(0.5, 0.52, p)); });
       // Brazos de inspección: siguen el módulo más cercano a cada uno
       const targetZ = (k) => nearest.length ? nearest.reduce((a, b) => Math.abs(b - k) < Math.abs(a - k) ? b : a) : k;
@@ -251,7 +252,7 @@ export function buildFoundry(ctx) {
       L.key.position.set(0, 18, cz + 3); L.key.target.position.set(0, 1.5, cz - 10);
       L.key.color.set(0xf1f1f4); L.key.angle = 1.0; L.key.penumbra = 1; L.key.intensity = 300 * live;
       const inChamber = smooth(MZ + 20, MZ + 6, s.camera.position.z) * (1 - smooth(MZ - 6, MZ - 20, s.camera.position.z));
-      L.acc1.position.set(0, 6, MZ); L.acc1.color.set(0xcdb8ff); L.acc1.distance = 40; L.acc1.intensity = (20 + 90 * compile) * live;
+      L.acc1.position.set(0, 6, MZ); L.acc1.color.set(0xdcd6f2); L.acc1.distance = 40; L.acc1.intensity = (20 + 60 * compile) * live;
       L.acc2.position.set(0, 16, AZ); L.acc2.color.set(0xf1f1f4); L.acc2.distance = 50; L.acc2.intensity = 120 * live * smooth(0.44, 0.5, p);
     },
   };

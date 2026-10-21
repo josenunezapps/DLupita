@@ -36,3 +36,8 @@ Parámetros útiles: `?q=low|medium|high` fuerza la calidad; `?noadapt` desactiv
 - **Composición:** en horizontal el sujeto se desplaza a la derecha y arriba para que el texto no lo tape; en la sala de análisis la cámara ahora recorre el centro y las piezas miran hacia ella (ya no se tapan entre sí).
 - **Color:** menos tinte azul/violeta (entornos, luces y materiales neutros); ligero gradado final en media/alta. El violeta queda para el logo y los acentos.
 - **Luz:** exposición equilibrada entre escenas, brazos robóticos más oscuros, entrada a la sala final visible y sin la mancha especular en el suelo.
+
+## Tercera pasada: calidad en celulares (revisión con capturas de un Android real)
+- **Resolución:** la gama baja renderizaba a 1× y el celular la estiraba (borroso y con dientes de sierra). Ahora arranca hasta 1.75× con un tope de píxeles totales, y si los FPS caen baja la resolución de a poco (hasta 3 pasos) antes de apagar efectos.
+- **Banding:** se activó *dithering* en los materiales para suavizar los degradados oscuros.
+- **Compilador (escena 3):** se corrigieron unas ranuras luminosas que se veían como láminas blancas al costado de la cámara y un velo lila demasiado fuerte; luz violeta del compilador más contenida.

@@ -161,6 +161,8 @@ export function createMaterials(Q) {
   sheen.colorSpace = THREE.SRGBColorSpace;
   M.screenGlass = new THREE.MeshBasicMaterial({ map: sheen, transparent: true, depthWrite: false, toneMapped: false });
   M.glass_ = M.glass;
+  // Dithering: rompe el banding de los degradados oscuros (sin postproceso en gama baja no hay grano que lo oculte).
+  for (const k in M) { const mt = M[k]; if (mt && (mt.isMeshStandardMaterial || mt.isMeshPhysicalMaterial || mt.isMeshBasicMaterial)) mt.dithering = true; }
   return M;
 }
 

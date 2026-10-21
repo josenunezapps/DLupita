@@ -34,9 +34,9 @@ function detectQuality() {
   if (['low', 'medium', 'high'].includes(forced)) tier = forced;
   const dprRaw = window.devicePixelRatio || 1;
   const T = {
-    low:    { dprMax: 1.0,  bloom: false, shadows: false, reflector: false, physical: false, particles: 900, samples: 0, detail: 'low' },
-    medium: { dprMax: 1.5,  bloom: true,  shadows: false, reflector: false, physical: true,  particles: 2000, samples: 4, detail: 'med' },
-    high:   { dprMax: 2.0,  bloom: true,  shadows: true,  reflector: true,  physical: true,  particles: 3600, samples: 4, detail: 'high' },
+    low:    { dprMax: 1.75, pixels: 1.5e6, bloom: false, shadows: false, reflector: false, physical: false, particles: 900, samples: 0, detail: 'low' },
+    medium: { dprMax: 1.5,  pixels: 2.2e6, bloom: true,  shadows: false, reflector: false, physical: true,  particles: 2000, samples: 4, detail: 'med' },
+    high:   { dprMax: 2.0,  pixels: 4.5e6, bloom: true,  shadows: true,  reflector: true,  physical: true,  particles: 3600, samples: 4, detail: 'high' },
   }[tier];
   return { tier, mobile, ...T, dpr: Math.min(dprRaw, T.dprMax) };
 }
@@ -144,13 +144,16 @@ async function init() {
 function resize() {
   const w = Math.max(1, canvas.parentElement.clientWidth || innerWidth);
   const h = Math.max(1, canvas.parentElement.clientHeight || innerHeight);
-  renderer.setPixelRatio(Q.dpr);
+  // Resolución efectiva: la objetivo (Q.dpr, que baja sola si la fluidez cae) limitada por un presupuesto de píxeles totales.
+  const d = Math.min(Q.dpr, Math.sqrt(Q.pixels / (w * h)));
+  Q.dprEff = d;
+  renderer.setPixelRatio(d);
   renderer.setSize(w, h, false);
   canvas.style.width = '100%'; canvas.style.height = '100%';
   camera.aspect = w / h;
   Q.aspect = w / h;
-  if (composer) { composer.setPixelRatio(Q.dpr); composer.setSize(w, h); if (bloom) bloom.resolution.set(w * (Q.tier === 'high' ? 1 : 0.5), h * (Q.tier === 'high' ? 1 : 0.5)); }
-  env.pMat.uniforms.uScale.value = 160 * Q.dpr * (h / 900);
+  if (composer) { composer.setPixelRatio(d); composer.setSize(w, h); if (bloom) bloom.resolution.set(w * (Q.tier === 'high' ? 1 : 0.5), h * (Q.tier === 'high' ? 1 : 0.5)); }
+  env.pMat.uniforms.uScale.value = 160 * d * (h / 900);
   scenes.forEach((s) => s.resize && s.resize(w, h));
   ui.measure();
 }
@@ -265,11 +268,12 @@ function adapt(dt) {
   if (perf.n < 60) return;
   const avg = perf.acc / perf.n;
   perf.acc = 0; perf.n = 0;
-  if (avg > 0.026 && perf.level < 4) {
+  if (avg > 0.026 && perf.level < 5) {
     perf.level++;
-    if (perf.level <= 2 && Q.dpr > 0.8) { Q.dpr = Math.max(0.75, Q.dpr - 0.3); resize(); }
-    else if (perf.level === 3 && bloom) { bloom.enabled = false; }
-    else if (perf.level === 4) { env.particles.visible = false; scenes.forEach((s) => s.degrade && s.degrade()); }
+    // Primero se baja la resolución de a poco (hasta 3 pasos), recién después se apagan efectos.
+    if (perf.level <= 3 && Q.dprEff > 0.85) { Q.dpr = Math.max(0.8, Math.min(Q.dpr, Q.dprEff) - 0.3); resize(); }
+    else if (perf.level === 4 && bloom) { bloom.enabled = false; }
+    else if (perf.level === 5) { env.particles.visible = false; scenes.forEach((s) => s.degrade && s.degrade()); }
     perf.cool = 2.5;
     ui.debug(`calidad ↓ nivel ${perf.level} (${(avg * 1000).toFixed(1)} ms/frame)`);
   }
@@ -302,7 +306,7 @@ window.__zenix = {
   setProgress(p) { forced = clamp(p); prog = forced; lastProg = forced; kick = 0; frame(performance.now(), true); },
   release() { forced = null; },
   get progress() { return prog; },
-  info() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geoms: renderer.info.memory.geometries, tex: renderer.info.memory.textures, tier: Q.tier, dpr: Q.dpr }; },
+  info() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geoms: renderer.info.memory.geometries, tex: renderer.info.memory.textures, tier: Q.tier, dpr: Q.dpr, dprEff: Q.dprEff }; },
   cameraAt(p) { const a = new THREE.Vector3(), b = new THREE.Vector3(); const m = sampleCamera(p, a, b); return { pos: a.toArray(), look: b.toArray(), ...m }; },
   checkCollisions(radius = 0.9, step = 0.0004) {
     const hits = [], a = new THREE.Vector3(), b = new THREE.Vector3();
