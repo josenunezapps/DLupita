@@ -40,10 +40,12 @@
     async crearTurno(t) {
       const occ = await demo.ocupados(t.fecha);
       if (occ.has(t.hora)) return { ok: false, error: "ocupado" };
-      sT([...dT(), { ...t, id: uid(), estado: "pendiente" }]); return { ok: true };
+      const id = t.id || uid();
+      sT([...dT(), { ...t, id, estado: "pendiente" }]); return { ok: true, id };
     },
     async turnos(f) { return dT().filter(t => t.fecha === f).sort((a, b) => a.hora.localeCompare(b.hora)); },
     async setEstado(id, e) { sT(dT().map(t => t.id === id ? { ...t, estado: e } : t)); return { ok: true }; },
+    async guardarPush(id, sub) { sT(dT().map(t => t.id === id ? { ...t, push_sub: sub } : t)); return { ok: true }; },
     async recordado(id) { sT(dT().map(t => t.id === id ? { ...t, recordado: true } : t)); return { ok: true }; },
     async bloqueos(f) { return dB().filter(b => b.fecha === f).map(b => b.hora); },
     async bloquear(f, h, on) {
@@ -62,8 +64,9 @@
       if (error) throw error; return new Set(data.map(r => r.hora));
     },
     async crearTurno(t) {
-      const { error } = await sb.from("turnos").insert({ ...t, estado: "pendiente" });
-      if (!error) return { ok: true };
+      const id = t.id || crypto.randomUUID();
+      const { error } = await sb.from("turnos").insert({ ...t, id, estado: "pendiente" });
+      if (!error) return { ok: true, id };
       if (error.code === "23505" || /bloqueado|ocupado/i.test(error.message)) return { ok: false, error: "ocupado" };
       return { ok: false, error: error.message };
     },
@@ -72,6 +75,7 @@
       if (error) throw error; return data;
     },
     async setEstado(id, e) { const { error } = await sb.from("turnos").update({ estado: e }).eq("id", id); return { ok: !error, error: error?.message }; },
+    async guardarPush(id, sub) { const { error } = await sb.rpc("guardar_push", { p_id: id, p_sub: sub }); return { ok: !error, error: error?.message }; },
     async recordado(id) { const { error } = await sb.from("turnos").update({ recordado: true }).eq("id", id); return { ok: !error, error: error?.message }; },
     async bloqueos(f) {
       const { data, error } = await sb.from("bloqueos").select("hora").eq("fecha", f);

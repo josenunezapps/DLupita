@@ -16,6 +16,27 @@ Sin configurar nada funciona en **modo demo**: los turnos se guardan solo en ese
 
 La anon key es pública por diseño: la seguridad la dan las reglas de `supabase.sql`. El público solo puede crear turnos y ver qué horarios están ocupados; nombres y teléfonos solo los ve el barbero logueado.
 
+## Recordatorios para el cliente
+
+Después de reservar, el cliente ve dos opciones:
+
+- **Calendario** (Google o el del celular): guarda el turno con aviso 2 horas antes. Funciona siempre, sin configurar nada.
+- **Aviso en el dispositivo** (notificación push): en modo demo muestra una notificación de ejemplo. Para que llegue de verdad 2 horas antes, seguí estos pasos.
+
+### Activar los avisos push (gratis, después de conectar Supabase)
+
+1. Generar las claves de aviso en tu compu: `npx web-push generate-vapid-keys`. Te da una clave **pública** y una **privada**.
+2. Pegar la clave pública en `config.js`, en `vapidPublic`.
+3. Desde esta carpeta, entrar y conectar el proyecto con la herramienta de Supabase: `npx supabase login` y `npx supabase link --project-ref TU-PROYECTO`.
+4. Guardar los secretos (la privada nunca va en el repo):
+   `npx supabase secrets set VAPID_PUBLIC=... VAPID_PRIVATE=... VAPID_SUBJECT=mailto:tu@email.com NEGOCIO="Barbería Filo" DIRECCION="Av. Corrientes 3150"`
+5. Subir la función: `npx supabase functions deploy recordatorios`
+6. En `push.sql`, reemplazar `TU-PROYECTO` y `TU_ANON_KEY`, y correrlo en el SQL Editor.
+
+Desde ahí, cada 15 minutos Supabase busca los turnos que empiezan en 2 horas y les manda el aviso a quienes lo activaron.
+
+En **iPhone** los avisos solo funcionan si el cliente agregó la página a la pantalla de inicio (iOS 16.4 o más nuevo). En Android y en la compu funcionan directo.
+
 ## Para otra barbería
 
 Copiar la carpeta, cambiar `config.js` (y el nombre en los títulos) y crear un proyecto de Supabase nuevo para ese cliente.

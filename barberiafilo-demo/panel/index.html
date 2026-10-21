@@ -241,7 +241,7 @@ function drawList(){
     const msg=t.estado==="cancelado"
       ?`Hola ${t.nombre}! Tuvimos que cancelar tu turno del ${dayText(d)} a las ${t.hora} en ${C.nombre}. Respondé este mensaje y te damos otro horario.`
       :`Hola ${t.nombre}! Te confirmamos tu turno en ${C.nombre} el ${dayText(d)} a las ${t.hora} (${t.servicio}). Te esperamos en ${C.direccion}.`;
-    el.innerHTML=`<span class="h">${t.hora}</span><strong>${esc(t.nombre)} ${t.recordado&&t.estado!=="cancelado"?'<span class="tag">· Recordado ✓</span>':""}</strong><span class="pill">${label}</span>
+    el.innerHTML=`<span class="h">${t.hora}</span><strong>${esc(t.nombre)} ${t.recordado&&t.estado!=="cancelado"?'<span class="tag">· Recordado ✓</span>':""}${t.push_sub&&t.estado!=="cancelado"?'<span class="tag">· Aviso en el celu</span>':""}</strong><span class="pill">${label}</span>
       <small>${esc(t.servicio)} · ${fmt(t.precio)} · ${esc(t.telefono)}</small>
       <div class="acts"></div>`;
     const acts=el.querySelector(".acts");

@@ -63,6 +63,12 @@ input{width:100%;padding:13px;border-radius:10px;border:1.5px solid var(--line);
 .hint{font-size:13px;color:var(--hero-muted);margin:0}
 .foot{font-size:13px;color:var(--muted);padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 
+.remember{display:grid;gap:10px;border-top:1px solid rgba(255,255,255,.14);padding-top:14px}
+.mini{margin:0;font-size:13px;color:var(--hero-muted)}
+.cal{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+a.ghost{display:block;text-align:center;text-decoration:none}
+.bell{border-color:var(--brass);color:var(--brass)}
+.pmsg{margin:0;font-size:13px;color:var(--hero-fg);background:rgba(255,255,255,.08);border-radius:10px;padding:10px 12px}
 .fields{display:grid;gap:14px}
 .banner{margin:0;padding:12px 14px;border-radius:12px;border:1px dashed var(--accent);font-size:14px;color:var(--muted)}
 .banner a,.foot a{color:var(--accent);font-weight:700}
@@ -125,6 +131,15 @@ button.confirm:disabled{opacity:.4;cursor:not-allowed}
       <div class="check">✓</div>
       <h3>¡Turno reservado!</h3>
       <dl id="doneSum"></dl>
+      <div class="remember">
+        <p class="mini">Para no olvidarte:</p>
+        <button class="ghost bell" id="push">Avisame en este dispositivo 2 h antes</button>
+        <p class="pmsg" id="pmsg" hidden></p>
+        <div class="cal">
+          <a class="ghost" id="gcal" target="_blank" rel="noopener">Google Calendar</a>
+          <a class="ghost" id="ics" href="#">Calendario del celu</a>
+        </div>
+      </div>
       <a class="confirm" id="notify" target="_blank" rel="noopener">Avisar a la barbería por WhatsApp</a>
       <button class="ghost" id="again">Reservar otro turno</button>
     </div>
@@ -206,7 +221,9 @@ $("confirm").onclick=async()=>{
   if(r.ok){
     $("doneSum").innerHTML=sumHTML();
     $("notify").href=`https://wa.me/${C.whatsapp}?text=${encodeURIComponent(`Hola! Reservé un turno desde la web:\n• ${sn}\n• ${dayText(d)} a las ${hora}\n• A nombre de ${nombre}`)}`;
+    prepararAvisos({id:r.id,d,hora,servicio:sn,mins:parseInt(SVCS[st.svc][1])||30});
     $("form").hidden=true; $("done").hidden=false;
+    if(innerWidth<900) $("done").scrollIntoView({behavior:"smooth",block:"start"});
   }else{
     $("msg").textContent=r.error==="ocupado"?"Alguien acaba de tomar ese horario. Elegí otro.":"No se pudo reservar. Revisá tu conexión e intentá de nuevo.";
     $("msg").hidden=false;
@@ -215,6 +232,51 @@ $("confirm").onclick=async()=>{
   }
 };
 $("again").onclick=()=>{$("done").hidden=true;$("form").hidden=false;pickDay(st.day,true);};
+
+// ---------- recordatorios para el cliente ----------
+let ultimo=null;
+const utc=x=>x.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+function rango(t){const [hh,mm]=t.hora.split(":").map(Number), a=new Date(t.d); a.setHours(hh,mm,0,0); return [a,new Date(a.getTime()+t.mins*60000)];}
+function prepararAvisos(t){
+  ultimo=t; const [a,b]=rango(t), titulo=`Turno: ${t.servicio} en ${C.nombre}`;
+  $("gcal").href=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(titulo)}&dates=${utc(a)}/${utc(b)}&location=${encodeURIComponent(C.direccion)}&details=${encodeURIComponent("Si no podés ir, avisá por WhatsApp.")}`;
+  $("pmsg").hidden=true; $("push").disabled=false; $("push").textContent="Avisame en este dispositivo 2 h antes";
+}
+$("ics").onclick=e=>{
+  e.preventDefault(); if(!ultimo) return;
+  const [a,b]=rango(ultimo);
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Turnos//ES","BEGIN:VEVENT",`UID:${ultimo.id||Date.now()}@turnos`,`DTSTAMP:${utc(new Date())}`,`DTSTART:${utc(a)}`,`DTEND:${utc(b)}`,
+    `SUMMARY:Turno: ${ultimo.servicio} en ${C.nombre}`,`LOCATION:${C.direccion}`,"BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Tenés turno en 2 horas","TRIGGER:-PT2H","END:VALARM","END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const url=URL.createObjectURL(new Blob([ics],{type:"text/calendar"})), l=document.createElement("a");
+  l.href=url; l.download="turno.ics"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(url),5000);
+};
+function pmsg(t){$("pmsg").textContent=t;$("pmsg").hidden=false;}
+function b64u8(b){const p="=".repeat((4-b.length%4)%4),r=atob((b+p).replace(/-/g,"+").replace(/_/g,"/"));return Uint8Array.from(r,c=>c.charCodeAt(0));}
+$("push").onclick=async()=>{
+  const btn=$("push"), t=ultimo; if(!t) return;
+  const ios=/iPhone|iPad|iPod/.test(navigator.userAgent), standalone=navigator.standalone||matchMedia("(display-mode: standalone)").matches;
+  if(!("serviceWorker" in navigator)||!("Notification" in window)||!("PushManager" in window)){
+    pmsg(ios&&!standalone?"En iPhone, primero agregá esta página a la pantalla de inicio (Compartir → Agregar a inicio) y reservá desde ahí. Mientras tanto, usá el calendario.":"Este navegador no permite avisos. Usá el botón del calendario.");return;}
+  btn.disabled=true; btn.textContent="Activando…";
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted"){pmsg("No diste permiso para los avisos. Podés usar el calendario.");btn.disabled=false;btn.textContent="Avisame en este dispositivo 2 h antes";return;}
+    const reg=await navigator.serviceWorker.register("sw.js"); await navigator.serviceWorker.ready;
+    const cuando=t.d.toDateString()===new Date().toDateString()?"Hoy":"El "+dayText(t.d);
+    if(S.modo==="supabase"&&C.vapidPublic){
+      const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u8(C.vapidPublic)});
+      const r=await S.guardarPush(t.id,sub.toJSON());
+      if(r.ok===false) throw new Error(r.error);
+      pmsg("Listo. Te vamos a mandar un aviso a este dispositivo 2 horas antes del turno.");
+    }else{
+      const titulo=`${cuando} a las ${t.hora} tenés turno`, opts={body:`En ${C.nombre}, ${C.direccion}. ¡No te olvides!`,tag:"turno"};
+      try{ await reg.showNotification(titulo,opts); }catch(err){ new Notification(titulo,opts); }
+      S.guardarPush(t.id,{demo:true});
+      pmsg("Así te va a llegar el aviso 2 horas antes del turno (en la demo te lo mostramos ahora).");
+    }
+    btn.textContent="Aviso activado ✓";
+  }catch(e){pmsg("No se pudo activar el aviso en este dispositivo. Usá el calendario.");btn.disabled=false;btn.textContent="Avisame en este dispositivo 2 h antes";}
+};
 
 const first=days.findIndex(d=>!C.diasCerrados.includes(d.getDay())&&!(d.getTime()===today.getTime()&&new Date().getHours()>=19));
 pickDay(first,true);

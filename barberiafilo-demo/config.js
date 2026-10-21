@@ -15,5 +15,6 @@ window.FILO = {
 
   // Supabase (gratis). Si queda vacío, la app funciona en modo demo.
   supabaseUrl: "",
-  supabaseKey: ""                     // la "anon public key" del proyecto
+  supabaseKey: "",                    // la "anon public key" del proyecto
+  vapidPublic: ""                     // clave pública para avisos push (ver LEEME.md)
 };
