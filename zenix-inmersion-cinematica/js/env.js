@@ -149,12 +149,13 @@ export function buildEnvironment(renderer, scene, Q) {
   });
 
   // --- Rig de luces que acompaña a la cámara (iluminación local consistente en todos los capítulos)
-  const hemi = new THREE.HemisphereLight(0x8f6dff, 0x07030f, 0.55);
-  const camLight = new THREE.PointLight(0xcfdcff, 60, 46, 1.4);
-  const aheadLight = new THREE.PointLight(0x8b4dff, 140, 60, 1.3);
-  const rimLight = new THREE.PointLight(0x22d3ee, 70, 46, 1.4);
-  scene.add(hemi, camLight, aheadLight, rimLight);
-  out.lights = { hemi, camLight, aheadLight, rimLight };
+  const hemi = new THREE.HemisphereLight(0xa98bff, 0x12081f, 0.82);
+  const camLight = new THREE.PointLight(0xe6e1ff, 74, 48, 1.35);
+  const aheadLight = new THREE.PointLight(0x9b63ff, 165, 64, 1.25);
+  const rimLight = new THREE.PointLight(0x55deff, 88, 52, 1.35);
+  const fillLight = new THREE.PointLight(0x7a60ff, 18, 42, 2.0);
+  scene.add(hemi, camLight, aheadLight, rimLight, fillLight);
+  out.lights = { hemi, camLight, aheadLight, rimLight, fillLight };
 
   if (Q.shadows) {
     const sp = new THREE.SpotLight(0xd8c8ff, 420, 90, 0.75, 0.7, 1.3);
@@ -179,6 +180,7 @@ export function buildEnvironment(renderer, scene, Q) {
     back.position.copy(cam.position);
     camLight.position.copy(cam.position).add(lightOffset.set(0, 2.2, 3).applyQuaternion(cam.quaternion));
     rimLight.position.copy(cam.position).add(lightOffset.set(5.5, 3, -4).applyQuaternion(cam.quaternion));
+    fillLight.position.copy(cam.position).add(lightOffset.set(-4.8, 1.4, 5.8).applyQuaternion(cam.quaternion));
     // La luz violeta se coloca delante del punto de mira (hacia la cámara) para que las caras visibles queden iluminadas
     aheadLight.position.copy(look).lerp(cam.position, Math.min(0.35, 14 / Math.max(1, look.distanceTo(cam.position))));
     if (out.lights.spot) {

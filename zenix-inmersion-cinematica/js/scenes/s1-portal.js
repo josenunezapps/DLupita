@@ -19,17 +19,20 @@ export function buildPortal(ctx) {
   tiers.forEach((t, i) => {
     const grp = new THREE.Group();
     grp.position.z = t.z;
-    const depth = 2.2;
+    const depth = 3.0;
     const body = new THREE.Mesh(hexRingGeometry(t.Ro, t.Ri, depth, 0.14), i % 2 ? M.metalMid : M.metalDark);
     body.castShadow = Q.shadows; body.receiveShadow = Q.shadows;
     grp.add(body);
+    const backPlate = new THREE.Mesh(hexRingGeometry(t.Ro - 0.65, t.Ri + 0.5, depth * 0.34, 0.08), i % 2 ? M.metalDark : M.metalMid);
+    backPlate.position.z = -depth * 0.12;
+    grp.add(backPlate);
     // Franja neón en el canto interior + aristas finas en el exterior
-    const strip = new THREE.Mesh(hexRingGeometry(t.Ri + 0.02, t.Ri - 0.16, depth + 0.5, 0), i % 2 ? M.cyanGlow : M.violetGlow);
+    const strip = new THREE.Mesh(hexRingGeometry(t.Ri + 0.06, t.Ri - 0.34, depth + 0.75, 0), i % 2 ? M.cyanGlow : M.violetGlow);
     grp.add(strip);
-    const edge = new THREE.Mesh(hexRingGeometry(t.Ro + 0.0, t.Ro - 0.12, depth + 0.35, 0), M.electricGlow);
+    const edge = new THREE.Mesh(hexRingGeometry(t.Ro + 0.03, t.Ro - 0.28, depth + 0.55, 0), M.electricGlow);
     grp.add(edge);
     // Nervios radiales (estructura técnica): placas entre el borde interior y el exterior
-    const ribGeo = new THREE.BoxGeometry(0.5, (t.Ro - t.Ri) * 0.9, depth * 1.35);
+    const ribGeo = new THREE.BoxGeometry(0.82, (t.Ro - t.Ri) * 0.92, depth * 1.45);
     for (let k = 0; k < 12; k++) {
       const a = (k / 12) * Math.PI * 2 + Math.PI / 6;
       const rr = (t.Ro + t.Ri) / 2;
@@ -45,7 +48,7 @@ export function buildPortal(ctx) {
   });
 
   // Vigas longitudinales: forman una jaula que aporta perspectiva y profundidad
-  const beamGeo = new THREE.BoxGeometry(0.9, 0.9, 40);
+  const beamGeo = new THREE.BoxGeometry(1.3, 1.3, 40);
   const R0 = tiers[0].Ro - 0.6;
   for (let k = 0; k < 6; k++) {
     const a = Math.PI / 2 + (k * Math.PI) / 3;
@@ -53,15 +56,15 @@ export function buildPortal(ctx) {
     const beam = new THREE.Mesh(beamGeo, M.metalDark);
     beam.position.set(bx, by, -42);
     g.add(beam);
-    const line = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 40.4), k % 2 ? M.cyanGlow : M.violetGlow);
+    const line = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.26, 40.4), k % 2 ? M.cyanGlow : M.violetGlow);
     line.position.set(bx * 0.985, by * 0.985, -42);
     g.add(line);
     col.box(beam, 'portal-beam-' + k, 0.1);
   }
 
   // Torres colosales a los lados (escala de la estructura)
-  const towerGeo = new THREE.BoxGeometry(8, 90, 8);
-  const stripGeo = new THREE.BoxGeometry(0.22, 88, 0.22);
+  const towerGeo = new THREE.BoxGeometry(9.5, 90, 9.5);
+  const stripGeo = new THREE.BoxGeometry(0.34, 88, 0.34);
   [[-52, -26], [52, -26], [-70, -70], [70, -70]].forEach(([x, z], i) => {
     const tw = new THREE.Mesh(towerGeo, M.metalDark);
     tw.position.set(x, 8, z);
@@ -85,20 +88,20 @@ export function buildPortal(ctx) {
 
   // Losas de datos flotando en el espacio: pasan por los costados de la cámara al avanzar
   const r = rng(7);
-  const SL = Q.detail === 'low' ? 18 : 40;
-  const slabGeo = new THREE.BoxGeometry(2.6, 1.5, 0.1);
-  const slabs = new THREE.InstancedMesh(slabGeo, M.metalMid, SL);
-  const strips = new THREE.InstancedMesh(new THREE.BoxGeometry(2.6, 0.07, 0.14), M.cyanGlow, SL);
+  const SL = Q.detail === 'low' ? 12 : 28;
+  const slabGeo = new THREE.BoxGeometry(3.0, 1.8, 0.55);
+  const slabs = new THREE.InstancedMesh(slabGeo, M.plate, SL);
+  const strips = new THREE.InstancedMesh(new THREE.BoxGeometry(2.8, 0.14, 0.22), M.cyanGlow, SL);
   const dummy = new THREE.Object3D();
   for (let i = 0; i < SL; i++) {
-    const a = r() * Math.PI * 2, rad = 10 + r() * 26;
-    dummy.position.set(Math.cos(a) * rad, Math.sin(a) * rad * 0.7 + 2, 38 - r() * 100);
+    const a = r() * Math.PI * 2, rad = 18 + r() * 22;
+    dummy.position.set(Math.cos(a) * rad, Math.sin(a) * rad * 0.6 + 2.5, 30 - r() * 92);
     dummy.rotation.set((r() - 0.5) * 0.5, (r() - 0.5) * 1.2, (r() - 0.5) * 0.6);
-    const s = 0.7 + r() * 1.8; dummy.scale.set(s, s, s);
+    const s = 0.76 + r() * 1.35; dummy.scale.set(s, s, s);
     dummy.updateMatrix();
     slabs.setMatrixAt(i, dummy.matrix);
     // franja en el borde inferior de cada losa
-    const m2 = dummy.matrix.clone().multiply(new THREE.Matrix4().makeTranslation(0, -0.78, 0.03));
+    const m2 = dummy.matrix.clone().multiply(new THREE.Matrix4().makeTranslation(0, -0.84, 0.18));
     strips.setMatrixAt(i, m2);
   }
   g.add(slabs, strips);
@@ -134,7 +137,7 @@ export function buildPortal(ctx) {
   const frame = new THREE.Mesh(new THREE.TorusGeometry(12.9, 0.7, 20, 96), M.silver);
   frame.position.copy(disc.position);
   g.add(frame);
-  const frameGlow = new THREE.Mesh(new THREE.TorusGeometry(12.9, 0.12, 8, 96), M.electricGlow);
+  const frameGlow = new THREE.Mesh(new THREE.TorusGeometry(12.9, 0.18, 12, 96), M.electricGlow);
   frameGlow.position.copy(disc.position); frameGlow.position.z += 0.55;
   g.add(frameGlow);
   col.ring([0, 0, -57], 11.9, 13.7, 1.6, 'portal-frame');

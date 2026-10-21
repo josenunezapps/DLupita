@@ -34,13 +34,13 @@ export function createMaterials(Q) {
   const phys = (o, coat = 0.2) => Q.physical
     ? new THREE.MeshPhysicalMaterial({ ...o, clearcoat: coat, clearcoatRoughness: 0.17 }) : std(o);
   const M = {
-    metalDark: std({ color: 0x272050, metalness: 0.92, roughness: 0.36 }),
-    metalMid: std({ color: 0x3a3170, metalness: 0.9, roughness: 0.3 }),
+    metalDark: std({ color: 0x3b2f6f, metalness: 0.9, roughness: 0.34, emissive: 0x090515, emissiveIntensity: 0.22 }),
+    metalMid: std({ color: 0x54459a, metalness: 0.88, roughness: 0.28, emissive: 0x10081f, emissiveIntensity: 0.18 }),
     metalViolet: phys({ color: 0x3a1f8f, metalness: 0.95, roughness: 0.24 }),
     silver: phys({ color: 0xc9c4e6, metalness: 1.0, roughness: 0.2 }),
-    plate: std({ color: 0x0f0b22, metalness: 0.7, roughness: 0.48 }),
+    plate: std({ color: 0x18122f, metalness: 0.68, roughness: 0.46, emissive: 0x0a0616, emissiveIntensity: 0.12 }),
     floor: phys({ color: 0x0b0819, metalness: 0.9, roughness: 0.3 }),
-    black: std({ color: 0x07050f, metalness: 0.5, roughness: 0.6 }),
+    black: std({ color: 0x161022, metalness: 0.42, roughness: 0.58, emissive: 0x08050f, emissiveIntensity: 0.08 }),
     violetGlow: neon(PAL.violet, 2.6),
     electricGlow: neon(PAL.electric, 3.0),
     cyanGlow: neon(PAL.cyan, 2.4),

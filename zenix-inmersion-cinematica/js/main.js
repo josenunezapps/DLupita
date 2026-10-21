@@ -47,7 +47,7 @@ const canvas = document.getElementById('gl');
 let renderer;
 try {
   renderer = new THREE.WebGLRenderer({
-    canvas, antialias: !Q.bloom,
+    canvas, antialias: true,
     powerPreference: 'high-performance', alpha: false, stencil: false,
   });
   if (!renderer.capabilities.isWebGL2) throw new Error('WebGL2 no disponible');
@@ -58,7 +58,7 @@ try {
 }
 renderer.setPixelRatio(Q.dpr);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 0.98;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 if (Q.shadows) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; }
 
@@ -91,7 +91,7 @@ function buildComposer() {
   composer.setSize(size.x, size.y);
   composer.addPass(new RenderPass(scene, camera));
   const half = new THREE.Vector2(size.x * (Q.tier === 'high' ? 1 : 0.5), size.y * (Q.tier === 'high' ? 1 : 0.5));
-  bloom = new UnrealBloomPass(half, 0.6, 0.55, 1.0);
+  bloom = new UnrealBloomPass(half, 0.42, 0.45, 1.2);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 }
@@ -230,7 +230,7 @@ function frame(now, once = false) {
   if (bloom) {
     // El bloom respira con el avance: más fuerte en portal y cierre, contenido en la estación
     const fin = clamp((prog - 0.86) / 0.1);
-    bloom.strength = 0.42 + 0.25 * (1 - clamp(prog / 0.14)) + 0.0 * fin;
+    bloom.strength = 0.28 + 0.14 * (1 - clamp(prog / 0.14)) + 0.06 * fin;
   }
   // Adaptación de exposición muy sutil, sin cambiar la paleta visual original.
   renderer.toneMappingExposure = 0.99 + .055 * Math.sin(prog * Math.PI) + .018 * Math.abs(kick);
