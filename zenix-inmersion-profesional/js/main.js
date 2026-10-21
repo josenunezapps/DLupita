@@ -125,7 +125,7 @@ async function init() {
   scenes.forEach((s) => (s.group.visible = false));
   frame(performance.now(), true);
   ui.ready();
-  requestAnimationFrame(loop);
+  startLoop();
 }
 
 // ---------------------------------------------------------------- Tamaño
@@ -202,9 +202,15 @@ function frame(now, once = false) {
   camera.rotateY(-pointer.x * 0.035);
   camera.rotateX(-pointer.y * 0.022);
   if (Q.aspect < 0.85) {
-    // En vertical, desplaza el encuadre hacia arriba para dejar el tercio inferior libre para el texto
+    // En vertical, desplaza el encuadre hacia arriba para dejar el tercio inferior libre para el texto.
+    // Recalcular el offset en cada fotograma reconstruía la matriz de proyección dos veces.
     const h = renderer.domElement.height, w = renderer.domElement.width;
-    camera.setViewOffset(w, h, 0, h * 0.13, w, h);
+    const offsetY = h * 0.13;
+    const view = camera.view;
+    if (!view || !view.enabled || view.fullWidth !== w || view.fullHeight !== h ||
+        view.width !== w || view.height !== h || view.offsetX !== 0 || view.offsetY !== offsetY) {
+      camera.setViewOffset(w, h, 0, offsetY, w, h);
+    }
   } else if (camera.view && camera.view.enabled) camera.clearViewOffset();
   camera.updateProjectionMatrix();
 
@@ -251,11 +257,26 @@ function adapt(dt) {
   }
 }
 
+// Suspendemos el bucle mientras la pestaña está oculta para no consumir CPU/GPU inútilmente.
+let running = false, rafId = 0;
 function loop(now) {
-  requestAnimationFrame(loop);
-  if (document.hidden) { last = now; return; }
+  if (document.hidden) { running = false; rafId = 0; last = now; return; }
+  rafId = requestAnimationFrame(loop);
   frame(now);
 }
+function startLoop() {
+  if (running || document.hidden) return;
+  running = true;
+  last = performance.now();
+  rafId = requestAnimationFrame(loop);
+}
+addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    running = false;
+  } else startLoop();
+});
 
 // ---------------------------------------------------------------- API de diagnóstico (usada en las pruebas)
 window.__zenix = {
