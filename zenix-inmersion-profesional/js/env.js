@@ -134,18 +134,21 @@ export function buildEnvironment(renderer, scene, Q) {
     out.lights.spot = sp;
   }
 
+  // Reutilizamos vectores temporales: mismo cálculo de luces, sin crear objetos en cada fotograma.
+  const lightOffset = new THREE.Vector3();
+  const spotOffset = new THREE.Vector3(0, 9, 4);
   out.update = (cam, look, time, prog, dt) => {
     backMat.uniforms.uTime.value = time;
     backMat.uniforms.uProg.value = prog;
     pMat.uniforms.uTime.value = time;
     back.position.copy(cam.position);
-    camLight.position.copy(cam.position).add(new THREE.Vector3(0, 2.2, 3).applyQuaternion(cam.quaternion));
-    rimLight.position.copy(cam.position).add(new THREE.Vector3(5.5, 3, -4).applyQuaternion(cam.quaternion));
+    camLight.position.copy(cam.position).add(lightOffset.set(0, 2.2, 3).applyQuaternion(cam.quaternion));
+    rimLight.position.copy(cam.position).add(lightOffset.set(5.5, 3, -4).applyQuaternion(cam.quaternion));
     // La luz violeta se coloca delante del punto de mira (hacia la cámara) para que las caras visibles queden iluminadas
     aheadLight.position.copy(look).lerp(cam.position, Math.min(0.35, 14 / Math.max(1, look.distanceTo(cam.position))));
     if (out.lights.spot) {
       const sp = out.lights.spot;
-      sp.position.copy(cam.position).add(new THREE.Vector3(0, 9, 4));
+      sp.position.copy(cam.position).add(spotOffset);
       sp.target.position.copy(look);
     }
   };
