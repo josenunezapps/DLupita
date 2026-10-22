@@ -36,7 +36,7 @@ del scroll corresponde a un fotograma concreto.
 - **Fundido sub-fotograma** entre vecinos para que el movimiento lento no se vea escalonado.
 - Sin `backdrop-filter`, `mix-blend-mode` ni desenfoques animados sobre el canvas (se recalculaban en cada cuadro).
 - Canvas limitado a la resolución del fotograma (menos píxeles por cuadro).
-- Memoria acotada: ~40 fotogramas nítidos decodificados en escritorio, ~25 en celular.
+- Memoria acotada: ~60 fotogramas nítidos decodificados en escritorio, ~40 en celular. El capítulo 1 se carga nítido antes de mostrar la página y el resto de la película se descarga hacia adelante en segundos; si una imagen nítida no llegó, se pasa de la previsualización a la nítida con un fundido corto.
 - `?debug` en la URL expone métricas en `window.__zx`.
 
 ## Publicar
