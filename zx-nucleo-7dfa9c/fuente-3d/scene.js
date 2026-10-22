@@ -156,7 +156,7 @@ const chrome = new THREE.MeshPhysicalMaterial({ color: 0xd9dbe4, metalness: 1.0,
 const lightMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0x8b52ff).multiplyScalar(0), toneMapped: true });
 const lightBase = new THREE.Color(0x8b52ff);
 const zMat = new THREE.MeshPhysicalMaterial({
-  color: 0xffffff, vertexColors: true, metalness: 0.82, roughness: 0.2,
+  color: 0xffffff, vertexColors: true, metalness: 0.82, roughness: 0.15,
   clearcoat: 1.0, clearcoatRoughness: 0.05, iridescence: 0.3, iridescenceIOR: 1.35, iridescenceThicknessMinimum: 180, iridescenceThicknessMaximum: 520,
   emissive: 0x5a22ff, emissiveIntensity: 0, envMapIntensity: 1.25,
 });
@@ -180,7 +180,7 @@ const petalTri = (() => {
   return g;
 })();
 
-const zColorA = new THREE.Color(0x3a1cf0), zColorB = new THREE.Color(0xa23cff);
+const zColorA = new THREE.Color(0x2418ff), zColorB = new THREE.Color(0xb83cff);
 function zPiece(pts, depth, zOff) {
   const g = extrude(pts.map((p) => new THREE.Vector2(p[0], p[1])), depth, 0.05, 6);
   g.translate(0, 0, zOff);
@@ -194,10 +194,31 @@ function zPiece(pts, depth, zOff) {
 
 // Z emblem (original 3-piece folded ribbon)
 const zGroup = new THREE.Group(); scene.add(zGroup);
-const zTop = new THREE.Mesh(zPiece([[-0.8, 0.97], [0.63, 0.97], [0.99, 0.61], [-0.93, 0.61], [-0.93, 0.84]], 0.3, -0.02), zMat);
-const zDiag = new THREE.Mesh(zPiece([[0.99, 0.585], [0.41, 0.585], [-0.99, -0.585], [-0.41, -0.585]], 0.38, 0.03), zMat);
-const zBot = new THREE.Mesh(zPiece([[0.8, -0.97], [-0.63, -0.97], [-0.99, -0.61], [0.93, -0.61], [0.93, -0.84]], 0.3, -0.02), zMat);
-[zTop, zDiag, zBot].forEach((m) => { m.castShadow = true; zGroup.add(m); });
+// ZX: cinta plegada. Bandas superior/inferior + diagonal (Z) y dos pliegues claros
+// cuyas aristas dibujan la segunda diagonal (X). Simetría de 180° como el logo.
+const foldMat = new THREE.MeshPhysicalMaterial({
+  color: 0xc98cff, vertexColors: true, metalness: 0.55, roughness: 0.17, clearcoat: 1.0, clearcoatRoughness: 0.05,
+  emissive: 0xb45cff, emissiveIntensity: 0.0, envMapIntensity: 1.15, iridescence: 0.35, iridescenceIOR: 1.3,
+});
+const rot = (p) => [-p[0], -p[1]];
+const T  = [[-0.95, 0.644], [-0.70, 1.006], [0.606, 1.006], [1.033, 0.644]];
+const DG = [[0.44, 0.644], [1.033, 0.644], [-0.44, -0.644], [-1.033, -0.644]];
+// arista izquierda de la diagonal: de (-1.033,-0.644) a (0.44,0.644); el vértice del pliegue cae sobre ella
+const yA = 0.06, xA = -1.033 + ((yA + 0.644) / 1.288) * (0.44 + 1.033);
+const F1 = [[-0.95, 0.62], [0.40, 0.62], [xA - 0.02, yA]];
+const zTop  = new THREE.Mesh(zPiece(T, 0.32, 0.0), zMat);
+const zBot  = new THREE.Mesh(zPiece(T.map(rot), 0.32, 0.0), zMat);
+const zDiag = new THREE.Mesh(zPiece(DG, 0.36, 0.035), zMat);
+function foldPiece(pts) {
+  const g = extrude(pts.map((p) => new THREE.Vector2(p[0], p[1])), 0.2, 0.04, 5);
+  const pos = g.attributes.position, col = new Float32Array(pos.count * 3), c = new THREE.Color(), A = new THREE.Color(0xffd6f4), B = new THREE.Color(0x8a3dff);
+  for (let i = 0; i < pos.count; i++) { const t = clamp(Math.abs(pos.getX(i)) * 0.75 - 0.05); c.copy(A).lerp(B, t); col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b; }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3)); return g;
+}
+const zF1 = new THREE.Mesh(foldPiece(F1), foldMat);
+const zF2 = new THREE.Mesh(foldPiece(F1.map(rot)), foldMat);
+zF1.position.z = zF2.position.z = -0.03;
+[zTop, zDiag, zBot, zF1, zF2].forEach((m) => { m.castShadow = true; zGroup.add(m); });
 
 // core glow behind Z
 const glowTex = glowTexture();
@@ -298,7 +319,7 @@ const CAM = track([
   [335, [16, 15, 11.0, 0, 0.15, 0.4, 32, 0.07]],
   [455, [-8, 13, 11.0, 0, 0.15, 0.4, 32, 0.07]],
   [500, [-4, 6, 10.5, 0, 0.1, 0, 31, 0]],
-  [539, [-8, 3, 9.6, 0, 0.05, 0, 30, 0.2]],
+  [539, [-10, 4, 7.4, 0, 0.0, 0, 30, 0.2]],
 ]);
 const CH = { az: 0, el: 1, dist: 2, tx: 3, ty: 4, tz: 5, fov: 6, sx: 7 };
 
@@ -332,7 +353,7 @@ function serviceSpin(f) {
   return (i + turn) * 60;
 }
 function setModules(f) {
-  const open = eio(ramp(f, 176, 214)) * (1 - eio(ramp(f, 282, 330))) + eio(ramp(f, 462, 505)); // open / re-close into wedges / open as frame
+  const open = eio(ramp(f, 176, 214)) * (1 - eio(ramp(f, 282, 330))); // abrir / volver a cerrar en cuñas
   const unlock = ss(ramp(f, 150, 172)) * (1 - ramp(f, 214, 240));
   const expl = eio(ramp(f, 212, 278));                 // radial explode
   const tilt = eio(ramp(f, 262, 336));                 // ring to horizontal
@@ -360,14 +381,13 @@ function setModules(f) {
     const center = new THREE.Vector3(rOff + (k === activeK ? pop : 0) + M_CENTER, 0, stagger).applyQuaternion(qA);
     let q = qA.clone(), scale = 1;
     if (toHalo > 0) {
-      // finale: modules re-form the hexagonal frame around the Z (brand mark), petals stay open
-      qD.setFromAxisAngle(vZ, (m.theta + 60) * D2R);
-      const cD = new THREE.Vector3(M_CENTER, 0, 0).applyQuaternion(qD);
-      const r0 = center.length(), r1 = cD.length();
-      const c = center.clone().lerp(cD, toHalo);
-      const rr = THREE.MathUtils.lerp(r0, r1, toHalo) + Math.sin(Math.PI * toHalo) * 0.8;
-      center.copy(c.normalize().multiplyScalar(rr));
-      q.slerp(qD, toHalo);
+      // final: los seis módulos se retiran hacia la oscuridad y dejan sola la marca ZX
+      const w = toHalo * toHalo * (3 - 2 * toHalo);
+      const dir = new THREE.Vector3(center.x, 0, center.z); if (dir.lengthSq() < 1e-4) dir.set(1, 0, 0); dir.normalize();
+      const cD = dir.clone().multiplyScalar(9).add(new THREE.Vector3(0, (k % 2 ? 1.6 : -0.4), -16 - k * 0.8));
+      center.lerp(cD, w);
+      q.multiply(tmpQ.setFromAxisAngle(vY, w * (k % 2 ? 1 : -1) * 1.2));
+      scale = 1 - 0.25 * w;
     }
     m.pivot.quaternion.copy(q); m.pivot.scale.setScalar(scale);
     m.pivot.position.copy(center).sub(new THREE.Vector3(M_CENTER * scale, 0, 0).applyQuaternion(q));
@@ -378,7 +398,7 @@ function setModules(f) {
     const boot = ss(ramp(f, 148 + k * 4, 160 + k * 4));
     const svc = k === activeK ? 0.4 + pop * 1.6 : 0;
     const lvl = boot * (0.7 + 0.6 * ss(ramp(f, 480, 530))) + svc * 1.0 + 0.6 * Math.max(0, Math.sin(f * 0.21 + k)) * boot * 0.25;
-    lightMats[k].color.copy(lightBase).multiplyScalar(lvl);
+    lightMats[k].color.copy(lightBase).multiplyScalar(lvl * (1 - 0.85 * toHalo));
   }
 }
 
@@ -405,6 +425,7 @@ function setFrame(f) {
   coreGlow.scale.setScalar(4.0 + 1.2 * fin);
   coreLight.intensity = 9 * core + 8 * fin;
   zMat.emissiveIntensity = 0.03 * core + 0.08 * fin;
+  foldMat.emissiveIntensity = 0.05 * core + 0.12 * fin;
   // Z motion
   const zs = eio(ramp(f, 214, 455)) * Math.PI * 2;
   zGroup.rotation.set(Math.sin(f * 0.02) * 0.04 * core, zs + Math.sin(f * 0.015) * 0.05 * core, 0);

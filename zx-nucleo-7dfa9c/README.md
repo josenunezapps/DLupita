@@ -17,10 +17,10 @@ que avanza y retrocede con el scroll.
 | Capítulo | Fotogramas | Animación |
 |---|---|---|
 | 01 Apertura | 0–119 | Barrido de luz que revela la cápsula hexagonal sellada; acercamiento macro y retroceso. |
-| 02 Núcleo | 119–214 | Las ranuras se iluminan, los módulos se “desbloquean” y los pétalos frontales/traseros se abren revelando la Z. |
+| 02 Núcleo | 119–214 | Las ranuras se iluminan, los módulos se “desbloquean” y los pétalos frontales/traseros se abren revelando la marca ZX (cinta plegada: la Z y, en sus pliegues, la X). |
 | 03 Despliegue (proceso) | 214–334 | Los seis módulos se separan, giran y la órbita se inclina a horizontal; la Z gira 360°. |
 | 04 Servicios | 334–454 | Cada módulo pasa al frente, se adelanta y enciende: un módulo = un servicio. |
-| 05 Contacto | 454–539 | Los módulos se reensamblan como marco hexagonal alrededor de la Z (la marca) + CTA de WhatsApp. |
+| 05 Contacto | 454–539 | Los seis módulos se retiran hacia la oscuridad y queda sola la marca ZX, iluminada + CTA de WhatsApp. |
 
 Al subir con el scroll todo se reproduce en reversa de forma exacta, porque cada posición
 del scroll corresponde a un fotograma concreto.
@@ -56,7 +56,7 @@ sin comando de build. El archivo `_headers` agrega caché de larga duración par
   (código fuente en `fuente-3d/`). No se usó ningún recurso, nombre ni imagen de Marvel / Iron Man.
 - El proyecto de referencia (devinilabs/iron-man) **no tiene licencia publicada**, por eso no se
   reutilizó su código ni sus imágenes: sólo se estudió la técnica (canvas fijo + secuencia de fotogramas + scroll).
-- Logo Z: provisto por Zenix AR.
+- Logo ZX: provisto por Zenix AR (versión sin hexágono en `assets/logo-zx*.webp`). La ZX 3D de la película está modelada a partir de ese logo.
 - [GSAP 3.15 + ScrollTrigger](https://gsap.com/standard-license) — licencia estándar sin cargo de GreenSock (uso comercial permitido).
 - [three.js r186](https://github.com/mrdoob/three.js) — MIT (sólo para renderizar los fotogramas; no se carga en la página).
 - Tipografías Unbounded, Manrope y JetBrains Mono — SIL Open Font License (Google Fonts).

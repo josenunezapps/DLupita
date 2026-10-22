@@ -28,7 +28,7 @@
   class DecoderPool {
     constructor(n) {
       this.jobs = new Map(); this.seq = 0; this.workers = [];
-      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js?v=3'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
+      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js?v=5'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
       catch (e) { this.workers = []; }
     }
     get capacity() { return Math.max(2, this.workers.length); }
@@ -213,7 +213,7 @@
   /* ------------------------------------------------------------------ */
   let target = 0, head = 0, lastHead = -1, raf = 0;
   const hudFrame = qs('#hudFrame'), railFill = qs('#railFill'), hudStatus = qs('#hudStatus'), hudChapter = qs('#hudChapter');
-  const status = (f) => f < 150 ? 'SELLADO' : f < 176 ? 'INICIANDO' : f < 214 ? 'APERTURA' : f < 262 ? 'DESPLIEGUE' : f < 334 ? 'RECONFIGURACIÓN' : f < 455 ? 'ÓRBITA · SERVICIO 0' + (1 + Math.min(5, Math.floor((f - 334) / 20))) : f < 515 ? 'ENSAMBLAJE' : 'EN LÍNEA';
+  const status = (f) => f < 150 ? 'SELLADO' : f < 176 ? 'INICIANDO' : f < 214 ? 'APERTURA' : f < 262 ? 'DESPLIEGUE' : f < 334 ? 'RECONFIGURACIÓN' : f < 455 ? 'ÓRBITA · SERVICIO 0' + (1 + Math.min(5, Math.floor((f - 334) / 20))) : f < 515 ? 'LIBERACIÓN' : 'MARCA ZX · EN LÍNEA';
   let lastStatus = '';
 
   let lastT = 0, jumpTo = false;
