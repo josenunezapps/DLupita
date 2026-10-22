@@ -392,7 +392,15 @@ function printDoc(html, title) {
 }
 
 // ---------- compartir ----------
-const waPhone = p => { let d = String(p || '').replace(/\D/g, ''); if (!d) return ''; if (d.startsWith('00')) d = d.slice(2); if (d.startsWith('54')) return d.startsWith('549') ? d : '549' + d.slice(2); if (d.startsWith('0')) d = d.slice(1); d = d.replace(/^(\d{2,4})15/, '$1'); return '549' + d; };
+// celular argentino → formato de wa.me (549 + característica + número). El "15" solo se quita si sobra.
+const waPhone = p => {
+  let d = String(p || '').replace(/\D/g, ''); if (!d) return '';
+  if (d.startsWith('00')) d = d.slice(2);
+  d = d.replace(/^0+/, '');
+  if (d.startsWith('54')) d = d.slice(2).replace(/^9/, '');
+  if (d.length === 12) { const m = d.match(/^(\d{2,4})15(\d+)$/); if (m && (m[1] + m[2]).length === 10) d = m[1] + m[2]; }
+  return '549' + d;
+};
 
 async function shareModal(q, after) {
   const cl = S.clientById(q.clientId);
