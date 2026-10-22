@@ -41,7 +41,7 @@ del scroll corresponde a un fotograma concreto.
 
 ### GitHub Pages (ruta independiente)
 La carpeta ya está lista para servirse tal cual en una subruta, por ejemplo
-`https://<usuario>.github.io/<repo>/zenix-nucleo-cinematico/`. Todas las rutas son relativas,
+`https://<usuario>.github.io/<repo>/zx-nucleo-7dfa9c/`. Todas las rutas son relativas,
 no toca ningún otro sitio.
 
 ### Cloudflare Pages
