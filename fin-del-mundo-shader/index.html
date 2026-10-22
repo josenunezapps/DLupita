@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fin del Mundo · Shader</title>
+<meta name="description" content="Ushuaia de noche generada en tiempo real con matemática pura: Canal Beagle, montañas nevadas, aurora austral y el faro Les Eclaireurs. Cero imágenes, cero librerías.">
+<meta name="theme-color" content="#04060d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#eef2ff; --dim:rgba(238,242,255,.62); --faint:rgba(238,242,255,.18);
+    --glass:rgba(8,12,24,.42); --aur:#6dffb4; --vio:#b58cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#04060d;color:var(--ink);overflow:hidden;
+    font-family:"JetBrains Mono",ui-monospace,monospace;-webkit-tap-highlight-color:transparent}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+  canvas:active{cursor:grabbing}
+
+  .ui{position:fixed;inset:0;pointer-events:none;transition:opacity .6s ease}
+  .ui.hidden{opacity:0}
+  .ui.hidden .dock{pointer-events:none}
+
+  .title{position:absolute;left:max(16px,env(safe-area-inset-left));top:max(18px,env(safe-area-inset-top));max-width:min(560px,calc(100% - 32px))}
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--aur);opacity:.9}
+  h1{font-family:Fraunces,Georgia,serif;font-weight:300;font-size:clamp(34px,7vw,72px);line-height:.95;margin:.25em 0 .2em;letter-spacing:-.02em;
+     text-shadow:0 2px 30px rgba(0,0,0,.5)}
+  h1 em{font-style:italic;font-weight:600;background:linear-gradient(90deg,var(--aur),var(--vio));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{font-size:12px;line-height:1.6;color:var(--dim);max-width:420px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+  .chip{font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border:1px solid var(--faint);border-radius:99px;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+  .stats{position:absolute;right:max(16px,env(safe-area-inset-right));top:max(18px,env(safe-area-inset-top));text-align:right;font-size:10px;line-height:1.7;color:var(--dim);
+    padding:8px 10px;border-radius:10px;background:var(--glass);border:1px solid var(--faint);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .stats b{color:var(--ink);font-weight:600}
+
+  .dock{position:absolute;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));width:min(640px,calc(100% - 32px));
+    pointer-events:auto;padding:12px 14px;border-radius:18px;background:var(--glass);border:1px solid var(--faint);
+    backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);display:grid;gap:10px}
+  .sliders{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  label{display:grid;gap:6px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  label span{display:flex;justify-content:space-between}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent}
+  input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:3px;background:linear-gradient(90deg,var(--faint),var(--aur))}
+  input[type=range]::-moz-range-track{height:3px;border-radius:3px;background:linear-gradient(90deg,var(--faint),var(--aur))}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;margin-top:-7.5px;box-shadow:0 0 0 4px rgba(109,255,180,.25)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(109,255,180,.25)}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  button{flex:1 1 0;min-width:90px;font:600 11px "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+    background:rgba(255,255,255,.06);border:1px solid var(--faint);border-radius:11px;padding:11px 10px;cursor:pointer;transition:background .2s,border-color .2s,transform .1s}
+  button:hover{background:rgba(255,255,255,.12)}
+  button:active{transform:scale(.97)}
+  button[aria-pressed=true]{border-color:var(--aur);color:var(--aur);background:rgba(109,255,180,.08)}
+  .hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(max(16px,env(safe-area-inset-bottom)) + 150px);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);
+    animation:fade 6s ease forwards;white-space:nowrap}
+  @keyframes fade{0%,70%{opacity:1}100%{opacity:0}}
+  .show{position:fixed;right:16px;bottom:max(16px,env(safe-area-inset-bottom));pointer-events:auto;opacity:0;transition:opacity .4s;flex:none;min-width:0;padding:10px 12px}
+  .ui.hidden ~ .show{opacity:.55}
+  .credit{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 4px);font-size:9px;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)}
+  .fallback{position:fixed;inset:0;display:none;place-items:center;text-align:center;padding:24px;
+    background:radial-gradient(ellipse at 50% 20%,#123c35 0%,#0a1020 45%,#04060d 100%)}
+  .fallback.on{display:grid}
+  @media (max-width:560px){
+    .sliders{grid-template-columns:1fr}
+    .stats{display:none}
+    .hint{bottom:calc(max(16px,env(safe-area-inset-bottom)) + 210px)}
+    .credit{display:none}
+  }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="Paisaje generado en tiempo real de Ushuaia de noche con aurora austral"></canvas>
+
+<div class="ui" id="ui">
+  <div class="title">
+    <div class="eyebrow">Ushuaia · 54°48′S 68°18′O</div>
+    <h1>Fin del <em>Mundo</em></h1>
+    <p class="sub">Canal Beagle, montañas nevadas, aurora austral y el faro Les Eclaireurs. Nada de esto es una foto ni un video: cada píxel se calcula 60 veces por segundo con matemática.</p>
+    <div class="chips"><span class="chip">0 imágenes</span><span class="chip">0 librerías</span><span class="chip">1 archivo</span><span class="chip">GPU · GLSL</span></div>
+  </div>
+
+  <div class="stats" id="stats">— fps</div>
+
+  <div class="hint">Arrastrá para mirar alrededor</div>
+
+  <div class="dock">
+    <div class="sliders">
+      <label><span>Hora <i id="vHora">noche</i></span><input id="sHora" type="range" min="0" max="1" step="0.001" value="0.18"></label>
+      <label><span>Aurora <i id="vAur">70%</i></span><input id="sAur" type="range" min="0" max="1" step="0.001" value="0.7"></label>
+    </div>
+    <div class="btns">
+      <button id="bSound" aria-pressed="false">♪ Sonido</button>
+      <button id="bAuto" aria-pressed="true">◐ Cámara</button>
+      <button id="bShot">◎ Foto</button>
+      <button id="bHide">✕ Ocultar</button>
+    </div>
+  </div>
+  <div class="credit">Hecho por Claude · para Zenix AR</div>
+</div>
+<button class="show" id="bShow" aria-label="Mostrar controles">☰</button>
+
+<div class="fallback" id="fallback">
+  <div>
+    <h1>Fin del <em>Mundo</em></h1>
+    <p class="sub" style="margin:12px auto 0">Tu navegador no tiene WebGL habilitado, así que no puedo dibujar el paisaje en tiempo real. Probá con Chrome actualizado o activá la aceleración por hardware.</p>
+  </div>
+</div>
+
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2  uRes;
+uniform float uTime;
+uniform float uDusk;     // 0 noche cerrada · 1 hora azul
+uniform float uAur;      // intensidad de aurora
+uniform vec3  uCamPos;
+uniform vec2  uLook;     // yaw, pitch
+
+#define PI 3.14159265
+
+// ---------- ruido ----------
+float hash11(float p){ p=fract(p*.1031); p*=p+33.33; p*=p+p; return fract(p); }
+float hash21(vec2 p){ vec3 p3=fract(vec3(p.xyx)*.1031); p3+=dot(p3,p3.yzx+33.33); return fract((p3.x+p3.y)*p3.z); }
+float noise(vec2 p){
+  vec2 i=floor(p), f=fract(p);
+  vec2 u=f*f*(3.-2.*f);
+  float a=hash21(i), b=hash21(i+vec2(1,0)), c=hash21(i+vec2(0,1)), d=hash21(i+vec2(1,1));
+  return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);
+}
+const mat2 ROT=mat2(.8,.6,-.6,.8);
+float fbm(vec2 p){ float s=0.,a=.5; for(int i=0;i<5;i++){ s+=a*noise(p); p=ROT*p*2.03; a*=.5; } return s; }
+
+// cordillera: ruido "ridged" con erosión aparente
+float ridged(vec2 p, int oct){
+  float s=0., a=.55, w=1.;
+  for(int i=0;i<7;i++){
+    if(i>=oct) break;
+    float n=1.-abs(noise(p)*2.-1.);
+    n*=n; s+=n*a*w; w=clamp(n*1.6,0.,1.);
+    p=ROT*p*2.1; a*=.5;
+  }
+  return s;
+}
+
+// ---------- geografía ----------
+const vec3 LH = vec3(5.5, 0., 17.);   // faro Les Eclaireurs
+
+float terrain(vec2 p, int oct){
+  // orilla sur del canal (Isla Navarino) + costa lateral
+  float far  = smoothstep(26., 48., p.y + 6.*sin(p.x*.05));
+  float side = smoothstep(26., 44., abs(p.x + 6.) + p.y*.25) * smoothstep(-6., 14., p.y);
+  float m = max(far, side*.75);
+  float h = ridged(p*.045 + vec2(3.1,1.7), oct) * 15. * m;
+  h += m*2.2 - 1.2;
+  // islote rocoso del faro
+  vec2 d = p - LH.xz;
+  h = max(h, .75*exp(-dot(d,d)*.9) - .35 + .08*noise(p*6.));
+  return h;
+}
+
+float march(vec3 ro, vec3 rd, float tmax, int steps, int oct){
+  float t=.5;
+  for(int i=0;i<110;i++){
+    if(i>=steps) break;
+    vec3 p=ro+rd*t;
+    float d=p.y-terrain(p.xz,oct);
+    if(d<.0015*t) return t;
+    t+=max(.4*d, .015+.002*t);
+    if(t>tmax) break;
+  }
+  return -1.;
+}
+
+vec3 terrainNormal(vec3 p, float t){
+  vec2 e=vec2(.015+.0035*t,0);
+  int oct = t<60. ? 7 : 6;
+  return normalize(vec3(terrain(p.xz-e.xy,oct)-terrain(p.xz+e.xy,oct), 2.*e.x, terrain(p.xz-e.yx,oct)-terrain(p.xz+e.yx,oct)));
+}
+
+// ---------- cielo ----------
+const vec3 MOON_DIR = vec3(-.5507,.4206,.7210); // normalizado
+
+float stars(vec3 rd){
+  vec2 uv=vec2(atan(rd.x,rd.z), asin(clamp(rd.y,-1.,1.)))*vec2(180.,180.);
+  vec2 id=floor(uv), f=fract(uv)-.5;
+  float h=hash21(id);
+  if(h<.985) return 0.;
+  vec2 o=vec2(hash21(id+7.),hash21(id+13.))-.5;
+  float d=length(f-o*.6);
+  float tw=.6+.4*sin(uTime*(2.+h*5.)+h*40.);
+  return smoothstep(.12,0.,d)*(h-.985)*66.*tw;
+}
+
+// cortinas de aurora: cintas onduladas, rayos verticales, verde abajo / violeta arriba
+vec3 aurora(vec3 ro, vec3 rd){
+  if(rd.y<0.01 || uAur<.01) return vec3(0);
+  vec3 acc=vec3(0);
+  float jitter=hash21(gl_FragCoord.xy+fract(uTime))*.9;
+  for(int i=0;i<26;i++){
+    float fi=float(i)+jitter;
+    float H=28.+fi*1.35;
+    float t=(H-ro.y)/rd.y;
+    if(t>420.) break;
+    vec2 p=ro.xz+rd.xz*t;
+    float k=fi/26.;
+    float s=0.;
+    // dos cintas con su propio vaivén
+    for(int j=0;j<2;j++){
+      float fj=float(j);
+      float line = 110.+fj*55. + 26.*sin(p.x*.011+uTime*.06+fj*2.3) + 9.*sin(p.x*.047-uTime*.11+fj) + 12.*fbm(vec2(p.x*.01+fj*5., uTime*.03));
+      float dist = p.y-line;
+      // borde inferior nítido, borde superior difuso (como las cortinas reales)
+      float band = exp(-dist*dist*(dist<0. ? .02 : .006));
+      float rays = pow(noise(vec2(p.x*.11+fj*11., uTime*.22+fj)),2.2)*1.6;
+      rays *= .5+.5*noise(vec2(p.x*.55+fj*3., uTime*.5));
+      rays += .12;
+      s += band*rays*(1.-k*.8)*(fj<.5 ? 1. : .7);
+    }
+    vec3 c = mix(vec3(.15,1.,.55), vec3(.55,.3,1.), smoothstep(.35,1.,k));
+    c = mix(c, vec3(1.,.25,.5), smoothstep(.85,1.,k)*.6);
+    acc += c*s;
+  }
+  float fade = smoothstep(.0,.12,rd.y);
+  return acc*fade*.11*uAur*smoothstep(1.,.55,rd.y);
+}
+
+vec3 skyBase(vec3 rd){
+  float y=max(rd.y,0.);
+  vec3 zen  = mix(vec3(.004,.007,.02), vec3(.03,.06,.16), uDusk);
+  vec3 hor  = mix(vec3(.025,.04,.08), vec3(.30,.32,.46), uDusk);
+  vec3 col  = mix(hor, zen, pow(y,.45));
+  // resplandor del atardecer hacia el noroeste (detrás, a la derecha)
+  float west = pow(max(dot(normalize(rd.xz+1e-4), normalize(vec2(-.9,-.6))),0.),3.);
+  col += vec3(1.,.42,.18)*west*exp(-y*9.)*uDusk*uDusk*.7;
+  // luna
+  float md=dot(rd,MOON_DIR);
+  col += vec3(.9,.92,1.)*smoothstep(.99955,.9997,md)*1.6;
+  col += vec3(.35,.4,.55)*pow(max(md,0.),900.)*.6 + vec3(.2,.25,.4)*pow(max(md,0.),12.)*.08;
+  return col;
+}
+
+vec3 sky(vec3 ro, vec3 rd, bool withStars){
+  vec3 col=skyBase(rd);
+  if(withStars){
+    float night=1.-smoothstep(.2,.95,uDusk);
+    col += vec3(.85,.9,1.)*stars(rd)*night*smoothstep(0.,.08,rd.y);
+    // vía láctea tenue
+    float band = exp(-pow(dot(rd,normalize(vec3(.35,.5,-.79))),2.)*30.);
+    col += vec3(.12,.12,.18)*band*fbm(rd.xy*8.+rd.z*3.)*night*.5;
+  }
+  col += aurora(ro,rd);
+  return col;
+}
+
+// ---------- faro ----------
+// cilindro vertical analítico
+float hitTower(vec3 ro, vec3 rd, out vec3 n, out float hy){
+  vec2 oc=ro.xz-LH.xz; vec2 d=rd.xz;
+  float r=.16, a=dot(d,d), b=dot(oc,d), c=dot(oc,oc)-r*r;
+  float h=b*b-a*c;
+  if(h<0.) return -1.;
+  float t=(-b-sqrt(h))/a;
+  float y=ro.y+rd.y*t;
+  if(t<0. || y<.25 || y>1.55) return -1.;
+  vec3 p=ro+rd*t;
+  n=normalize(vec3(p.x-LH.x,0.,p.z-LH.z)); hy=y;
+  return t;
+}
+
+vec3 lampPos(){ return LH+vec3(0.,1.68,0.); }
+vec3 beamDir(){ float a=uTime*1.15; return normalize(vec3(cos(a),-.03,sin(a))); }
+
+// haz volumétrico: distancia del rayo a la recta del haz
+vec3 beamGlow(vec3 ro, vec3 rd, float tScene){
+  vec3 L=lampPos(), B=beamDir();
+  vec3 w=ro-L;
+  float a=dot(rd,rd), b=dot(rd,B), c=dot(B,B), d=dot(rd,w), e=dot(B,w);
+  float den=a*c-b*b;
+  vec3 col=vec3(0);
+  if(abs(den)>1e-5){
+    float tr=(b*e-c*d)/den, tb=(a*e-b*d)/den;
+    if(tr>0. && tb>0. && tr<tScene){
+      float dist=length((ro+rd*tr)-(L+B*tb));
+      float wid=.035+tb*.028;
+      col+=vec3(1.,.93,.75)*exp(-dist*dist/(wid*wid))*exp(-tb*.05)*.4;
+    }
+  }
+  // halo de la linterna + destello cuando el haz apunta a la cámara
+  vec3 toL=L-ro; float tl=dot(toL,rd);
+  if(tl>0. && tl<tScene+.5){
+    float dl=length(toL-rd*tl);
+    float face=pow(max(dot(-B,normalize(toL)),0.),24.);
+    col+=vec3(1.,.9,.7)*(exp(-dl*dl*900.)*2.+exp(-dl*14.)*.12*(.3+face*6.));
+  }
+  return col;
+}
+
+// ---------- shading ----------
+vec3 shadeTerrain(vec3 ro, vec3 rd, float t){
+  vec3 p=ro+rd*t;
+  vec3 n=terrainNormal(p,t);
+  float h=p.y;
+  float snowLine = 4.2 + 2.2*fbm(p.xz*.08) - n.y*1.2;
+  float snow = smoothstep(snowLine-.6, snowLine+.4, h) * smoothstep(.45,.75,n.y);
+  float forest = smoothstep(.2,1.2,h)*(1.-smoothstep(2.5,3.6,h))*smoothstep(.6,.85,n.y);
+  vec3 rock  = mix(vec3(.05,.045,.04), vec3(.11,.1,.09), fbm(p.xz*.6));
+  vec3 alb   = mix(rock, vec3(.02,.05,.035), forest);
+  alb = mix(alb, vec3(.78,.84,.95), snow);
+  // islote: roca oscura y húmeda
+  float isl = exp(-dot(p.xz-LH.xz,p.xz-LH.xz)*.5);
+  alb = mix(alb, vec3(.04,.04,.045), isl);
+
+  float moon = max(dot(n,MOON_DIR),0.);
+  float sh = 1.;
+  if(moon>0.){ float ts=march(p+n*.05, MOON_DIR, 40., 28, 4); if(ts>0.) sh=.25; }
+  vec3 moonCol = mix(vec3(.16,.19,.3), vec3(.4,.42,.55), uDusk);
+  vec3 amb = mix(vec3(.02,.03,.06), vec3(.18,.2,.32), uDusk)*(.5+.5*n.y);
+  vec3 aurL = vec3(.1,.5,.28)*uAur*(1.-uDusk*.7)*(.4+.6*n.y)*.35;
+  vec3 col = alb*(moonCol*moon*sh*1.6 + amb + aurL);
+  // reflejo especular suave en la nieve
+  col += snow*pow(max(dot(reflect(rd,n),MOON_DIR),0.),18.)*moonCol*.25*sh;
+  return col;
+}
+
+vec3 shadeTower(vec3 rd, vec3 n, float hy){
+  float band = step(.5, fract((hy-.25)*2.3));
+  vec3 alb = mix(vec3(.75,.74,.72), vec3(.55,.06,.05), band);
+  if(hy>1.38) alb=vec3(.08);
+  float moon=max(dot(n,MOON_DIR),0.);
+  vec3 col = alb*(vec3(.2,.22,.32)*moon*1.4 + mix(vec3(.03,.035,.06),vec3(.2,.22,.32),uDusk));
+  return col;
+}
+
+vec3 fogify(vec3 col, vec3 rd, float t){
+  vec3 fogC = skyBase(normalize(vec3(rd.x,.02,rd.z)))*.9;
+  float f = 1.-exp(-t*t*.00005 - t*.004);
+  return mix(col, fogC, clamp(f,0.,1.));
+}
+
+vec3 render(vec3 ro, vec3 rd){
+  float tmax=260.;
+  float tT = march(ro,rd,tmax,110,5);
+  float tW = rd.y<0. ? -ro.y/rd.y : -1.;
+  vec3 tn; float thy;
+  float tL = hitTower(ro,rd,tn,thy);
+
+  float tScene = 1e5;
+  vec3 col;
+  bool water = tW>0. && (tT<0. || tW<tT);
+  float tHit = water ? tW : tT;
+
+  if(tL>0. && (tHit<0. || tL<tHit)){
+    col = shadeTower(rd,tn,thy); tScene=tL;
+    col = fogify(col,rd,tL);
+  } else if(water){
+    vec3 p=ro+rd*tW;
+    // oleaje: suma de ondas que viajan
+    vec2 q=p.xz;
+    float e=.04+tW*.004;
+    #define WAVES(x) (.007*sin(dot(x,vec2(.7,.9))*2.6+uTime*1.3)+.005*sin(dot(x,vec2(-.9,.5))*4.7+uTime*1.9)+.011*(noise(x*1.3+uTime*.15)-.5)+.006*(noise(x*3.1-uTime*.2)-.5))
+    float h0=WAVES(q);
+    vec3 n=normalize(vec3(h0-WAVES(q+vec2(e,0)), e*1.4, h0-WAVES(q+vec2(0,e))));
+    n=normalize(mix(n,vec3(0,1,0),smoothstep(10.,120.,tW)*.85));
+    vec3 rr=reflect(rd,n); rr.y=max(rr.y,.004); rr=normalize(rr);
+    float fres=.02+.98*pow(1.-max(dot(-rd,n),0.),5.);
+    vec3 refl;
+    float tr=march(p+vec3(0,.01,0),rr,200.,48,4);
+    if(tr>0.) refl=fogify(shadeTerrain(p,rr,tr),rr,tr+tW);
+    else refl=sky(p,rr,true);
+    vec3 tl2n; float tl2h;
+    float trl=hitTower(p,rr,tl2n,tl2h);
+    if(trl>0. && (tr<0. || trl<tr)) refl=shadeTower(rr,tl2n,tl2h);
+    refl += beamGlow(p,rr,1e4)*.6;
+    vec3 deep = mix(vec3(.004,.012,.018), vec3(.02,.05,.08), uDusk);
+    col = mix(deep, refl, clamp(fres*1.1,0.,1.));
+    col = fogify(col,rd,tW); tScene=tW;
+  } else if(tT>0.){
+    col = shadeTerrain(ro,rd,tT); tScene=tT;
+    col = fogify(col,rd,tT);
+  } else {
+    col = sky(ro,rd,true);
+  }
+  col += beamGlow(ro,rd,tScene);
+  return col;
+}
+
+vec3 aces(vec3 x){ return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.); }
+
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;
+  float yaw=uLook.x, pitch=uLook.y;
+  vec3 fw=normalize(vec3(sin(yaw)*cos(pitch), sin(pitch), cos(yaw)*cos(pitch)));
+  vec3 rt=normalize(cross(vec3(0,1,0),fw));
+  vec3 up=cross(fw,rt);
+  float focal = uRes.x<uRes.y ? 1.0 : 1.35;
+  vec3 rd=normalize(fw*focal+uv.x*rt+uv.y*up);
+  vec3 col=render(uCamPos,rd);
+
+  col=aces(col*1.35);
+  col=pow(col,vec3(.4545));
+  vec2 q=gl_FragCoord.xy/uRes;
+  col*=.55+.45*pow(16.*q.x*q.y*(1.-q.x)*(1.-q.y),.18);
+  col+=(hash21(gl_FragCoord.xy+fract(uTime*7.)*91.)-.5)*.018;
+  gl_FragColor=vec4(col,1.);
+}
+</script>
+
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const gl = canvas.getContext('webgl', { antialias:false, alpha:false, powerPreference:'high-performance', preserveDrawingBuffer:false });
+  if (!gl) { document.getElementById('fallback').classList.add('on'); document.getElementById('ui').style.display='none'; return; }
+
+  const vsSrc = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fsSrc = document.getElementById('fs').textContent;
+  function sh(type, src){
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  let prog;
+  try {
+    prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, vsSrc));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fsSrc));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  } catch (e) {
+    console.error(e);
+    document.getElementById('fallback').classList.add('on'); document.getElementById('ui').style.display='none'; return;
+  }
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(prog, 'p');
+  gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = n => gl.getUniformLocation(prog, n);
+  const uRes=U('uRes'), uTime=U('uTime'), uDusk=U('uDusk'), uAur=U('uAur'), uCam=U('uCamPos'), uLook=U('uLook');
+
+  // ---- estado ----
+  const params = new URLSearchParams(location.search);
+  const state = {
+    dusk: +document.getElementById('sHora').value,
+    aur:  +document.getElementById('sAur').value,
+    auto: true,
+    yaw: innerWidth < innerHeight ? .24 : .05, pitch: 0.13, yawT: 0.05, pitchT: 0.13,
+    dragYaw: 0, dragPitch: 0,
+  };
+  // modo "foto fija" para verificación / compartir: ?t=12&hora=0.2
+  const fixedT = params.has('t') ? +params.get('t') : null;
+  if (params.has('hora')) state.dusk = +params.get('hora');
+  if (params.has('aurora')) state.aur = +params.get('aurora');
+
+  // ---- resolución adaptativa ----
+  const isMobile = matchMedia('(pointer:coarse)').matches;
+  let scale = params.has('q') ? +params.get('q') : (isMobile ? .45 : .7);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function resize(){
+    const w = Math.max(1, Math.round(innerWidth * dpr * scale));
+    const h = Math.max(1, Math.round(innerHeight * dpr * scale));
+    if (canvas.width !== w || canvas.height !== h){ canvas.width = w; canvas.height = h; gl.viewport(0,0,w,h); }
+  }
+  addEventListener('resize', resize); resize();
+
+  // ---- controles ----
+  const sH = document.getElementById('sHora'), sA = document.getElementById('sAur');
+  const vH = document.getElementById('vHora'), vA = document.getElementById('vAur');
+  sH.value = state.dusk; sA.value = state.aur;
+  const horaTxt = v => v < .25 ? 'noche' : v < .55 ? 'madrugada' : v < .8 ? 'hora azul' : 'crepúsculo';
+  function syncLabels(){ vH.textContent = horaTxt(state.dusk); vA.textContent = Math.round(state.aur*100)+'%'; }
+  sH.addEventListener('input', () => { state.dusk = +sH.value; syncLabels(); });
+  sA.addEventListener('input', () => { state.aur  = +sA.value; syncLabels(); });
+  syncLabels();
+
+  // arrastre para mirar
+  let drag = null;
+  canvas.addEventListener('pointerdown', e => { drag = {x:e.clientX, y:e.clientY, yaw:state.dragYaw, pitch:state.dragPitch}; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const k = 2.4 / Math.min(innerWidth, innerHeight);
+    state.dragYaw   = drag.yaw   - (e.clientX - drag.x) * k;
+    state.dragPitch = Math.max(-.12, Math.min(.75, drag.pitch + (e.clientY - drag.y) * k));
+  });
+  const end = () => drag = null;
+  canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+
+  const ui = document.getElementById('ui');
+  document.getElementById('bHide').onclick = () => ui.classList.add('hidden');
+  document.getElementById('bShow').onclick = () => ui.classList.remove('hidden');
+  const bAuto = document.getElementById('bAuto');
+  bAuto.onclick = () => { state.auto = !state.auto; bAuto.setAttribute('aria-pressed', state.auto); };
+
+  // foto: se captura justo después de dibujar
+  let wantShot = false;
+  document.getElementById('bShot').onclick = () => { wantShot = true; };
+  function takeShot(){
+    canvas.toBlob(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b); a.download = 'fin-del-mundo-' + Date.now() + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    }, 'image/png');
+  }
+
+  // ---- sonido procedural (viento + mar + pad) ----
+  let audio = null;
+  const bSound = document.getElementById('bSound');
+  bSound.onclick = () => {
+    if (!audio) audio = makeAudio();
+    if (!audio) return;
+    const on = bSound.getAttribute('aria-pressed') !== 'true';
+    bSound.setAttribute('aria-pressed', on);
+    audio.ctx.resume();
+    audio.master.gain.setTargetAtTime(on ? .9 : 0, audio.ctx.currentTime, .6);
+  };
+  function makeAudio(){
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+    const ctx = new AC();
+    const master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+    // ruido marrón
+    const len = ctx.sampleRate * 4, nb = ctx.createBuffer(1, len, ctx.sampleRate), d = nb.getChannelData(0);
+    let last = 0; for (let i=0;i<len;i++){ const w = Math.random()*2-1; last = (last + .02*w)/1.02; d[i] = last*3.5; }
+    const noiseSrc = () => { const s = ctx.createBufferSource(); s.buffer = nb; s.loop = true; s.start(); return s; };
+    // viento: pasa-banda que respira
+    const wind = noiseSrc(), bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=500; bp.Q.value=.8;
+    const lfo = ctx.createOscillator(), lfoG = ctx.createGain(); lfo.frequency.value=.07; lfoG.gain.value=320; lfo.connect(lfoG).connect(bp.frequency); lfo.start();
+    const wg = ctx.createGain(); wg.gain.value=.35; wind.connect(bp).connect(wg).connect(master);
+    // mar: graves con oleaje
+    const sea = noiseSrc(), lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=380;
+    const sg = ctx.createGain(); sg.gain.value=.3;
+    const sl = ctx.createOscillator(), slg = ctx.createGain(); sl.frequency.value=.11; slg.gain.value=.2; sl.connect(slg).connect(sg.gain); sl.start();
+    sea.connect(lp).connect(sg).connect(master);
+    // pad: La menor suspendido, muy suave
+    const pad = ctx.createGain(); pad.gain.value=.05;
+    const pf = ctx.createBiquadFilter(); pf.type='lowpass'; pf.frequency.value=900;
+    [110, 164.81, 246.94, 329.63].forEach((f,i) => {
+      const o = ctx.createOscillator(); o.type = i%2 ? 'triangle' : 'sine'; o.frequency.value = f; o.detune.value = (i-1.5)*4;
+      const g = ctx.createGain(); g.gain.value = .25;
+      const tl = ctx.createOscillator(), tg = ctx.createGain(); tl.frequency.value = .05 + i*.031; tg.gain.value = .2; tl.connect(tg).connect(g.gain); tl.start();
+      o.connect(g).connect(pf); o.start();
+    });
+    pf.connect(pad).connect(master);
+    return { ctx, master };
+  }
+
+  // ---- bucle ----
+  const stats = document.getElementById('stats');
+  const t0 = performance.now();
+  let frames = 0, acc = 0, lastT = t0, lastAdjust = t0, fpsShown = 0;
+  function frame(now){
+    const dt = Math.min(.1, (now - lastT)/1000); lastT = now;
+    const t = fixedT !== null ? fixedT : (now - t0)/1000;
+
+    // cámara: deriva lenta tipo dron + arrastre del usuario
+    const autoYaw   = state.auto ? Math.sin(t*.045)*.32 : 0;
+    const autoPitch = state.auto ? .02*Math.sin(t*.07) : 0;
+    const baseYaw = innerWidth < innerHeight ? .24 : .05;
+    state.yawT = baseYaw + (innerWidth < innerHeight ? autoYaw*.5 : autoYaw) + state.dragYaw;
+    state.pitchT = .13 + autoPitch + state.dragPitch;
+    const k = 1 - Math.exp(-dt*4);
+    state.yaw += (state.yawT - state.yaw)*k; state.pitch += (state.pitchT - state.pitch)*k;
+    const cam = [Math.sin(t*.03)*2.2, 1.05 + .12*Math.sin(t*.05), -3 + (state.auto ? Math.sin(t*.021)*2.5 : 0)];
+
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, t);
+    gl.uniform1f(uDusk, state.dusk);
+    gl.uniform1f(uAur, state.aur);
+    gl.uniform3f(uCam, cam[0], cam[1], cam[2]);
+    gl.uniform2f(uLook, state.yaw, state.pitch);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (wantShot){ wantShot = false; takeShot(); }
+
+    frames++; acc += dt;
+    if (now - lastAdjust > 1000){
+      fpsShown = Math.round(frames/acc); frames = 0; acc = 0; lastAdjust = now;
+      if (!params.has('q')){
+        if (fpsShown < 38 && scale > .28){ scale = Math.max(.28, scale*.85); resize(); }
+        else if (fpsShown > 56 && scale < 1 && canvas.width*canvas.height < 2.2e6){ scale = Math.min(1, scale*1.08); resize(); }
+      }
+      stats.innerHTML = `<b>${fpsShown}</b> fps<br><b>${canvas.width}×${canvas.height}</b> px<br><b>${(canvas.width*canvas.height/1e6).toFixed(2)}M</b> rayos/frame`;
+    }
+    if (params.has('still')) { document.documentElement.dataset.rendered = '1'; return; }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
