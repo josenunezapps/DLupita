@@ -140,6 +140,15 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
 .chat form{display:flex;gap:8px;padding:12px;background:#fff}
 .chat input{flex:1;min-width:0;border:1px solid var(--line);border-radius:999px;padding:12px 16px;font-size:16px;background:var(--bg)}
 .chat form button{width:48px;height:48px;border-radius:50%;border:0;background:var(--cobalt);color:#fff;font-size:18px;cursor:pointer;flex:none}
+.vpanel{background:#fff;border-bottom:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:9px;font-size:13px;color:var(--ink-2)}
+.vpanel[hidden]{display:none}
+.vpanel select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:15px}
+.vrow label{display:flex;justify-content:space-between}.vrow output{font-family:"JetBrains Mono",monospace;color:var(--cobalt)}
+.vrow input{width:100%;accent-color:var(--cobalt)}
+.vbtns{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.vbtns button{border:0;background:var(--cobalt);color:#fff;border-radius:999px;padding:9px 16px;font-weight:600;cursor:pointer}
+.vall{display:flex;align-items:center;gap:6px;font-size:12px}
+#voice-count{color:var(--muted);font-size:12px}
 .voice-note{font-size:11px;color:var(--muted);text-align:center;padding:0 12px 10px;background:#fff;margin:0}
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
@@ -287,11 +296,19 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
     <div class="row">
       <div class="who"><b>Conciencia Zenix</b><small id="chat-state">en línea · pensando</small></div>
       <div style="display:flex;gap:8px">
+        <button class="iconbtn" id="voice-settings" type="button" aria-expanded="false" aria-controls="voice-panel" aria-label="Elegir voz" title="Elegir voz">⚙</button>
         <button class="iconbtn" id="voice-toggle" type="button" aria-pressed="true" title="Voz activada" aria-label="Activar o silenciar la voz">🔊</button>
         <button class="iconbtn" id="chat-close" type="button" aria-label="Cerrar chat">✕</button>
       </div>
     </div>
     <canvas id="chat-canvas" aria-hidden="true"></canvas>
+  </div>
+  <div class="vpanel" id="voice-panel" hidden>
+    <label for="voice-select">Voz <span id="voice-count"></span></label>
+    <select id="voice-select"></select>
+    <div class="vrow"><label for="voice-rate">Velocidad <output id="rate-out">1.0</output></label><input id="voice-rate" type="range" min="0.6" max="1.6" step="0.05" value="1.02"></div>
+    <div class="vrow"><label for="voice-pitch">Tono <output id="pitch-out">1.0</output></label><input id="voice-pitch" type="range" min="0.5" max="1.8" step="0.05" value="1"></div>
+    <div class="vbtns"><button type="button" id="voice-test">▶ Probar voz</button><label class="vall"><input type="checkbox" id="voice-all"> Ver todos los idiomas</label></div>
   </div>
   <div class="msgs" id="msgs" aria-live="polite"></div>
   <div class="quick" id="quick">
@@ -474,10 +491,24 @@ function loop(t){
 /* ---------- Voz ---------- */
 const synth='speechSynthesis' in window?window.speechSynthesis:null;
 let voiceOn=!!synth,voice=null;
+const store={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
+let rate=+(store.get('zx-rate')||1.02),pitch=+(store.get('zx-pitch')||1);
+const isEs=v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('es');
 function pickVoice(){
   if(!synth)return;const vs=synth.getVoices();if(!vs.length)return;
-  const pref=['es-AR','es-419','es-US','es-MX','es-ES','es'];
-  for(const p of pref){const m=vs.filter(v=>v.lang&&v.lang.replace('_','-').toLowerCase().startsWith(p.toLowerCase()));if(m.length){voice=m.find(v=>/google|natural|neural|online/i.test(v.name))||m[0];return;}}
+  const saved=store.get('zx-voice');
+  voice=saved&&vs.find(v=>v.voiceURI===saved)||null;
+  if(!voice){const pref=['es-AR','es-419','es-US','es-MX','es-ES','es'];
+    for(const p of pref){const m=vs.filter(v=>v.lang&&v.lang.replace('_','-').toLowerCase().startsWith(p.toLowerCase()));if(m.length){voice=m.find(v=>/google|natural|neural|online/i.test(v.name))||m[0];break;}}}
+  fillVoices();
+}
+function fillVoices(){
+  const sel=$('#voice-select');if(!sel||!synth)return;
+  const all=$('#voice-all').checked,vs=synth.getVoices().filter(v=>all||isEs(v));
+  const list=vs.length?vs:synth.getVoices();
+  sel.innerHTML='';
+  list.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name.replace(/^(Microsoft|Google)\s*/,'')+' · '+v.lang+(v.localService?'':' (online)');if(voice&&v.voiceURI===voice.voiceURI)o.selected=true;sel.appendChild(o);});
+  $('#voice-count').textContent='('+list.length+' disponibles en este dispositivo)';
 }
 if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
 else{$('#voice-note').textContent='Tu navegador no permite voz; las respuestas se muestran como texto.';$('#voice-toggle').hidden=true;}
@@ -498,7 +529,7 @@ function speak(text){
   setMode('speaking');
   parts.forEach(p=>{
     const u=new SpeechSynthesisUtterance(p.trim());
-    u.lang=voice?voice.lang:'es-AR';if(voice)u.voice=voice;u.rate=1.02;u.pitch=1;
+    u.lang=voice?voice.lang:'es-AR';if(voice)u.voice=voice;u.rate=rate;u.pitch=pitch;
     u.onboundary=()=>{Mind.energy=1;};
     const done=()=>{if(--pending<=0)setMode('idle');};
     u.onend=done;u.onerror=done;
@@ -560,6 +591,15 @@ $('#quick').addEventListener('click',e=>{const b=e.target.closest('button');if(b
 $('#voice-toggle').addEventListener('click',e=>{voiceOn=!voiceOn;e.currentTarget.setAttribute('aria-pressed',String(voiceOn));e.currentTarget.textContent=voiceOn?'🔊':'🔇';if(!voiceOn)stopVoice();});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&!chat.hidden)closeChat();});
 
+const vp=$('#voice-panel');
+$('#voice-settings').addEventListener('click',e=>{vp.hidden=!vp.hidden;e.currentTarget.setAttribute('aria-expanded',String(!vp.hidden));if(!vp.hidden)fillVoices();});
+$('#voice-select').addEventListener('change',e=>{const v=synth.getVoices().find(x=>x.voiceURI===e.target.value);if(v){voice=v;store.set('zx-voice',v.voiceURI);}speak('Hola, soy la conciencia de Zenix. ¿Te gusta cómo sueno?');});
+$('#voice-all').addEventListener('change',fillVoices);
+const rr=$('#voice-rate'),pp=$('#voice-pitch');rr.value=rate;pp.value=pitch;$('#rate-out').textContent=(+rate).toFixed(2);$('#pitch-out').textContent=(+pitch).toFixed(2);
+rr.addEventListener('input',()=>{rate=+rr.value;$('#rate-out').textContent=rate.toFixed(2);store.set('zx-rate',rate);});
+pp.addEventListener('input',()=>{pitch=+pp.value;$('#pitch-out').textContent=pitch.toFixed(2);store.set('zx-pitch',pitch);});
+$('#voice-test').addEventListener('click',()=>{if(!voiceOn){voiceOn=true;$('#voice-toggle').setAttribute('aria-pressed','true');$('#voice-toggle').textContent='🔊';}speak('Hola, soy la conciencia de Zenix. Estoy acá para ayudarte a construir tu próxima web o aplicación.');});
+if(!synth)$('#voice-settings').hidden=true;
 requestAnimationFrame(loop);
 })();
 </script>
