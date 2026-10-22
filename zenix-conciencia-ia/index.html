@@ -325,7 +325,7 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
     <input id="chat-input" type="text" placeholder="Escribile a la conciencia…" aria-label="Tu mensaje" maxlength="400">
     <button type="submit" aria-label="Enviar">➤</button>
   </form>
-  <p class="voice-note" id="voice-note">Las respuestas se escuchan en voz alta.</p>
+  <p class="voice-note" id="voice-note">Las respuestas se escuchan en voz alta · ⚙ para cambiar la voz.</p>
 </section>
 
 <script>
@@ -477,7 +477,9 @@ function loop(t){
   const dt=Math.min(50,t-(last||t));last=t;
   Mind.attX+=(tx-Mind.attX)*.04;Mind.attY+=(ty-Mind.attY)*.04;
   // la voz: envolvente tipo sílabas mientras habla
-  if(Mind.mode==='speaking'){syl-=dt;if(syl<=0){Mind.energy=.55+Math.random()*.45;syl=90+Math.random()*140;}}
+  const lvl=typeof audioLevel==='function'?audioLevel():-1;
+  if(Mind.mode==='speaking'&&lvl>=0){Mind.energy=Math.max(Mind.energy,Math.min(1,lvl*5));}
+  else if(Mind.mode==='speaking'){syl-=dt;if(syl<=0){Mind.energy=.55+Math.random()*.45;syl=90+Math.random()*140;}}
   else Mind.energy=0;
   Mind.energy*=.93;
   Mind.voice+=((Mind.mode==='speaking'?Mind.energy:0)-Mind.voice)*.18;
@@ -494,6 +496,7 @@ function loop(t){
 const synth='speechSynthesis' in window?window.speechSynthesis:null;
 let voiceOn=!!synth,voice=null;
 const store={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
+let useZenix=(store.get('zx-voice')||'zenix')==='zenix';
 let rate=+(store.get('zx-rate')||1.02),pitch=+(store.get('zx-pitch')||1);
 const isEs=v=>v.lang&&v.lang.toLowerCase().replace('_','-').startsWith('es');
 function pickVoice(){
@@ -505,15 +508,16 @@ function pickVoice(){
   fillVoices();
 }
 function fillVoices(){
-  const sel=$('#voice-select');if(!sel||!synth)return;
-  const all=$('#voice-all').checked,vs=synth.getVoices().filter(v=>all||isEs(v));
-  const list=vs.length?vs:synth.getVoices();
+  const sel=$('#voice-select');if(!sel)return;
+  const all=$('#voice-all').checked,vs=synth?synth.getVoices().filter(v=>all||isEs(v)):[];
+  const list=vs.length||!synth?vs:synth.getVoices();
   sel.innerHTML='';
-  list.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name.replace(/^(Microsoft|Google)\s*/,'')+' · '+v.lang+(v.localService?'':' (online)');if(voice&&v.voiceURI===voice.voiceURI)o.selected=true;sel.appendChild(o);});
-  $('#voice-count').textContent='('+list.length+' disponibles en este dispositivo)';
+  {const o=document.createElement('option');o.value='zenix';o.textContent='Zenix · voz de hombre (propia)';o.selected=useZenix;sel.appendChild(o);}
+  list.forEach(v=>{const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name.replace(/^(Microsoft|Google)\s*/,'')+' · '+v.lang+(v.localService?'':' (online)');if(!useZenix&&voice&&v.voiceURI===voice.voiceURI)o.selected=true;sel.appendChild(o);});
+  $('#voice-count').textContent='(1 propia + '+list.length+' del dispositivo)';
 }
 if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
-else{$('#voice-note').textContent='Tu navegador no permite voz; las respuestas se muestran como texto.';$('#voice-toggle').hidden=true;}
+
 
 function setMode(m){
   Mind.mode=m;
@@ -522,10 +526,21 @@ function setMode(m){
   $('#chat-state').textContent='en línea · '+label;
   if(m!=='idle')thoughtEl.style.opacity=0;else thoughtEl.style.opacity=1;
 }
-function speak(text){
-  if(!synth||!voiceOn){setMode('idle');return;}
+/* Voz propia de Zenix (hombre): respuestas pregrabadas en /voz */
+const CLIPS=new Set('7ab04948,df6cb9bd,9f968f11,a5728c91,2e20a3d6,4e6521c4,cd2b0bbd,c4b86a09,26d0d310,aae4cb52,856f60b6,2dfad2bb,f0766683,56112e87,fd0f2679,9d3a3857'.split(','));
+const cleanTxt=t=>t.replace(/https?:\/\/\S+/g,'').replace(/wa\.me\/\d+/g,'').replace(/[•·→↗]/g,',').replace(/\s+/g,' ').trim();
+const hashTxt=t=>{let x=5381;for(let i=0;i<t.length;i++)x=(Math.imul(x,33)^t.charCodeAt(i))>>>0;return x.toString(16).padStart(8,'0');};
+const clip=new Audio();clip.preload='auto';let actx=null,analyser=null,abuf=null,unlocked=false;
+function unlockAudio(){
+  if(unlocked)return;unlocked=true;
+  try{actx=new (window.AudioContext||window.webkitAudioContext)();const srcNode=actx.createMediaElementSource(clip);analyser=actx.createAnalyser();analyser.fftSize=512;abuf=new Uint8Array(analyser.fftSize);srcNode.connect(analyser);analyser.connect(actx.destination);}catch{analyser=null;}
+  clip.muted=true;clip.src='voz/fd0f2679.mp3';const pr=clip.play();if(pr)pr.then(()=>{clip.pause();clip.muted=false;}).catch(()=>{clip.muted=false;});
+}
+addEventListener('pointerdown',unlockAudio,{once:true,capture:true});addEventListener('keydown',unlockAudio,{once:true,capture:true});
+function audioLevel(){if(!analyser||clip.paused)return -1;analyser.getByteTimeDomainData(abuf);let sum=0;for(let i=0;i<abuf.length;i++){const v=(abuf[i]-128)/128;sum+=v*v;}return Math.sqrt(sum/abuf.length);}
+function speakDevice(clean){
+  if(!synth){setMode('idle');return;}
   synth.cancel();
-  const clean=text.replace(/https?:\/\/\S+/g,'').replace(/wa\.me\/\d+/g,'').replace(/[•·→↗]/g,',').replace(/\s+/g,' ').trim();
   const parts=clean.match(/[^.!?¿¡]+[.!?]*|[¿¡][^?!]+[?!]/g)||[clean];
   let pending=parts.length;
   setMode('speaking');
@@ -538,7 +553,22 @@ function speak(text){
     synth.speak(u);
   });
 }
-function stopVoice(){if(synth)synth.cancel();if(Mind.mode==='speaking')setMode('idle');}
+function speak(text){
+  if(!voiceOn){setMode('idle');return;}
+  const clean=cleanTxt(text),k=hashTxt(clean);
+  if(useZenix&&CLIPS.has(k)){
+    if(synth)synth.cancel();
+    clip.pause();clip.muted=false;clip.src='voz/'+k+'.mp3';clip.playbackRate=rate;
+    if(actx&&actx.state==='suspended')actx.resume();
+    setMode('speaking');
+    clip.onended=()=>setMode('idle');
+    clip.onerror=()=>speakDevice(clean);
+    const pr=clip.play();if(pr)pr.catch(()=>speakDevice(clean));
+    return;
+  }
+  speakDevice(clean);
+}
+function stopVoice(){if(synth)synth.cancel();clip.pause();if(Mind.mode==='speaking')setMode('idle');}
 
 /* ---------- Cerebro del chat (respuestas locales, sin API) ---------- */
 const WA='https://wa.me/5492901471353';
@@ -595,16 +625,16 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&!chat.hidden)closeChat();});
 
 const vp=$('#voice-panel');
 $('#voice-settings').addEventListener('click',e=>{vp.hidden=!vp.hidden;e.currentTarget.setAttribute('aria-expanded',String(!vp.hidden));if(!vp.hidden)fillVoices();});
-$('#voice-select').addEventListener('change',e=>{const v=synth.getVoices().find(x=>x.voiceURI===e.target.value);if(v){voice=v;store.set('zx-voice',v.voiceURI);}speak('Hola, soy la conciencia de Zenix. ¿Te gusta cómo sueno?');});
+$('#voice-select').addEventListener('change',e=>{if(e.target.value==='zenix'){useZenix=true;store.set('zx-voice','zenix');}else{const v=synth&&synth.getVoices().find(x=>x.voiceURI===e.target.value);if(v){voice=v;useZenix=false;store.set('zx-voice',v.voiceURI);}}speak('Hola, soy la conciencia de Zenix. ¿Te gusta cómo sueno?');});
 $('#voice-all').addEventListener('change',fillVoices);
 const rr=$('#voice-rate'),pp=$('#voice-pitch');rr.value=rate;pp.value=pitch;$('#rate-out').textContent=(+rate).toFixed(2);$('#pitch-out').textContent=(+pitch).toFixed(2);
 rr.addEventListener('input',()=>{rate=+rr.value;$('#rate-out').textContent=rate.toFixed(2);store.set('zx-rate',rate);});
 pp.addEventListener('input',()=>{pitch=+pp.value;$('#pitch-out').textContent=pitch.toFixed(2);store.set('zx-pitch',pitch);});
 $('#voice-test').addEventListener('click',()=>{if(!voiceOn){voiceOn=true;$('#voice-toggle').setAttribute('aria-pressed','true');$('#voice-toggle').textContent='🔊';}speak('Hola, soy la conciencia de Zenix. Estoy acá para ayudarte a construir tu próxima web o aplicación.');});
 function syncStyles(){$$s('#voice-styles button').forEach(b=>b.setAttribute('aria-pressed',String(Math.abs(+b.dataset.r-rate)<.01&&Math.abs(+b.dataset.p-pitch)<.01)));}
-$('#voice-styles').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;rate=+b.dataset.r;pitch=+b.dataset.p;rr.value=rate;pp.value=pitch;$('#rate-out').textContent=rate.toFixed(2);$('#pitch-out').textContent=pitch.toFixed(2);store.set('zx-rate',rate);store.set('zx-pitch',pitch);syncStyles();speak('Así sueno con el estilo '+b.textContent.toLowerCase()+'. ¿Qué te parece?');});
+$('#voice-styles').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;rate=+b.dataset.r;pitch=+b.dataset.p;rr.value=rate;pp.value=pitch;$('#rate-out').textContent=rate.toFixed(2);$('#pitch-out').textContent=pitch.toFixed(2);store.set('zx-rate',rate);store.set('zx-pitch',pitch);syncStyles();if(useZenix)speak('Hola, soy la conciencia de Zenix. Estoy acá para ayudarte a construir tu próxima web o aplicación.');else speak('Así sueno con el estilo '+b.textContent.toLowerCase()+'. ¿Qué te parece?');});
 rr.addEventListener('input',syncStyles);pp.addEventListener('input',syncStyles);syncStyles();
-if(!synth)$('#voice-settings').hidden=true;
+
 requestAnimationFrame(loop);
 })();
 </script>
