@@ -28,7 +28,7 @@
   class DecoderPool {
     constructor(n) {
       this.jobs = new Map(); this.seq = 0; this.workers = [];
-      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
+      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js?v=2'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
       catch (e) { this.workers = []; }
     }
     get capacity() { return Math.max(2, this.workers.length); }
