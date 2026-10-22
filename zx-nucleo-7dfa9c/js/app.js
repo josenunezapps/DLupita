@@ -1,172 +1,200 @@
 /* ZENIX AR — Núcleo Z
  * Motor de secuencia cinematográfica: fotogramas pre-renderizados sobre canvas,
  * sincronizados con el scroll mediante GSAP ScrollTrigger.
- * - Carga progresiva por prioridad (pasada gruesa de toda la película, luego relleno
- *   alrededor de la posición actual y en la dirección del scroll).
- * - Memoria acotada: sólo se mantienen decodificados (ImageBitmap) los fotogramas
- *   cercanos al cabezal; el resto queda comprimido.
- * - Interpolación entre fotogramas vecinos (fundido sub-frame) + inercia suave.
+ * - Capa de previsualización (540 fotogramas en 15 hojas, ~1 MB): continuidad total.
+ * - Fotogramas nítidos decodificados en Web Workers, alrededor del cabezal y hacia
+ *   donde se mueve el scroll. Memoria acotada.
+ * - Fundido sub-fotograma entre vecinos + inercia basada en tiempo (igual a 60/120 Hz).
  */
 (() => {
   'use strict';
   const N = 540;
   const SETS = {
-    d: { path: 'seq/d/', w: 1600, h: 900, ahead: 16, behind: 6, conc: 6 },
-    m: { path: 'seq/m/', w: 720, h: 1280, ahead: 12, behind: 5, conc: 5 },
+    d: { path: 'seq/d/', atlas: 'seq/dp/', w: 1600, h: 900, pw: 320, ph: 180, ahead: 30, behind: 12, conc: 6, workers: 3, keepAtlas: 15 },
+    m: { path: 'seq/m/', atlas: 'seq/mp/', w: 720, h: 1280, pw: 180, ph: 320, ahead: 18, behind: 7, conc: 4, workers: 2, keepAtlas: 2 },
   };
-  const COARSE = 12;
+  const PER = 36, ATLASES = 15, COLS = 6;
   const qs = (s, r = document) => r.querySelector(s);
   const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const saveData = !!(navigator.connection && navigator.connection.saveData);
-  const canBitmap = 'createImageBitmap' in window;
-
+  const DBG = /[?&]debug/.test(location.search) ? (window.__zx = { paints: 0, f: 0, p: 0, n: 0, maxJump: 0, last: -1 }) : null;
   const pickSet = () => (innerWidth / innerHeight < 0.9 ? 'm' : 'd');
 
   /* ------------------------------------------------------------------ */
-  /* Secuencia: descarga + decodificación con prioridades                 */
+  /* Decodificación fuera del hilo principal (pool de Web Workers)        */
+  /* ------------------------------------------------------------------ */
+  class DecoderPool {
+    constructor(n) {
+      this.jobs = new Map(); this.seq = 0; this.workers = [];
+      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
+      catch (e) { this.workers = []; }
+    }
+    get capacity() { return Math.max(2, this.workers.length); }
+    done({ id, bm, err }) {
+      const j = this.jobs.get(id); if (!j) { bm && bm.close(); return; }
+      this.jobs.delete(id); j.w && j.w.busy--;
+      err ? j.reject(err) : j.resolve(bm);
+    }
+    decode(blob) {
+      if (!this.workers.length) return createImageBitmap(blob); // respaldo: hilo principal
+      const w = this.workers.reduce((a, b) => (b.busy < a.busy ? b : a));
+      const id = ++this.seq; w.busy++;
+      return new Promise((resolve, reject) => { this.jobs.set(id, { resolve, reject, w }); w.postMessage({ id, blob }); });
+    }
+    destroy() { this.workers.forEach((w) => w.terminate()); this.jobs.clear(); }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Secuencia de dos capas:                                              */
+  /*  · previsualización: los 540 fotogramas en 15 hojas (~1 MB) -> nunca */
+  /*    hay huecos, la película es continua desde el primer segundo       */
+  /*  · nítida: fotogramas completos decodificados alrededor del cabezal  */
   /* ------------------------------------------------------------------ */
   class Sequence {
     constructor(key) {
-      this.key = key; this.cfg = SETS[key];
-      this.blobs = new Array(N); this.fail = new Uint8Array(N);
-      this.loading = new Set(); this.active = 0; this.count = 0;
-      this.bmp = new Map(); this.decoding = new Set(); this.decActive = 0;
-      this.cur = 0; this.dir = 1; this.dead = false;
-      this.coarse = []; for (let i = 0; i < N; i += COARSE) this.coarse.push(i);
-      if (this.coarse[this.coarse.length - 1] !== N - 1) this.coarse.push(N - 1);
-      this.coarseLeft = this.coarse.length;
-      this.onProgress = null; this.onFrame = null;
+      this.key = key; this.cfg = SETS[key]; this.dead = false;
+      this.pool = new DecoderPool(this.cfg.workers);
+      this.blobs = new Array(N); this.fail = new Uint8Array(N); this.loading = new Set(); this.active = 0; this.count = 0;
+      this.bmp = new Map(); this.decoding = new Set();
+      this.aBlob = new Array(ATLASES); this.aBmp = new Array(ATLASES); this.aDec = new Set(); this.aLoaded = 0;
+      this.cur = 0; this.dir = 1; this.onProgress = null; this.onFrame = null;
     }
     url(i) { return this.cfg.path + String(i).padStart(4, '0') + '.webp'; }
-    level(i) { return i % 12 === 0 ? 0 : i % 6 === 0 ? 1 : i % 3 === 0 ? 2 : 3; }
-    has(i) { return !!this.blobs[i]; }
-    pick() {
-      // 1) pasada gruesa: toda la película navegable cuanto antes
-      if (this.coarseLeft > 0) {
-        for (const i of this.coarse) if (!this.blobs[i] && !this.loading.has(i) && this.fail[i] < 3) return i;
+    /* --- previsualización --- */
+    loadAtlases() {
+      const order = Array.from({ length: ATLASES }, (_, a) => a).sort((a, b) => Math.abs(a * PER - this.cur) - Math.abs(b * PER - this.cur));
+      let next = 0;
+      const one = async () => {
+        while (next < order.length && !this.dead) {
+          const a = order[next++];
+          for (let t = 0; t < 3 && !this.aBlob[a]; t++) {
+            try { const r = await fetch(this.cfg.atlas + String(a).padStart(2, '0') + '.webp'); if (r.ok) this.aBlob[a] = await r.blob(); } catch (e) {}
+          }
+          this.aLoaded++; this.onProgress && this.onProgress(this);
+          this.manageAtlases();
+        }
+      };
+      for (let k = 0; k < 4; k++) one();
+    }
+    manageAtlases() {
+      if (this.dead) return;
+      const ca = Math.floor(this.cur / PER), keep = this.cfg.keepAtlas;
+      for (let a = 0; a < ATLASES; a++) {
+        const near = Math.abs(a - ca) <= keep;
+        if (!near && this.aBmp[a]) { this.aBmp[a].close(); this.aBmp[a] = null; }
+        if (near && this.aBlob[a] && !this.aBmp[a] && !this.aDec.has(a)) {
+          this.aDec.add(a);
+          this.pool.decode(this.aBlob[a]).then((bm) => {
+            if (this.dead || Math.abs(a - Math.floor(this.cur / PER)) > keep + 1) { bm.close(); return; }
+            this.aBmp[a] = bm; this.onFrame && this.onFrame(a * PER + PER / 2, true);
+          }).catch(() => {}).finally(() => this.aDec.delete(a));
+        }
       }
-      // 2) relleno por puntaje: cercanía al cabezal (más barato hacia adelante) + nivel
+    }
+    proxy(i) { const a = Math.floor(i / PER), bm = this.aBmp[a]; if (!bm) return null; const j = i - a * PER; return { bm, sx: (j % COLS) * this.cfg.pw, sy: Math.floor(j / COLS) * this.cfg.ph }; }
+    /* --- nítida --- */
+    pick() {
       let best = -1, bs = Infinity;
       for (let i = 0; i < N; i++) {
         if (this.blobs[i] || this.loading.has(i) || this.fail[i] >= 3) continue;
-        const d = i - this.cur;
-        const dist = (d * this.dir >= 0 ? Math.abs(d) * 0.55 : Math.abs(d) * 1.25);
-        const s = dist + this.level(i) * 14;
+        const d = i - this.cur, s = d * this.dir >= 0 ? Math.abs(d) : Math.abs(d) * 2.2;
         if (s < bs) { bs = s; best = i; }
       }
       return best;
     }
     pump() {
       const conc = saveData ? 2 : this.cfg.conc;
-      while (!this.dead && this.active < conc) {
-        const i = this.pick(); if (i < 0) break;
-        this.fetchOne(i);
-      }
+      while (!this.dead && this.active < conc) { const i = this.pick(); if (i < 0) break; this.fetchOne(i); }
     }
     async fetchOne(i) {
       this.active++; this.loading.add(i);
       try {
-        const r = await fetch(this.url(i), { cache: 'force-cache' });
-        if (!r.ok) throw new Error(r.status);
-        const b = await r.blob();
-        if (this.dead) return;
+        const r = await fetch(this.url(i)); if (!r.ok) throw 0;
+        const b = await r.blob(); if (this.dead) return;
         this.blobs[i] = b; this.count++;
-        if (this.coarse.includes(i)) this.coarseLeft--;
-        this.onProgress && this.onProgress(this);
-      } catch (e) {
-        this.fail[i]++;
-        if (this.fail[i] >= 3 && this.coarse.includes(i)) { this.coarseLeft--; this.onProgress && this.onProgress(this); }
-      } finally {
-        this.active--; this.loading.delete(i);
-        if (!this.dead) { this.decodeAround(); this.pump(); }
-      }
+      } catch (e) { this.fail[i]++; }
+      finally { this.active--; this.loading.delete(i); if (!this.dead) { this.decodeAround(); this.pump(); } }
     }
     setHead(i, dir) {
       if (dir) this.dir = dir;
       if (i === this.cur) return;
-      this.cur = i; this.decodeAround();
+      const moved = Math.floor(i / PER) !== Math.floor(this.cur / PER);
+      this.cur = i; this.decodeAround(); if (moved) this.manageAtlases();
     }
     decodeAround() {
       if (this.dead) return;
       const { ahead, behind } = this.cfg;
       const lo = this.dir > 0 ? this.cur - behind : this.cur - ahead;
       const hi = this.dir > 0 ? this.cur + ahead : this.cur + behind;
-      for (const [i, bm] of this.bmp) {
-        if (i < lo - 3 || i > hi + 3) { bm.close && bm.close(); this.bmp.delete(i); }
-      }
-      const maxDec = 2;
-      for (let d = 0; d <= Math.max(ahead, behind) && this.decActive < maxDec; d++) {
+      for (const [i, bm] of this.bmp) if (i < lo - 8 || i > hi + 8) { bm.close(); this.bmp.delete(i); }
+      const cap = this.pool.capacity + 1;
+      for (let d = 0; d <= Math.max(ahead, behind) && this.decoding.size < cap; d++) {
         for (const i of d === 0 ? [this.cur] : [this.cur + d * this.dir, this.cur - d * this.dir]) {
-          if (i < lo || i > hi || i < 0 || i >= N) continue;
-          if (this.blobs[i] && !this.bmp.has(i) && !this.decoding.has(i)) {
-            this.decode(i); if (this.decActive >= maxDec) break;
-          }
+          if (i < lo || i > hi || i < 0 || i >= N || !this.blobs[i] || this.bmp.has(i) || this.decoding.has(i)) continue;
+          this.decoding.add(i);
+          this.pool.decode(this.blobs[i]).then((bm) => {
+            if (this.dead) { bm.close(); return; }
+            this.bmp.set(i, bm); this.onFrame && this.onFrame(i, false);
+          }).catch(() => {}).finally(() => { this.decoding.delete(i); this.decodeAround(); });
+          if (this.decoding.size >= cap) break;
         }
       }
     }
-    async decode(i) {
-      this.decActive++; this.decoding.add(i);
-      try {
-        let bm;
-        if (canBitmap) bm = await createImageBitmap(this.blobs[i]);
-        else {
-          bm = new Image(); bm.src = URL.createObjectURL(this.blobs[i]);
-          await bm.decode(); bm.close = () => URL.revokeObjectURL(bm.src);
-        }
-        if (this.dead) { bm.close && bm.close(); return; }
-        this.bmp.set(i, bm);
-        this.onFrame && this.onFrame(i);
-      } catch (e) { /* fotograma ilegible: se usa el vecino */ }
-      finally { this.decActive--; this.decoding.delete(i); this.decodeAround(); }
+    destroy() {
+      this.dead = true; this.pool.destroy();
+      for (const bm of this.bmp.values()) bm.close(); this.bmp.clear();
+      this.aBmp.forEach((b) => b && b.close());
     }
-    nearest(i, radius = 40) {
-      if (this.bmp.has(i)) return i;
-      for (let d = 1; d <= radius; d++) {
-        const a = i - d * this.dir, b = i + d * this.dir;
-        if (this.bmp.has(a)) return a;
-        if (this.bmp.has(b)) return b;
-      }
-      return -1;
-    }
-    destroy() { this.dead = true; for (const bm of this.bmp.values()) bm.close && bm.close(); this.bmp.clear(); }
   }
 
   /* ------------------------------------------------------------------ */
   /* Canvas                                                               */
   /* ------------------------------------------------------------------ */
   const canvas = qs('#film');
-  const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
-  let seq = null, fit = { x: 0, y: 0, w: 1, h: 1 }, drawn = -1, drawnBlend = -1, shown = false, cvw = 0, cvh = 0;
+  const ctx = canvas.getContext('2d', { alpha: false });
+  let seq = null, fit = { x: 0, y: 0, w: 1, h: 1 }, drawnKey = '', shown = false, cvw = 0, cvh = 0;
 
   function resize() {
     const cfg = seq.cfg;
     const cw = canvas.clientWidth || innerWidth, ch = canvas.clientHeight || innerHeight;
     cvw = canvas.clientWidth; cvh = canvas.clientHeight;
-    // resolución útil: no tiene sentido superar ~1.25x la del fotograma
+    // nunca más píxeles que los del fotograma: menos relleno por cuadro = más FPS
     const dpr = Math.min(devicePixelRatio || 1, 2);
-    const scaleCap = Math.max(cfg.w / cw, cfg.h / ch) * 1.25;
-    const k = Math.max(1, Math.min(dpr, scaleCap));
+    const k = Math.max(1, Math.min(dpr, Math.max(cfg.w / cw, cfg.h / ch)));
     canvas.width = Math.round(cw * k); canvas.height = Math.round(ch * k);
     const s = Math.max(canvas.width / cfg.w, canvas.height / cfg.h);
     fit = { w: cfg.w * s, h: cfg.h * s, x: (canvas.width - cfg.w * s) / 2, y: (canvas.height - cfg.h * s) / 2 };
-    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
-    drawn = -1; render(true);
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'medium';
+    drawnKey = ''; render(true);
   }
 
+  function drawSrc(src, alpha) {
+    ctx.globalAlpha = alpha;
+    if (src.bm) ctx.drawImage(src.bm, src.sx, src.sy, seq.cfg.pw, seq.cfg.ph, fit.x, fit.y, fit.w, fit.h);
+    else ctx.drawImage(src, fit.x, fit.y, fit.w, fit.h);
+  }
   function paint(f) {
-    const i0 = Math.floor(f), frac = f - i0;
-    const a = seq.nearest(i0);
-    if (a < 0) return false;
-    const blend = a === i0 && frac > 0.04 && seq.bmp.has(i0 + 1) ? Math.round(frac * 16) / 16 : 0;
-    if (a === drawn && blend === drawnBlend) return true;
-    ctx.globalAlpha = 1;
-    ctx.drawImage(seq.bmp.get(a), fit.x, fit.y, fit.w, fit.h);
-    if (blend > 0) { ctx.globalAlpha = blend; ctx.drawImage(seq.bmp.get(i0 + 1), fit.x, fit.y, fit.w, fit.h); ctx.globalAlpha = 1; }
-    drawn = a; drawnBlend = blend;
+    const i0 = Math.floor(f), i1 = Math.min(N - 1, i0 + 1), frac = f - i0;
+    const blend = frac > 0.03 ? Math.round(frac * 12) / 12 : 0;
+    let a = seq.bmp.get(i0), b = blend ? seq.bmp.get(i1) : null, tier = 'f';
+    if (!a || (blend && !b)) {
+      // capa de previsualización: siempre continua, sin saltos
+      const pa = seq.proxy(i0), pb = blend ? seq.proxy(i1) : null;
+      if (pa && (!blend || pb)) { a = pa; b = pb; tier = 'p'; }
+      else if (!a) {
+        for (let d = 1; d < 10 && !a; d++) a = seq.bmp.get(i0 - d * seq.dir) || seq.bmp.get(i0 + d * seq.dir);
+        if (!a) return; b = null; tier = 'n';
+      } else b = null;
+    }
+    const key = tier + i0 + ':' + (b ? blend : 0);
+    if (key === drawnKey) return;
+    drawSrc(a, 1);
+    if (b) drawSrc(b, blend);
+    ctx.globalAlpha = 1; drawnKey = key;
+    if (DBG) { DBG.paints++; DBG[tier]++; if (DBG.last >= 0) DBG.maxJump = Math.max(DBG.maxJump, Math.abs(i0 - DBG.last)); DBG.last = i0; }
     if (!shown) { shown = true; canvas.classList.add('is-on'); }
-    return true;
   }
 
   /* ------------------------------------------------------------------ */
@@ -177,14 +205,22 @@
   const status = (f) => f < 150 ? 'SELLADO' : f < 176 ? 'INICIANDO' : f < 214 ? 'APERTURA' : f < 262 ? 'DESPLIEGUE' : f < 334 ? 'RECONFIGURACIÓN' : f < 455 ? 'ÓRBITA · SERVICIO 0' + (1 + Math.min(5, Math.floor((f - 334) / 20))) : f < 515 ? 'ENSAMBLAJE' : 'EN LÍNEA';
   let lastStatus = '';
 
+  let lastT = 0, jumpTo = false;
   function render(force) {
-    const ease = reduced ? 1 : (seq.key === 'm' ? 0.22 : 0.14);
+    const t0 = DBG ? performance.now() : 0;
+    const now = performance.now(), dt = Math.min(64, lastT ? now - lastT : 16); lastT = now;
+    const tau = reduced ? 1 : (seq.key === 'm' ? 70 : 95);            // ms: constante de inercia
     const diff = target - head;
-    head = Math.abs(diff) > 90 ? target : head + diff * ease; // saltos largos (menú) sin barrido
-    if (Math.abs(target - head) < 0.01) head = target;
-    const f = clamp(head, 0, N - 1);
-    const fi = Math.round(f);
-    seq.setHead(fi, diff > 0.01 ? 1 : diff < -0.01 ? -1 : 0);
+    // salto directo sólo al usar el menú; el scroll siempre recorre los fotogramas intermedios
+    if (jumpTo) { head = target; jumpTo = false; }
+    else {
+      // velocidad máxima por cuadro: en equipos lentos se reparte el recorrido en vez de saltar
+      const step = diff * (1 - Math.exp(-dt / tau)), maxStep = 6 * (dt / 16.7);
+      head += clamp(step, -maxStep, maxStep);
+    }
+    if (Math.abs(target - head) < 0.02) head = target;
+    const f = clamp(head, 0, N - 1), fi = Math.round(f);
+    seq.setHead(fi, diff > 0.02 ? 1 : diff < -0.02 ? -1 : 0);
     paint(f);
     if (fi !== lastHead || force) {
       lastHead = fi;
@@ -192,7 +228,9 @@
       railFill.style.transform = `scaleY(${(f / (N - 1)).toFixed(4)})`;
       const st = status(fi); if (st !== lastStatus) { hudStatus.textContent = st; lastStatus = st; }
     }
-    raf = (Math.abs(target - head) > 0.005) ? requestAnimationFrame(() => render()) : 0;
+    if (DBG) { const c = performance.now() - t0; DBG.js = (DBG.js || 0) + c; DBG.calls = (DBG.calls || 0) + 1; DBG.jsMax = Math.max(DBG.jsMax || 0, c); }
+    if (head !== target) raf = requestAnimationFrame(() => render());
+    else { raf = 0; lastT = 0; }
   }
   const kick = () => { if (!raf) raf = requestAnimationFrame(() => render()); };
 
@@ -211,12 +249,13 @@
     }
     seq.cur = Math.round(head);
     seq.onProgress = (s) => {
-      const p = (s.coarse.length - s.coarseLeft) / s.coarse.length;
+      const p = s.aLoaded / ATLASES;
       if (!started) { lpct.textContent = Math.round(p * 100); lbar.style.transform = `scaleX(${p})`; }
-      if (!started && s.coarseLeft <= 0) begin();
+      if (!started && s.aLoaded >= ATLASES) begin();
     };
-    seq.onFrame = (i) => { if (Math.abs(i - head) < 2.5 || drawn < 0) { drawn = -1; kick(); } };
+    seq.onFrame = (i, isProxy) => { if ((isProxy ? Math.abs(i - head) < PER : Math.abs(i - head) < 2.5) || !shown) { drawnKey = ''; kick(); } };
     resize();
+    seq.loadAtlases();
     seq.pump();
   }
 
@@ -246,7 +285,7 @@
       qsa('.beat', sec).forEach((b) => {
         const tin = +b.dataset.in, tout = +b.dataset.out;
         const kids = b.classList.contains('stage__kicker') ? [b] : Array.from(b.children);
-        const blur = !reduced && seq.key === 'd';
+        const blur = false;
         if (!b.classList.contains('stage__kicker')) gsap.set(b, { autoAlpha: 1 });
         gsap.set(kids, Object.assign({ autoAlpha: 0, y: 46 }, blur ? { filter: 'blur(12px)' } : {}));
         const d = 0.055;
@@ -273,7 +312,7 @@
       const sec = document.getElementById(a.dataset.jump); if (!sec) return;
       e.preventDefault();
       const extra = a.dataset.jump === 'contacto' ? (sec.offsetHeight - innerHeight) * 0.62 : a.dataset.jump === 'apertura' ? 0 : innerHeight * 0.12;
-      window.scrollTo({ top: sec.offsetTop + extra, behavior: 'auto' });
+      jumpTo = true; window.scrollTo({ top: sec.offsetTop + extra, behavior: 'auto' });
     }));
   }
   const navLinks = qsa('.nav a');
@@ -301,7 +340,7 @@
     startSeq(pickSet());
     setupScroll();
     // red de seguridad: si la red es muy lenta, mostrar igual a los 9 s
-    setTimeout(() => { if (!started && seq.count > 0) begin(); }, 9000);
+    setTimeout(() => { if (!started) begin(); }, 9000);
     let rt = 0, lw = innerWidth, lh = innerHeight;
     addEventListener('resize', () => {
       clearTimeout(rt);
@@ -314,7 +353,7 @@
         if (big) { lw = innerWidth; lh = innerHeight; ScrollTrigger.refresh(); }
       }, 180);
     });
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) { drawn = -1; kick(); } });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { drawnKey = ''; kick(); } });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

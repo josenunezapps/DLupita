@@ -25,17 +25,19 @@ que avanza y retrocede con el scroll.
 Al subir con el scroll todo se reproduce en reversa de forma exacta, porque cada posición
 del scroll corresponde a un fotograma concreto.
 
-### Rendimiento
+### Rendimiento y fluidez
 
-- **Precarga progresiva**: primero se baja una pasada gruesa (1 de cada 12 fotogramas, ~45 imágenes)
-  para que toda la película sea navegable en segundos; después se completa priorizando lo que está
-  cerca del cabezal y en la dirección del scroll.
-- **Memoria acotada**: sólo se decodifican (`ImageBitmap`) ~20 fotogramas alrededor del cabezal;
-  el resto queda comprimido (~25 MB por set). Apto para Android de gama media.
-- **Set por pantalla**: el celular en vertical baja sólo el set `m`; escritorio sólo el `d`.
-- **Sin pantallas negras**: el primer fotograma se precarga como póster CSS antes del JavaScript.
-- **Ahorro de datos** (`Save-Data`) reduce las descargas simultáneas. `prefers-reduced-motion`
-  desactiva inercia y animaciones de texto.
+- **Capa de previsualización**: los 540 fotogramas también están en 15 hojas pequeñas (`seq/dp`, `seq/mp`, ~1 MB por set).
+  Se cargan primero, así la película es continua desde el primer segundo y nunca se congela esperando una imagen.
+- **Decodificación en Web Workers** (`js/decoder.js`): las imágenes nítidas se decodifican fuera del hilo principal,
+  alrededor del cabezal y hacia donde va el scroll. El scroll y los textos no se traban.
+- **Inercia basada en tiempo** con velocidad máxima por cuadro: igual de suave a 60 o 120 Hz; en equipos lentos
+  recorre los fotogramas intermedios en vez de saltar.
+- **Fundido sub-fotograma** entre vecinos para que el movimiento lento no se vea escalonado.
+- Sin `backdrop-filter`, `mix-blend-mode` ni desenfoques animados sobre el canvas (se recalculaban en cada cuadro).
+- Canvas limitado a la resolución del fotograma (menos píxeles por cuadro).
+- Memoria acotada: ~40 fotogramas nítidos decodificados en escritorio, ~25 en celular.
+- `?debug` en la URL expone métricas en `window.__zx`.
 
 ## Publicar
 
