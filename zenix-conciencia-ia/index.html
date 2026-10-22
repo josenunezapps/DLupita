@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zenix AR — Desarrollo web, Android y automatización</title>
+<meta name="description" content="Zenix AR desarrolla páginas web, aplicaciones Android, extensiones y automatizaciones pensadas para transmitir confianza, simplificar procesos y resolver necesidades reales.">
+<meta name="theme-color" content="#f6f8fc">
+<meta property="og:title" content="Zenix AR — Desarrollo web, Android y automatización">
+<meta property="og:image" content="https://zenix.com.ar/assets/social/zenix-share.jpg?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f8fc;--surface:#ffffff;--ink:#0d1530;--ink-2:#3b4566;--muted:#6b7491;--line:#e3e8f3;
+  --cobalt:#2350ff;--cobalt-2:#5b7cff;--violet:#7a4dff;--soft:#eaf0ff;--shadow:0 20px 60px -24px rgba(22,40,110,.28);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit}
+img{max-width:100%;height:auto;display:block}
+.split>*,.hero .wrap>*,.grid4>*,.tiles>*,.services>*,.steps3>*,.flow>*{min-width:0}
+.wrap{width:min(1200px,100%);margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:500 12px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalt)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--cobalt);box-shadow:0 0 0 4px rgba(35,80,255,.14)}
+h1,h2,h3{letter-spacing:-.035em;line-height:1.05;margin:0}
+h2{font-size:clamp(30px,4.2vw,52px);font-weight:700}
+.lead{color:var(--ink-2);font-size:clamp(16px,1.4vw,19px);max-width:560px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:12px 22px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:15px;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.btn.primary{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+.btn:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:40;background:rgba(246,248,252,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{width:34px;height:34px}
+.brand b{display:block;font-size:17px;letter-spacing:-.02em}
+.brand small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.links{display:flex;gap:28px;font-size:14px;color:var(--ink-2)}
+.links a:hover{color:var(--cobalt)}
+.nav .btn{min-height:42px;padding:9px 18px;font-size:14px}
+@media(max-width:760px){.links{display:none}}
+
+/* hero */
+.hero{position:relative;padding:clamp(40px,7vw,90px) 0 clamp(40px,6vw,80px);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:70vw;height:70vw;max-width:900px;max-height:900px;background:radial-gradient(closest-side,rgba(91,124,255,.18),transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(20px,4vw,56px);align-items:center;position:relative}
+.hero h1{font-size:clamp(42px,6.4vw,82px);font-weight:800;margin:18px 0 22px}
+.hero h1 span{background:linear-gradient(100deg,var(--cobalt),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.mind{position:relative;aspect-ratio:1;width:100%;max-width:600px;justify-self:center}
+.mind canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer}
+.mind-tag{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.86);border:1px solid var(--line);box-shadow:var(--shadow);font:500 12px "JetBrains Mono",monospace;color:var(--ink-2);white-space:nowrap;backdrop-filter:blur(8px)}
+.mind-tag i{width:8px;height:8px;border-radius:50%;background:#18c26a;box-shadow:0 0 0 4px rgba(24,194,106,.18);animation:blink 1.6s infinite}
+.mind-thought{position:absolute;top:6%;left:50%;transform:translateX(-50%);max-width:88%;text-align:center;font:500 12px/1.5 "JetBrains Mono",monospace;color:var(--muted);transition:opacity .6s;pointer-events:none}
+@keyframes blink{50%{opacity:.35}}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-size:13px;color:var(--muted)}
+.chip b{color:var(--cobalt)}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.mind{max-width:460px;order:-1;margin-top:-10px}}
+
+/* sections */
+section{padding:clamp(60px,9vw,110px) 0}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);align-items:center}
+@media(max-width:900px){.split{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 1px 0 rgba(13,21,48,.02)}
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:34px}
+.grid4 .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--cobalt);font-size:20px;margin-bottom:14px}
+.grid4 h3{font-size:18px;margin-bottom:8px;letter-spacing:-.02em}
+.grid4 p{margin:0;color:var(--ink-2);font-size:15px}
+@media(max-width:640px){.grid4{grid-template-columns:1fr}}
+.illus{border-radius:var(--radius);background:var(--surface);border:1px solid var(--line);padding:18px;box-shadow:var(--shadow)}
+.illus figcaption{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+.quote{margin-top:40px;padding:30px;border-radius:var(--radius);background:linear-gradient(120deg,var(--cobalt),var(--violet));color:#fff;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.quote strong{font-size:clamp(18px,2vw,23px);line-height:1.4;max-width:720px;letter-spacing:-.02em}
+.quote a{background:#fff;color:var(--cobalt);border:0}
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.steps3 small{font:500 12px "JetBrains Mono",monospace;color:var(--cobalt);letter-spacing:.08em}
+.steps3 h3{font-size:19px;margin:10px 0 6px}
+.steps3 p{margin:0;color:var(--ink-2);font-size:15px}
+@media(max-width:760px){.steps3{grid-template-columns:1fr}}
+.dark{background:#0b1230;color:#eef2ff;border-radius:clamp(0px,3vw,36px);margin-inline:clamp(0px,2vw,24px)}
+.dark .lead{color:#b8c2e6}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.tile{display:block;border-radius:var(--radius);padding:24px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);transition:transform .25s,background .25s}
+.tile:hover{transform:translateY(-4px);background:rgba(255,255,255,.09)}
+.tile small{font:500 12px "JetBrains Mono",monospace;color:#8ea6ff;letter-spacing:.08em}
+.tile h3{font-size:21px;margin:12px 0 8px}
+.tile p{margin:0;color:#b8c2e6;font-size:15px}
+@media(max-width:900px){.tiles{grid-template-columns:1fr}}
+.services{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+.services a{display:flex;flex-direction:column;gap:8px;min-height:220px;transition:transform .25s,box-shadow .25s}
+.services a:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.services small{font:500 12px "JetBrains Mono",monospace;color:var(--cobalt);letter-spacing:.08em}
+.services h3{font-size:20px;margin-top:auto}
+.services p{margin:0;color:var(--ink-2);font-size:15px}
+@media(max-width:1000px){.services{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.services{grid-template-columns:1fr}.services a{min-height:0}}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:10px}
+.flow div{padding:22px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.flow small{font:500 12px "JetBrains Mono",monospace;color:var(--cobalt)}
+.flow b{display:block;font-size:18px;margin-top:6px}
+@media(max-width:640px){.flow{grid-template-columns:repeat(2,1fr)}}
+.closing{text-align:center}
+.closing h3{font-size:clamp(26px,3.4vw,42px);max-width:820px;margin:0 auto 16px}
+.closing p{margin:0 auto 28px}
+footer{border-top:1px solid var(--line);padding:40px 0 110px}
+footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;font-size:14px;color:var(--ink-2)}
+footer h4{margin:0 0 10px;font-size:13px;color:var(--ink);text-transform:uppercase;letter-spacing:.08em}
+footer nav{display:flex;flex-direction:column;gap:6px}
+footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:18px;margin-top:10px}
+@media(max-width:640px){footer .wrap{grid-template-columns:1fr}}
+
+/* chat */
+.chat-fab{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:999px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);cursor:pointer;font-weight:600;font-size:14px}
+.chat-fab canvas{width:46px;height:46px;border-radius:50%;background:#0b1230}
+.chat{position:fixed;right:18px;bottom:18px;z-index:70;width:min(400px,calc(100vw - 24px));height:min(620px,calc(100dvh - 36px));display:flex;flex-direction:column;padding:0;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px -20px rgba(13,21,48,.45);overflow:hidden;transform-origin:bottom right;transition:transform .3s,opacity .3s}
+.chat[hidden]{display:flex!important;opacity:0;transform:scale(.9) translateY(10px);pointer-events:none;visibility:hidden}
+.chat-head{position:relative;background:#0b1230;color:#fff;padding:14px 14px 0;display:flex;flex-direction:column;align-items:center}
+.chat-head .row{width:100%;display:flex;justify-content:space-between;align-items:center}
+.chat-head .who b{display:block;font-size:15px}
+.chat-head .who small{font:400 11px "JetBrains Mono",monospace;color:#9fb0ee}
+.iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center;font-size:16px}
+.iconbtn[aria-pressed=false]{opacity:.5}
+.chat-head canvas{width:150px;height:150px;display:block;margin:-6px 0 -10px}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.msg{max-width:86%;padding:11px 14px;border-radius:18px;font-size:15px;line-height:1.5;white-space:pre-line;word-wrap:break-word}
+.msg.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px;align-self:flex-start}
+.msg.me{background:var(--cobalt);color:#fff;border-bottom-right-radius:6px;align-self:flex-end}
+.msg a{color:var(--cobalt);font-weight:600;text-decoration:underline}
+.msg.typing{color:var(--muted);font-style:italic}
+.quick{display:flex;gap:6px;overflow-x:auto;padding:8px 12px 0;background:#fff;scrollbar-width:none}
+.quick button{flex:none;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.chat form{display:flex;gap:8px;padding:12px;background:#fff}
+.chat input{flex:1;min-width:0;border:1px solid var(--line);border-radius:999px;padding:12px 16px;font-size:16px;background:var(--bg)}
+.chat form button{width:48px;height:48px;border-radius:50%;border:0;background:var(--cobalt);color:#fff;font-size:18px;cursor:pointer;flex:none}
+.voice-note{font-size:11px;color:var(--muted);text-align:center;padding:0 12px 10px;background:#fff;margin:0}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Zenix AR, inicio">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2350ff"/><stop offset="1" stop-color="#7a4dff"/></linearGradient></defs><path d="M20 2 35.6 11v18L20 38 4.4 29V11z" fill="url(#lg)"/><path d="M13 14h14l-14 12h14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><b>Zenix AR</b><small>Desarrollo de software</small></span>
+    </a>
+    <nav class="links" aria-label="Principal">
+      <a href="#inicio">Inicio</a>
+      <a href="https://zenix.com.ar/servicios.html">Servicios</a>
+      <a href="https://zenix.com.ar/sobre-mi.html">Equipo</a>
+    </nav>
+    <a class="btn primary" href="https://zenix.com.ar/contacto.html">Contacto</a>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Software con propósito</span>
+        <h1 id="h1">Ideas digitales <span>hechas para servir.</span></h1>
+        <p class="lead">Tu presencia digital también habla por tu negocio. Diseñamos webs, apps y herramientas que transmiten confianza, explican mejor lo que ofrecés y hacen más simple dar el siguiente paso.</p>
+        <div class="actions">
+          <a class="btn primary" href="https://zenix.com.ar/servicios.html">Ver qué podemos construir →</a>
+          <button class="btn" type="button" id="talk-hero">Hablá con la conciencia Zenix ◉</button>
+        </div>
+        <p class="chip"><b>●</b> Web · Android · Automatización</p>
+      </div>
+      <div class="mind" id="mind">
+        <canvas id="mind-canvas" role="img" aria-label="Conciencia artificial de Zenix: una esfera de puntos que se mueve como si pensara. Tocala para hablarle."></canvas>
+        <p class="mind-thought" id="thought" aria-live="off">procesando ideas…</p>
+        <div class="mind-tag"><i></i><span id="mind-state">Conciencia Zenix · pensando</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="eval">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">Antes del primer mensaje</span>
+        <h2 id="eval" style="margin:16px 0">Ya te están evaluando.</h2>
+        <p class="lead">Cuando alguien conoce tu negocio, muchas veces lo siguiente que hace es buscarte. Lo que encuentra —o no encuentra— empieza a construir una impresión antes de hablar con vos.</p>
+      </div>
+      <figure class="illus" style="margin:0">
+        <img src="https://zenix.com.ar/concepto-cobalto/assets/need-web.svg" alt="Presencia digital y confianza online" loading="lazy" width="560" height="380">
+        <figcaption>Tu presencia digital trabaja incluso cuando vos no estás</figcaption>
+      </figure>
+    </div>
+    <div class="wrap">
+      <div class="grid4">
+        <div class="card"><div class="ico">⌕</div><h3>Te buscan antes de contactarte</h3><p>Una persona puede decidir si confiar, seguir mirando o irse sin siquiera mandarte un mensaje.</p></div>
+        <div class="card"><div class="ico">◫</div><h3>Las redes no son tu lugar propio</h3><p>Sirven para atraer atención, pero el formato, el alcance y la forma de mostrar tu negocio no los controlás vos.</p></div>
+        <div class="card"><div class="ico">◇</div><h3>Tu propuesta necesita claridad</h3><p>Si alguien no entiende rápido qué hacés, para quién y por qué elegirte, esa oportunidad puede desaparecer.</p></div>
+        <div class="card"><div class="ico">◷</div><h3>Tu negocio no debería depender de que estés conectado</h3><p>Una buena web responde lo básico, muestra tu trabajo y orienta al visitante aunque en ese momento no puedas atenderlo.</p></div>
+      </div>
+      <div class="quote">
+        <strong>Una web no hace que tu negocio sea mejor. Hace que lo que ya hacés bien se entienda, se vea y se valore mejor.</strong>
+        <a class="btn" href="https://zenix.com.ar/servicios.html#web">Ver qué puede resolver una web →</a>
+      </div>
+      <div class="steps3">
+        <div class="card"><small>01 · FOCO</small><h3>Primero el problema</h3><p>La función aparece porque hace falta, no para llenar una lista.</p></div>
+        <div class="card"><small>02 · DISEÑO</small><h3>Identidad y claridad</h3><p>Una interfaz que se entiende, se siente propia y acompaña al producto.</p></div>
+        <div class="card"><small>03 · PRUEBA</small><h3>Uso real</h3><p>Probar, corregir y pulir también forma parte de construir.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" aria-labelledby="exp">
+    <div class="wrap split">
+      <div>
+        <h2 id="exp">Diseño, producto y tecnología en una sola experiencia.</h2>
+        <p class="lead" style="margin-top:18px">Diseñamos cada proyecto para que tu negocio se vea tan profesional como realmente es. Una buena presencia digital combina claridad, detalle y tecnología para transmitir confianza, explicar mejor lo que ofrecés y facilitar que una persona dé el siguiente paso.</p>
+      </div>
+      <figure class="illus" style="margin:0;background:#fff">
+        <img src="https://zenix.com.ar/concepto-cobalto/assets/visual-dashboard.svg" alt="Ilustración de dashboard y aplicación móvil" loading="lazy" width="560" height="420">
+      </figure>
+    </div>
+    <div class="wrap tiles">
+      <a class="tile" href="https://zenix.com.ar/servicios.html#android"><small>01 · ANDROID</small><h3>Aplicaciones Android</h3><p>Cuando tu idea necesita vivir en el teléfono y resolver algo de forma directa.</p></a>
+      <a class="tile" href="https://zenix.com.ar/servicios.html#extensiones"><small>02 · AUTOMATIZACIÓN</small><h3>Extensiones y flujos</h3><p>Cuando una tarea repetitiva puede convertirse en un proceso más rápido y simple.</p></a>
+      <a class="tile" href="https://zenix.com.ar/servicios.html#web"><small>03 · WEB</small><h3>Productos web</h3><p>Cuando necesitás un lugar propio para mostrar, explicar, vender o recibir consultas.</p></a>
+    </div>
+  </section>
+
+  <section aria-labelledby="build">
+    <div class="wrap">
+      <h2 id="build">Qué podemos construir con vos.</h2>
+      <p class="lead" style="margin-top:14px">Elegimos la herramienta según el problema: web, Android, navegador o mejora sobre algo que ya existe.</p>
+      <div class="services">
+        <a class="card" href="https://zenix.com.ar/servicios.html#android"><small>01 · ANDROID</small><h3>Aplicaciones Android</h3><p>Desde una primera versión funcional hasta una app lista para probar o publicar.</p></a>
+        <a class="card" href="https://zenix.com.ar/servicios.html#extensiones"><small>02 · NAVEGADORES</small><h3>Extensiones</h3><p>Funciones concretas y automatizaciones integradas al navegador.</p></a>
+        <a class="card" href="https://zenix.com.ar/servicios.html#web"><small>03 · WEB</small><h3>Páginas y aplicaciones web</h3><p>Sitios pensados para generar confianza, explicar mejor y facilitar el contacto.</p></a>
+        <a class="card" href="https://zenix.com.ar/servicios.html#mejoras"><small>04 · EVOLUCIÓN</small><h3>Mejoras sobre proyectos existentes</h3><p>Correcciones, rediseños, nuevas funciones y preparación para publicar.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="work" style="padding-top:0">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">Forma de trabajo</span>
+        <h2 id="work" style="margin:16px 0">Menos ruido. Más utilidad.</h2>
+        <p class="lead">Antes de pensar en tecnología, buscamos entender qué hay que resolver y cuál es el camino más simple para hacerlo bien.</p>
+        <a class="btn" style="margin-top:22px" href="https://zenix.com.ar/sobre-mi.html">Ver cómo trabajamos →</a>
+      </div>
+      <div class="flow">
+        <div><small>01</small><b>Entender</b></div>
+        <div><small>02</small><b>Diseñar</b></div>
+        <div><small>03</small><b>Construir</b></div>
+        <div><small>04</small><b>Probar</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" aria-labelledby="close" style="padding-top:0">
+    <div class="wrap">
+      <h3 id="close">Tu negocio ya existe. La pregunta es cómo se ve cuando alguien lo busca.</h3>
+      <p class="lead">Una presencia digital profesional no reemplaza lo que hacés bien: lo muestra mejor. Esa es la diferencia entre simplemente estar en internet y usar internet a favor de tu negocio.</p>
+      <a class="btn primary" href="https://wa.me/5492901471353" target="_blank" rel="noopener">Hablemos por WhatsApp ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b style="color:var(--ink)">Zenix AR</b><br>Desarrollo de software<br>Software, extensiones y herramientas digitales.</div>
+    <div><h4>Explorar</h4><nav><a href="https://zenix.com.ar/servicios.html">Servicios</a><a href="https://zenix.com.ar/sobre-mi.html">Equipo</a><a href="https://zenix.com.ar/contacto.html">Contacto</a></nav></div>
+    <div><h4>Enfoque</h4>Claridad · Confianza · Utilidad · Producto real</div>
+    <div class="copy">© 2026 Zenix AR — Software y experiencias digitales</div>
+  </div>
+</footer>
+
+<!-- Chat -->
+<button class="chat-fab" id="chat-fab" type="button" aria-controls="chat" aria-expanded="false">
+  <canvas id="fab-canvas" aria-hidden="true"></canvas> Hablá con Zenix
+</button>
+<section class="chat" id="chat" hidden aria-label="Chat con la conciencia Zenix">
+  <div class="chat-head">
+    <div class="row">
+      <div class="who"><b>Conciencia Zenix</b><small id="chat-state">en línea · pensando</small></div>
+      <div style="display:flex;gap:8px">
+        <button class="iconbtn" id="voice-toggle" type="button" aria-pressed="true" title="Voz activada" aria-label="Activar o silenciar la voz">🔊</button>
+        <button class="iconbtn" id="chat-close" type="button" aria-label="Cerrar chat">✕</button>
+      </div>
+    </div>
+    <canvas id="chat-canvas" aria-hidden="true"></canvas>
+  </div>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+  <div class="quick" id="quick">
+    <button type="button">¿Qué hacen?</button>
+    <button type="button">Quiero una página web</button>
+    <button type="button">¿Hacen apps Android?</button>
+    <button type="button">¿Cuánto sale?</button>
+    <button type="button">¿Cómo trabajan?</button>
+    <button type="button">Contacto</button>
+  </div>
+  <form id="chat-form" autocomplete="off">
+    <input id="chat-input" type="text" placeholder="Escribile a la conciencia…" aria-label="Tu mensaje" maxlength="400">
+    <button type="submit" aria-label="Enviar">➤</button>
+  </form>
+  <p class="voice-note" id="voice-note">Las respuestas se escuchan en voz alta.</p>
+</section>
+
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarse=matchMedia('(pointer: coarse)').matches;
+
+/* ---------- Estado compartido de la conciencia ---------- */
+const Mind={mode:'idle',energy:0,voice:0,think:0,attX:0,attY:0};
+// mode: idle (piensa sola) | thinking (procesando un mensaje) | speaking (habla)
+
+/* ---------- Esfera de puntos ---------- */
+function makeOrb(canvas,opts){
+  const ctx=canvas.getContext('2d');
+  const N=opts.points,pts=new Float32Array(N*3),seed=new Float32Array(N);
+  const g=Math.PI*(3-Math.sqrt(5));
+  for(let i=0;i<N;i++){const y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=g*i;pts[i*3]=Math.cos(th)*r;pts[i*3+1]=y;pts[i*3+2]=Math.sin(th)*r;seed[i]=Math.random();}
+  const proj=new Float32Array(N*4);
+  const links=[];// índices de una red de neuronas (subconjunto)
+  const hubs=[];for(let i=0;i<N;i+=opts.hubStep)hubs.push(i);
+  for(const a of hubs){let best=[];for(const b of hubs){if(a>=b)continue;const dx=pts[a*3]-pts[b*3],dy=pts[a*3+1]-pts[b*3+1],dz=pts[a*3+2]-pts[b*3+2],d=dx*dx+dy*dy+dz*dz;if(d<opts.linkDist)best.push(b);}best.slice(0,3).forEach(b=>links.push([a,b]));}
+  const sparks=[];let W=1,H=1,dpr=1;
+  function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,coarse?1.5:2);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
+  new ResizeObserver(resize).observe(canvas);resize();
+  function draw(t){
+    const cx=W/2,cy=H/2,R=Math.min(W,H)*opts.scale*(1+Mind.voice*.08+Mind.think*.03);
+    ctx.clearRect(0,0,W,H);
+    if(opts.bg){ctx.fillStyle=opts.bg;ctx.fillRect(0,0,W,H);}
+    // halo
+    const halo=ctx.createRadialGradient(cx,cy,R*.2,cx,cy,R*1.55);
+    halo.addColorStop(0,`rgba(${opts.glow},${.16+Mind.voice*.22+Mind.think*.08})`);halo.addColorStop(1,`rgba(${opts.glow},0)`);
+    ctx.fillStyle=halo;ctx.fillRect(0,0,W,H);
+    const speed=1+Mind.think*1.8+Mind.voice*1.2;
+    const ry=t*.00018*speed+Mind.attX*.5,rx=Math.sin(t*.00011)*.35+Mind.attY*.4;
+    const cyr=Math.cos(ry),syr=Math.sin(ry),cxr=Math.cos(rx),sxr=Math.sin(rx);
+    const tt=t*.001;
+    const amp=.07+Mind.think*.1+Mind.voice*.16;
+    for(let i=0;i<N;i++){
+      let x=pts[i*3],y=pts[i*3+1],z=pts[i*3+2];
+      // campo de "pensamiento": ondas que recorren la superficie
+      let d=Math.sin(x*3.1+tt*1.3)*Math.sin(y*2.7-tt*1.1)*.6+Math.sin(z*4.3+x*1.7+tt*1.9)*.4;
+      d+=Math.sin((y+tt*.6)*9)*.25*Mind.voice+Math.sin(seed[i]*40+tt*6)*.12*Mind.think;
+      const s=1+d*amp;x*=s;y*=s;z*=s;
+      const X=x*cyr+z*syr,Z0=-x*syr+z*cyr,Y=y*cxr-Z0*sxr,Z=y*sxr+Z0*cxr;
+      const p=3.2/(3.2-Z);
+      proj[i*4]=cx+X*R*p;proj[i*4+1]=cy-Y*R*p;proj[i*4+2]=Z;proj[i*4+3]=d;
+    }
+    // conexiones neuronales
+    ctx.lineWidth=opts.line;
+    for(const [a,b] of links){
+      const za=proj[a*4+2],zb=proj[b*4+2];if(za+zb<-.6)continue;
+      const al=(.05+(za+zb+2)*.05)*(1+Mind.think+Mind.voice);
+      ctx.strokeStyle=`rgba(${opts.lineRGB},${Math.min(al,.45)})`;
+      ctx.beginPath();ctx.moveTo(proj[a*4],proj[a*4+1]);ctx.lineTo(proj[b*4],proj[b*4+1]);ctx.stroke();
+    }
+    // chispas: impulsos que viajan por la red (sinapsis)
+    const rate=opts.sparkRate*(1+Mind.think*5+Mind.voice*4);
+    if(Math.random()<rate&&links.length)sparks.push({l:links[(Math.random()*links.length)|0],p:0,v:.015+Math.random()*.03});
+    for(let k=sparks.length-1;k>=0;k--){
+      const s=sparks[k];s.p+=s.v*speed;if(s.p>=1){sparks.splice(k,1);continue;}
+      const [a,b]=s.l,x=proj[a*4]+(proj[b*4]-proj[a*4])*s.p,y=proj[a*4+1]+(proj[b*4+1]-proj[a*4+1])*s.p;
+      ctx.fillStyle=`rgba(${opts.sparkRGB},.95)`;ctx.beginPath();ctx.arc(x,y,opts.dot*2.1,0,6.283);ctx.fill();
+      ctx.fillStyle=`rgba(${opts.sparkRGB},.18)`;ctx.beginPath();ctx.arc(x,y,opts.dot*6,0,6.283);ctx.fill();
+    }
+    // puntos
+    for(let i=0;i<N;i++){
+      const z=proj[i*4+2],depth=(z+1.2)/2.4,d=proj[i*4+3];
+      const flick=.55+.45*Math.sin(seed[i]*30+tt*(2+Mind.think*6));
+      const a=Math.max(.06,depth*.9)*(.6+.4*flick);
+      const hot=Math.max(0,d)*(Mind.voice+Mind.think*.6);
+      const r=opts.dot*(.55+depth*.85+hot*.9);
+      ctx.fillStyle=hot>.35?`rgba(${opts.sparkRGB},${a})`:(seed[i]>.82?`rgba(${opts.accentRGB},${a})`:`rgba(${opts.dotRGB},${a})`);
+      ctx.beginPath();ctx.arc(proj[i*4],proj[i*4+1],r,0,6.283);ctx.fill();
+    }
+    // núcleo
+    const core=ctx.createRadialGradient(cx,cy,0,cx,cy,R*.42);
+    core.addColorStop(0,`rgba(${opts.sparkRGB},${.22+Mind.voice*.5+Mind.think*.18})`);core.addColorStop(1,`rgba(${opts.sparkRGB},0)`);
+    ctx.fillStyle=core;ctx.beginPath();ctx.arc(cx,cy,R*.42,0,6.283);ctx.fill();
+  }
+  return{draw,canvas};
+}
+
+const light={dotRGB:'28,52,170',accentRGB:'122,77,255',lineRGB:'35,80,255',sparkRGB:'40,110,255',glow:'91,124,255'};
+const dark={dotRGB:'190,205,255',accentRGB:'170,140,255',lineRGB:'140,165,255',sparkRGB:'120,220,255',glow:'91,124,255',bg:'#0b1230'};
+const orbs=[
+  makeOrb($('#mind-canvas'),{...light,points:coarse?850:1300,hubStep:7,linkDist:.09,scale:.36,dot:1.35,line:.7,sparkRate:.35}),
+  makeOrb($('#chat-canvas'),{...dark,bg:null,points:520,hubStep:6,linkDist:.12,scale:.33,dot:1,line:.6,sparkRate:.3}),
+  makeOrb($('#fab-canvas'),{...dark,points:220,hubStep:5,linkDist:.18,scale:.34,dot:.75,line:.5,sparkRate:.2})
+];
+
+/* Atención: la conciencia mira hacia el puntero */
+let tx=0,ty=0;
+addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5);ty=(e.clientY/innerHeight-.5);},{passive:true});
+
+/* Pensamientos que pasan por su mente */
+const thoughts=['procesando ideas…','conectando web · android · automatización','¿qué necesita tu negocio?','buscando el camino más simple','claridad → confianza → utilidad','imaginando tu próxima app','escuchando…','entender · diseñar · construir · probar'];
+let ti=0;const thoughtEl=$('#thought');
+setInterval(()=>{if(Mind.mode!=='idle')return;thoughtEl.style.opacity=0;setTimeout(()=>{ti=(ti+1)%thoughts.length;thoughtEl.textContent=thoughts[ti];thoughtEl.style.opacity=1;},600);},3800);
+
+let visible=true;document.addEventListener('visibilitychange',()=>visible=!document.hidden);
+let last=0,syl=0;
+function loop(t){
+  requestAnimationFrame(loop);
+  if(!visible)return;
+  const dt=Math.min(50,t-(last||t));last=t;
+  Mind.attX+=(tx-Mind.attX)*.04;Mind.attY+=(ty-Mind.attY)*.04;
+  // la voz: envolvente tipo sílabas mientras habla
+  if(Mind.mode==='speaking'){syl-=dt;if(syl<=0){Mind.energy=.55+Math.random()*.45;syl=90+Math.random()*140;}}
+  else Mind.energy=0;
+  Mind.energy*=.93;
+  Mind.voice+=((Mind.mode==='speaking'?Mind.energy:0)-Mind.voice)*.18;
+  // en reposo también "piensa": pulsos lentos
+  const idleThink=.15+.15*Math.sin(t*.0007)+.1*Math.max(0,Math.sin(t*.0023));
+  const targetThink=Mind.mode==='thinking'?1:Mind.mode==='speaking'?.35:idleThink;
+  Mind.think+=(targetThink-Mind.think)*.05;
+  const tt=reduce?t*.25:t;
+  orbs[0].draw(tt);
+  if(!chat.hidden)orbs[1].draw(tt);else orbs[2].draw(tt);
+}
+
+/* ---------- Voz ---------- */
+const synth='speechSynthesis' in window?window.speechSynthesis:null;
+let voiceOn=!!synth,voice=null;
+function pickVoice(){
+  if(!synth)return;const vs=synth.getVoices();if(!vs.length)return;
+  const pref=['es-AR','es-419','es-US','es-MX','es-ES','es'];
+  for(const p of pref){const m=vs.filter(v=>v.lang&&v.lang.replace('_','-').toLowerCase().startsWith(p.toLowerCase()));if(m.length){voice=m.find(v=>/google|natural|neural|online/i.test(v.name))||m[0];return;}}
+}
+if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
+else{$('#voice-note').textContent='Tu navegador no permite voz; las respuestas se muestran como texto.';$('#voice-toggle').hidden=true;}
+
+function setMode(m){
+  Mind.mode=m;
+  const label={idle:'pensando',thinking:'procesando tu mensaje…',speaking:'hablando'}[m];
+  $('#mind-state').textContent='Conciencia Zenix · '+label;
+  $('#chat-state').textContent='en línea · '+label;
+  if(m!=='idle')thoughtEl.style.opacity=0;else thoughtEl.style.opacity=1;
+}
+function speak(text){
+  if(!synth||!voiceOn){setMode('idle');return;}
+  synth.cancel();
+  const clean=text.replace(/https?:\/\/\S+/g,'').replace(/wa\.me\/\d+/g,'').replace(/[•·→↗]/g,',').replace(/\s+/g,' ').trim();
+  const parts=clean.match(/[^.!?¿¡]+[.!?]*|[¿¡][^?!]+[?!]/g)||[clean];
+  let pending=parts.length;
+  setMode('speaking');
+  parts.forEach(p=>{
+    const u=new SpeechSynthesisUtterance(p.trim());
+    u.lang=voice?voice.lang:'es-AR';if(voice)u.voice=voice;u.rate=1.02;u.pitch=1;
+    u.onboundary=()=>{Mind.energy=1;};
+    const done=()=>{if(--pending<=0)setMode('idle');};
+    u.onend=done;u.onerror=done;
+    synth.speak(u);
+  });
+}
+function stopVoice(){if(synth)synth.cancel();if(Mind.mode==='speaking')setMode('idle');}
+
+/* ---------- Cerebro del chat (respuestas locales, sin API) ---------- */
+const WA='https://wa.me/5492901471353';
+const intents=[
+  {k:['hola','buenas','buen dia','buenos dias','buenas tardes','buenas noches','hey','que tal'],r:()=>'¡Hola! Soy la conciencia de Zenix. Estoy acá pensando todo el tiempo en cómo hacer que los negocios se vean y funcionen mejor en internet. ¿Qué te gustaría construir?'},
+  {k:['gracias','genial','buenisimo','perfecto','excelente','joya'],r:()=>'¡Un placer! Si querés avanzar, escribinos por WhatsApp y lo charlamos con tranquilidad: '+WA},
+  {k:['precio','cuanto','cuesta','sale','costo','presupuesto','valor','cobran','tarifa'],r:()=>'Depende de lo que haga falta resolver: no es lo mismo una página de presentación que una app con panel de gestión. Lo primero es entender tu necesidad y después te pasamos un presupuesto claro, sin sorpresas. Escribinos por WhatsApp y te respondemos: '+WA},
+  {k:['tiempo','tarda','demora','cuando','plazo','rapido','dias','semanas'],r:()=>'Los tiempos dependen del alcance. Una web de presentación puede estar lista en pocos días; una app o un sistema lleva más, porque también lo probamos y lo pulimos. Contanos tu idea y te damos un plazo realista.'},
+  {k:['android','app','aplicacion','celular','movil','telefono','play store'],r:()=>'¡Sí! Hacemos aplicaciones Android: desde una primera versión funcional hasta una app lista para probar o publicar. Ideal cuando tu idea necesita vivir en el teléfono y resolver algo de forma directa. ¿Qué te gustaría que haga tu app?'},
+  {k:['extension','navegador','chrome','automatiz','flujo','repetitiv','bot'],r:()=>'Hacemos extensiones de navegador y automatizaciones: cuando una tarea repetitiva puede convertirse en un proceso más rápido y simple. Contame qué tarea te gustaría dejar de hacer a mano.'},
+  {k:['web','pagina','sitio','landing','tienda','ecommerce','online','internet'],r:()=>'Diseñamos páginas y aplicaciones web pensadas para generar confianza, explicar mejor lo que ofrecés y facilitar el contacto. Tu web trabaja incluso cuando vos no estás: responde lo básico, muestra tu trabajo y orienta al visitante. ¿Tenés un negocio en marcha o es un proyecto nuevo?'},
+  {k:['mejora','rediseño','redisen','arreglar','corregir','ya tengo','existente','actualizar'],r:()=>'También trabajamos sobre proyectos que ya existen: correcciones, rediseños, nuevas funciones y preparación para publicar. Pasanos lo que tenés y te decimos cómo mejorarlo.'},
+  {k:['como trabajan','proceso','metodo','forma de trabajo','pasos','etapas'],r:()=>'Trabajamos en cuatro pasos: entender, diseñar, construir y probar. Antes de pensar en tecnología, buscamos entender qué hay que resolver y cuál es el camino más simple para hacerlo bien. Menos ruido, más utilidad.'},
+  {k:['que hacen','servicios','que ofrecen','a que se dedican','quienes son','zenix'],r:()=>'Zenix AR desarrolla software con propósito: páginas y aplicaciones web, apps Android, extensiones de navegador y automatizaciones, y mejoras sobre proyectos existentes. Elegimos la herramienta según el problema. ¿Qué necesitás resolver?'},
+  {k:['contacto','whatsapp','telefono','hablar','comunicar','escribir','mail','correo'],r:()=>'Podés hablar directamente con el equipo por WhatsApp: '+WA+'. Contanos tu idea y te respondemos lo antes posible.'},
+  {k:['quien sos','que sos','sos una ia','sos real','conciencia','pensas','piensas'],r:()=>'Soy la conciencia digital de Zenix: una esfera de ideas que nunca deja de moverse. No duermo, no me canso, y cada punto que ves es un pensamiento buscando cómo ayudarte. Pero las decisiones importantes las toma el equipo humano.'}
+];
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+function answer(q){
+  const n=norm(q);let best=null,score=0;
+  for(const it of intents){let s=0;for(const k of it.k)if(n.includes(norm(k)))s+=k.length;if(s>score){score=s;best=it;}}
+  return best?best.r():'Interesante… lo estoy pensando. Para darte una respuesta precisa sobre eso, lo mejor es que lo charles con el equipo de Zenix por WhatsApp: '+WA+'. Mientras tanto, puedo contarte sobre webs, apps Android, automatizaciones o cómo trabajamos.';
+}
+
+/* ---------- UI del chat ---------- */
+const chat=$('#chat'),msgs=$('#msgs'),input=$('#chat-input');
+function linkify(t){const esc=t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));return esc.replace(/(https?:\/\/[^\s]+?)([.,]?)(?=\s|$)/g,'<a href="$1" target="_blank" rel="noopener">WhatsApp ↗</a>$2');}
+function add(text,who){const d=document.createElement('div');d.className='msg '+who;if(who==='bot')d.innerHTML=linkify(text);else d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;}
+let greeted=false;
+function openChat(){
+  chat.hidden=false;$('#chat-fab').hidden=true;$('#chat-fab').setAttribute('aria-expanded','true');
+  if(!greeted){greeted=true;const g='¡Hola! Soy la conciencia de Zenix. Preguntame lo que quieras sobre webs, apps o automatizaciones y te respondo en voz alta.';add(g,'bot');speak(g);}
+  setTimeout(()=>input.focus({preventScroll:true}),250);
+}
+function closeChat(){chat.hidden=true;$('#chat-fab').hidden=false;$('#chat-fab').setAttribute('aria-expanded','false');stopVoice();}
+function send(text){
+  text=text.trim();if(!text)return;
+  add(text,'me');input.value='';stopVoice();
+  // desbloquea el audio en móviles dentro del gesto del usuario
+  if(synth&&voiceOn){try{synth.resume();}catch{}}
+  setMode('thinking');
+  const typing=add('pensando…','bot typing');
+  const delay=650+Math.min(900,text.length*12);
+  setTimeout(()=>{typing.remove();const r=answer(text);add(r,'bot');speak(r);},delay);
+}
+$('#chat-fab').addEventListener('click',openChat);
+$('#talk-hero').addEventListener('click',openChat);
+$('#mind-canvas').addEventListener('click',openChat);
+$('#chat-close').addEventListener('click',closeChat);
+$('#chat-form').addEventListener('submit',e=>{e.preventDefault();send(input.value);});
+$('#quick').addEventListener('click',e=>{const b=e.target.closest('button');if(b)send(b.textContent);});
+$('#voice-toggle').addEventListener('click',e=>{voiceOn=!voiceOn;e.currentTarget.setAttribute('aria-pressed',String(voiceOn));e.currentTarget.textContent=voiceOn?'🔊':'🔇';if(!voiceOn)stopVoice();});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!chat.hidden)closeChat();});
+
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
