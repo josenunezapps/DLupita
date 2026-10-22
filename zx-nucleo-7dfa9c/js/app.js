@@ -10,10 +10,10 @@
   'use strict';
   const N = 540;
   const SETS = {
-    d: { path: 'seq/d/', atlas: 'seq/dp/', w: 1600, h: 900, pw: 320, ph: 180, ahead: 30, behind: 12, conc: 6, workers: 3, keepAtlas: 15 },
-    m: { path: 'seq/m/', atlas: 'seq/mp/', w: 720, h: 1280, pw: 180, ph: 320, ahead: 18, behind: 7, conc: 4, workers: 2, keepAtlas: 2 },
+    d: { path: 'seq/d/', atlas: 'seq/dp/', w: 1600, h: 900, pw: 320, ph: 180, ahead: 44, behind: 16, conc: 8, workers: 3, keepAtlas: 15 },
+    m: { path: 'seq/m/', atlas: 'seq/mp/', w: 720, h: 1280, pw: 180, ph: 320, ahead: 30, behind: 10, conc: 8, workers: 3, keepAtlas: 2 },
   };
-  const PER = 36, ATLASES = 15, COLS = 6;
+  const PER = 36, ATLASES = 15, COLS = 6, START_SHARP = 120; // capítulo 1 nítido antes de mostrar
   const qs = (s, r = document) => r.querySelector(s);
   const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
@@ -28,7 +28,7 @@
   class DecoderPool {
     constructor(n) {
       this.jobs = new Map(); this.seq = 0; this.workers = [];
-      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js?v=2'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
+      try { for (let i = 0; i < n; i++) { const w = new Worker('js/decoder.js?v=3'); w.onmessage = (e) => this.done(e.data); w.busy = 0; this.workers.push(w); } }
       catch (e) { this.workers = []; }
     }
     get capacity() { return Math.max(2, this.workers.length); }
@@ -99,7 +99,7 @@
       let best = -1, bs = Infinity;
       for (let i = 0; i < N; i++) {
         if (this.blobs[i] || this.loading.has(i) || this.fail[i] >= 3) continue;
-        const d = i - this.cur, s = d * this.dir >= 0 ? Math.abs(d) : Math.abs(d) * 2.2;
+        const d = i - this.cur, s = d >= 0 ? d : -d * 1.6; // siempre adelante primero: la película completa se baja en segundos
         if (s < bs) { bs = s; best = i; }
       }
       return best;
@@ -114,6 +114,7 @@
         const r = await fetch(this.url(i)); if (!r.ok) throw 0;
         const b = await r.blob(); if (this.dead) return;
         this.blobs[i] = b; this.count++;
+        this.onProgress && this.onProgress(this);
       } catch (e) { this.fail[i]++; }
       finally { this.active--; this.loading.delete(i); if (!this.dead) { this.decodeAround(); this.pump(); } }
     }
@@ -175,26 +176,36 @@
     if (src.bm) ctx.drawImage(src.bm, src.sx, src.sy, seq.cfg.pw, seq.cfg.ph, fit.x, fit.y, fit.w, fit.h);
     else ctx.drawImage(src, fit.x, fit.y, fit.w, fit.h);
   }
-  function paint(f) {
+  let sharpIn = 1, lastTier = 'f', lastI = -1;
+  function paint(f, dt) {
     const i0 = Math.floor(f), i1 = Math.min(N - 1, i0 + 1), frac = f - i0;
     const blend = frac > 0.03 ? Math.round(frac * 12) / 12 : 0;
-    let a = seq.bmp.get(i0), b = blend ? seq.bmp.get(i1) : null, tier = 'f';
-    if (!a || (blend && !b)) {
-      // capa de previsualización: siempre continua, sin saltos
-      const pa = seq.proxy(i0), pb = blend ? seq.proxy(i1) : null;
-      if (pa && (!blend || pb)) { a = pa; b = pb; tier = 'p'; }
-      else if (!a) {
-        for (let d = 1; d < 10 && !a; d++) a = seq.bmp.get(i0 - d * seq.dir) || seq.bmp.get(i0 + d * seq.dir);
-        if (!a) return; b = null; tier = 'n';
-      } else b = null;
+    let a = seq.bmp.get(i0), b = null, tier = 'f';
+    if (a) b = blend ? seq.bmp.get(i1) || null : null;       // nítido: si falta el vecino, sin fundido (nunca volver a borroso)
+    else {
+      // ¿hay un nítido a 1-2 fotogramas? retenerlo es imperceptible y evita el borroso
+      for (let d = 1; d <= 2 && !a; d++) a = seq.bmp.get(i0 - d * seq.dir) || seq.bmp.get(i0 + d * seq.dir);
+      if (a) tier = 'n';
+      else {
+        const pa = seq.proxy(i0);
+        if (pa) { a = pa; b = blend ? seq.proxy(i1) : null; tier = 'p'; }
+        else { for (let d = 3; d < 12 && !a; d++) a = seq.bmp.get(i0 - d * seq.dir) || seq.bmp.get(i0 + d * seq.dir); if (!a) return false; tier = 'n'; }
+      }
     }
-    const key = tier + i0 + ':' + (b ? blend : 0);
-    if (key === drawnKey) return;
-    drawSrc(a, 1);
-    if (b) drawSrc(b, blend);
-    ctx.globalAlpha = 1; drawnKey = key;
+    // al pasar de borroso a nítido: fundido corto en vez de salto
+    if (tier !== 'p' && lastTier === 'p') sharpIn = 0;
+    if (sharpIn < 1) sharpIn = Math.min(1, sharpIn + (dt || 16) / 140);
+    const key = tier + i0 + ':' + (b ? blend : 0) + ':' + sharpIn;
+    if (key === drawnKey) return sharpIn < 1;
+    if (sharpIn < 1 && lastI >= 0) {
+      const p = seq.proxy(i0);
+      if (p) { drawSrc(p, 1); drawSrc(a, sharpIn); if (b) drawSrc(b, blend * sharpIn); }
+      else { drawSrc(a, 1); if (b) drawSrc(b, blend); }
+    } else { drawSrc(a, 1); if (b) drawSrc(b, blend); }
+    ctx.globalAlpha = 1; drawnKey = key; lastTier = tier; lastI = i0;
     if (DBG) { DBG.paints++; DBG[tier]++; if (DBG.last >= 0) DBG.maxJump = Math.max(DBG.maxJump, Math.abs(i0 - DBG.last)); DBG.last = i0; }
     if (!shown) { shown = true; canvas.classList.add('is-on'); }
+    return sharpIn < 1;
   }
 
   /* ------------------------------------------------------------------ */
@@ -221,7 +232,7 @@
     if (Math.abs(target - head) < 0.02) head = target;
     const f = clamp(head, 0, N - 1), fi = Math.round(f);
     seq.setHead(fi, diff > 0.02 ? 1 : diff < -0.02 ? -1 : 0);
-    paint(f);
+    const fading = paint(f, dt);
     if (fi !== lastHead || force) {
       lastHead = fi;
       hudFrame.textContent = String(fi + 1).padStart(3, '0');
@@ -229,7 +240,7 @@
       const st = status(fi); if (st !== lastStatus) { hudStatus.textContent = st; lastStatus = st; }
     }
     if (DBG) { const c = performance.now() - t0; DBG.js = (DBG.js || 0) + c; DBG.calls = (DBG.calls || 0) + 1; DBG.jsMax = Math.max(DBG.jsMax || 0, c); }
-    if (head !== target) raf = requestAnimationFrame(() => render());
+    if (head !== target || fading) raf = requestAnimationFrame(() => render());
     else { raf = 0; lastT = 0; }
   }
   const kick = () => { if (!raf) raf = requestAnimationFrame(() => render()); };
@@ -249,9 +260,10 @@
     }
     seq.cur = Math.round(head);
     seq.onProgress = (s) => {
-      const p = s.aLoaded / ATLASES;
+      let sharp = 0; for (let i = 0; i < START_SHARP; i++) if (s.blobs[i]) sharp++;
+      const p = (s.aLoaded / ATLASES) * 0.35 + (sharp / START_SHARP) * 0.65;
       if (!started) { lpct.textContent = Math.round(p * 100); lbar.style.transform = `scaleX(${p})`; }
-      if (!started && s.aLoaded >= ATLASES) begin();
+      if (!started && s.aLoaded >= ATLASES && sharp >= START_SHARP) begin();
     };
     seq.onFrame = (i, isProxy) => { if ((isProxy ? Math.abs(i - head) < PER : Math.abs(i - head) < 2.5) || !shown) { drawnKey = ''; kick(); } };
     resize();
@@ -340,7 +352,7 @@
     startSeq(pickSet());
     setupScroll();
     // red de seguridad: si la red es muy lenta, mostrar igual a los 9 s
-    setTimeout(() => { if (!started) begin(); }, 9000);
+    setTimeout(() => { if (!started) begin(); }, 12000);
     let rt = 0, lw = innerWidth, lh = innerHeight;
     addEventListener('resize', () => {
       clearTimeout(rt);
