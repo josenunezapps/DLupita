@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05090e">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>ZENIX AR — Una nueva dimensión digital | Experiencia conceptual</title>
+<meta name="description" content="Experiencia cinematográfica experimental de Zenix AR. Desarrollo de páginas web y aplicaciones digitales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05090e;--fg:#e9f2f5;--muted:#71818c;--a:#85f1e6;--b:#8c9fff;--line:rgba(181,229,241,.16);--top:env(safe-area-inset-top);--bottom:env(safe-area-inset-bottom)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font-family:Manrope,system-ui,-apple-system,sans-serif;overflow-x:hidden}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit;text-decoration:none}::selection{background:var(--a);color:#071016}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:16;opacity:.15;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+.progress-top{height:2px;position:fixed;left:0;top:0;width:0;background:linear-gradient(90deg,var(--a),var(--b));z-index:50;box-shadow:0 0 20px var(--a)}
+.nav{position:absolute;left:0;right:0;top:0;z-index:35;padding:calc(25px + var(--top)) clamp(21px,5vw,84px) 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.04em;font-size:23px;line-height:1}.logo em{font-style:normal;font-size:11px;font-weight:700;margin-left:4px;letter-spacing:.18em;color:var(--a);vertical-align:4px}.logo-mark{height:31px;width:31px;display:grid;place-items:center;border-radius:8px;background:linear-gradient(140deg,var(--a),#647be3);color:#07141a;transform:skew(-10deg);font-weight:800;box-shadow:0 0 25px rgba(88,236,225,.2)}
+.nav-menu{display:flex;align-items:center;gap:35px}.nav-menu>a:not(.nav-btn){font-size:12px;font-weight:700;letter-spacing:.03em;color:#bdced4;transition:color .2s}.nav-menu>a:hover{color:#fff}.nav-btn{font-size:12px;font-weight:800;display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(194,239,244,.35);background:rgba(185,230,239,.065);padding:12px 17px;border-radius:99px;backdrop-filter:blur(10px)}.nav-btn span{color:var(--a)}
+.scrolly{position:relative;height:520vh;background:#03070b}.sticky{position:sticky;top:0;height:100svh;min-height:570px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 56% 52%,#0e1c2a 0%,#070e16 36%,#03070b 72%)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1;opacity:0;transition:opacity .8s ease}body.webgl-ready #gl{opacity:1}
+.ambient{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 70% 50%,rgba(29,110,117,.25),transparent 42%),radial-gradient(ellipse at 29% 65%,rgba(72,64,111,.16),transparent 46%)}
+.glow-bottom{position:absolute;z-index:2;inset:auto 0 0;height:32%;background:linear-gradient(transparent,rgba(3,7,11,.6) 88%);pointer-events:none}
+.sticky:before{content:"";position:absolute;z-index:3;inset:0;pointer-events:none;background:radial-gradient(ellipse at 53% 53%,transparent 14%,rgba(2,7,12,.12) 47%,rgba(2,7,12,.54) 100%)}
+.metal-fallback{position:absolute;z-index:1;top:50%;left:60%;width:min(42vw,400px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 34% 26%,#496879 1%,#101c2a 30%,#05090d 62%,#1a5d63 73%,#071016 78%);box-shadow:0 0 110px rgba(78,225,221,.13),inset -24px -30px 40px #010609,inset 11px 10px 35px #47707d;animation:fallback-turn 9s ease-in-out infinite alternate}
+.metal-fallback:before{content:"";position:absolute;inset:-17%;border:3px solid rgba(109,226,223,.38);border-left-color:transparent;border-bottom-color:rgba(131,148,241,.2);border-radius:50%;transform:rotateX(64deg) rotate(18deg);box-shadow:0 0 60px rgba(63,222,217,.13)}
+@keyframes fallback-turn{to{transform:translate(-50%,-50%) rotate(32deg) scale(1.05)}}
+body.webgl-ready .metal-fallback{display:none}
+.guide-h,.guide-v{position:absolute;z-index:3;pointer-events:none;opacity:.36}.guide-h{left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);top:50%}.guide-v{width:1px;top:13%;bottom:14%;right:6%;background:linear-gradient(transparent,var(--line),transparent)}
+.kicker{font:500 10px/1.6 'DM Mono',monospace;color:var(--a);letter-spacing:.21em;text-transform:uppercase;display:flex;align-items:center;gap:11px}.kicker:before{content:"";display:block;height:1px;width:23px;background:var(--a);box-shadow:0 0 10px var(--a)}
+.panel{position:absolute;inset:0;z-index:6;display:flex;align-items:center;padding:0 clamp(22px,7vw,125px);pointer-events:none;opacity:0;transform:translateY(22px);transition:opacity .45s ease,transform .6s cubic-bezier(.18,.7,.26,1)}
+.panel.active{opacity:1;transform:translateY(0)}.panel-body{max-width:min(560px,53vw)}.panel h1,.panel h2{font-weight:800;letter-spacing:-.085em;line-height:.99;margin:20px 0 24px;font-size:clamp(58px,8.1vw,136px)}.panel h2{font-size:clamp(54px,7vw,116px)}.panel h1 .thin,.panel h2 .thin{font-weight:500;color:#b5c9d6}.panel h1 .gradient,.panel h2 .gradient{background:linear-gradient(130deg,#f5ffff 4%,#8df7e9 36%,#8ea8f9 93%);color:transparent;background-clip:text;-webkit-background-clip:text}
+.panel p{max-width:385px;color:#b4c2cb;font-size:clamp(13px,1.2vw,16px);line-height:1.85;letter-spacing:.005em}.panel .smallcaps{font:400 10px 'DM Mono',monospace;color:#92a2ad;letter-spacing:.22em;text-transform:uppercase}
+.panel:nth-of-type(4) .panel-body,.panel:nth-of-type(5) .panel-body{margin-left:auto;text-align:right}.panel:nth-of-type(4) .kicker,.panel:nth-of-type(5) .kicker{justify-content:flex-end}.panel:nth-of-type(4) p,.panel:nth-of-type(5) p{margin-left:auto}
+.panel:nth-of-type(5) .panel-body{text-align:left;margin-left:0}.panel:nth-of-type(5) .kicker{justify-content:flex-start}.panel:nth-of-type(5) p{margin-left:0}
+.hero-actions{display:flex;gap:12px;align-items:center;margin-top:27px;pointer-events:auto}.chip{font-size:12px;font-weight:800;padding:14px 19px;border-radius:6px;background:var(--a);color:#031318;box-shadow:0 10px 38px rgba(103,228,214,.15);display:inline-flex;gap:12px;align-items:center}.chip:hover{background:#ccfff8}.chip.alt{background:rgba(203,235,241,.08);color:#e0f6f7;border:1px solid rgba(188,230,241,.22);box-shadow:none}
+.system{position:absolute;right:clamp(25px,5vw,80px);bottom:97px;z-index:8;width:218px;padding:16px;border:1px solid rgba(173,219,227,.13);background:linear-gradient(135deg,rgba(10,24,32,.56),rgba(7,16,25,.25));backdrop-filter:blur(12px);border-radius:9px;box-shadow:0 18px 50px rgba(0,0,0,.16);pointer-events:none}
+.sys-header{font:500 9px 'DM Mono',monospace;letter-spacing:.17em;color:#a8c5cf;display:flex;gap:8px;align-items:center}.live{width:6px;height:6px;border-radius:50%;background:var(--a);box-shadow:0 0 12px var(--a)}.sys-reading{font:400 26px 'DM Mono',monospace;letter-spacing:-.07em;margin:17px 0 12px}.sys-reading small{font-size:10px;color:#849ca5;letter-spacing:.08em}.sys-bar{height:2px;width:100%;background:#253940}.sys-bar div{height:100%;width:72%;background:linear-gradient(90deg,var(--a),var(--b));box-shadow:0 0 12px var(--a)}.sys-footer{font:400 8px 'DM Mono',monospace;color:#748992;display:flex;justify-content:space-between;letter-spacing:.08em;margin-top:12px}
+.bottom-ui{position:absolute;bottom:clamp(21px,4vh,39px);left:clamp(22px,7vw,125px);right:clamp(22px,7vw,125px);z-index:9;display:flex;align-items:flex-end;justify-content:space-between;gap:15px;pointer-events:none}
+.scroll-cue{display:flex;align-items:center;gap:15px;font:500 10px 'DM Mono',monospace;color:#a0b6be;letter-spacing:.17em;text-transform:uppercase}.scroll-icon{width:23px;height:35px;border:1px solid #647983;border-radius:20px;position:relative}.scroll-icon:after{content:"";position:absolute;top:7px;left:10px;width:2px;height:6px;background:var(--a);border-radius:2px;animation:mouse 1.7s ease-in-out infinite}@keyframes mouse{to{transform:translateY(11px);opacity:0}}
+.scene-meter{display:flex;align-items:center;gap:13px;font:400 10px 'DM Mono',monospace;color:#7d96a1}.scene-meter strong{font-weight:500;color:var(--a)}.meter-track{width:104px;height:1px;background:#3d5865}.meter-track div{width:0;height:100%;background:var(--a);box-shadow:0 0 9px var(--a)}
+.eyebrow-corner{position:absolute;right:clamp(23px,5vw,80px);top:calc(123px + var(--top));font:400 9px 'DM Mono',monospace;letter-spacing:.16em;color:#5f7d89;z-index:8;writing-mode:vertical-rl}
+.sep{height:1px;background:linear-gradient(90deg,transparent,#26363f,transparent)}
+.after{background:linear-gradient(180deg,#03070b,#09131b 48%,#04090e);position:relative;z-index:10;overflow:hidden}.after:before{content:"";position:absolute;top:15%;left:50%;width:700px;height:600px;background:radial-gradient(circle,rgba(61,124,138,.11),transparent 66%);transform:translateX(-50%);pointer-events:none}
+.wrap{max-width:1380px;margin:auto;padding:0 clamp(23px,7vw,98px)}.section-tag{font:500 11px 'DM Mono',monospace;color:var(--a);letter-spacing:.18em;text-transform:uppercase}
+.intro{padding:clamp(90px,13vw,200px) 0 115px}.split{display:grid;grid-template-columns:1.08fr .92fr;gap:8vw;align-items:end}.big-intro{font-size:clamp(45px,6.2vw,95px);letter-spacing:-.075em;line-height:1.04;font-weight:800;margin:30px 0 0}.big-intro span{color:#6c8493}.intro-right{font-size:clamp(15px,1.4vw,20px);font-weight:500;line-height:1.75;color:#a7b9c2;max-width:510px;padding-bottom:12px}
+.services{padding:40px 0 130px}.section-heading{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:40px}.section-heading h2{font-size:clamp(42px,5.5vw,84px);line-height:1.05;letter-spacing:-.075em;margin:20px 0 0}.section-heading p{max-width:240px;font-size:13px;color:#738995;line-height:1.8}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.service{position:relative;min-height:520px;border:1px solid rgba(174,215,225,.12);border-radius:13px;overflow:hidden;background:linear-gradient(145deg,#111c28,#09121a 62%,#070f17);isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;padding:27px;transition:transform .45s ease,border-color .4s;transform-style:preserve-3d}
+.service:hover{border-color:rgba(134,241,230,.5);transform:translateY(-8px)}.service:after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 55% 44%,rgba(53,129,135,.14),transparent 45%)}.service:nth-child(2){background:linear-gradient(155deg,#131b2b,#090d1b)}.service:nth-child(3){background:linear-gradient(150deg,#151c27,#080e16)}
+.card-top{display:flex;align-items:center;justify-content:space-between;font:400 10px 'DM Mono',monospace;letter-spacing:.14em;color:#7e9caa}.card-top .num{color:var(--a)}.visual{height:225px;display:grid;place-items:center;position:relative;perspective:700px}
+.visual-web{height:150px;width:240px;border:7px solid #283849;border-radius:13px;background:linear-gradient(135deg,#0c1b28,#14334a 67%,#121e3c);transform:rotateY(-22deg) rotateX(8deg) rotateZ(-8deg);box-shadow:22px 22px 0 rgba(9,18,31,.9),30px 36px 50px rgba(0,0,0,.55),0 0 90px rgba(62,190,204,.11);position:relative;overflow:hidden}
+.visual-web:before{content:"";position:absolute;left:9px;right:9px;top:9px;height:8px;border-bottom:1px solid #3e677b;background:radial-gradient(circle at 7px 2px,#8bf5e3 2px,transparent 3px),radial-gradient(circle at 17px 2px,#768ecb 2px,transparent 3px)}.visual-web:after{content:"";position:absolute;left:18px;top:43px;width:112px;height:38px;border-radius:7px;background:linear-gradient(115deg,#79efe4,#627bdd);box-shadow:0 55px 0 -14px #49606a,107px 24px 0 -7px #344b5d}
+.visual-app{height:176px;width:92px;border:6px solid #344a59;border-radius:18px;transform:rotateY(-25deg) rotateX(11deg) rotateZ(10deg);background:radial-gradient(circle at 65% 43%,#4c668c,#1e3243 58%,#06121c);box-shadow:18px 20px 0 rgba(8,17,27,.9),22px 28px 50px rgba(0,0,0,.45),0 0 55px rgba(66,170,219,.19);position:relative}
+.visual-app:before{content:"";position:absolute;top:12px;left:21px;width:34px;height:4px;border-radius:10px;background:#4f788c}.visual-app:after{content:"";position:absolute;left:15px;right:15px;top:43px;height:39px;border-radius:11px;background:linear-gradient(140deg,#8decdf,#6e7feb);box-shadow:0 52px 0 -12px #7d9cac}
+.visual-auto{position:relative;width:162px;height:162px;border-radius:50%;background:radial-gradient(circle at 33% 27%,#345367 3%,#0c1d2b 46%,#03090d 65%,#59acaa 82%,#0c1921 88%);box-shadow:0 0 0 13px rgba(105,198,209,.08),0 0 58px rgba(112,227,217,.21),inset -14px -11px 20px #00070a;transform:rotateX(18deg) rotateY(-15deg)}
+.visual-auto:after{content:"";position:absolute;inset:-16px;border:2px solid rgba(121,240,230,.27);border-radius:50%;transform:rotateX(58deg) rotateZ(35deg)}
+.card-bottom h3{font-size:27px;letter-spacing:-.045em;margin:0 0 11px}.card-bottom p{font-size:13px;line-height:1.75;color:#8da5b0;max-width:320px;margin:0}.card-bottom span{display:block;margin-top:22px;font:500 10px 'DM Mono',monospace;color:#a7efe5;letter-spacing:.1em}
+.end{position:relative;overflow:hidden;padding:125px 0 125px;background:linear-gradient(#050c12,#04080c);border-top:1px solid #152633;text-align:center}
+.end:before{content:"";position:absolute;left:50%;top:10%;width:min(68vw,760px);aspect-ratio:1;border:1px solid rgba(111,239,224,.11);border-radius:50%;transform:translateX(-50%);box-shadow:0 0 0 70px rgba(105,239,232,.014),0 0 0 140px rgba(105,239,232,.012),0 0 160px rgba(55,191,192,.075);pointer-events:none}
+.end-inner{position:relative;z-index:2;display:flex;align-items:center;flex-direction:column}.end h2{font-size:clamp(54px,9vw,154px);line-height:.97;font-weight:800;letter-spacing:-.095em;max-width:1000px;margin:30px auto}.end h2 em{font-style:normal;background:linear-gradient(105deg,#bffdf6,#769ded);background-clip:text;-webkit-background-clip:text;color:transparent}.end p{font-size:15px;max-width:380px;color:#8ca4b0;line-height:1.8;margin:0 auto 30px}.end .chip{padding:16px 27px}
+.footer{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:27px clamp(22px,7vw,98px);background:#04080c;color:#78919d;font:400 10px 'DM Mono',monospace;letter-spacing:.05em;border-top:1px solid #152530}.footer a{color:#bde9e6}
+.reveal{opacity:0;transform:translateY(35px);transition:transform .85s cubic-bezier(.2,.65,.2,1),opacity .85s ease}.reveal.shown{opacity:1;transform:translateY(0)}
+@media(max-width:860px){
+.nav{padding:calc(19px + var(--top)) 21px}.nav-menu>a:not(.nav-btn){display:none}.logo{font-size:20px}.logo-mark{width:27px;height:27px}.nav-btn{padding:10px 13px;font-size:11px}
+.sticky{min-height:0;height:100svh}.panel{align-items:flex-start;padding:calc(138px + var(--top)) 24px 0}.panel-body{max-width:91vw}.panel h1,.panel h2{font-size:clamp(48px,10vw,74px);max-width:440px;margin:12px 0 15px}.panel p{font-size:13px;line-height:1.7;max-width:300px}.panel:nth-of-type(4) .panel-body,.panel:nth-of-type(5) .panel-body{margin-left:0;text-align:left}.panel:nth-of-type(4) .kicker,.panel:nth-of-type(5) .kicker{justify-content:flex-start}.panel:nth-of-type(4) p,.panel:nth-of-type(5) p{margin-left:0}
+.hero-actions{margin-top:18px}.chip{padding:12px 14px;font-size:11px}.system{right:20px;bottom:75px;width:154px;padding:10px;opacity:.83}.sys-reading{font-size:20px;margin:9px 0}.sys-header{font-size:7px}.sys-footer{font-size:7px}.bottom-ui{left:22px;right:22px;bottom:20px}.scroll-cue{font-size:9px}.eyebrow-corner{display:none}.meter-track{width:48px}.metal-fallback{width:62vw;left:51%;top:61%}
+.split{grid-template-columns:1fr;gap:30px}.intro{padding:90px 0 85px}.services{padding-bottom:100px}.cards{grid-template-columns:1fr;gap:16px}.service{min-height:370px}.visual{height:150px}.service .visual-web{transform:scale(.78) rotateY(-22deg) rotateZ(-8deg)}.service .visual-app{transform:scale(.82) rotateY(-25deg) rotateZ(10deg)}.service .visual-auto{transform:scale(.76) rotateX(18deg) rotateY(-15deg)}.section-heading{align-items:start;flex-direction:column}.section-heading p{max-width:400px}.end{padding:100px 0}.end:before{width:90vw;top:20%}.footer{flex-direction:column;align-items:flex-start;font-size:9px}
+}
+@media(max-width:420px){
+.panel{padding-top:calc(125px + var(--top))}.panel h1,.panel h2{font-size:clamp(43px,11.7vw,54px)}.panel p{font-size:12px;max-width:260px}.system{bottom:67px;right:17px;width:137px}.scrolly{height:570vh}.hero-actions{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.panel,.reveal,.service,#gl{transition:none!important}.scroll-icon:after,.metal-fallback{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="progress-top" id="progress-top"></div>
+<header class="nav">
+<a href="#inicio" class="logo" aria-label="Zenix AR inicio"><span class="logo-mark">Z</span>ZENIX <em>AR</em></a>
+<div class="nav-menu"><a href="#servicios">Servicios</a><a href="#contacto">Contacto</a><a class="nav-btn" href="https://wa.me/5492901471353?text=Hola%2C%20quiero%20consultar%20por%20una%20p%C3%A1gina%20web" target="_blank" rel="noopener">Hablemos <span>↗</span></a></div>
+</header>
+<main>
+<section class="scrolly" id="inicio" aria-label="Experiencia cinematográfica de Zenix AR">
+<div class="sticky" id="sticky">
+<div class="ambient"></div>
+<div class="metal-fallback" aria-hidden="true"></div>
+<canvas id="gl" aria-label="Escultura tecnológica tridimensional animada con el desplazamiento"></canvas>
+<div class="glow-bottom"></div><div class="guide-h"></div><div class="guide-v"></div>
+<div class="eyebrow-corner">ZENIX MOTION LAB — CONCEPT / 001</div>
+<div class="panel active" data-scene="0">
+<div class="panel-body"><div class="kicker">ZENIX AR / PRESENTA</div>
+<h1>No hacemos<br><span class="thin">páginas.</span><br><span class="gradient">Creamos<br>experiencias.</span></h1>
+<p>Un nuevo lenguaje digital donde la tecnología, el diseño y el movimiento se vuelven uno.</p>
+<div class="hero-actions"><a class="chip" href="#servicios">Conocé lo que hacemos <span>↘</span></a></div>
+</div>
+</div>
+<div class="panel" data-scene="1"><div class="panel-body">
+<div class="kicker">01 / LA TRANSFORMACIÓN</div><h2>Todo<br><span class="gradient">cobra<br>vida.</span></h2>
+<p>Diseñamos interfaces que no solo se ven: se sienten, se descubren y se recuerdan.</p>
+</div></div>
+<div class="panel" data-scene="2"><div class="panel-body">
+<div class="kicker">02 / PRODUCTOS DIGITALES</div><h2>Ideas<br><span class="gradient">hechas<br>realidad.</span></h2>
+<p>Páginas web, aplicaciones y herramientas hechas para hacer crecer tu negocio.</p>
+</div></div>
+<div class="panel" data-scene="3"><div class="panel-body">
+<div class="kicker">03 / UNA NUEVA DIMENSIÓN</div><h2>Una marca.<br><span class="gradient">Infinitas<br>posibilidades.</span></h2>
+<p>Innovación, detalle y tecnología al servicio de experiencias extraordinarias.</p>
+</div></div>
+<div class="panel" data-scene="4"><div class="panel-body">
+<div class="kicker">04 / EL SIGUIENTE PASO</div><h2>Tu próximo<br><span class="gradient">gran salto.</span></h2>
+<p>Tu negocio merece más que estar en internet. Merece destacar.</p>
+<div class="hero-actions"><a href="#contacto" class="chip">Empezar un proyecto <span>↗</span></a><a href="#servicios" class="chip alt">Ver servicios</a></div>
+</div></div>
+<div class="system" aria-hidden="true">
+<div class="sys-header"><span class="live"></span> MOTOR CREATIVO / LIVE</div>
+<div class="sys-reading"><span id="pct">000</span><small> / 100%</small></div>
+<div class="sys-bar"><div id="sys-progress"></div></div>
+<div class="sys-footer"><span>VISUAL ENGINE</span><span id="scene-code">S-01</span></div>
+</div>
+<div class="bottom-ui">
+<div class="scroll-cue"><span class="scroll-icon"></span><span>Deslizá para explorar</span></div>
+<div class="scene-meter"><span id="scene-no"><strong>01</strong> / 05</span><span class="meter-track"><div id="meter-progress"></div></span><span>ZENIX / XR</span></div>
+</div>
+</div>
+</section>
+<div class="after">
+<section class="intro wrap reveal">
+<div class="section-tag">01 — ESTUDIO DIGITAL</div>
+<div class="split">
+<h2 class="big-intro">El futuro no se espera.<br><span>Se diseña.</span></h2>
+<p class="intro-right">En Zenix AR creamos experiencias digitales a medida. Cada proyecto combina estrategia, diseño y tecnología para convertir una buena idea en algo que tu negocio realmente pueda aprovechar.</p>
+</div>
+</section>
+<div class="sep"></div>
+<section class="services wrap" id="servicios">
+<div class="section-heading reveal"><div><div class="section-tag">02 — LO QUE HACEMOS</div><h2>Construimos<br>lo que sigue.</h2></div><p>Soluciones digitales que se ven profesionales y, sobre todo, cumplen una función real.</p></div>
+<div class="cards">
+<article class="service reveal"><div class="card-top"><span class="num">01 / 03</span><span>WEB DESIGN ↗</span></div><div class="visual"><div class="visual-web"></div></div><div class="card-bottom"><h3>Páginas web</h3><p>Identidades digitales modernas, rápidas y preparadas para mostrar lo mejor de tu negocio.</p><span>DISEÑO + DESARROLLO</span></div></article>
+<article class="service reveal"><div class="card-top"><span class="num">02 / 03</span><span>DIGITAL PRODUCT ↗</span></div><div class="visual"><div class="visual-app"></div></div><div class="card-bottom"><h3>Aplicaciones web</h3><p>Catálogos, presupuestos, paneles de administración y herramientas hechas a tu medida.</p><span>PRODUCTO + EXPERIENCIA</span></div></article>
+<article class="service reveal"><div class="card-top"><span class="num">03 / 03</span><span>SMART SYSTEMS ↗</span></div><div class="visual"><div class="visual-auto"></div></div><div class="card-bottom"><h3>Soluciones digitales</h3><p>Procesos más simples, experiencias más fluidas y herramientas para trabajar mejor.</p><span>TECNOLOGÍA + IMPACTO</span></div></article>
+</div>
+</section>
+<section class="end" id="contacto"><div class="wrap end-inner reveal">
+<div class="section-tag">03 — TU TURNO</div><h2>Hagamos<br>algo <em>increíble.</em></h2><p>Contanos qué tenés en mente. Vamos a transformarlo en una experiencia digital de verdad.</p><a class="chip" href="https://wa.me/5492901471353?text=Hola%2C%20quiero%20conocer%20las%20soluciones%20de%20Zenix%20AR" target="_blank" rel="noopener">Hablemos por WhatsApp <span>↗</span></a>
+</div></section>
+</div>
+</main>
+<footer class="footer"><div>© 2026 ZENIX AR — DISEÑADO PARA EL FUTURO</div><div>DEMO CINEMATOGRÁFICA ORIGINAL · <a href="https://zenix.com.ar/" target="_blank" rel="noopener">ZENIX.COM.AR ↗</a></div></footer>
+<script>
+(function(){
+var scrolly=document.querySelector('.scrolly'),topbar=document.getElementById('progress-top'),panels=Array.from(document.querySelectorAll('.panel')),sceneNum=document.getElementById('scene-no'),sceneCode=document.getElementById('scene-code'),pct=document.getElementById('pct'),sysP=document.getElementById('sys-progress'),meter=document.getElementById('meter-progress');
+var wanted=0,progress=0,active=-1,reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
+function sync(){var r=scrolly.getBoundingClientRect(),range=Math.max(1,r.height-innerHeight);wanted=clamp(-r.top/range,0,1);var doc=Math.max(1,document.documentElement.scrollHeight-innerHeight);topbar.style.width=(clamp(scrollY/doc,0,1)*100).toFixed(2)+'%';var s= wanted<.19?0:wanted<.37?1:wanted<.60?2:wanted<.82?3:4;if(s!==active){active=s;panels.forEach(function(p,i){p.classList.toggle('active',i===s)});sceneNum.innerHTML='<strong>0'+(s+1)+'</strong> / 05';sceneCode.textContent='S-0'+(s+1)}pct.textContent=String(Math.round(wanted*100)).padStart(3,'0');sysP.style.width=(wanted*100)+'%';meter.style.width=(wanted*100)+'%'}
+window.addEventListener('scroll',sync,{passive:true});window.addEventListener('resize',sync,{passive:true});sync();
+var ob=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('shown');ob.unobserve(e.target)}})},{threshold:.10});document.querySelectorAll('.reveal').forEach(function(el){ob.observe(el)});
+window.ZenixScroll={get:function(){return wanted},isReduced:reduceMotion};
+})();
+</script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+try{
+const canvas=document.getElementById('gl'),engine=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+engine.setPixelRatio(Math.min(devicePixelRatio||1,1.6));engine.setSize(innerWidth,innerHeight);
+engine.outputColorSpace=THREE.SRGBColorSpace;engine.toneMapping=THREE.ACESFilmicToneMapping;engine.toneMappingExposure=1.35;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x03070b);scene.fog=new THREE.FogExp2(0x03070b,.026);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.1,100);camera.position.set(0,0,innerWidth<700?17:13);
+const ambient=new THREE.HemisphereLight(0xa2e9ff,0x04101e,2.35);scene.add(ambient);
+const key=new THREE.PointLight(0x96fff0,115,26,1.7);key.position.set(5,6,8);scene.add(key);
+const rim=new THREE.PointLight(0x728aff,100,23,1.7);rim.position.set(-6,-2,5);scene.add(rim);
+const warm=new THREE.PointLight(0xffffff,55,23,2);warm.position.set(0,-5,-1);scene.add(warm);
+const root=new THREE.Group();scene.add(root);
+const shell=new THREE.Group();root.add(shell);
+const dark=new THREE.MeshPhysicalMaterial({color:0x142332,metalness:.87,roughness:.22,clearcoat:1,clearcoatRoughness:.14});
+const chrome=new THREE.MeshPhysicalMaterial({color:0x9bbfc5,metalness:.9,roughness:.18,clearcoat:1});
+const blue=new THREE.MeshPhysicalMaterial({color:0x354c70,metalness:.84,roughness:.19,clearcoat:1});
+const lineMat=new THREE.MeshStandardMaterial({color:0x65eadf,emissive:0x39ddd2,emissiveIntensity:2.3,metalness:.35,roughness:.3});
+const capMat=new THREE.MeshStandardMaterial({color:0xe5ffff,emissive:0x78e4f5,emissiveIntensity:1.2,metalness:.18,roughness:.19});
+const body=new THREE.Mesh(new THREE.IcosahedronGeometry(1.19,4),dark);shell.add(body);
+const inner=new THREE.Mesh(new THREE.IcosahedronGeometry(.64,3),new THREE.MeshPhysicalMaterial({color:0x183b49,metalness:.3,roughness:.12,emissive:0x13928e,emissiveIntensity:.95,transparent:true,opacity:.92}));shell.add(inner);
+const bars=[];const shardGeo=new THREE.CylinderGeometry(.36,.45,.82,6,1);
+for(let i=0;i<20;i++){
+ const a=(i/20)*Math.PI*2,z=(i%3-1)*.35,rad=1.55+(i%4)*.09;
+ const m=new THREE.Mesh(shardGeo,i%5===0?chrome:i%4===0?blue:dark);
+ m.userData={a:a,z:z,rad:rad,scatter:new THREE.Vector3(Math.sin(i*3.37)*7.5,Math.cos(i*2.7)*6,(i%7-3)*3),turn:new THREE.Euler(i*.54,i*.2,-i*.22)};
+ shell.add(m);bars.push(m);
+}
+const rings=[];
+for(let i=0;i<4;i++){
+ const r=new THREE.Mesh(new THREE.TorusGeometry(1.73+i*.22,.035+i*.006,10,130),i===1?lineMat:i===3?chrome:blue);r.rotation.set(i*.47+.3,i*.35,0);shell.add(r);rings.push(r);
+}
+const rail=[];
+for(let i=0;i<12;i++){
+ const ang=i*Math.PI/6;
+ const pin=new THREE.Mesh(new THREE.SphereGeometry(i%3===0?.087:.052,12,10),i%3===0?capMat:chrome);
+ pin.position.set(Math.cos(ang)*2.32,Math.sin(ang)*2.32,(i%2?-.13:.14));shell.add(pin);rail.push(pin);
+}
+const globe=new THREE.Mesh(new THREE.SphereGeometry(.27,32,24),new THREE.MeshBasicMaterial({color:0xb2ffff}));globe.position.z=1.2;shell.add(globe);
+const haloC=document.createElement('canvas');haloC.width=256;haloC.height=256;const hctx=haloC.getContext('2d');let gr=hctx.createRadialGradient(128,128,2,128,128,125);gr.addColorStop(0,'rgba(180,255,249,.75)');gr.addColorStop(.13,'rgba(59,222,216,.30)');gr.addColorStop(.5,'rgba(35,160,184,.07)');gr.addColorStop(1,'rgba(15,50,70,0)');hctx.fillStyle=gr;hctx.fillRect(0,0,256,256);
+const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(haloC),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));halo.scale.set(6.2,6.2,1);halo.position.z=-.5;root.add(halo);
+const particles=new THREE.Group();scene.add(particles);const dustMat=new THREE.MeshBasicMaterial({color:0x83c9d3,transparent:true,opacity:.34});
+const dustGeo=new THREE.IcosahedronGeometry(.023,0);
+for(let i=0;i<175;i++){let m=new THREE.Mesh(dustGeo,dustMat);let u=i*2.3999632297;let r=4+(i%17)*.51;m.position.set(Math.cos(u)*r,Math.sin(u)*r,(i%13-6)*1.2);m.scale.setScalar(.6+(i%7)*.23);particles.add(m)}
+const ui=new THREE.Group();scene.add(ui);
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y);c.closePath()}
+function txt(c,s,x,y,size,color,weight){c.fillStyle=color;c.font=(weight||'600')+' '+size+'px Arial, sans-serif';c.fillText(s,x,y)}
+function paintDesktop(c,w,h){
+ c.fillStyle='#f1f4f6';c.fillRect(0,0,w,h);c.fillStyle='#fafdff';c.fillRect(0,0,w,74);c.fillStyle='#dfe7ea';c.fillRect(0,74,w,2);
+ txt(c,'Z / ZENIX',46,48,24,'#132e39','800');txt(c,'EXPLORAR     SERVICIOS     CONTACTO',w-480,48,15,'#6a7c87','600');
+ c.fillStyle='#e8f2f3';rr(c,33,105,w-66,390,22);c.fill();let gradient=c.createLinearGradient(500,100,w,530);gradient.addColorStop(0,'#143442');gradient.addColorStop(1,'#081621');c.fillStyle=gradient;rr(c,33,105,w-66,390,22);c.fill();
+ txt(c,'UNA NUEVA VISIÓN',76,176,19,'#8cf1e6','700');txt(c,'TU NEGOCIO',76,250,53,'#f5ffff','800');txt(c,'EN OTRA',76,314,53,'#f5ffff','800');txt(c,'DIMENSIÓN.',76,379,53,'#a5fff6','800');c.fillStyle='#8cf1e6';rr(c,76,414,202,46,22);c.fill();txt(c,'DESCUBRIR  ↗',96,444,20,'#061922','700');
+ c.strokeStyle='rgba(157,246,237,.46)';c.lineWidth=24;c.beginPath();c.ellipse(w-220,300,116,175,-.34,0,Math.PI*2);c.stroke();c.strokeStyle='rgba(131,161,237,.60)';c.lineWidth=12;c.beginPath();c.ellipse(w-220,298,66,155,.4,0,Math.PI*2);c.stroke();c.fillStyle='#a6f2ec';c.beginPath();c.arc(w-235,294,53,0,Math.PI*2);c.fill();
+ txt(c,'PROYECTOS',40,556,17,'#273947','800');
+ for(let j=0;j<3;j++){c.fillStyle=['#bdeee7','#cbd3fb','#d9e8ee'][j];rr(c,40+j*317,583,292,155,16);c.fill();txt(c,['DISEÑO WEB','APPS WEB','SOLUCIONES'][j],60+j*317,662,24,'#152c3b','800')}
+}
+function paintPhone(c,w,h){
+ c.fillStyle='#0b1620';c.fillRect(0,0,w,h);c.fillStyle='#1d303e';rr(c,20,18,w-40,h-36,38);c.fill();c.fillStyle='#e5f3f3';rr(c,35,33,w-70,h-66,34);c.fill();
+ txt(c,'TU NEGOCIO',65,135,29,'#142732','800');txt(c,'CATÁLOGO     PEDIDOS',65,179,16,'#56707d');
+ let gd=c.createLinearGradient(0,230,w,500);gd.addColorStop(0,'#9ae6de');gd.addColorStop(1,'#6588b3');c.fillStyle=gd;rr(c,56,222,w-112,365,25);c.fill();
+ c.fillStyle='#29495e';c.beginPath();c.ellipse(w/2,400,120,84,0,0,Math.PI*2);c.fill();c.fillStyle='#ebfafa';c.beginPath();c.ellipse(w/2,393,63,49,0,0,Math.PI*2);c.fill();
+ txt(c,'DISEÑO QUE VENDE',61,646,27,'#213c49','800');txt(c,'Encontrá lo que necesitás.',61,686,19,'#62808c','500');
+ for(let j=0;j<3;j++){c.fillStyle='#e0e9ed';rr(c,56,735+j*93,w-112,77,14);c.fill();c.fillStyle=j%2?'#9caee1':'#91dad2';rr(c,70,749+j*93,55,49,9);c.fill();txt(c,'PRODUCTO 0'+(j+1),143,784+j*93,18,'#29404b','700')}
+}
+function paintDashboard(c,w,h){
+ c.fillStyle='#0c1725';c.fillRect(0,0,w,h);c.fillStyle='#182838';c.fillRect(0,0,w,84);txt(c,'ZENIX  /  CONTROL',35,54,23,'#a2eadd','800');txt(c,'RESUMEN  •  PROYECTOS  •  VENTAS',37,135,17,'#859eab');
+ for(let j=0;j<3;j++){c.fillStyle=['#1c4953','#23334d','#304052'][j];rr(c,32+j*289,169,267,189,14);c.fill();txt(c,['CONSULTAS','PROYECTOS','VENTAS'][j],53+j*289,217,19,'#aac4cb','600');txt(c,['128','42','91%'][j],53+j*289,301,53,'#e6ffff','800')}
+ c.fillStyle='#152a3a';rr(c,32,388,w-64,220,15);c.fill();c.strokeStyle='#86f0e2';c.lineWidth=5;c.beginPath();for(let i=0;i<12;i++){let x=70+i*64,y=530-Math.sin(i*.77)*35-i*5;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke();
+}
+function screen(w,h,paint,depth){
+ const cv=document.createElement('canvas');cv.width=w;cv.height=h;const ctx=cv.getContext('2d');paint(ctx,w,h);const texture=new THREE.CanvasTexture(cv);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(4,engine.capabilities.getMaxAnisotropy());
+ const ratio=w/h;const H=2.75,W=H*ratio;
+ const group=new THREE.Group();
+ const back=new THREE.Mesh(new THREE.BoxGeometry(W+.11,H+.11,.14),new THREE.MeshPhysicalMaterial({color:0x132331,metalness:.84,roughness:.18,transparent:true,opacity:0}));back.position.z=-.07;group.add(back);
+ const front=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:texture,transparent:true,opacity:0,side:THREE.DoubleSide}));front.position.z=.02;group.add(front);
+ const trim=new THREE.Mesh(new THREE.BoxGeometry(W+.18,.055,.2),new THREE.MeshStandardMaterial({color:0x89a7ab,metalness:.8,roughness:.24,transparent:true,opacity:0}));trim.position.y=-H/2-.07;group.add(trim);
+ group.userData={mats:[back.material,front.material,trim.material]};group.position.z=depth||0;
+ ui.add(group);return group
+}
+const desktop=screen(1024,768,paintDesktop,-.6),phone=screen(490,1060,paintPhone,1.1),dash=screen(900,650,paintDashboard,-1.2);
+const portal=new THREE.Group();scene.add(portal);
+const portalMats=[];
+for(let i=0;i<5;i++){let material=new THREE.MeshPhysicalMaterial({color:i%2?0x1b4b60:0x7188b2,metalness:.8,roughness:.2,transparent:true,opacity:0,emissive:i%2?0x075f68:0x111d35,emissiveIntensity:.4});portalMats.push(material);let ring=new THREE.Mesh(new THREE.TorusGeometry(2.35+i*.28,.07,12,180),material);ring.rotation.set(.1+i*.27,.15+i*.42,i*.27);portal.add(ring)}
+const beam=new THREE.Mesh(new THREE.SphereGeometry(.46,32,32),new THREE.MeshBasicMaterial({color:0x7cf6e9,transparent:true,opacity:0}));portal.add(beam);
+function ease(a,b,t){t=Math.min(1,Math.max(0,(t-a)/(b-a)));return t*t*(3-2*t)}
+function lerp(a,b,t){return a+(b-a)*t}
+function setOpacity(g,op){for(let m of g.userData.mats)m.opacity=Math.max(0,Math.min(1,op))}
+function fit(){const mobile=innerWidth<700;camera.aspect=innerWidth/innerHeight;camera.fov=mobile?48:38;camera.position.z=mobile?18:13;camera.updateProjectionMatrix();engine.setSize(innerWidth,innerHeight);engine.setPixelRatio(Math.min(devicePixelRatio||1,mobile?1.35:1.6))}
+window.addEventListener('resize',fit,{passive:true});fit();
+let frame=0,smooth=0,last=performance.now();
+function animate(time){
+ const delta=Math.min(.05,(time-last)/1000);last=time;
+ let target=window.ZenixScroll.get();smooth=lerp(smooth,target,1-Math.exp(-delta*6.5));
+ const p=smooth,t=time*.001,compact=innerWidth<700;
+ const enter=ease(0,.20,p),move=ease(.20,.46,p),windowIn=ease(.29,.49,p),windowOut=ease(.64,.84,p),portalIn=ease(.68,.91,p),assemble=ease(.02,.17,p);
+ const scale=compact?.84:1;
+ root.position.set(lerp(compact?0:.95,compact?-.4:-3.5,move),lerp(compact?-1.25:0,compact?-2.2:.1,move),lerp(0,-2.5,move));
+ root.scale.setScalar(scale*lerp(1,.23,move));
+ root.rotation.set(.13+Math.sin(t*.23)*.09, t*.10+p*6.1,Math.sin(t*.18)*.04+p*.25);
+ shell.rotation.z=Math.sin(t*.25)*.035;
+ body.rotation.set(t*.1,p*2,0);
+ inner.rotation.set(-t*.12,t*.28,t*.15);
+ for(let i=0;i<bars.length;i++){
+  let m=bars[i],d=m.userData,a=d.a;
+  const fx=Math.cos(a)*d.rad,fy=Math.sin(a)*d.rad,fz=d.z;
+  m.position.set(lerp(d.scatter.x,fx,assemble),lerp(d.scatter.y,fy,assemble),lerp(d.scatter.z,fz,assemble));
+  m.rotation.set(lerp(d.turn.x,0,assemble),lerp(d.turn.y,0,assemble),lerp(d.turn.z,-a+Math.PI/2,assemble));
+  m.scale.set(.85,lerp(.6,1,assemble),1);
+ }
+ rings.forEach((r,i)=>{r.rotation.x=i*.39+.2+t*(i%2?.07:-.08)+p*3;r.rotation.y=i*.27+t*(i%2?-.16:.13)});
+ halo.material.opacity=(1-move*.9)*(.65+.12*Math.sin(t*2));halo.scale.setScalar(6.2*(1+.15*Math.sin(t*.75)));globe.scale.setScalar(.86+.12*Math.sin(t*3));
+ // Floating, fully rendered product screens that assemble from the original sculpture.
+ let opacity=windowIn*(1-windowOut);
+ const wi=windowIn,wo=windowOut;
+ desktop.position.set(lerp(4,compact?0:-.2,wi)+wo*(compact?-7:-11),lerp(-1.4,compact?-1.75:-.15,wi)+wo*1.9,lerp(-5,-.75,wi)+wo*-9);
+ desktop.rotation.set(lerp(.55,compact?-.10:-.07,wi),lerp(-1.4,compact?-.10:-.32,wi)-wo*.4,lerp(.28,compact?-.07:.04,wi));
+ desktop.scale.setScalar(lerp(.3,compact?.86:1.0,wi));setOpacity(desktop,opacity);
+ phone.position.set(lerp(6,compact?2.05:2.95,wi)+wo*7,lerp(-4,compact?-2.45:-.4,wi)+wo*-2,lerp(-4,2.0,wi));
+ phone.rotation.set(lerp(.3,0,wi),lerp(1.5,-.35,wi)+wo*1.2,lerp(-.7,.10,wi));
+ phone.scale.setScalar(lerp(.3,compact?.56:.8,wi));setOpacity(phone,opacity);
+ dash.position.set(lerp(-9,compact?-2.65:-3.2,wi)+wo*-7,lerp(1,compact?-3.75:-1.3,wi),lerp(-7,-1.8,wi)+wo*-8);
+ dash.rotation.set(lerp(-.5,-.06,wi),lerp(1.5,.48,wi)-wo*.5,lerp(-.3,-.10,wi));
+ dash.scale.setScalar(lerp(.2,compact?.62:.76,wi));setOpacity(dash,opacity*.85);
+ // Portal sequence is a second, independent 3D environment, not a fixed overlay.
+ portal.visible=portalIn>.001;
+ portal.position.set(compact?0:.9,compact?-1.95:0,lerp(-9,0,portalIn));
+ portal.scale.setScalar((compact?.85:1)*lerp(.25,1.1,portalIn));
+ portal.rotation.set(.1+p*.7,.07+Math.sin(t*.14)*.1,p*3);
+ portal.children.forEach((r,i)=>{r.rotation.y+=delta*(i%2?-.22:.20);r.rotation.z+=delta*(i%2?.13:-.15);if(i<5)portalMats[i].opacity=portalIn*(.75-(i*.07))});
+ beam.material.opacity=portalIn*.78;beam.scale.setScalar(.8+.15*Math.sin(t*2.5));
+ particles.rotation.z=t*.005+p*.2;particles.position.z=p*2;
+ key.intensity=115+Math.sin(t*1.5)*23;rim.intensity=100+p*32;warm.intensity=55+portalIn*33;
+ camera.position.x=lerp(0,compact?0:.17,ease(.62,.95,p));
+ camera.position.y=lerp(0,compact?.1:0,ease(.3,.8,p));
+ camera.lookAt(0,0,0);
+ engine.render(scene,camera);
+ frame=requestAnimationFrame(animate)
+}
+document.body.classList.add('webgl-ready');
+if(document.visibilityState==='visible')frame=requestAnimationFrame(animate);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){last=performance.now();if(!frame)frame=requestAnimationFrame(animate)}else{cancelAnimationFrame(frame);frame=0}});
+}catch(err){console.warn('Modo visual de respaldo activo',err)}
+</script>
+</body>
+</html>
