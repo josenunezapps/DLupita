@@ -147,6 +147,7 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
 .vrow input{width:100%;accent-color:var(--cobalt)}
 .vbtns{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .vbtns button{border:0;background:var(--cobalt);color:#fff;border-radius:999px;padding:9px 16px;font-weight:600;cursor:pointer}
+.vstyles{display:flex;flex-wrap:wrap;gap:6px}.vstyles button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-size:13px;cursor:pointer;color:var(--ink-2)}.vstyles button[aria-pressed=true]{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
 .vall{display:flex;align-items:center;gap:6px;font-size:12px}
 #voice-count{color:var(--muted);font-size:12px}
 .voice-note{font-size:11px;color:var(--muted);text-align:center;padding:0 12px 10px;background:#fff;margin:0}
@@ -306,6 +307,7 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
   <div class="vpanel" id="voice-panel" hidden>
     <label for="voice-select">Voz <span id="voice-count"></span></label>
     <select id="voice-select"></select>
+    <div class="vstyles" id="voice-styles" role="group" aria-label="Estilos de voz"><button type="button" data-r="1" data-p="1">Natural</button><button type="button" data-r=".9" data-p=".6">Grave</button><button type="button" data-r=".85" data-p=".75">Serena</button><button type="button" data-r="1.05" data-p="1.25">Cálida</button><button type="button" data-r="1.2" data-p="1.45">Enérgica</button><button type="button" data-r=".95" data-p="1.8">Aguda</button><button type="button" data-r=".75" data-p=".5">Profunda</button><button type="button" data-r="1.35" data-p="1">Rápida</button></div>
     <div class="vrow"><label for="voice-rate">Velocidad <output id="rate-out">1.0</output></label><input id="voice-rate" type="range" min="0.6" max="1.6" step="0.05" value="1.02"></div>
     <div class="vrow"><label for="voice-pitch">Tono <output id="pitch-out">1.0</output></label><input id="voice-pitch" type="range" min="0.5" max="1.8" step="0.05" value="1"></div>
     <div class="vbtns"><button type="button" id="voice-test">▶ Probar voz</button><label class="vall"><input type="checkbox" id="voice-all"> Ver todos los idiomas</label></div>
@@ -329,7 +331,7 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
 <script>
 (()=>{
 'use strict';
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s),$$s=s=>[...document.querySelectorAll(s)];
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse=matchMedia('(pointer: coarse)').matches;
 
@@ -599,6 +601,9 @@ const rr=$('#voice-rate'),pp=$('#voice-pitch');rr.value=rate;pp.value=pitch;$('#
 rr.addEventListener('input',()=>{rate=+rr.value;$('#rate-out').textContent=rate.toFixed(2);store.set('zx-rate',rate);});
 pp.addEventListener('input',()=>{pitch=+pp.value;$('#pitch-out').textContent=pitch.toFixed(2);store.set('zx-pitch',pitch);});
 $('#voice-test').addEventListener('click',()=>{if(!voiceOn){voiceOn=true;$('#voice-toggle').setAttribute('aria-pressed','true');$('#voice-toggle').textContent='🔊';}speak('Hola, soy la conciencia de Zenix. Estoy acá para ayudarte a construir tu próxima web o aplicación.');});
+function syncStyles(){$$s('#voice-styles button').forEach(b=>b.setAttribute('aria-pressed',String(Math.abs(+b.dataset.r-rate)<.01&&Math.abs(+b.dataset.p-pitch)<.01)));}
+$('#voice-styles').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;rate=+b.dataset.r;pitch=+b.dataset.p;rr.value=rate;pp.value=pitch;$('#rate-out').textContent=rate.toFixed(2);$('#pitch-out').textContent=pitch.toFixed(2);store.set('zx-rate',rate);store.set('zx-pitch',pitch);syncStyles();speak('Así sueno con el estilo '+b.textContent.toLowerCase()+'. ¿Qué te parece?');});
+rr.addEventListener('input',syncStyles);pp.addEventListener('input',syncStyles);syncStyles();
 if(!synth)$('#voice-settings').hidden=true;
 requestAnimationFrame(loop);
 })();
