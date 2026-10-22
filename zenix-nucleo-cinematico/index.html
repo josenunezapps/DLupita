@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zenix AR — Núcleo Z · Experiencia cinematográfica</title>
+<meta name="description" content="Zenix AR diseña y desarrolla páginas web, aplicaciones web y soluciones digitales para negocios. Una experiencia cinematográfica controlada por el scroll.">
+<meta name="theme-color" content="#040407">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="Zenix AR — Núcleo Z">
+<meta property="og:description" content="Páginas web, aplicaciones y soluciones digitales para negocios.">
+<meta property="og:image" content="assets/og.jpg">
+<link rel="icon" href="assets/logo-z.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="seq/d/0000.webp" media="(min-aspect-ratio: 9/10)">
+<link rel="preload" as="image" href="seq/m/0000.webp" media="(max-aspect-ratio: 9/10)">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-loading">
+
+<!-- ============ PELÍCULA (canvas fijo) ============ -->
+<div class="film" aria-hidden="true">
+  <canvas id="film"></canvas>
+  <div class="film__shade"></div>
+  <div class="film__grain"></div>
+</div>
+
+<!-- ============ PRECARGA ============ -->
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <div class="loader__mark"><img src="assets/logo-z.webp" alt="" width="72" height="67"></div>
+  <div class="loader__label">Cargando secuencia <span id="loaderPct">0</span>%</div>
+  <div class="loader__bar"><i id="loaderBar"></i></div>
+  <div class="loader__hint">Núcleo Z · 540 fotogramas · carga progresiva</div>
+</div>
+
+<!-- ============ HUD ============ -->
+<header class="top">
+  <a class="brand" href="#apertura" data-jump="apertura" aria-label="Zenix AR, inicio">
+    <img src="assets/logo-z.webp" alt="" width="30" height="28">
+    <span>ZENIX<b>AR</b></span>
+  </a>
+  <nav class="nav" aria-label="Capítulos">
+    <a href="#nucleo" data-jump="nucleo">Núcleo</a>
+    <a href="#proceso" data-jump="proceso">Proceso</a>
+    <a href="#servicios" data-jump="servicios">Servicios</a>
+    <a href="#contacto" data-jump="contacto">Contacto</a>
+  </nav>
+  <a class="btn btn--ghost top__cta" href="https://wa.me/5492901471353?text=Hola%20Zenix%20AR%2C%20quiero%20hacer%20realidad%20mi%20proyecto" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+    Hablemos
+  </a>
+</header>
+
+<div class="hud" aria-hidden="true">
+  <div class="hud__corner hud__corner--tl"></div><div class="hud__corner hud__corner--tr"></div>
+  <div class="hud__corner hud__corner--bl"></div><div class="hud__corner hud__corner--br"></div>
+  <div class="hud__chapter"><span class="dot"></span><span id="hudChapter">CAP. 01 — APERTURA</span></div>
+  <div class="hud__status">NÚCLEO Z · <span id="hudStatus">SELLADO</span></div>
+  <div class="rail"><i id="railFill"></i>
+    <span style="--p:0"></span><span style="--p:.22"></span><span style="--p:.396"></span><span style="--p:.618"></span><span style="--p:.84"></span>
+  </div>
+  <div class="hud__bottom">
+    <span>FOTOGRAMA <b id="hudFrame">001</b> / 540</span>
+    <span class="hud__mid">ZENIX AR // SECUENCIA CINEMATOGRÁFICA</span>
+    <span class="hud__scroll">Deslizá <i></i></span>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- CAP 01 · APERTURA (frames 0–119) -->
+  <section class="chapter" id="apertura" data-f0="0" data-f1="119" data-label="CAP. 01 — APERTURA">
+    <div class="stage">
+      <div class="hero" id="hero">
+        <p class="eyebrow"><span class="dot"></span>Zenix AR — Soluciones digitales</p>
+        <h1 class="hero__title"><span class="split">ZENIX</span> <span class="split accent">AR</span></h1>
+        <p class="hero__lead">Diseñamos y desarrollamos páginas web, aplicaciones y sistemas para negocios que quieren verse —y funcionar— a otro nivel.</p>
+        <p class="hero__cue"><span></span>Deslizá para iniciar la secuencia</p>
+      </div>
+      <div class="beat beat--left" data-in=".46" data-out=".9">
+        <p class="kicker">Secuencia 01</p>
+        <h2 class="display">Toda gran experiencia digital empieza <em>sellada.</em></h2>
+        <p class="body">Una idea. Un núcleo. Todavía cerrado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAP 02 · NÚCLEO (frames 119–214) -->
+  <section class="chapter" id="nucleo" data-f0="119" data-f1="214" data-label="CAP. 02 — NÚCLEO">
+    <div class="stage">
+      <div class="beat beat--left" data-in=".02" data-out=".5">
+        <p class="kicker">Secuencia 02 · Precisión</p>
+        <h2 class="display">Ingeniería con precisión <em>de estudio.</em></h2>
+        <p class="body">Cada pieza se diseña, se mide y se ajusta antes de mostrarse. Así construimos productos digitales: sin atajos y sin plantillas genéricas.</p>
+        <ul class="tags"><li>Diseño</li><li>Código</li><li>Rendimiento</li></ul>
+      </div>
+      <div class="beat beat--center" data-in=".6" data-out=".98">
+        <h2 class="display display--xl">Y cuando todo encaja… <em>se abre.</em></h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAP 03 · PROCESO / TRANSFORMACIÓN (frames 214–334) -->
+  <section class="chapter" id="proceso" data-f0="214" data-f1="334" data-label="CAP. 03 — DESPLIEGUE">
+    <div class="stage">
+      <p class="stage__kicker beat" data-in=".0" data-out="1">Del núcleo al despliegue · Cómo trabajamos</p>
+      <div class="beat beat--step" data-in=".03" data-out=".27"><span class="num">01</span><h3>Descubrimos</h3><p>Entendemos tu negocio, tus clientes y lo que necesitás resolver.</p></div>
+      <div class="beat beat--step" data-in=".27" data-out=".51"><span class="num">02</span><h3>Diseñamos</h3><p>Interfaces claras, con identidad propia y pensadas para convertir visitas en clientes.</p></div>
+      <div class="beat beat--step" data-in=".51" data-out=".75"><span class="num">03</span><h3>Desarrollamos</h3><p>Código limpio, rápido y seguro, preparado para crecer con vos.</p></div>
+      <div class="beat beat--step" data-in=".75" data-out=".99"><span class="num">04</span><h3>Lanzamos</h3><p>Publicamos, medimos y acompañamos la evolución del proyecto.</p></div>
+    </div>
+  </section>
+
+  <!-- CAP 04 · SERVICIOS (frames 334–454) — cada módulo del núcleo = un servicio -->
+  <section class="chapter" id="servicios" data-f0="334" data-f1="454" data-label="CAP. 04 — SERVICIOS">
+    <div class="stage">
+      <p class="stage__kicker beat" data-in="0" data-out="1">Seis módulos · Un mismo sistema</p>
+      <ol class="svc-dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+      <article class="beat svc" data-in=".005" data-out=".16"><span class="num">01</span><h3>Páginas web</h3><p>Sitios institucionales y landing pages rápidas, pensadas primero para el celular y listas para aparecer en buscadores.</p></article>
+      <article class="beat svc" data-in=".172" data-out=".327"><span class="num">02</span><h3>Aplicaciones web</h3><p>Plataformas a medida: paneles, portales para clientes y herramientas internas que trabajan por vos.</p></article>
+      <article class="beat svc" data-in=".339" data-out=".494"><span class="num">03</span><h3>Apps móviles</h3><p>Aplicaciones para celulares que tus clientes y tu equipo usan todos los días.</p></article>
+      <article class="beat svc" data-in=".506" data-out=".661"><span class="num">04</span><h3>Tiendas online</h3><p>Catálogos y ventas por internet con pedidos, pagos online y WhatsApp integrados.</p></article>
+      <article class="beat svc" data-in=".672" data-out=".827"><span class="num">05</span><h3>Sistemas de gestión</h3><p>Turnos, stock, pedidos y clientes en un solo lugar. Chau planillas sueltas.</p></article>
+      <article class="beat svc" data-in=".839" data-out=".995"><span class="num">06</span><h3>Experiencias interactivas</h3><p>Presentaciones 3D y sitios cinematográficos como este, para marcas que quieren destacarse.</p></article>
+    </div>
+  </section>
+
+  <!-- CAP 05 · CONTACTO (frames 454–539) -->
+  <section class="chapter chapter--last" id="contacto" data-f0="454" data-f1="539" data-label="CAP. 05 — CONTACTO">
+    <div class="stage">
+      <div class="beat beat--center" data-in=".0" data-out=".6">
+        <h2 class="display display--xl">Todas las piezas. <em>Un mismo sistema.</em></h2>
+      </div>
+      <div class="beat cta" data-in=".68" data-out="2">
+        <p class="kicker">Tu proyecto, en marcha</p>
+        <h2 class="cta__title">Hagamos realidad<br>tu proyecto</h2>
+        <p class="body">Contanos qué necesitás y te respondemos por WhatsApp.</p>
+        <div class="cta__actions">
+          <a class="btn btn--primary" href="https://wa.me/5492901471353?text=Hola%20Zenix%20AR%2C%20quiero%20hacer%20realidad%20mi%20proyecto" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+            Hablemos por WhatsApp
+          </a>
+          <a class="btn btn--ghost" href="https://zenix.com.ar/" target="_blank" rel="noopener">Ver zenix.com.ar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__in">
+    <div class="foot__brand"><img src="assets/logo-z.webp" alt="" width="40" height="37"><div><strong>Zenix AR</strong><span>Soluciones digitales</span></div></div>
+    <p>Páginas web · Aplicaciones web · Apps móviles · Tiendas online · Sistemas de gestión</p>
+    <div class="foot__links">
+      <a href="https://wa.me/5492901471353" target="_blank" rel="noopener">WhatsApp +54 9 2901 47-1353</a>
+      <a href="https://zenix.com.ar/" target="_blank" rel="noopener">zenix.com.ar</a>
+    </div>
+    <small>© 2026 Zenix AR. Secuencia 3D original renderizada para Zenix AR.</small>
+  </div>
+</footer>
+
+<noscript><style>.loader{display:none}.beat,.hero{opacity:1!important;transform:none!important}</style></noscript>
+<script src="vendor/gsap.min.js" defer></script>
+<script src="vendor/ScrollTrigger.min.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
