@@ -1,0 +1,52 @@
+name: Capturas Zenix (una vez)
+on:
+  push:
+    branches:
+      - capturas-zenix-20261022
+    paths:
+      - .github/workflows/capturas-zenix.yml
+permissions:
+  contents: write
+jobs:
+  capturar:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Preparar navegador
+        run: |
+          command -v google-chrome
+          google-chrome --version
+          mkdir -p capturas-zenix
+      - name: Obtener seis capturas reales
+        shell: bash
+        run: |
+          set -e
+          urls=(
+            "https://josenunezapps.github.io/DLupita/zenix-caja/#/inicio"
+            "https://josenunezapps.github.io/DLupita/zenix-caja/#/vender"
+            "https://josenunezapps.github.io/DLupita/zenix-caja/#/caja"
+            "https://josenunezapps.github.io/DLupita/zenix-cotiza/#/inicio"
+            "https://josenunezapps.github.io/DLupita/zenix-cotiza/#/presupuestos"
+            "https://josenunezapps.github.io/DLupita/zenix-cotiza/#/p/q14"
+          )
+          names=(Caja_01_Inicio Caja_02_Vender Caja_03_Caja Cotiza_01_Inicio Cotiza_02_Presupuestos Cotiza_03_Editor)
+          for i in "${!urls[@]}"; do
+            echo "Capturando ${names[$i]}..."
+            timeout 65s google-chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --window-size=1440,940 --virtual-time-budget=6500 --screenshot="capturas-zenix/${names[$i]}.png" "${urls[$i]}" || true
+            test -s "capturas-zenix/${names[$i]}.png" || exit 1
+            file "capturas-zenix/${names[$i]}.png"
+          done
+          ls -lh capturas-zenix
+      - name: Guardar ZIP descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Capturas_Zenix_Caja_y_Cotiza
+          path: capturas-zenix/*.png
+          retention-days: 30
+      - name: Publicar capturas en rama aislada
+        run: |
+          git config user.name "Zenix Screenshot Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add capturas-zenix/*.png
+          git commit -m "Capturas PNG verificadas de Zenix Caja y Cotiza" || exit 0
+          git push origin HEAD:capturas-zenix-20261022
