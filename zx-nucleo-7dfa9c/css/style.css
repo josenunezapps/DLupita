@@ -116,7 +116,7 @@ main{position:relative;z-index:10}
 
 /* hero */
 .hero{position:absolute;left:var(--gx);right:var(--gx);bottom:calc(96px + var(--safeB));max-width:58rem}
-.hero__title{font:500 clamp(4.2rem,13vw,12.5rem)/.86 var(--display);letter-spacing:-.045em;margin:0 0 26px;white-space:nowrap}
+.hero__title{font:500 min(12.5rem,calc((100vw - 2*var(--gx)) / 5.8))/.86 var(--display);letter-spacing:-.045em;margin:0 0 26px;white-space:nowrap}
 .hero__title .accent{background:linear-gradient(110deg,#b79bff,#7a52ff 50%,#5a3dff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero__title .ch{display:inline-block;will-change:transform}
 .hero__title .accent .ch{background:linear-gradient(110deg,#b79bff,#7a52ff 60%,#5a3dff);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -152,7 +152,7 @@ main{position:relative;z-index:10}
   .display{font-size:clamp(1.9rem,8.2vw,3rem)}
   .display--xl{font-size:clamp(2.1rem,9.4vw,3.4rem)}
   .hero{bottom:calc(11vh + var(--safeB))}
-  .hero__title{font-size:clamp(3.6rem,19vw,7rem);margin-bottom:18px}
+  .hero__title{font-size:min(7rem,calc((100vw - 2*var(--gx)) / 5.8));margin-bottom:18px}
   .hero__lead{font-size:1rem;margin-bottom:20px}
   .stage__kicker{top:calc(104px + var(--safeT));max-width:calc(100% - 2*var(--gx))}
   .num{font-size:2.8rem}
