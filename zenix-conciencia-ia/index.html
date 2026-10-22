@@ -55,11 +55,11 @@ h2{font-size:clamp(30px,4.2vw,52px);font-weight:700}
 .hero h1{font-size:clamp(42px,6.4vw,82px);font-weight:800;margin:18px 0 22px}
 .hero h1 span{background:linear-gradient(100deg,var(--cobalt),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.mind{position:relative;aspect-ratio:1;width:100%;max-width:600px;justify-self:center}
+.mind{position:relative;aspect-ratio:1;width:100%;max-width:600px;justify-self:center;border-radius:36px;overflow:hidden;background:radial-gradient(circle at 50% 48%,#08204d 0%,#040b1f 55%,#02050d 100%);box-shadow:0 40px 90px -30px rgba(10,40,140,.6),inset 0 0 0 1px rgba(120,170,255,.12)}
 .mind canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer}
-.mind-tag{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.86);border:1px solid var(--line);box-shadow:var(--shadow);font:500 12px "JetBrains Mono",monospace;color:var(--ink-2);white-space:nowrap;backdrop-filter:blur(8px)}
+.mind-tag{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;background:rgba(6,16,40,.7);border:1px solid rgba(120,170,255,.22);font:500 12px "JetBrains Mono",monospace;color:#bcd2ff;white-space:nowrap;backdrop-filter:blur(8px)}
 .mind-tag i{width:8px;height:8px;border-radius:50%;background:#18c26a;box-shadow:0 0 0 4px rgba(24,194,106,.18);animation:blink 1.6s infinite}
-.mind-thought{position:absolute;top:6%;left:50%;transform:translateX(-50%);max-width:88%;text-align:center;font:500 12px/1.5 "JetBrains Mono",monospace;color:var(--muted);transition:opacity .6s;pointer-events:none}
+.mind-thought{position:absolute;top:6%;left:50%;transform:translateX(-50%);max-width:88%;text-align:center;font:500 12px/1.5 "JetBrains Mono",monospace;color:#8fb4ff;transition:opacity .6s;pointer-events:none}
 @keyframes blink{50%{opacity:.35}}
 .chip{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-size:13px;color:var(--muted)}
 .chip b{color:var(--cobalt)}
@@ -119,10 +119,10 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
 
 /* chat */
 .chat-fab{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:999px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);cursor:pointer;font-weight:600;font-size:14px}
-.chat-fab canvas{width:46px;height:46px;border-radius:50%;background:#0b1230}
+.chat-fab canvas{width:46px;height:46px;border-radius:50%;background:#030814}
 .chat{position:fixed;right:18px;bottom:18px;z-index:70;width:min(400px,calc(100vw - 24px));height:min(620px,calc(100dvh - 36px));display:flex;flex-direction:column;padding:0;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px -20px rgba(13,21,48,.45);overflow:hidden;transform-origin:bottom right;transition:transform .3s,opacity .3s}
 .chat[hidden]{display:flex!important;opacity:0;transform:scale(.9) translateY(10px);pointer-events:none;visibility:hidden}
-.chat-head{position:relative;background:#0b1230;color:#fff;padding:14px 14px 0;display:flex;flex-direction:column;align-items:center}
+.chat-head{position:relative;background:radial-gradient(circle at 50% 70%,#08204d,#030814 70%);color:#fff;padding:14px 14px 0;display:flex;flex-direction:column;align-items:center}
 .chat-head .row{width:100%;display:flex;justify-content:space-between;align-items:center}
 .chat-head .who b{display:block;font-size:15px}
 .chat-head .who small{font:400 11px "JetBrains Mono",monospace;color:#9fb0ee}
@@ -320,83 +320,111 @@ const coarse=matchMedia('(pointer: coarse)').matches;
 const Mind={mode:'idle',energy:0,voice:0,think:0,attX:0,attY:0};
 // mode: idle (piensa sola) | thinking (procesando un mensaje) | speaking (habla)
 
-/* ---------- Esfera de puntos ---------- */
+/* ---------- Conciencia: red neuronal azul luminosa ---------- */
 function makeOrb(canvas,opts){
   const ctx=canvas.getContext('2d');
-  const N=opts.points,pts=new Float32Array(N*3),seed=new Float32Array(N);
-  const g=Math.PI*(3-Math.sqrt(5));
-  for(let i=0;i<N;i++){const y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=g*i;pts[i*3]=Math.cos(th)*r;pts[i*3+1]=y;pts[i*3+2]=Math.sin(th)*r;seed[i]=Math.random();}
-  const proj=new Float32Array(N*4);
-  const links=[];// índices de una red de neuronas (subconjunto)
-  const hubs=[];for(let i=0;i<N;i+=opts.hubStep)hubs.push(i);
-  for(const a of hubs){let best=[];for(const b of hubs){if(a>=b)continue;const dx=pts[a*3]-pts[b*3],dy=pts[a*3+1]-pts[b*3+1],dz=pts[a*3+2]-pts[b*3+2],d=dx*dx+dy*dy+dz*dz;if(d<opts.linkDist)best.push(b);}best.slice(0,3).forEach(b=>links.push([a,b]));}
-  const sparks=[];let W=1,H=1,dpr=1;
-  function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,coarse?1.5:2);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
+  const N=opts.points,base=new Float32Array(N*3),seed=new Float32Array(N),shell=new Uint8Array(N);
+  const g=Math.PI*(3-Math.sqrt(5)),outer=Math.round(N*.68);
+  const lump=(x,y,z)=>.16*Math.sin(x*2.3+1.1)*Math.cos(y*1.9-.4)+.12*Math.sin(z*3.1+x*1.3)+.08*Math.cos(y*4.2+z*2.1);
+  for(let i=0;i<N;i++){
+    let x,y,z,r;
+    if(i<outer){const yy=1-(i/(outer-1))*2,rr=Math.sqrt(1-yy*yy),th=g*i;x=Math.cos(th)*rr;y=yy;z=Math.sin(th)*rr;r=1+lump(x,y,z)+(Math.random()-.5)*.08;shell[i]=1;}
+    else{const u=Math.random()*2-1,th=Math.random()*6.283,rr=Math.sqrt(1-u*u);x=Math.cos(th)*rr;y=u;z=Math.sin(th)*rr;r=.18+Math.pow(Math.random(),.7)*.62;}
+    base[i*3]=x*r;base[i*3+1]=y*r;base[i*3+2]=z*r;seed[i]=Math.random();
+  }
+  // red cristalina: cada nodo se une a sus vecinos más cercanos
+  const links=[];
+  for(let a=0;a<N;a++){
+    const near=[];
+    for(let b=0;b<N;b++){if(a===b)continue;const dx=base[a*3]-base[b*3],dy=base[a*3+1]-base[b*3+1],dz=base[a*3+2]-base[b*3+2],d=dx*dx+dy*dy+dz*dz;if(d<opts.linkDist)near.push([d,b]);}
+    near.sort((p,q)=>p[0]-q[0]);
+    for(const [,b] of near.slice(0,opts.k))if(a<b)links.push(a,b);
+  }
+  const L=links.length/2;
+  // rayos del núcleo hacia algunos nodos de la cáscara
+  const rays=[];for(let i=0;i<outer;i+=Math.max(1,Math.round(outer/opts.rays)))rays.push(i);
+  // filamentos que se escapan de la esfera
+  const tend=[];for(let i=0;i<opts.tendrils;i++)tend.push({n:(Math.random()*outer)|0,len:.35+Math.random()*.55,ph:Math.random()*6.283});
+  // polvo de luz alrededor
+  const dust=[];for(let i=0;i<opts.dust;i++)dust.push({a:Math.random()*6.283,r:1.05+Math.random()*.9,y:(Math.random()-.5)*1.6,s:.2+Math.random()*.8,p:Math.random()});
+  const P=new Float32Array(N*4),sparks=[];let W=1,H=1;
+  function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,coarse?1.5:2);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
   new ResizeObserver(resize).observe(canvas);resize();
+  const C=opts.rgb,HOT=opts.hot;
   function draw(t){
-    const cx=W/2,cy=H/2,R=Math.min(W,H)*opts.scale*(1+Mind.voice*.08+Mind.think*.03);
-    ctx.clearRect(0,0,W,H);
-    if(opts.bg){ctx.fillStyle=opts.bg;ctx.fillRect(0,0,W,H);}
-    // halo
-    const halo=ctx.createRadialGradient(cx,cy,R*.2,cx,cy,R*1.55);
-    halo.addColorStop(0,`rgba(${opts.glow},${.16+Mind.voice*.22+Mind.think*.08})`);halo.addColorStop(1,`rgba(${opts.glow},0)`);
-    ctx.fillStyle=halo;ctx.fillRect(0,0,W,H);
-    const speed=1+Mind.think*1.8+Mind.voice*1.2;
-    const ry=t*.00018*speed+Mind.attX*.5,rx=Math.sin(t*.00011)*.35+Mind.attY*.4;
-    const cyr=Math.cos(ry),syr=Math.sin(ry),cxr=Math.cos(rx),sxr=Math.sin(rx);
-    const tt=t*.001;
-    const amp=.07+Mind.think*.1+Mind.voice*.16;
+    const cx=W/2,cy=H/2,R=Math.min(W,H)*opts.scale*(1+Mind.voice*.07+Mind.think*.025),tt=t*.001;
+    ctx.globalCompositeOperation='source-over';
+    if(opts.bg){ctx.fillStyle=opts.bg;ctx.fillRect(0,0,W,H);}else ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+    const glow=.3+Mind.voice*.25+Mind.think*.1;
+    let gr=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.7);gr.addColorStop(0,`rgba(${C},${glow})`);gr.addColorStop(.45,`rgba(20,70,200,${glow*.45})`);gr.addColorStop(1,'rgba(0,20,80,0)');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+    const speed=1+Mind.think*1.6+Mind.voice*1.1,amp=.06+Mind.think*.09+Mind.voice*.15;
+    const ry=t*.00016*speed+Mind.attX*.6,rx=Math.sin(t*.0001)*.3+Mind.attY*.45,cyr=Math.cos(ry),syr=Math.sin(ry),cxr=Math.cos(rx),sxr=Math.sin(rx);
     for(let i=0;i<N;i++){
-      let x=pts[i*3],y=pts[i*3+1],z=pts[i*3+2];
-      // campo de "pensamiento": ondas que recorren la superficie
-      let d=Math.sin(x*3.1+tt*1.3)*Math.sin(y*2.7-tt*1.1)*.6+Math.sin(z*4.3+x*1.7+tt*1.9)*.4;
-      d+=Math.sin((y+tt*.6)*9)*.25*Mind.voice+Math.sin(seed[i]*40+tt*6)*.12*Mind.think;
-      const s=1+d*amp;x*=s;y*=s;z*=s;
-      const X=x*cyr+z*syr,Z0=-x*syr+z*cyr,Y=y*cxr-Z0*sxr,Z=y*sxr+Z0*cxr;
-      const p=3.2/(3.2-Z);
-      proj[i*4]=cx+X*R*p;proj[i*4+1]=cy-Y*R*p;proj[i*4+2]=Z;proj[i*4+3]=d;
+      let x=base[i*3],y=base[i*3+1],z=base[i*3+2];
+      let d=Math.sin(x*3.1+tt*1.3)*Math.sin(y*2.7-tt*1.05)*.6+Math.sin(z*4.1+x*1.6+tt*1.8)*.4;
+      d+=Math.sin((y+tt*.7)*8)*.3*Mind.voice+Math.sin(seed[i]*40+tt*6)*.14*Mind.think;
+      const s=1+d*amp*(shell[i]?1:1.6);x*=s;y*=s;z*=s;
+      const X=x*cyr+z*syr,Z0=-x*syr+z*cyr,Y=y*cxr-Z0*sxr,Z=y*sxr+Z0*cxr,p=3.4/(3.4-Z);
+      P[i*4]=cx+X*R*p;P[i*4+1]=cy-Y*R*p;P[i*4+2]=Z;P[i*4+3]=d;
     }
-    // conexiones neuronales
-    ctx.lineWidth=opts.line;
-    for(const [a,b] of links){
-      const za=proj[a*4+2],zb=proj[b*4+2];if(za+zb<-.6)continue;
-      const al=(.05+(za+zb+2)*.05)*(1+Mind.think+Mind.voice);
-      ctx.strokeStyle=`rgba(${opts.lineRGB},${Math.min(al,.45)})`;
-      ctx.beginPath();ctx.moveTo(proj[a*4],proj[a*4+1]);ctx.lineTo(proj[b*4],proj[b*4+1]);ctx.stroke();
+    // red: tres capas de profundidad en un solo trazo cada una
+    const act=1+Mind.think*.9+Mind.voice*1.2;
+    for(let layer=0;layer<3;layer++){
+      ctx.beginPath();
+      for(let k=0;k<L;k++){const a=links[k*2],b=links[k*2+1],z=(P[a*4+2]+P[b*4+2])*.5,band=z<-.35?0:z<.3?1:2;if(band!==layer)continue;ctx.moveTo(P[a*4],P[a*4+1]);ctx.lineTo(P[b*4],P[b*4+1]);}
+      ctx.strokeStyle=`rgba(${C},${Math.min(.9,[.12,.3,.55][layer]*act)})`;ctx.lineWidth=opts.line*[.6,.85,1.15][layer];ctx.stroke();
     }
-    // chispas: impulsos que viajan por la red (sinapsis)
-    const rate=opts.sparkRate*(1+Mind.think*5+Mind.voice*4);
-    if(Math.random()<rate&&links.length)sparks.push({l:links[(Math.random()*links.length)|0],p:0,v:.015+Math.random()*.03});
-    for(let k=sparks.length-1;k>=0;k--){
-      const s=sparks[k];s.p+=s.v*speed;if(s.p>=1){sparks.splice(k,1);continue;}
-      const [a,b]=s.l,x=proj[a*4]+(proj[b*4]-proj[a*4])*s.p,y=proj[a*4+1]+(proj[b*4+1]-proj[a*4+1])*s.p;
-      ctx.fillStyle=`rgba(${opts.sparkRGB},.95)`;ctx.beginPath();ctx.arc(x,y,opts.dot*2.1,0,6.283);ctx.fill();
-      ctx.fillStyle=`rgba(${opts.sparkRGB},.18)`;ctx.beginPath();ctx.arc(x,y,opts.dot*6,0,6.283);ctx.fill();
+    // brillo exterior de la red (pasada ancha y tenue)
+    ctx.lineWidth=opts.line*3.5;ctx.strokeStyle=`rgba(${C},${.07*act})`;ctx.stroke();ctx.lineWidth=opts.line*8;ctx.strokeStyle=`rgba(${C},${.025*act})`;ctx.stroke();
+    // rayos desde el núcleo
+    ctx.beginPath();
+    for(const i of rays){const f=.5+.5*Math.sin(seed[i]*50+tt*(1.5+Mind.think*4));if(f<.55)continue;ctx.moveTo(cx,cy);ctx.lineTo(P[i*4],P[i*4+1]);}
+    ctx.strokeStyle=`rgba(${HOT},${.12+Mind.voice*.22+Mind.think*.08})`;ctx.lineWidth=opts.line*.7;ctx.stroke();
+    // filamentos
+    for(const f of tend){
+      const i=f.n,x=P[i*4],y=P[i*4+1],dx=x-cx,dy=y-cy,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,ext=R*f.len*(1+Mind.voice*.4),w=Math.sin(tt*1.4+f.ph)*R*.12;
+      const ex=x+ux*ext-uy*w,ey=y+uy*ext+ux*w;
+      const lg=ctx.createLinearGradient(x,y,ex,ey);lg.addColorStop(0,`rgba(${C},.5)`);lg.addColorStop(1,`rgba(${C},0)`);
+      ctx.strokeStyle=lg;ctx.lineWidth=opts.line*1.4;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+ux*ext*.5+uy*w,y+uy*ext*.5-ux*w,ex,ey);ctx.stroke();
     }
-    // puntos
+    // nodos
     for(let i=0;i<N;i++){
-      const z=proj[i*4+2],depth=(z+1.2)/2.4,d=proj[i*4+3];
-      const flick=.55+.45*Math.sin(seed[i]*30+tt*(2+Mind.think*6));
-      const a=Math.max(.06,depth*.9)*(.6+.4*flick);
-      const hot=Math.max(0,d)*(Mind.voice+Mind.think*.6);
-      const r=opts.dot*(.55+depth*.85+hot*.9);
-      ctx.fillStyle=hot>.35?`rgba(${opts.sparkRGB},${a})`:(seed[i]>.82?`rgba(${opts.accentRGB},${a})`:`rgba(${opts.dotRGB},${a})`);
-      ctx.beginPath();ctx.arc(proj[i*4],proj[i*4+1],r,0,6.283);ctx.fill();
+      const z=P[i*4+2],depth=Math.min(1,Math.max(0,(z+1.3)/2.6)),hot=Math.max(0,P[i*4+3])*(Mind.voice+Mind.think*.5);
+      const fl=.55+.45*Math.sin(seed[i]*31+tt*(2.2+Mind.think*6));
+      const a=Math.min(1,(.3+depth*.9)*fl),r=opts.dot*(.45+depth*.9+hot*.8);
+      if(seed[i]>.9||hot>.45){ctx.fillStyle=`rgba(${C},${a*.22})`;ctx.beginPath();ctx.arc(P[i*4],P[i*4+1],r*5,0,6.283);ctx.fill();ctx.fillStyle=`rgba(${HOT},${a})`;}
+      else ctx.fillStyle=`rgba(${C},${a})`;
+      ctx.beginPath();ctx.arc(P[i*4],P[i*4+1],r,0,6.283);ctx.fill();
     }
-    // núcleo
-    const core=ctx.createRadialGradient(cx,cy,0,cx,cy,R*.42);
-    core.addColorStop(0,`rgba(${opts.sparkRGB},${.22+Mind.voice*.5+Mind.think*.18})`);core.addColorStop(1,`rgba(${opts.sparkRGB},0)`);
-    ctx.fillStyle=core;ctx.beginPath();ctx.arc(cx,cy,R*.42,0,6.283);ctx.fill();
+    // impulsos viajando por la red
+    if(Math.random()<opts.sparkRate*(1+Mind.think*5+Mind.voice*4)&&L)sparks.push({k:(Math.random()*L)|0,p:0,v:.02+Math.random()*.04});
+    for(let s=sparks.length-1;s>=0;s--){
+      const sp=sparks[s];sp.p+=sp.v*speed;if(sp.p>=1){sparks.splice(s,1);continue;}
+      const a=links[sp.k*2],b=links[sp.k*2+1],x=P[a*4]+(P[b*4]-P[a*4])*sp.p,y=P[a*4+1]+(P[b*4+1]-P[a*4+1])*sp.p;
+      ctx.fillStyle=`rgba(${HOT},.9)`;ctx.beginPath();ctx.arc(x,y,opts.dot*1.6,0,6.283);ctx.fill();
+      ctx.fillStyle=`rgba(${C},.25)`;ctx.beginPath();ctx.arc(x,y,opts.dot*5,0,6.283);ctx.fill();
+    }
+    // polvo de luz
+    for(const p of dust){
+      p.a+=.0015*p.s*speed;const x=cx+Math.cos(p.a)*p.r*R,y=cy+p.y*R+Math.sin(tt*p.s+p.p*6)*R*.04,tw=.5+.5*Math.sin(tt*2*p.s+p.p*9);
+      ctx.fillStyle=`rgba(${C},${.12+tw*.35})`;ctx.beginPath();ctx.arc(x,y,opts.dot*(.4+tw*.6),0,6.283);ctx.fill();
+    }
+    // núcleo blanco
+    const cr=R*(.6+Mind.voice*.18),pul=.75+.25*Math.sin(tt*3)+Mind.voice*.6+Mind.think*.25;
+    gr=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);gr.addColorStop(0,`rgba(255,255,255,${Math.min(1,.85*pul)})`);gr.addColorStop(.18,`rgba(${HOT},${.55*pul})`);gr.addColorStop(.5,`rgba(${C},${.18*pul})`);gr.addColorStop(1,`rgba(${C},0)`);
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(cx,cy,cr,0,6.283);ctx.fill();
+    ctx.globalCompositeOperation='source-over';
   }
   return{draw,canvas};
 }
 
-const light={dotRGB:'28,52,170',accentRGB:'122,77,255',lineRGB:'35,80,255',sparkRGB:'40,110,255',glow:'91,124,255'};
-const dark={dotRGB:'190,205,255',accentRGB:'170,140,255',lineRGB:'140,165,255',sparkRGB:'120,220,255',glow:'91,124,255',bg:'#0b1230'};
+const blue={rgb:'70,165,255',hot:'190,240,255'};
 const orbs=[
-  makeOrb($('#mind-canvas'),{...light,points:coarse?850:1300,hubStep:7,linkDist:.09,scale:.36,dot:1.35,line:.7,sparkRate:.35}),
-  makeOrb($('#chat-canvas'),{...dark,bg:null,points:520,hubStep:6,linkDist:.12,scale:.33,dot:1,line:.6,sparkRate:.3}),
-  makeOrb($('#fab-canvas'),{...dark,points:220,hubStep:5,linkDist:.18,scale:.34,dot:.75,line:.5,sparkRate:.2})
+  makeOrb($('#mind-canvas'),{...blue,points:coarse?560:820,k:3,linkDist:.075,rays:40,tendrils:9,dust:coarse?70:120,scale:.33,dot:1.3,line:.8,sparkRate:.45}),
+  makeOrb($('#chat-canvas'),{...blue,points:380,k:3,linkDist:.11,rays:24,tendrils:6,dust:40,scale:.32,dot:1,line:.7,sparkRate:.35}),
+  makeOrb($('#fab-canvas'),{...blue,bg:'#030814',points:170,k:2,linkDist:.18,rays:12,tendrils:0,dust:0,scale:.34,dot:.75,line:.55,sparkRate:.25})
 ];
 
 /* Atención: la conciencia mira hacia el puntero */
