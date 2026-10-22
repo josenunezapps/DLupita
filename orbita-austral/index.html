@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Órbita Austral</title>
+<meta name="description" content="Arcade de un toque: saltá entre órbitas, esquivá meteoritos y juntá cristales bajo la aurora austral.">
+<meta name="theme-color" content="#05060f">
+<meta property="og:title" content="Órbita Austral">
+<meta property="og:description" content="Un toque. Dos órbitas. ¿Cuánto aguantás?">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root { --acc: #c6ff3d; --cy: #7cf7ff; --ink: #eef2ff; --dim: rgba(238,242,255,.6); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; overflow: hidden; background: #05060f; color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  canvas { position: fixed; inset: 0; display: block; }
+  .layer { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; text-align: center; padding: 24px; }
+  .layer > * { pointer-events: auto; }
+  .top { position: fixed; top: max(14px, env(safe-area-inset-top)); left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 16px; pointer-events: none; z-index: 5; }
+  .top > * { pointer-events: auto; }
+  .ib { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); background: rgba(10,14,30,.5); backdrop-filter: blur(8px); color: var(--ink); font-size: 18px; cursor: pointer; }
+  .title { font-weight: 900; letter-spacing: -.04em; line-height: .9; font-size: clamp(46px, 12vw, 92px); text-shadow: 0 0 40px rgba(124,247,255,.35); }
+  .title em { font-style: normal; display: block; font-size: .5em; letter-spacing: .35em; color: var(--acc); text-shadow: 0 0 24px rgba(198,255,61,.5); margin-top: 8px; }
+  #menu { place-items: stretch; padding: 0; }
+  .menu { position: fixed; inset: 0; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: max(9vh, calc(env(safe-area-inset-top) + 60px)) 24px max(10vh, calc(env(safe-area-inset-bottom) + 44px)); pointer-events: none; }
+  .menu .head, .menu .foot { display: grid; gap: 14px; justify-items: center; }
+  .menu .tap { font-weight: 800; letter-spacing: .25em; font-size: 14px; color: var(--acc); animation: blink 1.4s ease-in-out infinite; }
+  .menu small { color: var(--dim); font-size: 13px; max-width: 300px; line-height: 1.5; }
+  .pill { font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 99px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); }
+  @keyframes blink { 50% { opacity: .35; } }
+  .hud { position: fixed; left: 0; right: 0; top: max(20px, env(safe-area-inset-top)); display: grid; justify-items: center; gap: 6px; pointer-events: none; }
+  #lvl { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+  #combo { font-size: 30px; font-weight: 900; color: var(--acc); text-shadow: 0 0 20px rgba(198,255,61,.6); transform: scale(.6); opacity: 0; transition: transform .15s, opacity .15s; min-height: 36px; }
+  #combo.on { transform: scale(1); opacity: 1; }
+  .cbar { width: 80px; height: 3px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; } #comboBar { height: 100%; background: var(--acc); transform-origin: left; transform: scaleX(0); }
+  #shieldIc { font-size: 12px; font-weight: 800; color: var(--cy); opacity: 0; transition: opacity .2s; letter-spacing: .12em; } #shieldIc.on { opacity: 1; }
+  .card { background: rgba(8,12,28,.78); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.12); border-radius: 26px; padding: 28px 26px 22px; width: min(360px, 100%); display: grid; gap: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.6); animation: up .35s cubic-bezier(.2,.8,.3,1); }
+  @keyframes up { from { transform: translateY(20px) scale(.97); opacity: 0; } }
+  .card h2 { font-size: 13px; letter-spacing: .3em; color: var(--dim); font-weight: 800; }
+  #finalScore { font-size: 76px; font-weight: 900; letter-spacing: -.04em; line-height: 1; }
+  #finalBest { font-weight: 800; color: var(--dim); } #finalBest.new { color: var(--acc); text-shadow: 0 0 20px rgba(198,255,61,.5); animation: blink 1s ease-in-out 3; }
+  #finalStats { font-size: 13px; color: var(--dim); } #overMsg { font-size: 13px; color: var(--cy); margin-top: 2px; }
+  .btns { display: grid; grid-template-columns: 1.4fr 1fr; gap: 10px; margin-top: 10px; }
+  .btn { height: 52px; border-radius: 16px; border: 0; font: 800 15px inherit; font-family: inherit; cursor: pointer; }
+  .btn.p { background: var(--acc); color: #0b0c0e; box-shadow: 0 10px 30px -8px rgba(198,255,61,.6); } .btn.g { background: rgba(255,255,255,.1); color: var(--ink); }
+  .btn:active { transform: scale(.97); }
+  .hint { font-size: 11px; color: var(--dim); margin-top: 6px; }
+  #pause { position: fixed; inset: 0; background: rgba(5,6,15,.6); display: none; place-items: center; z-index: 6; } #pause.on { display: grid; }
+  #toast { position: fixed; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translate(-50%, 20px); background: #fff; color: #000; padding: 10px 16px; border-radius: 99px; font-weight: 700; opacity: 0; transition: all .25s; pointer-events: none; }
+  #toast.on { opacity: 1; transform: translate(-50%, 0); }
+  .credit { position: fixed; bottom: max(12px, env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; font-size: 11px; color: rgba(238,242,255,.35); letter-spacing: .1em; pointer-events: none; }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="Juego Órbita Austral"></canvas>
+<div class="top"><button class="ib" id="pauseBtn" aria-label="Pausa">❚❚</button><button class="ib" id="mute" aria-label="Sonido">🔊</button></div>
+
+<div class="layer" id="menu">
+  <div class="menu">
+    <div class="head"><h1 class="title">ÓRBITA<em>AUSTRAL</em></h1><span class="pill" id="bestMenu"></span></div>
+    <div class="foot"><p class="tap">TOCÁ PARA JUGAR</p>
+    <small>Un toque cambia de órbita. Esquivá meteoritos y compuertas, juntá cristales seguidos para multiplicar.</small></div>
+  </div>
+</div>
+
+<div class="hud" id="hud" hidden><span id="lvl"></span><span id="combo"></span><div class="cbar"><div id="comboBar"></div></div><span id="shieldIc">◎ ESCUDO</span></div>
+
+<div class="layer" id="over" hidden>
+  <div class="card">
+    <h2>PUNTAJE</h2>
+    <div id="finalScore">0</div>
+    <div id="finalBest"></div>
+    <div id="finalStats"></div>
+    <div id="overMsg"></div>
+    <div class="btns"><button class="btn p" id="retry">Otra vez</button><button class="btn g" id="share">Desafiar</button></div>
+    <div class="hint">Tocá la pantalla o espacio para reintentar</div>
+  </div>
+</div>
+
+<div id="pause"><div class="card"><h2>PAUSA</h2><button class="btn p" id="resume">Seguir</button></div></div>
+<div id="toast"></div>
+<div class="credit">ZENIX AR · USHUAIA</div>
+<script src="game.js"></script>
+</body>
+</html>
