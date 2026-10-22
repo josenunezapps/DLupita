@@ -55,11 +55,11 @@ h2{font-size:clamp(30px,4.2vw,52px);font-weight:700}
 .hero h1{font-size:clamp(42px,6.4vw,82px);font-weight:800;margin:18px 0 22px}
 .hero h1 span{background:linear-gradient(100deg,var(--cobalt),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-.mind{position:relative;aspect-ratio:1;width:100%;max-width:600px;justify-self:center;border-radius:36px;overflow:hidden;background:radial-gradient(circle at 50% 48%,#08204d 0%,#040b1f 55%,#02050d 100%);box-shadow:0 40px 90px -30px rgba(10,40,140,.6),inset 0 0 0 1px rgba(120,170,255,.12)}
+.mind{position:relative;aspect-ratio:1;width:100%;max-width:600px;justify-self:center;border-radius:36px;overflow:hidden;background:#000;box-shadow:0 40px 90px -30px rgba(10,40,140,.55)}
 .mind canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer}
 .mind-tag{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;background:rgba(6,16,40,.7);border:1px solid rgba(120,170,255,.22);font:500 12px "JetBrains Mono",monospace;color:#bcd2ff;white-space:nowrap;backdrop-filter:blur(8px)}
 .mind-tag i{width:8px;height:8px;border-radius:50%;background:#18c26a;box-shadow:0 0 0 4px rgba(24,194,106,.18);animation:blink 1.6s infinite}
-.mind-thought{position:absolute;top:6%;left:50%;transform:translateX(-50%);max-width:88%;text-align:center;font:500 12px/1.5 "JetBrains Mono",monospace;color:#8fb4ff;transition:opacity .6s;pointer-events:none}
+.mind-thought{position:absolute;top:3.5%;z-index:1;text-shadow:0 0 12px #000,0 0 4px #000;left:50%;transform:translateX(-50%);max-width:88%;text-align:center;font:500 12px/1.5 "JetBrains Mono",monospace;color:#8fb4ff;transition:opacity .6s;pointer-events:none}
 @keyframes blink{50%{opacity:.35}}
 .chip{display:inline-flex;align-items:center;gap:8px;margin-top:26px;font-size:13px;color:var(--muted)}
 .chip b{color:var(--cobalt)}
@@ -119,16 +119,16 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
 
 /* chat */
 .chat-fab{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:999px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);cursor:pointer;font-weight:600;font-size:14px}
-.chat-fab canvas{width:46px;height:46px;border-radius:50%;background:#030814}
+.chat-fab canvas{width:46px;height:46px;border-radius:50%;background:#000}
 .chat{position:fixed;right:18px;bottom:18px;z-index:70;width:min(400px,calc(100vw - 24px));height:min(620px,calc(100dvh - 36px));display:flex;flex-direction:column;padding:0;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px -20px rgba(13,21,48,.45);overflow:hidden;transform-origin:bottom right;transition:transform .3s,opacity .3s}
 .chat[hidden]{display:flex!important;opacity:0;transform:scale(.9) translateY(10px);pointer-events:none;visibility:hidden}
-.chat-head{position:relative;background:radial-gradient(circle at 50% 70%,#08204d,#030814 70%);color:#fff;padding:14px 14px 0;display:flex;flex-direction:column;align-items:center}
+.chat-head{position:relative;overflow:hidden;background:#000;color:#fff;padding:14px 14px 0;display:flex;flex-direction:column;align-items:center}
 .chat-head .row{width:100%;display:flex;justify-content:space-between;align-items:center}
 .chat-head .who b{display:block;font-size:15px}
 .chat-head .who small{font:400 11px "JetBrains Mono",monospace;color:#9fb0ee}
 .iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center;font-size:16px}
 .iconbtn[aria-pressed=false]{opacity:.5}
-.chat-head canvas{width:150px;height:150px;display:block;margin:-6px 0 -10px}
+.chat-head canvas{width:170px;height:150px;display:block;margin:-4px 0 0}
 .msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
 .msg{max-width:86%;padding:11px 14px;border-radius:18px;font-size:15px;line-height:1.5;white-space:pre-line;word-wrap:break-word}
 .msg.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px;align-self:flex-start}
@@ -320,111 +320,125 @@ const coarse=matchMedia('(pointer: coarse)').matches;
 const Mind={mode:'idle',energy:0,voice:0,think:0,attX:0,attY:0};
 // mode: idle (piensa sola) | thinking (procesando un mensaje) | speaking (habla)
 
-/* ---------- Conciencia: red neuronal azul luminosa ---------- */
+/* ---------- Conciencia: energía neuronal azul con resplandor ---------- */
 function makeOrb(canvas,opts){
   const ctx=canvas.getContext('2d');
   const N=opts.points,base=new Float32Array(N*3),seed=new Float32Array(N),shell=new Uint8Array(N);
-  const g=Math.PI*(3-Math.sqrt(5)),outer=Math.round(N*.68);
-  const lump=(x,y,z)=>.16*Math.sin(x*2.3+1.1)*Math.cos(y*1.9-.4)+.12*Math.sin(z*3.1+x*1.3)+.08*Math.cos(y*4.2+z*2.1);
+  const g=Math.PI*(3-Math.sqrt(5)),outer=Math.round(N*.62);
+  const lump=(x,y,z)=>.2*Math.sin(x*2.1+1.1)*Math.cos(y*1.7-.4)+.14*Math.sin(z*3.3+x*1.2)+.1*Math.cos(y*4.4+z*2.3);
   for(let i=0;i<N;i++){
     let x,y,z,r;
-    if(i<outer){const yy=1-(i/(outer-1))*2,rr=Math.sqrt(1-yy*yy),th=g*i;x=Math.cos(th)*rr;y=yy;z=Math.sin(th)*rr;r=1+lump(x,y,z)+(Math.random()-.5)*.08;shell[i]=1;}
-    else{const u=Math.random()*2-1,th=Math.random()*6.283,rr=Math.sqrt(1-u*u);x=Math.cos(th)*rr;y=u;z=Math.sin(th)*rr;r=.18+Math.pow(Math.random(),.7)*.62;}
+    if(i<outer){const yy=1-(i/(outer-1))*2,rr=Math.sqrt(1-yy*yy),th=g*i;x=Math.cos(th)*rr;y=yy;z=Math.sin(th)*rr;r=1+lump(x,y,z)+(Math.random()-.5)*.14;if(Math.random()<.035)r+=.25+Math.random()*.45;shell[i]=1;}
+    else{const u=Math.random()*2-1,th=Math.random()*6.283,rr=Math.sqrt(1-u*u);x=Math.cos(th)*rr;y=u;z=Math.sin(th)*rr;r=.12+Math.pow(Math.random(),.6)*.75;}
     base[i*3]=x*r;base[i*3+1]=y*r;base[i*3+2]=z*r;seed[i]=Math.random();
   }
-  // red cristalina: cada nodo se une a sus vecinos más cercanos
-  const links=[];
+  // red: vecinos más cercanos
+  const nb=Array.from({length:N},()=>[]),links=[];
   for(let a=0;a<N;a++){
     const near=[];
     for(let b=0;b<N;b++){if(a===b)continue;const dx=base[a*3]-base[b*3],dy=base[a*3+1]-base[b*3+1],dz=base[a*3+2]-base[b*3+2],d=dx*dx+dy*dy+dz*dz;if(d<opts.linkDist)near.push([d,b]);}
     near.sort((p,q)=>p[0]-q[0]);
-    for(const [,b] of near.slice(0,opts.k))if(a<b)links.push(a,b);
+    for(const [,b] of near.slice(0,opts.k)){if(!nb[a].includes(b)){nb[a].push(b);nb[b].push(a);if(a<b)links.push(a,b);else links.push(b,a);}}
   }
   const L=links.length/2;
-  // rayos del núcleo hacia algunos nodos de la cáscara
-  const rays=[];for(let i=0;i<outer;i+=Math.max(1,Math.round(outer/opts.rays)))rays.push(i);
-  // filamentos que se escapan de la esfera
-  const tend=[];for(let i=0;i<opts.tendrils;i++)tend.push({n:(Math.random()*outer)|0,len:.35+Math.random()*.55,ph:Math.random()*6.283});
-  // polvo de luz alrededor
-  const dust=[];for(let i=0;i<opts.dust;i++)dust.push({a:Math.random()*6.283,r:1.05+Math.random()*.9,y:(Math.random()-.5)*1.6,s:.2+Math.random()*.8,p:Math.random()});
-  const P=new Float32Array(N*4),sparks=[];let W=1,H=1;
-  function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,coarse?1.5:2);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
+  // placas de cristal: triángulos de la red
+  const tris=[],tseed=[];
+  for(let k=0;k<L&&tris.length/3<opts.tris;k++){const a=links[k*2],b=links[k*2+1];for(const c of nb[a])if(c!==b&&nb[b].includes(c)&&Math.random()<.55){tris.push(a,b,c);tseed.push(Math.random());break;}}
+  const T=tris.length/3;
+  // hilos de energía enredados alrededor
+  const strands=[];
+  for(let i=0;i<opts.strands;i++){
+    let ax=[Math.random()-.5,Math.random()-.5,Math.random()-.5];const l=Math.hypot(...ax);ax=ax.map(v=>v/l);
+    let u=Math.abs(ax[0])<.9?[0,-ax[2],ax[1]]:[-ax[2],0,ax[0]];const lu=Math.hypot(...u);u=u.map(v=>v/lu);
+    const v=[ax[1]*u[2]-ax[2]*u[1],ax[2]*u[0]-ax[0]*u[2],ax[0]*u[1]-ax[1]*u[0]];
+    strands.push({u,v,r:.75+Math.random()*.6,arc:2+Math.random()*3.5,ph:Math.random()*6.283,sp:(Math.random()-.5)*.6,wob:.05+Math.random()*.15,bright:Math.random()<.25});
+  }
+  const dust=[];for(let i=0;i<opts.dust;i++){const u=Math.random()*2-1,th=Math.random()*6.283,rr=Math.sqrt(1-u*u),r=.3+Math.random()*1.9;dust.push({x:Math.cos(th)*rr*r,y:u*r*.8,z:Math.sin(th)*rr*r,s:Math.random(),p:Math.random()*6.283});}
+  const P=new Float32Array(N*4),sparks=[];let W=1,H=1,dpr=1;
+  // lienzos reducidos para el resplandor (bloom)
+  const b1=document.createElement('canvas'),b2=document.createElement('canvas'),b3=document.createElement('canvas'),c1=b1.getContext('2d'),c2=b2.getContext('2d'),c3=b3.getContext('2d');
+  let cap=coarse?1.6:2,ema=16,lastT=0,frames=0;
+  function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,cap);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+    b1.width=Math.max(1,canvas.width>>2);b1.height=Math.max(1,canvas.height>>2);b2.width=Math.max(1,b1.width>>1);b2.height=Math.max(1,b1.height>>1);b3.width=Math.max(1,b2.width>>1);b3.height=Math.max(1,b2.height>>1);}
   new ResizeObserver(resize).observe(canvas);resize();
   const C=opts.rgb,HOT=opts.hot;
+  let rxv=0,ryv=0,cyr=1,syr=0,cxr=1,sxr=0,cx=0,cy=0,R=1;
+  function proj(x,y,z,out,o){const X=x*cyr+z*syr,Z0=-x*syr+z*cyr,Y=y*cxr-Z0*sxr,Z=y*sxr+Z0*cxr,p=3.4/(3.4-Z);out[o]=cx+X*R*p;out[o+1]=cy-Y*R*p;out[o+2]=Z;}
+  const tmp=new Float32Array(3);
   function draw(t){
-    const cx=W/2,cy=H/2,R=Math.min(W,H)*opts.scale*(1+Mind.voice*.07+Mind.think*.025),tt=t*.001;
-    ctx.globalCompositeOperation='source-over';
-    if(opts.bg){ctx.fillStyle=opts.bg;ctx.fillRect(0,0,W,H);}else ctx.clearRect(0,0,W,H);
+    const now=performance.now();if(lastT){ema=ema*.95+(now-lastT)*.05;if(++frames>90&&ema>28&&cap>1){cap=1;frames=0;resize();}}lastT=now;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cx=W/2;cy=H/2;R=Math.min(W,H)*opts.scale*(1+Mind.voice*.07+Mind.think*.025);const tt=t*.001;
+    ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1;
+    ctx.fillStyle=opts.bg;ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation='lighter';
-    const glow=.3+Mind.voice*.25+Mind.think*.1;
-    let gr=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.7);gr.addColorStop(0,`rgba(${C},${glow})`);gr.addColorStop(.45,`rgba(20,70,200,${glow*.45})`);gr.addColorStop(1,'rgba(0,20,80,0)');
+    const speed=1+Mind.think*1.6+Mind.voice*1.1,amp=.07+Mind.think*.1+Mind.voice*.16,act=1+Mind.think*.8+Mind.voice*1.1;
+    ryv=t*.00015*speed+Mind.attX*.6;rxv=Math.sin(t*.0001)*.3+Mind.attY*.45;cyr=Math.cos(ryv);syr=Math.sin(ryv);cxr=Math.cos(rxv);sxr=Math.sin(rxv);
+    let gr=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.6);gr.addColorStop(0,`rgba(30,110,255,${.28+Mind.voice*.2})`);gr.addColorStop(.5,'rgba(10,50,170,.12)');gr.addColorStop(1,'rgba(0,10,60,0)');
     ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
-    const speed=1+Mind.think*1.6+Mind.voice*1.1,amp=.06+Mind.think*.09+Mind.voice*.15;
-    const ry=t*.00016*speed+Mind.attX*.6,rx=Math.sin(t*.0001)*.3+Mind.attY*.45,cyr=Math.cos(ry),syr=Math.sin(ry),cxr=Math.cos(rx),sxr=Math.sin(rx);
     for(let i=0;i<N;i++){
       let x=base[i*3],y=base[i*3+1],z=base[i*3+2];
       let d=Math.sin(x*3.1+tt*1.3)*Math.sin(y*2.7-tt*1.05)*.6+Math.sin(z*4.1+x*1.6+tt*1.8)*.4;
-      d+=Math.sin((y+tt*.7)*8)*.3*Mind.voice+Math.sin(seed[i]*40+tt*6)*.14*Mind.think;
-      const s=1+d*amp*(shell[i]?1:1.6);x*=s;y*=s;z*=s;
-      const X=x*cyr+z*syr,Z0=-x*syr+z*cyr,Y=y*cxr-Z0*sxr,Z=y*sxr+Z0*cxr,p=3.4/(3.4-Z);
-      P[i*4]=cx+X*R*p;P[i*4+1]=cy-Y*R*p;P[i*4+2]=Z;P[i*4+3]=d;
+      d+=Math.sin((y+tt*.7)*8)*.3*Mind.voice+Math.sin(seed[i]*40+tt*6)*.15*Mind.think;
+      const s=1+d*amp*(shell[i]?1:1.7);proj(x*s,y*s,z*s,P,i*4);P[i*4+3]=d;
     }
-    // red: tres capas de profundidad en un solo trazo cada una
-    const act=1+Mind.think*.9+Mind.voice*1.2;
+    // placas translúcidas
+    ctx.beginPath();const bright=[];
+    for(let k=0;k<T;k++){const a=tris[k*3],b=tris[k*3+1],c=tris[k*3+2];if(P[a*4+2]+P[b*4+2]+P[c*4+2]<-1.2)continue;
+      if(Math.sin(tseed[k]*60+tt*(.7+Mind.think*2))>.72){bright.push(k);continue;}
+      ctx.moveTo(P[a*4],P[a*4+1]);ctx.lineTo(P[b*4],P[b*4+1]);ctx.lineTo(P[c*4],P[c*4+1]);ctx.closePath();}
+    ctx.fillStyle=`rgba(${C},${.05*act})`;ctx.fill();
+    ctx.beginPath();for(const k of bright){const a=tris[k*3],b=tris[k*3+1],c=tris[k*3+2];ctx.moveTo(P[a*4],P[a*4+1]);ctx.lineTo(P[b*4],P[b*4+1]);ctx.lineTo(P[c*4],P[c*4+1]);ctx.closePath();}
+    ctx.fillStyle=`rgba(${HOT},${.14*act})`;ctx.fill();ctx.strokeStyle=`rgba(${HOT},${.5*act})`;ctx.lineWidth=opts.line;ctx.stroke();
+    // red en tres profundidades
     for(let layer=0;layer<3;layer++){
       ctx.beginPath();
       for(let k=0;k<L;k++){const a=links[k*2],b=links[k*2+1],z=(P[a*4+2]+P[b*4+2])*.5,band=z<-.35?0:z<.3?1:2;if(band!==layer)continue;ctx.moveTo(P[a*4],P[a*4+1]);ctx.lineTo(P[b*4],P[b*4+1]);}
-      ctx.strokeStyle=`rgba(${C},${Math.min(.9,[.12,.3,.55][layer]*act)})`;ctx.lineWidth=opts.line*[.6,.85,1.15][layer];ctx.stroke();
+      ctx.strokeStyle=`rgba(${C},${Math.min(.95,[.16,.36,.62][layer]*act)})`;ctx.lineWidth=opts.line*[.55,.8,1.1][layer];ctx.stroke();
     }
-    // brillo exterior de la red (pasada ancha y tenue)
-    ctx.lineWidth=opts.line*3.5;ctx.strokeStyle=`rgba(${C},${.07*act})`;ctx.stroke();ctx.lineWidth=opts.line*8;ctx.strokeStyle=`rgba(${C},${.025*act})`;ctx.stroke();
-    // rayos desde el núcleo
-    ctx.beginPath();
-    for(const i of rays){const f=.5+.5*Math.sin(seed[i]*50+tt*(1.5+Mind.think*4));if(f<.55)continue;ctx.moveTo(cx,cy);ctx.lineTo(P[i*4],P[i*4+1]);}
-    ctx.strokeStyle=`rgba(${HOT},${.12+Mind.voice*.22+Mind.think*.08})`;ctx.lineWidth=opts.line*.7;ctx.stroke();
-    // filamentos
-    for(const f of tend){
-      const i=f.n,x=P[i*4],y=P[i*4+1],dx=x-cx,dy=y-cy,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,ext=R*f.len*(1+Mind.voice*.4),w=Math.sin(tt*1.4+f.ph)*R*.12;
-      const ex=x+ux*ext-uy*w,ey=y+uy*ext+ux*w;
-      const lg=ctx.createLinearGradient(x,y,ex,ey);lg.addColorStop(0,`rgba(${C},.5)`);lg.addColorStop(1,`rgba(${C},0)`);
-      ctx.strokeStyle=lg;ctx.lineWidth=opts.line*1.4;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+ux*ext*.5+uy*w,y+uy*ext*.5-ux*w,ex,ey);ctx.stroke();
+    // hilos de energía
+    for(const s of strands){
+      ctx.beginPath();const segs=opts.segs,o=s.ph+tt*s.sp*speed;
+      for(let j=0;j<=segs;j++){const th=o+s.arc*j/segs,w=1+Math.sin(th*3+tt*1.2+s.ph)*s.wob+Mind.voice*.12*Math.sin(th*6+tt*8),r=s.r*w,c=Math.cos(th)*r,sn=Math.sin(th)*r;
+        proj(s.u[0]*c+s.v[0]*sn,s.u[1]*c+s.v[1]*sn,s.u[2]*c+s.v[2]*sn,tmp,0);j?ctx.lineTo(tmp[0],tmp[1]):ctx.moveTo(tmp[0],tmp[1]);}
+      ctx.strokeStyle=s.bright?`rgba(${HOT},${.55*act})`:`rgba(${C},${.28*act})`;ctx.lineWidth=opts.line*(s.bright?1.5:.8);ctx.stroke();
     }
     // nodos
     for(let i=0;i<N;i++){
       const z=P[i*4+2],depth=Math.min(1,Math.max(0,(z+1.3)/2.6)),hot=Math.max(0,P[i*4+3])*(Mind.voice+Mind.think*.5);
-      const fl=.55+.45*Math.sin(seed[i]*31+tt*(2.2+Mind.think*6));
-      const a=Math.min(1,(.3+depth*.9)*fl),r=opts.dot*(.45+depth*.9+hot*.8);
-      if(seed[i]>.9||hot>.45){ctx.fillStyle=`rgba(${C},${a*.22})`;ctx.beginPath();ctx.arc(P[i*4],P[i*4+1],r*5,0,6.283);ctx.fill();ctx.fillStyle=`rgba(${HOT},${a})`;}
-      else ctx.fillStyle=`rgba(${C},${a})`;
-      ctx.beginPath();ctx.arc(P[i*4],P[i*4+1],r,0,6.283);ctx.fill();
+      const fl=.5+.5*Math.sin(seed[i]*31+tt*(2.2+Mind.think*6)),a=Math.min(1,(.35+depth*.9)*fl),r=opts.dot*(.4+depth*.9+hot*.8);
+      ctx.fillStyle=(seed[i]>.86||hot>.4)?`rgba(${HOT},${a})`:`rgba(${C},${a})`;
+      ctx.beginPath();ctx.arc(P[i*4],P[i*4+1],seed[i]>.86?r*1.6:r,0,6.283);ctx.fill();
     }
-    // impulsos viajando por la red
+    // impulsos
     if(Math.random()<opts.sparkRate*(1+Mind.think*5+Mind.voice*4)&&L)sparks.push({k:(Math.random()*L)|0,p:0,v:.02+Math.random()*.04});
-    for(let s=sparks.length-1;s>=0;s--){
-      const sp=sparks[s];sp.p+=sp.v*speed;if(sp.p>=1){sparks.splice(s,1);continue;}
-      const a=links[sp.k*2],b=links[sp.k*2+1],x=P[a*4]+(P[b*4]-P[a*4])*sp.p,y=P[a*4+1]+(P[b*4+1]-P[a*4+1])*sp.p;
-      ctx.fillStyle=`rgba(${HOT},.9)`;ctx.beginPath();ctx.arc(x,y,opts.dot*1.6,0,6.283);ctx.fill();
-      ctx.fillStyle=`rgba(${C},.25)`;ctx.beginPath();ctx.arc(x,y,opts.dot*5,0,6.283);ctx.fill();
-    }
-    // polvo de luz
-    for(const p of dust){
-      p.a+=.0015*p.s*speed;const x=cx+Math.cos(p.a)*p.r*R,y=cy+p.y*R+Math.sin(tt*p.s+p.p*6)*R*.04,tw=.5+.5*Math.sin(tt*2*p.s+p.p*9);
-      ctx.fillStyle=`rgba(${C},${.12+tw*.35})`;ctx.beginPath();ctx.arc(x,y,opts.dot*(.4+tw*.6),0,6.283);ctx.fill();
-    }
-    // núcleo blanco
-    const cr=R*(.6+Mind.voice*.18),pul=.75+.25*Math.sin(tt*3)+Mind.voice*.6+Mind.think*.25;
-    gr=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);gr.addColorStop(0,`rgba(255,255,255,${Math.min(1,.85*pul)})`);gr.addColorStop(.18,`rgba(${HOT},${.55*pul})`);gr.addColorStop(.5,`rgba(${C},${.18*pul})`);gr.addColorStop(1,`rgba(${C},0)`);
+    ctx.fillStyle=`rgba(${HOT},.95)`;
+    for(let s=sparks.length-1;s>=0;s--){const sp=sparks[s];sp.p+=sp.v*speed;if(sp.p>=1){sparks.splice(s,1);continue;}
+      const a=links[sp.k*2],b=links[sp.k*2+1];ctx.beginPath();ctx.arc(P[a*4]+(P[b*4]-P[a*4])*sp.p,P[a*4+1]+(P[b*4+1]-P[a*4+1])*sp.p,opts.dot*1.8,0,6.283);ctx.fill();}
+    // partículas
+    for(const d of dust){const tw=.5+.5*Math.sin(tt*(1+d.s*2)+d.p);proj(d.x,d.y+Math.sin(tt*.4+d.p)*.05,d.z,tmp,0);ctx.fillStyle=`rgba(${d.s>.7?HOT:C},${.15+tw*.55})`;ctx.beginPath();ctx.arc(tmp[0],tmp[1],opts.dot*(.3+tw*.7),0,6.283);ctx.fill();}
+    // núcleo encandilante
+    const cr=R*(.7+Mind.voice*.2),pul=.8+.2*Math.sin(tt*3)+Mind.voice*.6+Mind.think*.25;
+    gr=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);gr.addColorStop(0,`rgba(255,255,255,${Math.min(1,pul)})`);gr.addColorStop(.1,`rgba(220,245,255,${.85*pul})`);gr.addColorStop(.3,`rgba(${HOT},${.3*pul})`);gr.addColorStop(.6,`rgba(${C},${.1*pul})`);gr.addColorStop(1,`rgba(${C},0)`);
     ctx.fillStyle=gr;ctx.beginPath();ctx.arc(cx,cy,cr,0,6.283);ctx.fill();
-    ctx.globalCompositeOperation='source-over';
+    // resplandor: reducir y volver a sumar (bloom barato, funciona en todos los navegadores)
+    ctx.setTransform(1,0,0,1,0,0);
+    c1.globalCompositeOperation='copy';c2.globalCompositeOperation='copy';c3.globalCompositeOperation='copy';
+    c1.drawImage(canvas,0,0,b1.width,b1.height);c2.drawImage(b1,0,0,b2.width,b2.height);c3.drawImage(b2,0,0,b3.width,b3.height);
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+    ctx.globalAlpha=opts.bloom*.6;ctx.drawImage(b1,0,0,canvas.width,canvas.height);
+    ctx.globalAlpha=opts.bloom*.8;ctx.drawImage(b2,0,0,canvas.width,canvas.height);
+    ctx.globalAlpha=opts.bloom;ctx.drawImage(b3,0,0,canvas.width,canvas.height);
+    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
   }
   return{draw,canvas};
 }
 
-const blue={rgb:'70,165,255',hot:'190,240,255'};
+const blue={rgb:'45,150,255',hot:'170,230,255',bg:'#000'};
 const orbs=[
-  makeOrb($('#mind-canvas'),{...blue,points:coarse?560:820,k:3,linkDist:.075,rays:40,tendrils:9,dust:coarse?70:120,scale:.33,dot:1.3,line:.8,sparkRate:.45}),
-  makeOrb($('#chat-canvas'),{...blue,points:380,k:3,linkDist:.11,rays:24,tendrils:6,dust:40,scale:.32,dot:1,line:.7,sparkRate:.35}),
-  makeOrb($('#fab-canvas'),{...blue,bg:'#030814',points:170,k:2,linkDist:.18,rays:12,tendrils:0,dust:0,scale:.34,dot:.75,line:.55,sparkRate:.25})
+  makeOrb($('#mind-canvas'),{...blue,points:coarse?600:850,k:3,linkDist:.07,tris:coarse?220:320,strands:coarse?16:24,segs:44,dust:coarse?160:260,scale:.29,dot:1.15,line:.75,sparkRate:.5,bloom:.75}),
+  makeOrb($('#chat-canvas'),{...blue,bg:'#000',points:380,k:3,linkDist:.1,tris:140,strands:12,segs:32,dust:80,scale:.31,dot:.95,line:.65,sparkRate:.35,bloom:.7}),
+  makeOrb($('#fab-canvas'),{...blue,points:170,k:2,linkDist:.18,tris:40,strands:5,segs:20,dust:20,scale:.33,dot:.7,line:.5,sparkRate:.25,bloom:.6})
 ];
 
 /* Atención: la conciencia mira hacia el puntero */
