@@ -76,7 +76,7 @@
   }), { rootMargin: '300px 0px' });
   $$('.step').forEach(step => {
     const holder = step.querySelector('.m-phone'), name = step.querySelector('.num').textContent;
-    holder.innerHTML = `<div class="phone small"><div class="island"></div><div class="screen m-screen"><div class="status"><span>9:41</span><i>●●● ▮</i></div><button class="tap"><span>▶</span>Tocá para probar ${name}</button></div></div><div class="phone-label">${name} · en vivo</div>`;
+    holder.innerHTML = `<div class="phone small"><div class="island"></div><div class="screen m-screen"><div class="status"><span>9:41</span><i>●●● ▮</i></div><img class="preview" src="assets/preview-${step.dataset.app}.webp" alt="Vista previa de ${name}" loading="lazy"><button class="tap"><span>▶</span>Tocá para probar ${name}</button></div></div><div class="phone-label">${name} · en vivo</div>`;
     const sc = holder.querySelector('.m-screen');
     fitPhone(sc);
     sc.querySelector('.tap').onclick = () => load(step, sc);
