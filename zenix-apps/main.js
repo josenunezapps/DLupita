@@ -29,36 +29,25 @@
     const s = screen.clientWidth / W;
     screen.style.setProperty('--s', s); screen.style.height = H * s + 'px';
   }
-  const screen = $('#screen'), label = $('#phoneLabel');
-  let active = null;
-  function activate(step) {
-    if (!desktop() || active === step) return;
-    active = step;
-    $$('.step').forEach(s => s.classList.toggle('on', s === step));
-    const key = step.dataset.app;
-    if (!frames[key]) { const f = makeFrame(step.dataset.src, step.querySelector('.num').textContent); frames[key] = f; screen.appendChild(f); }
-    Object.entries(frames).forEach(([k, f]) => f.classList.toggle('show', k === key));
-    label.textContent = `${step.querySelector('.num').textContent} · en vivo`;
-    $('#phone').classList.remove('swap'); void $('#phone').offsetWidth; $('#phone').classList.add('swap');
-  }
-  const sio = new IntersectionObserver(es => {
-    const vis = es.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (vis) activate(vis.target);
-  }, { threshold: [.35, .6, .85], rootMargin: '-25% 0px -25% 0px' });
-  $$('.step').forEach(s => sio.observe(s));
-  const firstStep = $('.step');
-  const initDesktop = () => { if (desktop()) { fitPhone(screen); if (!active) activate(firstStep); } };
-  initDesktop();
-  addEventListener('resize', () => { initDesktop(); $$('.m-screen').forEach(fitPhone); });
-
-  // en celular: cada app tiene su teléfono y se carga al tocar (ahorra datos)
+  // cada app tiene su propio teléfono. En PC se carga sola al acercarse; en celular, al tocar (ahorra datos).
+  const load = (step, sc) => {
+    if (sc.querySelector('iframe')) return;
+    const f = makeFrame(step.dataset.src, step.querySelector('.num').textContent); f.loading = 'eager';
+    sc.appendChild(f); requestAnimationFrame(() => f.classList.add('show'));
+    sc.querySelector('.tap')?.remove();
+  };
+  const lazy = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && desktop()) { const step = e.target.closest('.step'); load(step, e.target); lazy.unobserve(e.target); }
+  }), { rootMargin: '300px 0px' });
   $$('.step').forEach(step => {
-    const holder = step.querySelector('.m-phone');
-    holder.innerHTML = `<div class="phone small"><div class="island"></div><div class="screen m-screen"><div class="status"><span>9:41</span><i>●●● ▮</i></div><button class="tap"><span>▶</span>Tocá para probar ${step.querySelector('.num').textContent}</button></div></div>`;
+    const holder = step.querySelector('.m-phone'), name = step.querySelector('.num').textContent;
+    holder.innerHTML = `<div class="phone small"><div class="island"></div><div class="screen m-screen"><div class="status"><span>9:41</span><i>●●● ▮</i></div><button class="tap"><span>▶</span>Tocá para probar ${name}</button></div></div><div class="phone-label">${name} · en vivo</div>`;
     const sc = holder.querySelector('.m-screen');
     fitPhone(sc);
-    sc.querySelector('.tap').onclick = () => { const f = makeFrame(step.dataset.src, step.querySelector('.num').textContent); f.classList.add('show'); sc.appendChild(f); sc.querySelector('.tap').remove(); };
+    sc.querySelector('.tap').onclick = () => load(step, sc);
+    lazy.observe(sc);
   });
+  addEventListener('resize', () => $$('.m-screen').forEach(fitPhone));
 
   // íconos y capturas de las tiendas: si no cargan, se reemplazan con algo prolijo
   $$('.st-icon').forEach(img => img.addEventListener('error', () => { const d = document.createElement('div'); d.className = 'st-icon fb'; d.textContent = img.dataset.fallback || '★'; img.replaceWith(d); }));
