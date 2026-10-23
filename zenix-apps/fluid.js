@@ -161,7 +161,7 @@
     const raw = now - last;
     // en celular (o en modo mínimo) se simula a ~30 cuadros por segundo: la mitad de trabajo para la GPU
     if ((isMobile || level >= 2) && (skip = !skip)) return;
-    const dt = Math.min(.033, raw / 1000); last = now; t += dt;
+    const dt = Math.max(0, Math.min(.033, raw / 1000)); last = now; t += dt;   // el reloj de rAF puede venir antes que performance.now()
     if (now - perf.since > 600) { perf.n++; perf.sum += raw; }
     if (perf.n >= 45) { const avg = perf.sum / perf.n, budget = (isMobile || level >= 2) ? 50 : 30; perf.n = perf.sum = 0; if (avg > budget) degrade(); }
     resize();
@@ -174,7 +174,7 @@
         for (let k = 0; k < (isMobile ? 1 : 2); k++) {
           const a = t * (.35 + k * .17) + k * 2.1, x = .5 + Math.cos(a) * .32, y = .5 + Math.sin(a * 1.3 + k) * .28;
           const dx = -Math.sin(a) * 420, dy = Math.cos(a * 1.3 + k) * 360;
-          splat(x, y, dx * intensity, dy * intensity, PALETTE[(Math.floor(t / 3) + k) % PALETTE.length].map(v => v * .045 * intensity), .12);
+          splat(x, y, dx * intensity, dy * intensity, PALETTE[(Math.floor(t / 3) + k) % PALETTE.length || 0].map(v => v * .045 * intensity), .12);
         }
       }
     }
