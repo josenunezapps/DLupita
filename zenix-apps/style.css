@@ -101,15 +101,41 @@ section { position: relative; }
 /* experiencias */
 .extra { padding: 100px 0; }
 .cards { max-width: 1240px; margin: 60px auto 0; padding: 0 clamp(18px, 4vw, 48px); display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-.xcard { border-radius: 28px; background: var(--panel); border: 1px solid var(--line); overflow: hidden; transition: transform .3s, border-color .3s; }
-.xcard:hover { transform: translateY(-4px); border-color: rgba(139,92,246,.35); }
-.xframe { aspect-ratio: 16 / 10; position: relative; background: #000; }
-.xframe iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.poster { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; padding: 24px; }
-.poster span { font-size: 56px; } .poster b { font: 750 clamp(18px, 2.2vw, 24px)/1.15 var(--display); letter-spacing: -.02em; max-width: 360px; }
-.poster.neurona { background: radial-gradient(circle at 30% 30%, #2b5b49, #10221c 70%); }
-.poster.orbita { background: radial-gradient(circle at 50% 60%, #3b2aa8, #070814 70%), #05060f; }
-.xbody { padding: 24px 26px 26px; } .xbody h3 { font: 800 26px var(--display); letter-spacing: -.03em; } .xbody p { color: var(--ink2); margin: 8px 0 12px; }
+.store { border-radius: 28px; background: var(--panel); border: 1px solid var(--line); padding: 28px; display: flex; flex-direction: column; gap: 18px; min-width: 0; transition: border-color .3s, transform .3s; }
+.store:hover { border-color: rgba(139,92,246,.35); transform: translateY(-4px); }
+.store:nth-child(2) { transition-delay: .1s; }
+.st-head { display: flex; align-items: center; gap: 16px; }
+.st-icon { width: 72px; height: 72px; border-radius: 18px; flex: none; object-fit: cover; background: #1d1a2e; box-shadow: 0 10px 30px -12px rgba(0,0,0,.8); }
+.st-icon.fb { display: grid; place-items: center; font-size: 36px; }
+.store h3 { font: 800 28px/1.1 var(--display); letter-spacing: -.03em; }
+.st-meta { color: var(--muted); font-size: 14px; margin-top: 2px; } .stars { color: #ffd166; font-weight: 700; }
+.st-lead { font-size: 18px; color: var(--ink2); }
+.shots { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
+.shots img { height: 300px; width: auto; flex: none; border-radius: 14px; scroll-snap-align: start; background: #1d1a2e; border: 1px solid var(--line); }
+.shots img.err { display: none; }
+.st-feats { list-style: none; display: grid; gap: 9px; }
+.st-feats li { display: flex; gap: 12px; color: var(--ink2); font-size: 15px; }
+.st-feats li::before { content: ""; flex: none; width: 18px; height: 18px; margin-top: 3px; border-radius: 50%; background: radial-gradient(circle, var(--lime) 0 3px, transparent 4px), rgba(198,255,61,.12); }
+.st-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: auto; }
+.badge { display: inline-flex; align-items: center; gap: 12px; height: 58px; padding: 0 22px 0 18px; border-radius: 14px; background: #000; border: 1px solid rgba(255,255,255,.28); transition: transform .15s, border-color .2s; }
+.badge:hover { transform: translateY(-2px); border-color: #fff; }
+.badge svg { width: 26px; height: 26px; color: var(--lime); }
+.badge span { display: grid; line-height: 1.1; font: 700 19px var(--display); letter-spacing: -.01em; } .badge small { font: 500 11px var(--font); letter-spacing: .04em; color: var(--ink2); }
+/* maqueta de DistraGuard (ilustración, no captura) */
+.mock { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #0d0b16; }
+.mk-bar { display: flex; align-items: center; gap: 6px; padding: 9px 12px; background: #1a1726; font-size: 11px; color: var(--muted); }
+.mk-bar i { width: 9px; height: 9px; border-radius: 50%; background: #3a3550; } .mk-bar span { margin-left: 8px; }
+.mk-body { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; min-height: 250px; }
+.mk-feed { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start; }
+.mk-feed b { aspect-ratio: 16/10; border-radius: 8px; background: linear-gradient(135deg, #2a2540, #1c1930); position: relative; }
+.mk-feed b.blocked { background: repeating-linear-gradient(135deg, rgba(255,77,109,.12) 0 8px, rgba(255,77,109,.04) 8px 16px); border: 1px dashed rgba(255,77,109,.45); display: grid; place-items: center; }
+.mk-feed em { font-style: normal; font-size: 9.5px; font-weight: 700; color: #ff8fa3; text-align: center; padding: 0 4px; }
+.mk-pop { align-self: start; background: #f6f4ff; color: #16131f; border-radius: 14px; padding: 14px; display: grid; gap: 10px; box-shadow: 0 20px 40px -14px rgba(0,0,0,.8); }
+.mk-pop-h { display: flex; align-items: center; gap: 8px; font-size: 15px; } .mk-pop-h .lock { margin-left: auto; font-size: 13px; }
+.mk-pop label { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
+.mk-pop label i { width: 32px; height: 18px; border-radius: 99px; background: #cfcadd; position: relative; } .mk-pop label i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
+.mk-pop label i.on { background: var(--vio2); } .mk-pop label i.on::after { left: 16px; }
+.mk-stat { display: flex; align-items: baseline; gap: 8px; padding-top: 8px; border-top: 1px solid #e2def0; } .mk-stat b { font: 800 24px var(--display); color: var(--vio2); } .mk-stat span { font-size: 12px; color: #6b6680; }
 
 /* cómo */
 .como { padding: 100px 0; }
@@ -138,6 +164,7 @@ footer a:hover { color: var(--ink); }
   .phone.small .screen { border-radius: 38px; }
   .phone.small .island { top: 19px; width: 90px; height: 26px; }
   .cards, .how { grid-template-columns: minmax(0, 1fr); }
+  .store { padding: 22px; } .shots img { height: 240px; } .mk-body { grid-template-columns: 1fr; } .mk-feed { display: none; }
   .apps { padding-top: 100px; }
 }
 @media (prefers-reduced-motion: reduce) { .track { animation: none; } .reveal { opacity: 1; transform: none; } .hero h1 .w > span { transform: none; transition: none; } }

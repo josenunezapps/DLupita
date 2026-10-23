@@ -60,12 +60,7 @@
     sc.querySelector('.tap').onclick = () => { const f = makeFrame(step.dataset.src, step.querySelector('.num').textContent); f.classList.add('show'); sc.appendChild(f); sc.querySelector('.tap').remove(); };
   });
 
-  // tarjetas de experiencias: cargar la demo en vivo al tocar
-  $$('.xcard').forEach(card => {
-    card.querySelector('.poster button').onclick = () => {
-      const fr = card.querySelector('.xframe'); const f = document.createElement('iframe');
-      f.src = card.dataset.src; f.title = card.querySelector('h3').textContent; f.loading = 'lazy';
-      fr.innerHTML = ''; fr.appendChild(f); fr.classList.add('live');
-    };
-  });
+  // íconos y capturas de las tiendas: si no cargan, se reemplazan con algo prolijo
+  $$('.st-icon').forEach(img => img.addEventListener('error', () => { const d = document.createElement('div'); d.className = 'st-icon fb'; d.textContent = img.dataset.fallback || '★'; img.replaceWith(d); }));
+  $$('.shots img').forEach(img => img.addEventListener('error', () => { img.classList.add('err'); const box = img.parentElement; if (![...box.children].some(x => !x.classList.contains('err'))) box.remove(); }));
 })();
