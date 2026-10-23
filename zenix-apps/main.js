@@ -53,7 +53,6 @@
 
   // ---------- teléfono con apps en vivo ----------
   const W = 390, H = 844;
-  const frames = {};
   function makeFrame(src, title) {
     const f = document.createElement('iframe');
     f.src = src; f.title = title; f.loading = 'lazy'; f.width = W; f.height = H;
