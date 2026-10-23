@@ -1,12 +1,15 @@
 // Simulación de fluidos en la GPU (Navier–Stokes, "stable fluids") en WebGL, escrita a mano.
 // Reacciona al mouse / dedo y se mueve sola cuando nadie la toca.
+// En celular corre más liviana; si el equipo no da abasto, baja la calidad sola y, como último paso, se apaga con un fundido.
 (function () {
   const canvas = document.getElementById('fluid');
   if (!canvas) return;
   const params = { SIM: 128, DYE: 1024, DISS_D: 0.985, DISS_V: 0.992, PRESSURE_IT: 18, CURL: 26, RADIUS: 0.22, FORCE: 6200 };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = matchMedia('(pointer: coarse)').matches;
-  if (isMobile) { params.DYE = 512; params.SIM = 96; params.PRESSURE_IT = 14; }
+  if (isMobile) { params.DYE = 384; params.SIM = 64; params.PRESSURE_IT = 10; params.FORCE = 4200; params.CURL = 18; }
+  let dprCap = isMobile ? 1 : 1.5, level = 0;      // level: 0 normal · 1 liviano · 2 mínimo · 3 apagado
+  const intensity = isMobile ? .7 : 1;
 
   let gl = canvas.getContext('webgl2', { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false });
   const isGL2 = !!gl;
@@ -87,7 +90,7 @@
     if (!dye.ok || !vel.ok) { canvas.classList.add('off'); throw new Error('framebuffer'); }
   }
   function resize() {
-    const dpr = Math.min(isMobile ? 1.25 : 1.5, devicePixelRatio || 1);
+    const dpr = Math.min(dprCap, devicePixelRatio || 1);
     const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; initFBOs(); return true; }
     return false;
@@ -97,7 +100,7 @@
 
   // ---------- interacción ----------
   const PALETTE = [[0.43, 0.24, 0.96], [0.13, 0.83, 0.93], [0.78, 1, 0.24], [0.55, 0.3, 1], [0.1, 0.6, 1]];
-  const pickColor = () => { const c = PALETTE[Math.floor(Math.random() * PALETTE.length)]; return c.map(v => v * .16); };
+  const pickColor = () => { const c = PALETTE[Math.floor(Math.random() * PALETTE.length)]; return c.map(v => v * .16 * intensity); };
   function splat(x, y, dx, dy, color, r = params.RADIUS) {
     const ar = canvas.width / canvas.height;
     gl.useProgram(P.splat.p);
@@ -139,30 +142,44 @@
     blit(null);
   }
 
-  let last = performance.now(), visible = true, auto = 0, t = 0;
+  let last = performance.now(), visible = true, auto = 0, t = 0, skip = false;
+  // monitor de rendimiento: mide el promedio de cuadros y degrada en escalones
+  const perf = { n: 0, sum: 0, since: performance.now() };
+  function degrade() {
+    level++; perf.since = performance.now();
+    if (level === 1) { dprCap = Math.max(.75, dprCap * .75); params.DYE = Math.round(params.DYE * .6); params.PRESSURE_IT = Math.max(8, params.PRESSURE_IT - 6); canvas.width = 0; }
+    else if (level === 2) { params.SIM = Math.max(48, Math.round(params.SIM * .7)); dprCap = .6; canvas.width = 0; }
+    else { canvas.style.transition = 'opacity 1.2s'; canvas.style.opacity = '0'; setTimeout(() => canvas.classList.add('off'), 1300); }
+  }
   new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(canvas);
   // ráfaga inicial
-  for (let i = 0; i < 6; i++) splat(.2 + Math.random() * .6, .25 + Math.random() * .5, (Math.random() - .5) * 900, (Math.random() - .5) * 900, pickColor().map(v => v * 1.6));
+  for (let i = 0; i < (reduce ? 3 : isMobile ? 4 : 6); i++) splat(.2 + Math.random() * .6, .25 + Math.random() * .5, (Math.random() - .5) * 900, (Math.random() - .5) * 900, pickColor().map(v => v * 1.6));
   function frame(now) {
     requestAnimationFrame(frame);
     if (!visible || document.hidden) { last = now; return; }
-    const dt = Math.min(.033, (now - last) / 1000); last = now; t += dt;
-    if (resize()) {}
+    if (level >= 3) return;
+    const raw = now - last;
+    // en celular (o en modo mínimo) se simula a ~30 cuadros por segundo: la mitad de trabajo para la GPU
+    if ((isMobile || level >= 2) && (skip = !skip)) return;
+    const dt = Math.min(.033, raw / 1000); last = now; t += dt;
+    if (now - perf.since > 600) { perf.n++; perf.sum += raw; }
+    if (perf.n >= 45) { const avg = perf.sum / perf.n, budget = (isMobile || level >= 2) ? 50 : 30; perf.n = perf.sum = 0; if (avg > budget) degrade(); }
+    resize();
     if (pointer.moved) { splat(pointer.x, pointer.y, pointer.dx, pointer.dy, pointer.color); pointer.moved = false; if (Math.random() < .03) pointer.color = pickColor(); }
     // movimiento propio: dos "corrientes" que dibujan curvas de Lissajous
-    if (!reduce && now - pointer.last > 1800) {
+    if (!reduce && level < 2 && now - pointer.last > 1800) {
       auto += dt;
-      if (auto > .05) {
+      if (auto > (isMobile ? .09 : .05)) {
         auto = 0;
-        for (let k = 0; k < 2; k++) {
+        for (let k = 0; k < (isMobile ? 1 : 2); k++) {
           const a = t * (.35 + k * .17) + k * 2.1, x = .5 + Math.cos(a) * .32, y = .5 + Math.sin(a * 1.3 + k) * .28;
           const dx = -Math.sin(a) * 420, dy = Math.cos(a * 1.3 + k) * 360;
-          splat(x, y, dx, dy, PALETTE[(Math.floor(t / 3) + k) % PALETTE.length].map(v => v * .05), .12);
+          splat(x, y, dx * intensity, dy * intensity, PALETTE[(Math.floor(t / 3) + k) % PALETTE.length].map(v => v * .045 * intensity), .12);
         }
       }
     }
     step(dt); render();
   }
   requestAnimationFrame(frame);
-  window.__fluid = { ok: true, splat: (x, y) => splat(x, y, 500, 300, pickColor()) };
+  window.__fluid = { ok: true, get level() { return level; }, splat: (x, y) => splat(x, y, 500, 300, pickColor()) };
 })();
