@@ -66,9 +66,9 @@ section { position: relative; }
 .sec-h h2 { font: 800 clamp(36px, 6vw, 76px)/1 var(--display); letter-spacing: -.045em; }
 
 .about { padding: 130px 0 20px; }
-.about-in { max-width: 1240px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 48px); display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+.about-in { max-width: 1240px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 48px); }
 .about h2 { font: 800 clamp(36px, 6vw, 76px)/1 var(--display); letter-spacing: -.045em; margin-bottom: 26px; }
-.about-txt p { color: var(--ink2); font-size: 18px; margin-top: 14px; max-width: 560px; } .about-txt b { color: var(--ink); }
+.about-txt p { color: var(--ink2); font-size: clamp(18px, 1.8vw, 22px); margin-top: 16px; max-width: 760px; } .about-txt b { color: var(--ink); }
 .about-cards { display: grid; gap: 18px; }
 .who { padding: 26px 28px; border-radius: 26px; background: linear-gradient(160deg, rgba(139,92,246,.12), rgba(255,255,255,.02)); border: 1px solid var(--line); }
 .who:nth-child(2) { transition-delay: .12s; background: linear-gradient(160deg, rgba(34,211,238,.10), rgba(255,255,255,.02)); }
