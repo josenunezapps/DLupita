@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Neurona · una IA que aprende frente a tus ojos</title>
+<meta name="description" content="Una red neuronal escrita desde cero que aprende a reconocer dibujos en tu navegador. Dibujá, mirá cómo piensa y enseñale cosas nuevas.">
+<meta name="theme-color" content="#f3efe6">
+<meta property="og:title" content="Neurona · una IA que aprende frente a tus ojos">
+<meta property="og:description" content="Dibujá y adivina. Enseñale cosas nuevas en segundos. Todo corre en tu navegador.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hd">
+  <div class="brand"><span class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#1d3b31"/><g stroke="#c6ff3d" stroke-width="1.6" opacity=".7"><path d="M10 13 20 20M10 27 20 20M20 20 30 13M20 20 30 27M10 13 20 10M10 27 20 30M20 10 30 13M20 30 30 27"/></g><g fill="#f5f5e6"><circle cx="10" cy="13" r="3"/><circle cx="10" cy="27" r="3"/><circle cx="20" cy="10" r="2.6"/><circle cx="20" cy="30" r="2.6"/><circle cx="30" cy="13" r="3"/><circle cx="30" cy="27" r="3"/></g><circle cx="20" cy="20" r="4" fill="#c6ff3d"/></svg></span>
+    <div><b>Neurona</b><small>Una IA que aprende frente a tus ojos</small></div></div>
+  <span class="pill">🔒 Corre en tu navegador · sin servidores</span>
+</header>
+
+<main class="wrap">
+  <section class="stage">
+    <div class="board-card">
+      <div class="game" id="game"><div class="game-p" id="gamePrompt"></div><button class="link" id="stopGame">Salir</button><div class="gtime"><i id="gameTime"></i></div></div>
+      <div class="board-wrap">
+        <canvas class="board" id="board" aria-label="Pizarra para dibujar"></canvas>
+        <p class="hint" id="hintDraw">Dibujá acá con el dedo o el mouse:<br><span>un círculo, una estrella, un corazón, una casa, un rayo…</span></p>
+      </div>
+      <div class="tools"><button class="btn chalk" id="undo">↶ Deshacer</button><button class="btn chalk" id="clear">Borrar</button></div>
+    </div>
+    <aside class="side">
+      <div class="card" id="pred"></div>
+      <div class="card see"><canvas id="seeCv" width="28" height="28"></canvas><div><b>Lo que ve la red</b><p class="muted">Tu dibujo achicado a 28×28 puntos: 784 números entre 0 y 1. Eso es todo lo que recibe.</p></div></div>
+      <div class="cta"><button class="btn primary" id="play">🎯 Desafío: ¿me adivina?</button><button class="btn ghost" id="teach">✏️ Enseñale algo nuevo</button></div>
+    </aside>
+  </section>
+
+  <section class="card dark">
+    <div class="ch"><h2>Adentro de la red</h2><span class="muted" id="info"></span></div>
+    <canvas id="netCv" aria-label="Visualización de las neuronas activándose"></canvas>
+    <p class="cap">Cada punto es una neurona. Las que se encienden en amarillo son las que tu dibujo activó; las líneas muestran por dónde viaja la señal hasta la respuesta.</p>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <div class="ch"><h2>Qué aprendió solita</h2></div>
+      <div class="feats" id="feats"></div>
+      <p class="muted">Estos son los pesos de 16 neuronas de la primera capa. Nadie se los programó: al entrenar, cada una se especializó en detectar un patrón (bordes, curvas, esquinas). En naranja lo que la excita, en azul lo que la apaga.</p>
+    </div>
+    <div class="card">
+      <div class="ch"><h2>Lo que sabe reconocer</h2><button class="link" id="retrain">Reentrenar desde cero</button></div>
+      <div class="known" id="knownBase"></div>
+      <h3>Enseñado por vos</h3>
+      <ul class="custom" id="customList"></ul>
+    </div>
+  </section>
+
+  <section class="card how">
+    <h2>Cómo funciona</h2>
+    <ol>
+      <li><b>Dibujos de práctica.</b> Un generador inventa miles de dibujos a mano alzada, cada uno distinto: más torcidos, más chicos, sin cerrar, con temblor.</li>
+      <li><b>Una red neuronal desde cero.</b> 784 entradas, dos capas de 128 y 64 neuronas, y una salida por cada cosa. Unos 110.000 números que empiezan al azar.</li>
+      <li><b>Aprende equivocándose.</b> Mira un dibujo, adivina, compara con la respuesta y corrige un poquito cada número (retropropagación con el optimizador Adam). Miles de veces, en pocos segundos.</li>
+      <li><b>Generaliza.</b> Por eso reconoce tus dibujos aunque nunca los haya visto. Y con 6 ejemplos tuyos aprende algo nuevo, aprovechando todo lo que ya sabe.</li>
+    </ol>
+    <p class="muted">Todo el código (generador, red neuronal, entrenamiento) está escrito a mano en JavaScript, sin librerías de IA, y corre en tu dispositivo. Hecho por Zenix AR.</p>
+  </section>
+</main>
+
+<div class="ov" id="trainOv">
+  <div class="tcard">
+    <h2 id="trTitle">La red está aprendiendo…</h2>
+    <div class="tbar"><i id="trBar"></i></div>
+    <div class="tgrid">
+      <div class="tstat"><span>Aciertos</span><b id="trAcc">—</b><small id="trSeen">empezando…</small></div>
+      <div class="tsample"><canvas id="trSample" width="28" height="28"></canvas><small id="trSampleL"></small></div>
+    </div>
+    <div class="tloss"><span>Error (cuánto se equivoca)</span><canvas id="lossCv" width="520" height="90"></canvas></div>
+    <p class="muted">Está viendo miles de dibujos de práctica y corrigiéndose. Mirá cómo baja el error y suben los aciertos.</p>
+  </div>
+</div>
+<div class="ov" id="teachOv" hidden></div>
+<div id="toast"></div>
+
+<script src="shapes.js"></script>
+<script src="net.js"></script>
+<script src="app.js"></script>
+<script>
+  // lista de cosas que ya sabe (base)
+  document.getElementById('knownBase').innerHTML = Shapes.CLASSES.map(c => `<span>${c.emoji} ${c.name}</span>`).join('');
+</script>
+</body>
+</html>
