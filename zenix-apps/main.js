@@ -15,6 +15,42 @@
   // barra de navegación
   addEventListener('scroll', () => { $('#nav').classList.toggle('solid', scrollY > 40); $('#touch').classList.toggle('gone', scrollY > 60); }, { passive: true });
 
+  // ---------- cintas cruzadas: se mueven en sentidos opuestos, aceleran con el scroll y se ondulan ----------
+  (() => {
+    const rows = $$('.ticker .row'); if (!rows.length) return;
+    const bands = $$('.ticker .band'), tickerEl = $('.ticker');
+    rows.forEach(r => { const set = r.querySelector('.set'); const need = Math.ceil((innerWidth * 1.3 * 2) / Math.max(1, set.offsetWidth)) + 1; for (let i = 0; i < need; i++) r.appendChild(set.cloneNode(true)); });
+    const st = rows.map(r => ({ r, x: 0, w: r.querySelector('.set').offsetWidth, dir: +r.dataset.dir, items: [...r.querySelectorAll('.tk')] }));
+    let boost = 0, lastY = scrollY, last = performance.now(), hover = 1, t = 0, visible = true;
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe($('.ticker'));
+    addEventListener('scroll', () => { const d = scrollY - lastY; lastY = scrollY; boost = Math.max(-1400, Math.min(1400, boost + d * 9)); }, { passive: true });
+    $('.ticker').addEventListener('pointerenter', () => hover = .25); $('.ticker').addEventListener('pointerleave', () => hover = 1);
+    addEventListener('resize', () => st.forEach(s => s.w = s.r.querySelector('.set').offsetWidth));
+    const base = matchMedia('(prefers-reduced-motion: reduce)').matches ? 30 : 70;
+    function frame(now) {
+      requestAnimationFrame(frame);
+      const dt = Math.min(.05, (now - last) / 1000); last = now; t += dt;
+      boost *= Math.pow(.04, dt);
+      if (!visible) return;
+      const cx = innerWidth / 2;
+      st.forEach((s, i) => {
+        // el scroll empuja: bajando aceleran, subiendo se invierten
+        const speed = base * hover + Math.abs(boost) * .35, way = boost < -40 ? -1 : 1;
+        s.x += speed * s.dir * way * dt;
+        s.x = ((s.x % s.w) + s.w) % s.w - s.w;
+        s.r.style.transform = `translate3d(${s.x}px,0,0)`;
+        // la palabra que pasa por el centro se enciende
+        for (const it of s.items) { const b = it.getBoundingClientRect(); const on = Math.abs(b.left + b.width / 2 - cx) < b.width / 2 + 30; if (on !== it._on) { it._on = on; it.classList.toggle('hot', on); } }
+      });
+      // las cintas respiran y se inclinan un poco más con la velocidad
+      const k = Math.max(-1, Math.min(1, boost / 900));
+      bands[0].style.transform = `rotate(${-3.2 - k * 1.6 + Math.sin(t * .8) * .35}deg) translateY(${Math.sin(t * 1.1) * 3}px)`;
+      bands[1].style.transform = `rotate(${2.4 + k * 1.6 + Math.sin(t * .7 + 1) * .35}deg) translateY(${Math.cos(t * .9) * 3}px)`;
+      tickerEl.style.setProperty('--spin', `${(t * 90) % 360}deg`);
+    }
+    requestAnimationFrame(frame);
+  })();
+
   // ---------- teléfono con apps en vivo ----------
   const W = 390, H = 844;
   const frames = {};
