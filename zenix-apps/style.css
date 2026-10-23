@@ -6,7 +6,7 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; overflow-x: clip; }
-.hero, .apps, .extra, .como, .final { overflow-x: clip; }
+.hero, .apps, .extra, .como, .final, .about { overflow-x: clip; }
 body { font: 16px/1.6 var(--font); color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 a { color: inherit; text-decoration: none; } button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
 em { font-style: normal; background: linear-gradient(90deg, #c4b5fd, var(--cy)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -24,7 +24,7 @@ em { font-style: normal; background: linear-gradient(90deg, #c4b5fd, var(--cy));
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: flex; align-items: center; gap: 24px; padding: max(14px, env(safe-area-inset-top)) clamp(16px, 4vw, 48px) 14px; transition: background .3s, border-color .3s; border-bottom: 1px solid transparent; }
 .nav.solid { background: rgba(7,6,13,.72); backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4); border-color: var(--line); }
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.02em; font-size: 19px; }
-.logo svg { width: 46px; height: 29px; } .logo b { font-weight: 800; margin-left: 4px; background: linear-gradient(90deg, #c4b5fd, var(--cy)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.logo img { width: 40px; height: 40px; display: block; filter: drop-shadow(0 4px 14px rgba(124,58,237,.55)); } .logo b { font-weight: 800; margin-left: 4px; background: linear-gradient(90deg, #c4b5fd, var(--cy)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .nav nav { display: flex; gap: 26px; margin-left: auto; font-size: 14.5px; font-weight: 550; color: var(--ink2); }
 .nav nav a:hover { color: var(--ink); }
 
@@ -65,7 +65,16 @@ section { position: relative; }
 .kicker { display: block; font-size: 13px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
 .sec-h h2 { font: 800 clamp(36px, 6vw, 76px)/1 var(--display); letter-spacing: -.045em; }
 
-.apps { padding: 130px 0 60px; }
+.about { padding: 130px 0 20px; }
+.about-in { max-width: 1240px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 48px); display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; }
+.about h2 { font: 800 clamp(36px, 6vw, 76px)/1 var(--display); letter-spacing: -.045em; margin-bottom: 26px; }
+.about-txt p { color: var(--ink2); font-size: 18px; margin-top: 14px; max-width: 560px; } .about-txt b { color: var(--ink); }
+.about-cards { display: grid; gap: 18px; }
+.who { padding: 26px 28px; border-radius: 26px; background: linear-gradient(160deg, rgba(139,92,246,.12), rgba(255,255,255,.02)); border: 1px solid var(--line); }
+.who:nth-child(2) { transition-delay: .12s; background: linear-gradient(160deg, rgba(34,211,238,.10), rgba(255,255,255,.02)); }
+.who-ic { font-size: 34px; } .who h3 { font: 750 24px var(--display); letter-spacing: -.02em; margin: 8px 0 6px; } .who p { color: var(--ink2); }
+.who small { display: block; margin-top: 12px; font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--lime); }
+.apps { padding: 110px 0 60px; }
 .scrolly { max-width: 1240px; margin: 70px auto 0; padding: 0 clamp(18px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 60px; }
 .steps { display: grid; }
 .step { min-height: 88vh; display: flex; flex-direction: column; justify-content: center; padding: 40px 0; opacity: .32; transition: opacity .5s; }
@@ -164,6 +173,7 @@ footer a:hover { color: var(--ink); }
   .phone.small .screen { border-radius: 38px; }
   .phone.small .island { top: 19px; width: 90px; height: 26px; }
   .cards, .how { grid-template-columns: minmax(0, 1fr); }
+  .about-in { grid-template-columns: minmax(0, 1fr); gap: 34px; } .about { padding-top: 90px; }
   .store { padding: 22px; } .shots img { height: 240px; } .mk-body { grid-template-columns: 1fr; } .mk-feed { display: none; }
   .apps { padding-top: 100px; }
 }
