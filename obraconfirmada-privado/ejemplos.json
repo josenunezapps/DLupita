@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Ejemplos ficticios de ObraConfirmada. Ningún cliente, número telefónico ni importe corresponde a una operación real.",
+  "description": "Ejemplos ficticios de ObraCotiza. Ningún cliente, número telefónico ni importe corresponde a una operación real.",
   "projects": [
     {
       "id": "OC-101",
