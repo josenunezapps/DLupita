@@ -1,4 +1,4 @@
-/* ObraConfirmada - Formulario de presupuestos.
+/* ObraCotiza - Formulario de presupuestos.
  * Sin conversación obligatoria: cada dato se escribe o selecciona.
  * Las entrevistas anteriores se conservan y se importan como borradores editables.
  */
