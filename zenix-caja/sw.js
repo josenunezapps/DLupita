@@ -1,5 +1,5 @@
 // Service worker: deja la app disponible sin conexión.
-const CACHE = 'zenix-caja-v1';
+const CACHE = 'zenix-caja-v2';
 const ASSETS = ['./', './index.html', './css/app.css', './js/app.js', './js/store.js', './js/seed.js', './js/util.js', './js/charts.js', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

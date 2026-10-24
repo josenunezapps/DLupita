@@ -389,7 +389,10 @@ body[data-view="vender"] #view { padding-bottom: 0; height: calc(100dvh - 73px);
   .cart-fab { position: fixed; z-index: 40; left: 16px; right: 16px; bottom: calc(76px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 18px; border-radius: 15px; background: var(--panel); color: var(--muted); border: 1px solid var(--line2); box-shadow: var(--shadow-lg); font-weight: 600; transition: all .2s; }
   .cart-fab span { flex: 1; text-align: left; } .cart-fab b { font-size: 17px; font-variant-numeric: tabular-nums; }
   .cart-fab.has { background: var(--acc); color: #fff; border-color: var(--acc); }
-  .modal-wrap { place-items: end center; padding: 0; }
+  .modal-wrap { place-items: end center; padding: 0; grid-template-columns: minmax(0, 1fr); }
+  .modal-b { grid-template-columns: minmax(0, 1fr); }
+  .modal-b > * { min-width: 0; }
+  .field input { min-width: 0; width: 100%; }
   .modal, .modal.sm, .modal.md { width: 100%; border-radius: 20px 20px 0 0; max-height: 92dvh; transform: translateY(40px); }
   .modal footer { padding-bottom: max(18px, env(safe-area-inset-bottom)); }
   .modal footer .btn { flex: 1; }
