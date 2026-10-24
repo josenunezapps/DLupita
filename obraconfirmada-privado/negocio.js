@@ -78,7 +78,7 @@ function saveQuote(){
 function pdf(q){
  const t=totals(q.lines||[],q.taxRate||0,q.discountRate||0);
  const doc={id:q.id,title:q.title,client:q.client,phone:q.phone||"",scope:q.scope||"",original:t.price,payment:q.payment||"",validity:q.validity??15,delivery:q.delivery||"",notes:q.notes||"",discountRate:q.discountRate||0,taxRate:q.taxRate||0,lines:q.lines||[],version:q.version||null,issuedAt:q.issuedAt||q.updated||q.created||new Date().toISOString(),demo:!!q.demo};
- api.pdf(doc,"ObraConfirmada-Presupuesto-"+q.id+(q.version?"-v"+q.version:"")+".pdf",q.company||company());
+ api.pdf(doc,"ObraCotiza-Presupuesto-"+q.id+(q.version?"-v"+q.version:"")+".pdf",q.company||company());
 }
 function renderVersions(q){
 const box=$("ocVersions");box.replaceChildren();
@@ -365,7 +365,7 @@ function csvQuote(q){
  const csv="\ufeffsep=;\r\n"+header.map(escCSV).join(";")+"\r\n"+rows.map(row=>row.map(escCSV).join(";")).join("\r\n");
  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
  const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="ObraConfirmada-"+q.id+".csv";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+ a.href=url;a.download="ObraCotiza-"+q.id+".csv";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
  info("Archivo CSV compatible con Excel preparado.");
 }
 async function shareQuote(q,channel){
@@ -375,14 +375,14 @@ async function shareQuote(q,channel){
  let file;
  try{
   const blob=window.OCBudgetPDF.build(p,company());
-  file=new File([blob],"ObraConfirmada-"+q.id+".pdf",{type:"application/pdf"});
+  file=new File([blob],"ObraCotiza-"+q.id+".pdf",{type:"application/pdf"});
  }catch(e){return info("No se pudo preparar el PDF: "+e.message)}
  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
   try{await navigator.share({files:[file],title:"Presupuesto "+q.id,text:"Presupuesto de "+q.title+". Elegí WhatsApp, Gmail u otra aplicación para compartir el PDF."});info("Se abrió el menú de compartir.");return}
   catch(e){if(e.name==="AbortError")return}
  }
  // No navegador universal permite adjuntar PDF a WhatsApp/Gmail por enlace sin autorización.
- api.pdf({...p,lines:q.lines},"ObraConfirmada-"+q.id+".pdf",company());
+ api.pdf({...p,lines:q.lines},"ObraCotiza-"+q.id+".pdf",company());
  info("Tu navegador no permite adjuntar directamente el PDF. Lo descargué para que lo adjuntes en "+(channel==="gmail"?"Gmail":channel==="whatsapp"?"WhatsApp":"el servicio que prefieras")+".");
  if(channel==="whatsapp")window.open("https://wa.me/?text="+encodeURIComponent("Te comparto el presupuesto "+q.id+" de "+q.title+". Adjunto el PDF descargado."),"_blank","noopener,noreferrer");
  if(channel==="gmail")window.open("https://mail.google.com/mail/?view=cm&fs=1&su="+encodeURIComponent("Presupuesto "+q.id+" - "+q.title)+"&body="+encodeURIComponent("Hola, adjunto el presupuesto en PDF.\n\nSaludos."),"_blank","noopener,noreferrer");
