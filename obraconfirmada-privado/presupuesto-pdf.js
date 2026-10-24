@@ -1,4 +1,4 @@
-/* ObraConfirmada · PDF comercial autónomo, A4, sin servicios externos. */
+/* ObraCotiza · PDF comercial autónomo, A4, sin servicios externos. */
 (function(){
 "use strict";
 const PT=595.28,PH=841.89,LEFT=42,RIGHT=553,BOTTOM=779;
@@ -41,7 +41,7 @@ function build(data,business,environment){
   rect(0,0,PT,99,C.navy);rect(LEFT,19,4,60,C.orange);
   let xx=LEFT+15;
   if(jpg){content+="q 52 0 0 52 "+(LEFT+13)+" "+(PH-22-52)+" cm /Im1 Do Q\n";xx=LEFT+76}
-  const name=String(business.name||"ObraConfirmada").slice(0,jpg?31:40);
+  const name=String(business.name||"ObraCotiza").slice(0,jpg?31:40);
   text(xx,43,name,Math.min(17,name.length>26?13.5:17),true,C.white);
   text(xx,60,[business.phone,business.email].filter(Boolean).join("  ·  ").slice(0,67)||"PRESUPUESTOS PROFESIONALES",8,false,[.8,.85,.89]);
   text(xx,77,String(business.address||"").slice(0,75),7.5,false,[.7,.79,.85]);
@@ -98,7 +98,7 @@ function build(data,business,environment){
  if(jpg)imageRef=obj("<< /Type /XObject /Subtype /Image /Width "+business.logoW+" /Height "+business.logoH+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+jpg.length+" >>\nstream\n"+jpg+"\nendstream");
  const root=obj(""),catalog=obj(""),references=[];
  pages.forEach((pageContent,index)=>{
-  const foot=rgb(C.slate)+"BT /F1 8 Tf 1 0 0 1 "+LEFT+" 29 Tm ("+literal(String(business.name||"ObraConfirmada")+" · Presupuesto comercial")+") Tj ET\n";
+  const foot=rgb(C.slate)+"BT /F1 8 Tf 1 0 0 1 "+LEFT+" 29 Tm ("+literal(String(business.name||"ObraCotiza")+" · Presupuesto comercial")+") Tj ET\n";
   const number=rgb(C.slate)+"BT /F1 8 Tf 1 0 0 1 516 29 Tm ("+(index+1)+" / "+pageCount+") Tj ET\n";
   const stream=pageContent+foot+number;
   const c=obj("<< /Length "+stream.length+" >>\nstream\n"+stream+"\nendstream");
