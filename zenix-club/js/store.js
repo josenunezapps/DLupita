@@ -128,5 +128,5 @@ export function undoLast(id) {
 
 export function cardPayload(c) {
   const b = state.biz;
-  return { v: 1, b: { n: b.name, e: b.emoji, c: b.color, p: b.phone, g: goal(), r: b.reward, a: b.address, d: b.doubleDay }, c: { n: c.name, s: c.stamps, t: c.total, r: c.redeemed || 0, j: c.createdAt, l: lastVisit(c) }, ts: Date.now() };
+  return { v: 1, b: { n: b.name, e: b.emoji, c: b.color, p: b.phone, g: goal(), r: b.reward, a: b.address, d: b.doubleDay }, c: { n: c.name, s: c.stamps, t: c.total, v: c.visits || 0, r: c.redeemed || 0, j: c.createdAt, l: lastVisit(c) }, ts: Date.now() };
 }

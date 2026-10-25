@@ -215,7 +215,7 @@ async function sendCard(c, kind = 'update') {
     welcome: `¡Hola ${first(c.name)}! 👋 Bienvenido/a al club de ${b.name} ${b.emoji}\nCon ${g} sellos te llevás: ${b.reward}.\nYa tenés ${plural(c.stamps, 'sello', 'sellos')}. Tu tarjeta:\n${url}`,
     ready: `¡${first(c.name)}, completaste tu tarjeta en ${b.name}! 🎉\nLa próxima vez que vengas te espera: ${b.reward}.\n${url}`,
     update: S.rewardsReady(c) ? `¡${first(c.name)}! Tenés un premio esperándote en ${b.name} 🎁\n${url}` : `¡Gracias por venir, ${first(c.name)}! ${b.emoji}\nLlevás ${cur} de ${g} sellos: te ${left === 1 ? 'falta 1' : `faltan ${left}`} para ${b.reward.toLowerCase()}.\n${url}`,
-    miss: `¡Hola ${first(c.name)}! Hace rato que no te vemos por ${b.name} ${b.emoji}\nTenés ${plural(cur, 'sello', 'sellos')} en tu tarjeta${left <= 3 ? ` y te ${left === 1 ? 'falta solo 1' : `faltan solo ${left}`} para tu premio` : ''}. ¡Te esperamos!\n${url}`,
+    miss: `¡Hola ${first(c.name)}! Hace rato que no te vemos por ${b.name} ${b.emoji}\n${cur ? `Tenés ${plural(cur, 'sello', 'sellos')} en tu tarjeta${left <= 3 ? ` y te ${left === 1 ? 'falta solo 1' : `faltan solo ${left}`} para tu premio` : ''}.` : `Tu próxima visita ya suma para tu próximo premio: ${b.reward.toLowerCase()}.`} ¡Te esperamos!\n${url}`,
     bday: `¡Feliz cumpleaños, ${first(c.name)}! 🎂\nEn ${b.name} te regalamos ${(b.birthdayGift || 'un detalle de la casa').toLowerCase()}: pasá a buscarlo esta semana.\n${url}`,
   }[kind];
   modal({
@@ -392,7 +392,7 @@ async function publicCard(payload) {
     ${cardHTML({ b, c })}
     <div class="pub-info">
       ${ready ? `<div class="pub-ready">🎁 <b>¡Tu premio te espera!</b><span>Mostrá esta pantalla en ${esc(b.n)}.</span></div>` : `<div class="pub-left"><b>${g - cur}</b><span>${g - cur === 1 ? 'sello más' : 'sellos más'} para ${esc(String(b.r).charAt(0).toLowerCase() + String(b.r).slice(1))}</span></div>`}
-      <dl><div><dt>Visitas</dt><dd>${Math.max(0, c.t)}</dd></div><div><dt>Premios</dt><dd>${c.r}</dd></div><div><dt>Socio desde</dt><dd>${fmt.dateShort(c.j)}</dd></div></dl>
+      <dl><div><dt>Visitas</dt><dd>${Math.max(0, c.v ?? c.t)}</dd></div><div><dt>Premios</dt><dd>${c.r}</dd></div><div><dt>Socio desde</dt><dd>${fmt.dateShort(c.j)}</dd></div></dl>
       ${b.d !== '' && b.d !== null && b.d !== undefined ? `<p class="pub-tip">${icon('bolt')} Los ${DIAS[b.d]} cada visita suma <b>doble</b>.</p>` : ''}
     </div>
     ${b.p ? `<a class="btn wa xl" href="https://wa.me/${waPhone(b.p)}?text=${encodeURIComponent(`¡Hola! Soy ${c.n}, socio/a del club.`)}" target="_blank" rel="noopener">${icon('wa')} Escribirle a ${esc(b.n)}</a>` : ''}
@@ -400,7 +400,7 @@ async function publicCard(payload) {
   </div>`;
   // efecto 3D con el dedo / mouse
   const card = $('.card3d');
-  const tilt = (x, y) => { const r = card.getBoundingClientRect(); const px = (x - r.left) / r.width - 0.5, py = (y - r.top) / r.height - 0.5; card.style.transform = `rotateY(${px * 14}deg) rotateX(${-py * 14}deg)`; card.style.setProperty('--gx', `${(px + 0.5) * 100}%`); card.style.setProperty('--gy', `${(py + 0.5) * 100}%`); };
+  const tilt = (x, y) => { const r = card.getBoundingClientRect(); const px = (x - r.left) / r.width - 0.5, py = (y - r.top) / r.height - 0.5; card.style.transform = `perspective(800px) rotateY(${px * 14}deg) rotateX(${-py * 14}deg)`; card.style.setProperty('--gx', `${(px + 0.5) * 100}%`); card.style.setProperty('--gy', `${(py + 0.5) * 100}%`); };
   addEventListener('pointermove', e => tilt(e.clientX, e.clientY));
   addEventListener('deviceorientation', e => { if (e.gamma == null) return; const r = card.getBoundingClientRect(); tilt(r.left + r.width * (0.5 + e.gamma / 60), r.top + r.height * (0.5 + (e.beta - 40) / 60)); });
 }
