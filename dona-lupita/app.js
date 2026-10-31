@@ -1,8 +1,11 @@
-const WHATSAPP_NUMBER = "5492901535229";
+let WHATSAPP_NUMBER = "5492901535229";
+const SUPABASE_URL = "https://luipqbzyfnrwplseritu.supabase.co";
+const SUPABASE_PUBLIC_KEY = "sb_publishable_SMtgZgiRe3Bqv9hQw4Kw1w_Kz4dGWF2";
+let businessSettings = {openingLunch:"12:00",closingLunch:"15:00",openingDinner:"20:00",closingDinner:"00:00",closedSunday:true};
 const CART_KEY = "dlupita-cart-sale-v2";
 const BUSINESS_TIME_ZONE = "America/Argentina/Ushuaia";
 
-const menuData = {
+let menuData = {
   empanadas: [
     { name: "Carne cortada a cuchillo", desc: "Una de las variedades más nombradas por clientes y en la historia publicada por NASA.", tag: "Clásico" },
     { name: "Matambre", desc: "Un sabor muy asociado a la casa y uno de los favoritos mencionados en reseñas.", tag: "Muy pedida" },
@@ -64,7 +67,8 @@ function itemKey(category, index) {
 }
 
 function getItem(category, index) {
-  return menuData[category]?.[Number(index)] || null;
+  const item = menuData[category]?.[Number(index)];
+  return item && item.enabled !== false ? item : null;
 }
 
 function loadCart() {
@@ -100,6 +104,14 @@ function quantityFor(category, index) {
   return cart.find(entry => entry.key === itemKey(category, index))?.qty || 0;
 }
 
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+function formatPrice(value) {
+  return Number.isFinite(Number(value)) && Number(value) > 0
+    ? new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS",maximumFractionDigits:0}).format(Number(value))
+    : "";
+}
 function showToast(message) {
   if (!toast) return;
 
@@ -115,9 +127,10 @@ function showToast(message) {
 function renderMenu() {
   if (!menuList) return;
 
-  const items = menuData[activeCategory] || [];
+  const items = (menuData[activeCategory] || []).map((item, index) => ({...item, originalIndex:index})).filter(item => item.enabled !== false);
 
-  menuList.innerHTML = items.map((item, index) => {
+  menuList.innerHTML = items.map((item) => {
+    const index = item.originalIndex;
     const qty = quantityFor(activeCategory, index);
     const hasPhoto = activeCategory === "empanadas" || activeCategory === "pizzas";
     const photoLabel = activeCategory === "empanadas"
@@ -132,14 +145,15 @@ function renderMenu() {
           <div
             class="menu-item-photo menu-photo-${activeCategory}-${index}"
             role="img"
-            aria-label="${photoLabel}">
+            aria-label="${escapeHtml(photoLabel)}">
             <span>Imagen ilustrativa</span>
           </div>
         ` : ""}
         <div class="menu-item-copy">
-          <span class="menu-item-kicker">${item.tag}</span>
-          <h3>${item.name}</h3>
-          <p>${item.desc}</p>
+          <span class="menu-item-kicker">${escapeHtml(item.tag)}</span>
+          <h3>${escapeHtml(item.name)}</h3>
+          <p>${escapeHtml(item.desc)}</p>
+          ${formatPrice(item.price) ? `<strong class="menu-item-price">${escapeHtml(formatPrice(item.price))}</strong>` : ""}
         </div>
         <button
           class="add-item${qty ? " is-added" : ""}"
@@ -147,7 +161,7 @@ function renderMenu() {
           data-add
           data-category="${activeCategory}"
           data-index="${index}"
-          aria-label="Agregar ${item.name} al pedido">
+          aria-label="Agregar ${escapeHtml(item.name)} al pedido">
           ${qty ? `Sumar otro · ${qty}` : "Agregar al pedido +"}
         </button>
       </article>
@@ -213,13 +227,13 @@ function renderCart() {
         return `
           <div class="cart-line" data-key="${entry.key}">
             <div>
-              <div class="cart-line-title">${formatOrderItem(data)}</div>
+              <div class="cart-line-title">${escapeHtml(formatOrderItem(data))}</div>
               <div class="cart-line-category">${categoryNames[data.category]}</div>
             </div>
             <div class="cart-controls">
-              <button type="button" data-change="-1" aria-label="Quitar uno de ${data.item.name}">−</button>
+              <button type="button" data-change="-1" aria-label="Quitar uno de ${escapeHtml(data.item.name)}">−</button>
               <strong>${entry.qty}</strong>
-              <button type="button" data-change="1" aria-label="Agregar uno de ${data.item.name}">+</button>
+              <button type="button" data-change="1" aria-label="Agregar uno de ${escapeHtml(data.item.name)}">+</button>
             </div>
           </div>
         `;
@@ -417,26 +431,68 @@ function getUshuaiaTime(date = new Date()) {
   };
 }
 
+function timeMinutes(value) {
+  const [hours, minutes] = String(value || "00:00").split(":").map(Number);
+  return (hours || 0) * 60 + (minutes || 0);
+}
 function getBusinessStatus(date = new Date()) {
-  const { day, minutes } = getUshuaiaTime(date);
-
-  if (day === 0) {
-    return { open: false, short: "Cerrado ahora", detail: "Abre el lunes a las 12:00" };
+  const {day, minutes} = getUshuaiaTime(date);
+  const t = businessSettings;
+  const lStart = timeMinutes(t.openingLunch), lEnd = timeMinutes(t.closingLunch);
+  const dStart = timeMinutes(t.openingDinner), dEnd = t.closingDinner === "00:00" ? 1440 : timeMinutes(t.closingDinner);
+  if (day === 0 && t.closedSunday) {
+    return {open:false,short:"Cerrado ahora",detail:"Domingos cerrado · consultá horarios especiales"};
   }
-
-  if (minutes < 12 * 60) {
-    return { open: false, short: "Cerrado ahora", detail: "Abre hoy a las 12:00" };
+  const weekday = day === 6 ? "lunes" : "mañana";
+  if (minutes < lStart) return {open:false,short:"Cerrado ahora",detail:"Abre hoy a las "+t.openingLunch};
+  if (minutes < lEnd) return {open:true,short:"Abierto según horario",detail:"Hasta las "+t.closingLunch};
+  if (minutes < dStart) return {open:false,short:"Cerrado ahora",detail:"Abre hoy a las "+t.openingDinner};
+  if (minutes < dEnd) return {open:true,short:"Abierto según horario",detail:"Hasta las "+t.closingDinner};
+  return {open:false,short:"Cerrado ahora",detail:"Abre "+weekday+" a las "+t.openingLunch};
+}
+function applyCatalog(data) {
+  if (!data?.menu || !data?.site) return;
+  for (const key of Object.keys(categoryNames)) {
+    if (!Array.isArray(data.menu[key])) return;
   }
-
-  if (minutes < 15 * 60) {
-    return { open: true, short: "Abierto ahora", detail: "Hasta las 15:00" };
+  menuData = data.menu;
+  businessSettings = {...businessSettings,...data.site};
+  if (/^\d{10,16}$/.test(String(data.site.whatsapp || ""))) {
+    WHATSAPP_NUMBER = data.site.whatsapp;
+    document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
+      a.href = a.href.replace(/wa\.me\/\d+/, "wa.me/"+WHATSAPP_NUMBER);
+    });
   }
-
-  if (minutes < 20 * 60) {
-    return { open: false, short: "Cerrado ahora", detail: "Abre hoy a las 20:00" };
+  if (data.site.phone) {
+    document.querySelectorAll('a[href^="tel:"]').forEach(a => {
+      a.href = "tel:+"+String(data.site.phone).replace(/\D/g,"").replace(/^54/,"54");
+    });
   }
-
-  return { open: true, short: "Abierto ahora", detail: "Hasta las 00:00" };
+  const info = document.querySelector(".order-note");
+  if (info && data.site.notice) info.textContent = data.site.notice + " Esta web no cobra ni confirma pedidos.";
+  cart = loadCart();
+  renderCart();
+  paintBusinessStatus();
+}
+async function loadPublishedCatalog() {
+  try {
+    const response = await fetch("catalog.json", {cache:"no-store"});
+    if (response.ok) applyCatalog(await response.json());
+  } catch { /* El catálogo incluido en app.js es el respaldo sin conexión. */ }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 4500);
+  try {
+    const response = await fetch(SUPABASE_URL+"/rest/v1/dona_lupita_catalog?select=content&id=eq.1", {
+      headers:{"apikey":SUPABASE_PUBLIC_KEY},
+      cache:"no-store",
+      signal:controller.signal
+    });
+    if (response.ok) {
+      const rows = await response.json();
+      if (Array.isArray(rows) && rows[0]?.content) applyCatalog(rows[0].content);
+    }
+  } catch { /* Si la API no responde, queda visible el catálogo local. */ }
+  finally {clearTimeout(timeout);}
 }
 
 function paintBusinessStatus() {
@@ -510,6 +566,7 @@ window.addEventListener("resize", () => {
 
 renderCart();
 paintBusinessStatus();
+loadPublishedCatalog();
 setupRevealAnimations();
 updateHeaderState();
 
