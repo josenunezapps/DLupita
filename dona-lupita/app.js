@@ -169,14 +169,19 @@ function renderMenu() {
   }).join("");
 }
 
+function quickItemIndex(button) {
+  const category = button.dataset.quickCategory;
+  const name = button.dataset.quickName;
+  return (menuData[category] || []).findIndex(item => item.name?.toLocaleLowerCase("es") === name?.toLocaleLowerCase("es") && item.enabled !== false);
+}
 function updateQuickAddButtons() {
-  document.querySelectorAll("[data-quick-category][data-quick-index]").forEach(button => {
+  document.querySelectorAll("[data-quick-category][data-quick-name]").forEach(button => {
     const category = button.dataset.quickCategory;
-    const index = Number(button.dataset.quickIndex);
-    const qty = quantityFor(category, index);
-
+    const index = quickItemIndex(button);
+    const qty = index < 0 ? 0 : quantityFor(category, index);
+    button.disabled = index < 0;
     button.classList.toggle("is-added", qty > 0);
-    button.textContent = qty > 0 ? `Sumar otro · ${qty}` : "Sumar al pedido +";
+    button.textContent = index < 0 ? "Consultar disponibilidad" : (qty > 0 ? `Sumar otro · ${qty}` : "Sumar al pedido +");
   });
 }
 
@@ -320,13 +325,11 @@ menuList?.addEventListener("click", event => {
 });
 
 document.addEventListener("click", event => {
-  const quickButton = event.target.closest("[data-quick-category][data-quick-index]");
+  const quickButton = event.target.closest("[data-quick-category][data-quick-name]");
   if (!quickButton) return;
-
   const category = quickButton.dataset.quickCategory;
-  const index = Number(quickButton.dataset.quickIndex);
-
-  addItem(category, index);
+  const index = quickItemIndex(quickButton);
+  if (index >= 0) addItem(category, index);
 });
 
 tabs.forEach((tab, index) => {
