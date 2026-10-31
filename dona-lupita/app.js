@@ -469,8 +469,49 @@ function applyCatalog(data) {
   WHATSAPP_NUMBER = canUseWhatsApp ? String(data.site.whatsapp) : "";
   const rawPhone = String(data.site.phone || "2901437675").replace(/\D/g, "");
   const phoneIntl = rawPhone.startsWith("54") ? "+" + rawPhone : "+54" + rawPhone;
-  document.querySelectorAll('a[href^="tel:"]:not([data-contact-link])').forEach(a => {
+  document.querySelectorAll('a[href^="tel:"]:not([data-contact-link]):not([data-mobile-contact])').forEach(a => {
     a.href = "tel:" + phoneIntl;
+  });
+  const businessName = String(data.site.businessName || "").trim();
+  if (businessName) {
+    document.querySelectorAll(".brand-text strong, .footer-brand strong").forEach(el => {el.textContent = businessName;});
+  }
+  const address = String(data.site.address || "").trim();
+  if (address) {
+    const title = document.querySelector(".visit-address strong");
+    if (title) title.textContent = address;
+    const subtitle = document.querySelector(".visit-address p");
+    if (subtitle) subtitle.textContent = "Ushuaia · Tierra del Fuego";
+    document.querySelectorAll('a[href*="google.com/maps/search"]').forEach(a => {
+      a.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+    });
+    const iframe = document.querySelector(".map-wrap iframe");
+    if (iframe) iframe.src = "https://www.google.com/maps?q=" + encodeURIComponent(address) + "&output=embed";
+  }
+  if (data.site.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.site.email)) {
+    document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+      a.href = "mailto:" + data.site.email;
+      a.textContent = data.site.email;
+    });
+  }
+  try {
+    const instagram = new URL(String(data.site.instagram || ""));
+    if (instagram.protocol === "https:" && (instagram.hostname === "instagram.com" || instagram.hostname === "www.instagram.com")) {
+      document.querySelectorAll('a[href*="instagram.com"]').forEach(a => {a.href = instagram.href;});
+    }
+  } catch {}
+  const mobileRaw = String(data.site.mobile || "").replace(/\D/g,"");
+  const mobileLink = document.querySelector("[data-mobile-contact]");
+  if (mobileLink && mobileRaw) {
+    mobileLink.href = "tel:" + (mobileRaw.startsWith("54") ? "+" : "+54") + mobileRaw;
+    mobileLink.textContent = data.site.mobile + " (celular)";
+  }
+  const phoneLabel = String(data.site.phone || "2901437675");
+  document.querySelectorAll('.visit-actions a[href^="tel:"]').forEach(a => {
+    a.textContent = "Llamar al " + phoneLabel;
+  });
+  document.querySelectorAll('.footer-links a[href^="tel:"]:not([data-mobile-contact]):not([data-contact-link])').forEach(a => {
+    a.textContent = phoneLabel + " (fijo)";
   });
   document.querySelectorAll("[data-contact-link]").forEach(a => {
     const label = a.querySelector("[data-contact-label]") || (a.matches("[data-contact-label]") ? a : null);
