@@ -94,7 +94,7 @@ async function publish(){
     if(products.some(p=>!String(p.name||"").trim()))return status("dashboardStatus","Todos los productos necesitan nombre: "+group,"error");
     if(products.some(p=>p.price!==null&&(!Number.isFinite(p.price)||p.price<0)))return status("dashboardStatus","Hay precios inválidos en "+group,"error");
   }
-  if(catalog.site.whatsapp&&!/^\d{10,16}$/.test(catalog.site.whatsapp))return status("dashboardStatus","El WhatsApp debe incluir solo números y código de país.","error");
+  if(catalog.site.whatsappVerified&&!/^\d{10,16}$/.test(catalog.site.whatsapp))return status("dashboardStatus","El WhatsApp debe incluir solo números y código de país.","error");
   saving=true;setDirty();status("dashboardStatus","Guardando cambios en la base de datos…");
   try{
     const next=structuredClone(catalog);next.updatedAt=new Date().toISOString();
