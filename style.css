@@ -1,1 +1,52 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap');:root{--ink:#171713;--paper:#ede9df;--gold:#c7ad79}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:'DM Sans',sans-serif}body{background:var(--paper);color:var(--ink)}a{text-decoration:none;color:inherit}button{font:inherit;cursor:pointer}header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(22px,4vw,65px);border-bottom:1px solid #7773}.home header{position:absolute;inset:0 0 auto;color:white;border-color:#ffffff45}header .brand{font:30px 'Playfair Display',serif}.controls{display:flex;align-items:center;gap:15px}.iconbtn{border:0;background:none;color:inherit;font-size:22px;padding:10px}.cartcount{font-size:11px;vertical-align:top}.full{height:100dvh;min-height:550px;position:relative;overflow:hidden;background:#161613;color:white}.full video,.poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.poster{background:linear-gradient(#0007,#0008),url('https://img.carta.menu/storage/media/company_gallery/4568481/conversions/contribution_gallery.jpg') center/cover}.full:after{content:'';position:absolute;inset:0;background:linear-gradient(#0005,#0003,#0008);pointer-events:none}.center{position:absolute;z-index:2;left:5%;right:5%;top:50%;transform:translateY(-45%);text-align:center}.kicker{font-size:11px;letter-spacing:4px;text-transform:uppercase}.center h1{font:clamp(80px,12vw,190px)/1 'Playfair Display',serif;letter-spacing:-.045em;margin:18px 0}.center p{letter-spacing:3px;text-transform:uppercase;font-size:12px}.center .cta{display:inline-block;padding:16px 32px;margin-top:32px;border:1px solid #fff;font-size:11px;letter-spacing:2px}.center .cta:hover{background:white;color:black}.home .bottom{position:absolute;bottom:32px;left:0;right:0;text-align:center;z-index:3;font-size:11px;letter-spacing:2px}.menuoverlay{position:fixed;z-index:30;inset:0;background:#171713f7;color:white;display:none;align-items:center;justify-content:center;text-align:center}.menuoverlay.open{display:flex}.menuoverlay nav{display:flex;flex-direction:column;gap:15px}.menuoverlay nav a{font:clamp(39px,6vw,75px) 'Playfair Display',serif}.close{position:absolute;right:30px;top:25px;color:white;border:0;background:none;font-size:34px}.page{padding:65px clamp(24px,7vw,110px);max-width:1300px;margin:auto;min-height:75vh}.page h1{font:clamp(56px,8vw,105px) 'Playfair Display',serif;margin:0 0 25px}.page p{line-height:1.9;color:#565249;max-width:760px}.page .tag{letter-spacing:3px;font-size:11px;text-transform:uppercase;color:#937344}.split{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center}.split img{width:100%;height:520px;object-fit:cover}.products{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin-top:40px}.product{background:white;padding-bottom:24px}.product img{width:100%;height:250px;object-fit:cover}.product div{padding:0 20px}.product h2{font:30px 'Playfair Display',serif}.product button,.checkout,.button{border:1px solid #211d19;padding:13px 17px;background:#211d19;color:#fff;font-size:12px;letter-spacing:1px;text-transform:uppercase}.product button:hover,.checkout:hover{background:#655038}.cartitems{margin:30px 0}.cartitem{display:flex;gap:15px;justify-content:space-between;border-bottom:1px solid #aaa5;padding:17px 0}.cartitem button{background:transparent;border:0;text-decoration:underline}.notice{background:#e1d6c0;padding:18px;line-height:1.6;margin:20px 0}footer{background:#191915;color:#b9b0a4;padding:35px 6%;display:flex;justify-content:space-between;gap:20px;font-size:12px}footer a{text-decoration:underline}@media(max-width:760px){header .brand{font-size:23px}.center h1{font-size:clamp(62px,14vw,100px)}.split,.products{grid-template-columns:1fr}.page{padding:45px 22px}.split img{height:340px}.products img{height:280px}footer{flex-direction:column}.full{min-height:560px}}
+/* Refinamiento editorial · Doña Lupita */
+:root{--paper:#f4f0e8;--ink:#201d19;--gold:#bc9a65}
+body{background:var(--paper);-webkit-font-smoothing:antialiased}
+header{padding:17px clamp(22px,4.8vw,76px);border-bottom:1px solid rgba(255,255,255,.23)}
+body:not(.home) header{border-bottom-color:#221b1520;background:#f4f0e8}
+header .brand{font-size:clamp(24px,2.2vw,32px);font-weight:500;letter-spacing:-.045em}
+.controls{gap:10px}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;position:relative;min-height:46px;min-width:46px;border-radius:50%;transition:background .2s,color .2s}
+.iconbtn:hover{background:#ffffff26}
+body:not(.home) .iconbtn:hover{background:#201d1912}
+.iconbtn:focus-visible,.close:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid #bd9863;outline-offset:4px}
+.cartcount{position:absolute;right:0;top:0;min-width:17px;height:17px;display:grid;place-items:center;border-radius:50%;background:#bc9a65;color:#16130f;font:700 10px 'DM Sans',sans-serif;padding:0 3px}
+.cartglyph{width:24px;height:24px;display:block}
+.dotsglyph{font-size:28px;font-weight:600;letter-spacing:1px;line-height:1}
+.full{height:100svh;min-height:540px}
+.full video{z-index:1;object-position:center center}
+.full:after{z-index:1;background:linear-gradient(180deg,rgba(8,7,6,.56) 0%,rgba(8,7,6,.2) 32%,rgba(8,7,6,.4) 70%,rgba(8,7,6,.65) 100%)}
+.home header{z-index:5}
+.center{top:52%;transform:translateY(-50%);max-width:1200px;margin:auto}
+.center h1{font-size:clamp(65px,10.6vw,151px);font-weight:400;letter-spacing:-.065em;line-height:1.02;margin:15px 0 20px;text-shadow:0 2px 25px rgba(0,0,0,.14)}
+.kicker{letter-spacing:5px;font-weight:600;font-size:10px}
+.center p{font-size:11px;letter-spacing:4px;font-weight:500}
+.center .cta{padding:16px 31px;margin-top:29px;letter-spacing:2.5px;transition:background .2s,color .2s,transform .2s}
+.center .cta:hover{transform:translateY(-2px)}
+.home .bottom{bottom:27px;font-size:10px;letter-spacing:3px;color:#e9e3d9}
+.menuoverlay{background:#181612;backdrop-filter:blur(18px)}
+.menuoverlay nav{gap:9px}
+.menuoverlay nav a{font-size:clamp(46px,6.1vw,83px);font-weight:400;line-height:1.23;letter-spacing:-.04em;transition:color .2s,transform .2s}
+.menuoverlay nav a:hover{color:#c7a56f;transform:translateX(7px)}
+.menuoverlay:before{content:'DOÑA LUPITA · USHUAIA';position:absolute;top:38px;left:6%;font-size:11px;letter-spacing:3px;color:#bba986}
+.menuoverlay:after{content:'EL GUSTO ES NUESTRO';position:absolute;bottom:35px;font-size:10px;letter-spacing:3px;color:#bba986}
+.close{z-index:2;right:clamp(22px,4.8vw,76px);top:20px;font-size:40px}
+.page{padding-top:85px;padding-bottom:100px}
+.page h1{letter-spacing:-.055em;line-height:1.08}
+.page .tag{font-weight:700}
+.page p{font-size:15px;line-height:1.9}
+.products{gap:20px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.product{padding-bottom:26px;background:#fffdf9;box-shadow:0 12px 35px #241b110a;overflow:hidden}
+.product img{height:350px;transition:transform .6s;display:block}
+.product:hover img{transform:scale(1.035)}
+.product div{padding:8px 28px 0}
+.product h2{font-size:36px;letter-spacing:-.035em;margin-bottom:8px}
+.product p{font-size:13px;min-height:28px}
+.product button,.checkout,.button{margin-top:12px;transition:background .2s,transform .2s}
+.product button:hover,.checkout:hover,.button:hover{background:#524334;transform:translateY(-1px)}
+.cartitems{max-width:700px}
+.cartitem{padding:22px 0;align-items:center}
+.notice{max-width:700px;background:#e9dfcd;border-left:3px solid #bd9863}
+@media(max-width:760px){header{padding:15px 17px}header .brand{font-size:25px}.controls{gap:1px}.center{left:7%;right:7%;top:51%}.center h1{font-size:clamp(54px,12.6vw,100px)}.kicker{font-size:9px;letter-spacing:2.5px}.center p{font-size:10px;letter-spacing:2.4px}.home .bottom{bottom:22px;font-size:9px;letter-spacing:2px}.menuoverlay nav a{font-size:clamp(42px,12vw,67px)}.menuoverlay:before{top:33px;font-size:9px}.products{grid-template-columns:1fr}.product img{height:275px}.page{padding-top:60px}.full{min-height:500px}}
+@media(max-height:600px){.center h1{font-size:clamp(55px,9vw,110px)}.center .cta{margin-top:12px}.home .bottom{bottom:13px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
