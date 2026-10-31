@@ -1,4 +1,4 @@
-let WHATSAPP_NUMBER = "5492901535229";
+let WHATSAPP_NUMBER = "";
 const SUPABASE_URL = "https://luipqbzyfnrwplseritu.supabase.co";
 const SUPABASE_PUBLIC_KEY = "sb_publishable_SMtgZgiRe3Bqv9hQw4Kw1w_Kz4dGWF2";
 let businessSettings = {openingLunch:"12:00",closingLunch:"15:00",openingDinner:"20:00",closingDinner:"00:00",closedSunday:true};
@@ -377,6 +377,11 @@ clearCartButton?.addEventListener("click", clearCart);
 sendOrderButton?.addEventListener("click", () => {
   if (!cart.length) return;
 
+  if (!WHATSAPP_NUMBER) {
+    showToast("WhatsApp sin confirmar: consultá por teléfono.");
+    window.location.href = "tel:+542901437675";
+    return;
+  }
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildOrderMessage())}`;
   window.open(url, "_blank", "noopener,noreferrer");
 });
@@ -457,17 +462,29 @@ function applyCatalog(data) {
   }
   menuData = data.menu;
   businessSettings = {...businessSettings,...data.site};
-  if (/^\d{10,16}$/.test(String(data.site.whatsapp || ""))) {
-    WHATSAPP_NUMBER = data.site.whatsapp;
-    document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
-      a.href = a.href.replace(/wa\.me\/\d+/, "wa.me/"+WHATSAPP_NUMBER);
-    });
-  }
-  if (data.site.phone) {
-    document.querySelectorAll('a[href^="tel:"]').forEach(a => {
-      a.href = "tel:+"+String(data.site.phone).replace(/\D/g,"").replace(/^54/,"54");
-    });
-  }
+  const canUseWhatsApp = data.site.whatsappVerified === true && /^\d{10,16}$/.test(String(data.site.whatsapp || ""));
+  WHATSAPP_NUMBER = canUseWhatsApp ? String(data.site.whatsapp) : "";
+  const rawPhone = String(data.site.phone || "2901437675").replace(/\D/g, "");
+  const phoneIntl = rawPhone.startsWith("54") ? "+" + rawPhone : "+54" + rawPhone;
+  document.querySelectorAll('a[href^="tel:"]:not([data-contact-link])').forEach(a => {
+    a.href = "tel:" + phoneIntl;
+  });
+  document.querySelectorAll("[data-contact-link]").forEach(a => {
+    const label = a.querySelector("[data-contact-label]") || (a.matches("[data-contact-label]") ? a : null);
+    if (canUseWhatsApp) {
+      a.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Hola Doña Lupita, quisiera hacer una consulta");
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      if (label && !a.classList.contains("floating-wa")) label.textContent = a.matches(".footer-links a") ? "WhatsApp" : "WhatsApp directo";
+      a.setAttribute("aria-label", "Consultar por WhatsApp");
+    } else {
+      a.href = "tel:" + phoneIntl;
+      a.removeAttribute("target");
+      if (label && !a.classList.contains("floating-wa")) label.textContent = a.matches(".footer-links a") ? "Consultar por teléfono" : "Llamanos directo";
+      a.setAttribute("aria-label", "Llamar a Doña Lupita");
+    }
+  });
+  if (sendOrderButton) sendOrderButton.textContent = canUseWhatsApp ? "Enviar consulta por WhatsApp ↗" : "Consultar por teléfono ↗";
   const info = document.querySelector(".order-note");
   if (info && data.site.notice) info.textContent = data.site.notice + " Esta web no cobra ni confirma pedidos.";
   cart = loadCart();
