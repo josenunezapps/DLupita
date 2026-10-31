@@ -50,3 +50,7 @@ body:not(.home) .iconbtn:hover{background:#201d1912}
 @media(max-width:760px){header{padding:15px 17px}header .brand{font-size:25px}.controls{gap:1px}.center{left:7%;right:7%;top:51%}.center h1{font-size:clamp(54px,12.6vw,100px)}.kicker{font-size:9px;letter-spacing:2.5px}.center p{font-size:10px;letter-spacing:2.4px}.home .bottom{bottom:22px;font-size:9px;letter-spacing:2px}.menuoverlay nav a{font-size:clamp(42px,12vw,67px)}.menuoverlay:before{top:33px;font-size:9px}.products{grid-template-columns:1fr}.product img{height:275px}.page{padding-top:60px}.full{min-height:500px}}
 @media(max-height:600px){.center h1{font-size:clamp(55px,9vw,110px)}.center .cta{margin-top:12px}.home .bottom{bottom:13px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Catálogo compacto: cuatro productos por fila en escritorio */
+@media(min-width:1050px){.products{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.product img{height:190px}.product div{padding:5px 15px 0}.product h2{font-size:26px;margin:12px 0 6px}.product p{font-size:12px;line-height:1.5;min-height:37px}.product button{font-size:10px;padding:12px 10px;width:100%;margin-top:8px}.product{padding-bottom:17px}}
+@media(min-width:761px) and (max-width:1049px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
