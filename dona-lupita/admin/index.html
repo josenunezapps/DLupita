@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://api.github.com; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src https://luipqbzyfnrwplseritu.supabase.co; base-uri 'none'; form-action 'none'">
 <title>Administración · Doña Lupita</title>
 <link rel="icon" href="../assets/favicon.png">
 <style>
@@ -23,23 +23,18 @@
 <section id="loginPanel" class="card login">
 <p class="eyebrow">ACCESO RESTRINGIDO</p>
 <h1>Administrar Doña Lupita</h1>
-<p>Editá la carta y los datos del local sin tocar el código. Para publicar los cambios se requiere permiso de escritura sobre el repositorio.</p>
+<p>Editá la carta y los datos del local sin tocar el código. El acceso y los permisos se verifican en el servidor.</p>
 <div class="stack">
-<label>Usuario de GitHub<input id="username" autocomplete="username" value="josenunezapps" required spellcheck="false"></label>
-<label>Contraseña de acceso (token de GitHub)<input id="password" type="password" autocomplete="off" placeholder="github_pat_…" required></label>
-<button class="btn primary" id="loginBtn" type="button">Ingresar al panel</button>
+<label>Correo electrónico<input id="username" type="email" autocomplete="username" placeholder="tu@correo.com" required spellcheck="false"></label>
+<label>Contraseña<input id="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required minlength="8"></label>
+<button class="btn primary" id="loginBtn" type="button">Ingresar al panel</button><button class="btn ghost" id="signupBtn" type="button">Crear cuenta de administración</button>
 </div>
 <div id="loginStatus" class="status" role="status" aria-live="polite" hidden></div>
-<div class="notice" style="margin-top:16px">Tu contraseña normal de GitHub <strong>no funciona acá</strong>. El acceso usa un token personal limitado al repositorio; nunca se guarda en la web ni en GitHub Pages.</div>
-<details>
-<summary>Cómo generar mi clave de acceso</summary>
-<ol><li>Abrí <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → Tokens de acceso (fine-grained)</a>.</li><li>Seleccioná la cuenta propietaria y permití acceso solo a <strong>DLupita</strong>.</li><li>En permisos del repositorio habilitá <strong>Contents: Read and write</strong>.</li><li>Generá el token, copialo y pegalo en el campo de contraseña. No lo compartas ni lo subas al repo.</li></ol>
-<p class="footnote">La sesión vive solo en esta pestaña. Al recargar, se vuelve a pedir el acceso.</p>
-</details>
+<div class="notice" style="margin-top:16px">La cuenta usa correo y contraseña mediante Supabase Auth. Crear una cuenta no otorga acceso de edición automáticamente: debe habilitarse como administrador. Ninguna contraseña se guarda en GitHub.</div>
 </section>
 <section id="dashboard" hidden>
 <div class="topline">
-<div><p class="eyebrow">EDITOR EN VIVO · PUBLICACIÓN EN GITHUB</p><h1>Gestioná tu carta.</h1><p id="userInfo">Cambios pendientes de publicar</p></div>
+<div><p class="eyebrow">EDITOR EN VIVO · BASE DE DATOS PROTEGIDA</p><h1>Gestioná tu carta.</h1><p id="userInfo">Cambios pendientes de publicar</p></div>
 <div class="actions"><button id="reloadBtn" class="btn ghost">Descartar y recargar</button><button id="logoutBtn" class="btn ghost">Cerrar sesión</button></div>
 </div>
 <div class="admin-grid">
@@ -78,7 +73,7 @@
 </section>
 </div>
 <div class="publish-bar">
-<div><strong id="unsavedLabel">Sin cambios pendientes</strong><div><span>Publicar actualiza <code>catalog.json</code> del repositorio; la web lee ese archivo.</span></div></div>
+<div><strong id="unsavedLabel">Sin cambios pendientes</strong><div><span>Publicar actualiza el catálogo en la base de datos. El sitio lee la versión publicada.</span></div></div>
 <button id="publishBtn" class="btn primary" type="button" disabled>Publicar cambios ↗</button>
 </div>
 <div id="dashboardStatus" class="status" role="status" aria-live="polite" hidden></div>
