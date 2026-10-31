@@ -59,6 +59,7 @@ function setDirty(){
 function renderSettings(){
   fields.forEach(field=>{$(field).value=String(catalog.site[field]??"");});
   $("closedSunday").checked=!!catalog.site.closedSunday;
+  $("whatsappVerified").checked=!!catalog.site.whatsappVerified;
 }
 function renderProducts(){
   document.querySelectorAll(".tab").forEach(t=>{const active=t.dataset.category===category;t.classList.toggle("active",active);t.setAttribute("aria-selected",String(active));});
@@ -114,6 +115,7 @@ $("reloadBtn").addEventListener("click",reload);
 $("publishBtn").addEventListener("click",publish);
 fields.forEach(key=>$(key).addEventListener("input",e=>{if(!catalog)return;catalog.site[key]=e.target.value;markDirty();}));
 $("closedSunday").addEventListener("change",e=>{if(!catalog)return;catalog.site.closedSunday=e.target.checked;markDirty();});
+$("whatsappVerified").addEventListener("change",e=>{if(!catalog)return;catalog.site.whatsappVerified=e.target.checked;markDirty();});
 $("categoryTabs").addEventListener("click",e=>{const tab=e.target.closest("[data-category]");if(!tab||!catalog)return;category=tab.dataset.category;renderProducts();});
 $("productList").addEventListener("input",e=>{
   const row=e.target.closest("[data-index]"),field=e.target.dataset.field;if(!row||!field||!catalog)return;
