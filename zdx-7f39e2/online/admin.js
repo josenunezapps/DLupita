@@ -1,0 +1,48 @@
+import {db,configured,html,price,errorView,goodUrl,alertError} from './client.js';
+const root=document.getElementById('root');
+let session=null, business=null, products=[], section='website', busy=false, message='', editId=null;
+const E=html;
+const template=(content)=>`<div class="admin"><aside class="sidebar"><div class="zlogo">Z <span>Zenix <b>Core</b><small>Administración privada</small></span></div><div class="business-pill">${E(business?.name||'Comercio')}</div><nav><button data-section="website" class="${section==='website'?'active':''}">◈ Mi página web</button><button data-section="products" class="${section==='products'?'active':''}">▤ Catálogo</button><button data-section="security" class="${section==='security'?'active':''}">⚙ Mi cuenta</button></nav><button class="logout" id="logout">Cerrar sesión</button></aside><main class="workspace"><header class="bar"><div><small>ZENIX CORE / ${E(business?.name||'')}</small><h1>${section==='website'?'Mi página web':section==='products'?'Mis productos':'Mi cuenta'}</h1></div>${business?`<a href="index.html?comercio=${encodeURIComponent(business.slug)}" target="_blank" rel="noopener">Ver página ↗</a>`:''}</header><div class="inner">${message?`<div class="flash" role="status">${E(message)}</div>`:''}${content}</div></main></div>`;
+function loginForm(){root.innerHTML=`<main class="center"><form id="login" class="login"><div class="zlogo darklogo">Z <span>Zenix <b>Core</b></span></div><h1>Acceso del comercio</h1><p>Ingresá con la cuenta autorizada para administrar tu página.</p><label>Correo electrónico<input type="email" name="email" autocomplete="username" required></label><label>Contraseña<input type="password" name="password" autocomplete="current-password" required></label><button class="button" ${busy?'disabled':''}>${busy?'Ingresando…':'Ingresar'}</button>${message?`<p class="error" role="alert">${E(message)}</p>`:''}<small>Solo usuarios habilitados. No hay registro público de administradores.</small></form></main>`}
+function siteForm(){const b=business;return `<section class="card"><h2>Personalizá tu página</h2><p>Lo que edites acá se guarda en la base central y se verá desde otros dispositivos.</p><form id="siteform"><div class="form-grid"><label>Nombre del negocio<input name="name" value="${E(b.name)}" maxlength="90" required></label><label>Color principal<input type="color" name="accent" value="${/^#[0-9a-fA-F]{6}$/.test(b.accent||'')?E(b.accent):'#a92738'}"></label><label class="wide">Título de portada<input name="headline" value="${E(b.headline)}" maxlength="140"></label><label class="wide">Descripción<textarea name="description" maxlength="500" rows="3">${E(b.description)}</textarea></label><label class="wide">Imagen de portada (URL HTTPS)<input type="url" name="hero_image" value="${E(b.hero_image)}" placeholder="https://..."></label><label>Texto superior<input name="eyebrow" value="${E(b.eyebrow)}" maxlength="100"></label><label>Texto Nosotros<input name="about" value="${E(b.about)}" maxlength="170"></label><label>Dirección<input name="address" value="${E(b.address)}" maxlength="170"></label><label>Teléfono<input name="phone" value="${E(b.phone)}" maxlength="50"></label></div><label class="check"><input type="checkbox" name="published" ${b.published?'checked':''}> Mostrar página públicamente</label><button class="button" ${busy?'disabled':''}>Guardar cambios</button></form></section>`}
+function productsPanel(){return `<section class="card"><div class="row-between"><div><h2>Catálogo del comercio</h2><p>Los precios y productos provienen de una sola base de datos.</p></div><button class="button" id="new">+ Nuevo producto</button></div>${products.map(p=>`<div class="prodrow"><img src="${E(goodUrl(p.image_url))}" alt="" onerror="this.style.opacity=0"><div class="prodtext"><strong>${E(p.name)}</strong><small>${E(p.category)} · ${p.visible?'Publicado':'Oculto'}</small></div><strong>${price(p.price_ars)}</strong><button class="outline" data-edit="${p.id}">Editar</button></div>`).join('')||'<p>No hay productos cargados todavía.</p>'}</section>${editId!==null?productForm():''}`}
+function productForm(){const p=products.find(p=>p.id===editId)||{name:'',category:'General',description:'',price_ars:0,image_url:'',visible:true};return `<div class="modal-overlay"><form class="modal" id="productform"><button type="button" class="close" data-cancel="1" aria-label="Cerrar">×</button><h2>${editId==='new'?'Nuevo producto':'Editar producto'}</h2><label>Nombre<input name="name" required maxlength="100" value="${E(p.name)}"></label><label>Categoría<input name="category" required maxlength="60" value="${E(p.category)}"></label><label>Precio (ARS)<input type="number" name="price_ars" required min="0" step="1" value="${p.price_ars}"></label><label>Descripción<textarea name="description" rows="2" maxlength="350">${E(p.description)}</textarea></label><label>URL de imagen HTTPS<input type="url" name="image_url" value="${E(p.image_url)}"></label><label class="check"><input type="checkbox" name="visible" ${p.visible?'checked':''}> Producto visible</label><button class="button" ${busy?'disabled':''}>Guardar</button></form></div>`}
+function securityPanel(){return `<section class="card"><h2>Cuenta segura</h2><p>Sesión de Supabase Auth. Los cambios se validan en el servidor: un usuario no puede editar el catálogo de otro comercio.</p><p><strong>Usuario:</strong> ${E(session?.user?.email||'')}</p><p><strong>Comercio:</strong> ${E(business?.name||'')}</p><p><strong>Plan:</strong> Acceso piloto, sin cobros</p></section>`}
+function render(){if(!configured){root.innerHTML=errorView('Configuración pendiente','Falta crear o seleccionar una base independiente de Supabase y configurar su clave pública.');return}if(!session){loginForm();return}if(!business){root.innerHTML=`<main class="center"><section class="notice"><h1>Sin comercio autorizado</h1><p>Tu cuenta no tiene ningún comercio asignado. Un administrador de Zenix AR debe habilitarla.</p><button class="outline" id="logout">Cerrar sesión</button></section></main>`;return}
+ root.innerHTML=template(section==='website'?siteForm():section==='products'?productsPanel():securityPanel());}
+async function refresh(silent=false){if(!session?.user)return;const {data:bs,error:e}=await db.from('zd_businesses').select('*').eq('owner_id',session.user.id).order('created_at',{ascending:true}).limit(1);if(e){message=alertError(e);render();return}business=bs?.[0]||null;if(!business){render();return}const {data:ps,error:pe}=await db.from('zd_products').select('*').eq('business_id',business.id).order('created_at',{ascending:true});if(pe){message=alertError(pe);render();return}products=ps||[];if(!silent)message='';render()}
+root.addEventListener('click',async e=>{
+ const tab=e.target.closest('[data-section]');if(tab){section=tab.dataset.section;editId=null;message='';render();return}
+ if(e.target.closest('#logout')){await db.auth.signOut();session=null;business=null;message='';render();return}
+ if(e.target.closest('#new')){editId='new';render();return}
+ const edit=e.target.closest('[data-edit]');if(edit){editId=edit.dataset.edit;render();return}
+ if(e.target.closest('[data-cancel]')){editId=null;render()}
+});
+root.addEventListener('submit',async e=>{
+ e.preventDefault();if(busy)return;
+ const form=e.target,values=new FormData(form);busy=true;message='';
+ try{
+ if(form.id==='login'){const {data,error}=await db.auth.signInWithPassword({email:String(values.get('email')||'').trim(),password:String(values.get('password')||'')});if(error)throw error;session=data.session;await refresh();return}
+ if(!business||!session?.user)throw Error('No hay una sesión autorizada.');
+ if(form.id==='siteform'){
+  const fields={};for(const k of ['name','headline','description','hero_image','eyebrow','about','address','phone'])fields[k]=String(values.get(k)||'').trim();
+  fields.accent=String(values.get('accent')||'#a92738');fields.published=values.has('published');
+  if(fields.hero_image&&!goodUrl(fields.hero_image))throw Error('La portada debe utilizar una URL HTTPS.');
+  if(!fields.name)throw Error('Completá el nombre del comercio.');
+  const {error}=await db.from('zd_businesses').update(fields).eq('id',business.id).eq('owner_id',session.user.id);if(error)throw error;
+  message='Página actualizada correctamente.';await refresh(true);return;
+ }
+ if(form.id==='productform'){
+  const value=Number(values.get('price_ars'));if(!Number.isSafeInteger(value)||value<0)throw Error('El precio debe ser un número entero válido.');
+  const fields={name:String(values.get('name')||'').trim(),category:String(values.get('category')||'').trim(),description:String(values.get('description')||'').trim(),image_url:String(values.get('image_url')||'').trim(),price_ars:value,visible:values.has('visible')};
+  if(!fields.name||!fields.category)throw Error('Completá nombre y categoría.');
+  if(fields.image_url&&!goodUrl(fields.image_url))throw Error('La imagen debe utilizar una URL HTTPS.');
+  let result;
+  if(editId==='new')result=await db.from('zd_products').insert({...fields,business_id:business.id});
+  else result=await db.from('zd_products').update(fields).eq('id',editId).eq('business_id',business.id);
+  if(result.error)throw result.error;editId=null;message='Producto guardado correctamente.';await refresh(true);return;
+ }
+ }catch(err){message=alertError(err);render()}finally{busy=false}
+});
+async function bootstrap(){if(!configured){render();return}try{const {data,error}=await db.auth.getSession();if(error)throw error;session=data.session;if(session)await refresh();else render();db.auth.onAuthStateChange((event,newSession)=>{if(event==='SIGNED_OUT'){session=null;business=null;render()}})}catch(e){message=alertError(e);render()}}
+bootstrap();
