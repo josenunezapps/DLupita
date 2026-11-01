@@ -1,9 +1,11 @@
 /* Doña Lupita - categorías, variedades y lista de consulta */
 const CATEGORIES = [
   {id:'pizzas',name:'Pizzas',description:'A la piedra, en horno de barro',image:'https://img.carta.menu/storage/media/company_gallery/4568481/conversions/contribution_gallery.jpg',href:'pizzas.html'},
-  {id:'empanadas',name:'Empanadas',description:'Al horno o fritas; sabores tradicionales y especiales',image:'https://media-cdn.tripadvisor.com/media/photo-s/19/35/fc/58/empanadas-de-carne-queijo.jpg',href:'empanadas.html'},
-  {id:'milanesas',name:'Milanesas',description:'Variedades al plato con guarnición',image:'https://media.0221.com.ar/p/0e7d23a2d078151f83c22f0948dfcb80/adjuntos/357/imagenes/100/247/0100247840/1400x0/smart/milanesas-2.jpg',href:'milanesas.html'},
-  {id:'pastas',name:'Pastas',description:'Opciones de pasta y especialidades del día',image:'https://infomiba.com.ar/uploads/noticias/5/2024/11/20241101144534_sorrentinos-rellenos-de-jamon-y-queso-con-salsa-marinara.jpg',href:'pastas.html'}
+  {id:'empanadas',name:'Empanadas',description:'Al horno o fritas; sabores tradicionales',image:'https://media-cdn.tripadvisor.com/media/photo-s/19/35/fc/58/empanadas-de-carne-queijo.jpg',href:'empanadas.html'},
+  {id:'minutas',name:'Minutas',description:'Milanesas y sándwiches',image:'https://media.0221.com.ar/p/0e7d23a2d078151f83c22f0948dfcb80/adjuntos/357/imagenes/100/247/0100247840/1400x0/smart/milanesas-2.jpg',href:'minutas.html'},
+  {id:'menu',name:'Menú',description:'Platos caseros y del día',image:'https://infomiba.com.ar/uploads/noticias/5/2024/11/20241101144534_sorrentinos-rellenos-de-jamon-y-queso-con-salsa-marinara.jpg',href:'menu.html'},
+  {id:'papas-fritas',name:'Papas fritas',description:'Papas y acompañamientos',image:'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=850&q=80',href:'papas-fritas.html'},
+  {id:'bebidas',name:'Bebidas',description:'Sin alcohol y cervezas',image:'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=850&q=80',href:'bebidas.html'}
 ];
 const VARIETIES = [
   {id:'pizza-muzzarella',category:'pizzas',name:'Muzzarella',description:'Salsa y muzzarella.'},
@@ -28,15 +30,33 @@ const VARIETIES = [
   {id:'emp-cebolla-queso',category:'empanadas',name:'Cebolla y queso',description:'Cebolla caramelizada y queso.'},
   {id:'emp-mariscos',category:'empanadas',name:'Mariscos',description:'Relleno de mariscos.'},
   {id:'emp-bondiola',category:'empanadas',name:'Bondiola desmechada',description:'Bondiola al horno, verduras y especias.'},
-  {id:'mila-napolitana',category:'milanesas',name:'Napolitana',description:'Salsa napolitana, jamón y muzzarella.'},
-  {id:'mila-margarita',category:'milanesas',name:'Margarita',description:'Muzzarella, tomates cherry y albahaca.'},
-  {id:'mila-solitara',category:'milanesas',name:'Solitaria',description:'Milanesa tradicional con guarnición.'},
-  {id:'mila-linea-tres',category:'milanesas',name:'Línea de tres',description:'Muzzarella y tres tipos de cebolla.'},
-  {id:'mila-del-94',category:'milanesas',name:'Del 94',description:'Salsa, huevos fritos y panceta.'},
-  {id:'mila-popeye',category:'milanesas',name:'La de Popeye',description:'Espinaca, salsa blanca y queso.'},
-  {id:'pasta-noquis',category:'pastas',name:'Ñoquis con estofado',description:'Ñoquis caseros con estofado de carne.'},
-  {id:'pasta-sorrentinos',category:'pastas',name:'Sorrentinos',description:'Mencionados en reseñas; confirmá la variedad y su disponibilidad.'}
+  {id:'mila-napolitana',category:'minutas',name:'Napolitana',description:'Salsa napolitana, jamón y muzzarella.'},
+  {id:'mila-margarita',category:'minutas',name:'Margarita',description:'Muzzarella, tomates cherry y albahaca.'},
+  {id:'mila-solitara',category:'minutas',name:'Solitaria',description:'Milanesa tradicional con guarnición.'},
+  {id:'mila-linea-tres',category:'minutas',name:'Línea de tres',description:'Muzzarella y tres tipos de cebolla.'},
+  {id:'mila-del-94',category:'minutas',name:'Del 94',description:'Salsa, huevos fritos y panceta.'},
+  {id:'mila-popeye',category:'minutas',name:'La de Popeye',description:'Espinaca, salsa blanca y queso.'},
+  {id:'pasta-noquis',category:'menu',name:'Ñoquis con estofado',description:'Ñoquis caseros con estofado de carne.'},
+  {id:'pasta-sorrentinos',category:'menu',name:'Sorrentinos',description:'Mencionados en reseñas; confirmá la variedad y su disponibilidad.'}
 ];
+
+/* Productos adicionales de la carta pública; precios y stock sujetos a confirmación */
+VARIETIES.push(
+ {id:'minuta-lomo',category:'minutas',name:'Sándwich de lomo completo',description:'Pan casero, lomo, jamón, queso, huevo y vegetales; con fritas.'},
+ {id:'minuta-sandwich-milanesa',category:'minutas',name:'Sándwich de milanesa',description:'En pan casero, con jamón, queso, huevo y vegetales; con fritas.'},
+ {id:'minuta-hamburguesa',category:'minutas',name:'Hamburguesa completa',description:'Pan casero, queso, jamón, huevo y vegetales; con fritas.'},
+ {id:'menu-pollo-pure',category:'menu',name:'Pollo al horno con puré',description:'Pata muslo con verduras al horno y puré.'},
+ {id:'menu-pollo-grille',category:'menu',name:'Pollo grillé',description:'Filet a la plancha con guarnición a elección.'},
+ {id:'menu-matambre',category:'menu',name:'Matambre a la pizza',description:'Matambre, salsa, jamón y queso; con guarnición.'},
+ {id:'menu-locro',category:'menu',name:'Locro',description:'Plato tradicional; confirmar si está disponible hoy.'},
+ {id:'bebida-coca-500',category:'bebidas',name:'Coca-Cola 500 ml',description:'Gaseosa, consultar presentación disponible.'},
+ {id:'bebida-sprite-500',category:'bebidas',name:'Sprite 500 ml',description:'Gaseosa lima-limón.'},
+ {id:'bebida-agua-500',category:'bebidas',name:'Agua mineral 500 ml',description:'Con o sin gas, consultar disponibilidad.'},
+ {id:'bebida-beagle',category:'bebidas',name:'Cerveza Beagle',description:'Cerveza regional, presentación a confirmar.'},
+ {id:'bebida-brahma',category:'bebidas',name:'Cerveza Brahma',description:'Presentaciones sujetas a disponibilidad.'},
+ {id:'papas-porcion',category:'papas-fritas',name:'Papas fritas',description:'Consultar porción y disponibilidad.'}
+);
+
 const getProduct=id=>VARIETIES.find(x=>x.id===id);
 const getCategory=id=>CATEGORIES.find(x=>x.id===id);
 const read=()=>{try{const o=JSON.parse(localStorage.getItem('lupita-cart')||'{}');return o&&typeof o==='object'&&!Array.isArray(o)?o:{}}catch{return {}}};
@@ -50,9 +70,9 @@ function renderCart(){
  const items=Object.entries(read()).filter(([_,n])=>Number(n)>0);
  if(!items.length){el.innerHTML='<p>Tu carrito está vacío. <a class="textlink" href="productos.html">Elegí una categoría para comenzar →</a></p>';return}
  el.innerHTML=items.map(([id,n])=>{
-   const p=getProduct(id);const c=getCategory(id==='pizza'?'pizzas':id);
+   const p=getProduct(id);const c=getCategory(id==='pizza'?'pizzas':id==='milanesas'?'minutas':id==='pastas'?'menu':id);
    const label=p?p.name:(c?c.name+' · selección anterior':'Producto anterior');
-   const sub=p?getCategory(p.category).name:'Seleccioná una variedad para reemplazar esta selección';
+   const sub=p?(getCategory(p.category)?.name||'Variedades'):'Seleccioná una variedad para reemplazar esta selección';
    return '<div class="cartitem"><span><strong>'+label+'</strong><small>'+sub+'</small></span><span class="qty"><button type="button" aria-label="Quitar uno de '+label+'" onclick="change(\''+id+'\',-1)">−</button><b>'+Number(n)+'</b><button type="button" aria-label="Agregar uno de '+label+'" onclick="change(\''+id+'\',1)">+</button></span></div>'
  }).join('');
 }
@@ -84,6 +104,20 @@ const PHOTO_SETS={
     'https://media.losandes.com.ar/adjuntos/368/migration/resizer/v2/SXB3R2NHKZGLVMJRJHMVS5QXAY.jpg?auth=dabe63a368dee17b34efb972fd83b9ba727ed97d675c5df6797fea105ed92c8b&height=955&width=1125'
   ]
 };
+
+/* Enlaces existentes para categorías antes separadas; se conservan las imágenes.
+   Las fotos externas pueden no representar los platos reales del restaurante. */
+PHOTO_SETS.minutas=PHOTO_SETS.milanesas;
+PHOTO_SETS.menu=PHOTO_SETS.pastas;
+PHOTO_SETS.bebidas=[
+ 'https://images.unsplash.com/photo-1535958636474-b021ee887b13?auto=format&fit=crop&w=850&q=80',
+ 'https://images.unsplash.com/photo-1513558161293-cdaf765edfd7?auto=format&fit=crop&w=850&q=80'
+];
+PHOTO_SETS['papas-fritas']=[
+ 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=850&q=80',
+ 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?auto=format&fit=crop&w=850&q=80'
+];
+
 function imageMarkup(source,label,backup){
  const src=String(source).replaceAll('"','&quot;');
  const alt=String(label).replaceAll('"','&quot;');
@@ -101,22 +135,24 @@ function handleImageFailures(scope){
    if(img.complete && !img.naturalWidth)retry();
  });
 }
+
 function renderCategories(){
  const el=document.getElementById('products');if(!el)return;
- el.innerHTML=CATEGORIES.map(c=>'<a class="product category-card" href="'+c.href+'">'+imageMarkup(c.image,'Imagen ilustrativa de '+c.name,PHOTO_SETS[c.id]?.[1])+'<div><h2>'+c.name+'</h2><p>'+c.description+'</p><span class="category-link">Ver variedades <span aria-hidden="true">↗</span></span></div></a>').join('');
+ el.innerHTML=CATEGORIES.map(c=>'<a class="product category-card" href="'+c.href+'">'+imageMarkup(c.image,'Imagen ilustrativa de '+c.name,PHOTO_SETS[c.id]?.[1])+'<div class="card-bottom"><div class="card-text"><h2>'+c.name+'</h2><p>'+c.description+'</p></div><span class="category-link">Ver variedades <span aria-hidden="true">↗</span></span></div></a>').join('');
  handleImageFailures(el);
 }
 function renderVarieties(){
  const el=document.getElementById('variety-products');if(!el)return;
- const categoryId=document.querySelector('[data-category]')?.getAttribute('data-category');
+ const rawCategory=document.querySelector('[data-category]')?.getAttribute('data-category');
+ const categoryId=rawCategory==='milanesas'?'minutas':rawCategory==='pastas'?'menu':rawCategory;
  const cat=getCategory(categoryId);
  if(!cat){el.innerHTML='<p>Esta categoría no existe.</p>';return}
  const entries=VARIETIES.filter(p=>p.category===categoryId);
  const imgs=PHOTO_SETS[categoryId]||[cat.image];
  el.innerHTML=entries.map((p,i)=>{
-   const picture=imgs[i%imgs.length];
-   const backup=picture===cat.image?imgs[(i+1)%imgs.length]:cat.image;
-   return '<article class="product variety-card">'+imageMarkup(picture,'Foto ilustrativa de '+cat.name,backup)+'<div><h2>'+p.name+'</h2><p>'+p.description+'</p><button type="button" onclick="add(\''+p.id+'\')">Agregar al carrito +</button></div></article>';
+  const picture=imgs[i%imgs.length];
+  const backup=picture===cat.image?imgs[(i+1)%imgs.length]:cat.image;
+  return '<article class="product variety-card">'+imageMarkup(picture,'Imagen ilustrativa de '+cat.name,backup)+'<div class="card-bottom"><div class="card-text"><h2>'+p.name+'</h2><p>'+p.description+'</p></div><button type="button" onclick="add(\''+p.id+'\')">Agregar al carrito +</button></div></article>';
  }).join('');
  handleImageFailures(el);
 }
