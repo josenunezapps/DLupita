@@ -90,3 +90,20 @@ body:not(.home) .iconbtn:hover{background:#201d1912}
 .cartitem small{font-size:11px;color:#776b5e}
 #shop-toast{position:fixed;z-index:100;bottom:24px;left:50%;transform:translate(-50%,12px);background:#211c17;color:#fff;padding:15px 25px;font-size:13px;box-shadow:0 12px 40px #0003;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:min(420px,90vw);text-align:center}
 #shop-toast.visible{opacity:1;transform:translate(-50%,0)}
+
+/* Ajustes visuales y tolerancia a fotos externas faltantes */
+.products .product{background-color:#28231d}
+.products .image-missing{background:radial-gradient(ellipse at 27% 23%,#6b4a30 0%,transparent 60%),linear-gradient(140deg,#3c3328 0%,#191714 100%)}
+.products .image-missing:before{background:linear-gradient(180deg,#0000 25%,rgba(0,0,0,.6) 100%)}
+.varieties-page .variety-card:after{content:'FOTO ILUSTRATIVA';position:absolute;z-index:2;top:15px;left:15px;padding:5px 8px;border:1px solid #ffffff6b;color:#fff;font-size:8px;font-weight:600;letter-spacing:1.2px;text-shadow:0 1px 4px #0008;pointer-events:none}
+.products .category-card:hover,.products .variety-card:hover{box-shadow:0 18px 42px rgba(30,24,16,.20)}
+/* Algunos navegadores móviles fuerzan el modo escritorio y omiten el
+   breakpoint basado en el ancho del viewport. */
+@media(hover:none) and (pointer:coarse) and (max-device-width:750px){
+ .products{grid-template-columns:1fr!important;gap:17px}
+ .products .product{aspect-ratio:4/4.2;min-height:340px}
+ .products .product>div{padding:24px!important}
+ .products .product h2{font-size:clamp(30px,8vw,44px)!important}
+ .products .product p{font-size:13px!important}
+ .products .product button,.products .category-card .category-link{font-size:11px!important;min-height:44px;padding:13px 16px!important}
+}
