@@ -1,5 +1,43 @@
 <!doctype html>
 <html lang="es-AR">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Tienda | Zenix Web</title><meta name="description" content="Tienda online del comercio"><link rel="stylesheet" href="style.css"></head>
-<body><div id="root"><main class="center"><p>Cargando comercio…</p></main></div><script type="module" src="app.js"></script></body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#301817">
+  <title>Zenix Web · Vista previa de tienda</title>
+  <meta name="description" content="Vista previa de la página web incluida en Zenix Delivery">
+  <link id="app-theme" rel="stylesheet" href="style.css">
+  <style>
+    .zenix-preview-banner{position:relative;z-index:30;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;background:#203449;color:#fff;padding:10px 16px;text-align:center;font:600 12px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+    .zenix-preview-banner strong{background:#f1c97d;color:#29210d;padding:2px 7px;border-radius:4px;font-size:10px;letter-spacing:.08em}
+  </style>
+</head>
+<body>
+  <div id="root"><main class="center"><p>Cargando tienda…</p></main></div>
+  <script type="module">
+    import {SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY} from './config.js';
+    const connected=/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(SUPABASE_URL) && SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_');
+    try {
+      if(connected){
+        await import('./app.js');
+      }else{
+        // Sin base de datos: mostrar la tienda interactiva, no una pantalla vacía.
+        // Los cambios y pedidos de prueba permanecen solo en este navegador.
+        document.getElementById('app-theme').href='../app/storefront.css';
+        const root=document.getElementById('root');
+        root.id='store';
+        root.replaceChildren();
+        const banner=document.createElement('div');
+        banner.className='zenix-preview-banner';
+        banner.innerHTML='<strong>DEMO</strong><span>Vista previa interactiva · No realiza pedidos ni cobros reales</span>';
+        document.body.prepend(banner);
+        await import('../app/storefront.js');
+      }
+    }catch(error){
+      console.error('Error cargando Zenix Web',error);
+      document.getElementById(connected?'root':'store').innerHTML='<main style="max-width:560px;margin:12vh auto;padding:28px;font:16px system-ui"><h1>No se pudo abrir la vista previa</h1><p>Hubo un problema al cargar los archivos. Intentá actualizar la página.</p></main>';
+    }
+  </script>
+</body>
 </html>
