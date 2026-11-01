@@ -42,7 +42,7 @@ root.addEventListener('submit',async e=>{
   else result=await db.from('zd_products').update(fields).eq('id',editId).eq('business_id',business.id);
   if(result.error)throw result.error;editId=null;message='Producto guardado correctamente.';await refresh(true);return;
  }
- }catch(err){message=alertError(err);render()}finally{busy=false}
+ }catch(err){message=alertError(err);render()}finally{busy=false;render()}
 });
 async function bootstrap(){if(!configured){render();return}try{const {data,error}=await db.auth.getSession();if(error)throw error;session=data.session;if(session)await refresh();else render();db.auth.onAuthStateChange((event,newSession)=>{if(event==='SIGNED_OUT'){session=null;business=null;render()}})}catch(e){message=alertError(e);render()}}
 bootstrap();
