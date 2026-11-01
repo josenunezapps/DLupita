@@ -107,3 +107,60 @@ body:not(.home) .iconbtn:hover{background:#201d1912}
  .products .product p{font-size:13px!important}
  .products .product button,.products .category-card .category-link{font-size:11px!important;min-height:44px;padding:13px 16px!important}
 }
+
+/* 2026-11: 3 columnas en PC, texto a la izquierda y acción a la derecha. */
+@media (min-width:1050px){
+  .products{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+  .products .product{aspect-ratio:1/1.15;min-height:340px}
+}
+@media (min-width:761px) and (max-width:1049px){
+  .products{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:760px){
+  .products{grid-template-columns:1fr!important}
+}
+.products .product>.card-bottom{
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:end!important;justify-content:space-between!important;
+  gap:12px!important;flex-direction:row!important;
+  width:100%;padding:22px 19px 20px!important;
+}
+.products .card-bottom>.card-text{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.products .card-bottom>.card-text h2{
+  margin:0 0 6px!important;font:400 clamp(19px,2.3vw,31px)/1.14 'Playfair Display',Georgia,serif!important;
+  letter-spacing:-.03em;color:#fff
+}
+.products .card-bottom>.card-text p{
+  margin:0!important;font-size:11px!important;line-height:1.35!important;
+  min-height:0!important;color:#f2e7d9!important;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.products .card-bottom>.category-link,
+.products .card-bottom>button{
+  grid-column:2;grid-row:1;align-self:end;
+  width:auto!important;max-width:144px;min-width:110px;
+  margin:0!important;flex:0 0 auto!important;
+  text-align:center;display:inline-flex;align-items:center;justify-content:center;
+  padding:13px 12px!important;line-height:1.3!important;
+  min-height:45px;white-space:normal;font-size:10px!important;
+  letter-spacing:.35px!important;
+}
+.products .category-card .card-bottom>.category-link{width:auto!important}
+.products .variety-card .card-bottom>button{width:auto!important}
+.products .product .card-bottom>.card-text h2{font-size:clamp(19px,2.3vw,31px)!important}
+@media(max-width:760px){
+  .products .product>.card-bottom{padding:21px 16px!important;gap:12px!important}
+  .products .product .card-bottom>.card-text h2{font-size:clamp(23px,5.8vw,34px)!important}
+  .products .card-bottom>.category-link,.products .card-bottom>button{font-size:10px!important;min-width:110px;max-width:142px;padding:12px 10px!important}
+}
+@media(max-width:370px){
+  .products .product>.card-bottom{padding:17px 12px!important;gap:8px!important}
+  .products .product .card-bottom>.card-text h2{font-size:21px!important}
+  .products .card-bottom>.category-link,.products .card-bottom>button{min-width:102px;max-width:124px;padding:11px 7px!important;font-size:9px!important}
+}
+/* El navegador táctil mantiene una tarjeta por fila; el botón no baja del nombre. */
+@media(hover:none) and (pointer:coarse) and (max-device-width:750px){
+ .products .product>.card-bottom{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;flex-direction:row!important;align-items:end!important;gap:12px!important}
+ .products .product .card-bottom>.card-text h2{font-size:clamp(23px,5.8vw,34px)!important}
+ .products .card-bottom>.category-link,.products .card-bottom>button{grid-column:2;grid-row:1;width:auto!important;max-width:142px;min-width:110px;margin:0!important;font-size:10px!important;padding:12px 10px!important}
+}
