@@ -1,52 +1,30 @@
-# Zenix Delivery — Prototipo funcional (v0.1)
+# Zenix Web + Core · MVP de integración · v0.2
 
-Plataforma de demostración para comercios, compradores, repartidores y administración Zenix AR.
+## Nuevo modelo comercial
 
-## Ejecutar
+Zenix AR ofrece **un único abono mensual** que incluye: sitio web de marca para cada comercio, catálogo autogestionable, gestión de pedidos, fidelización y, según el plan, el módulo de delivery. No ofrecemos la web como producto independiente para este servicio: la web y su administrador comparten un solo origen de datos.
 
-No requiere instalar dependencias ni configurar claves.
+## Rutas dentro de la carpeta de prueba
+
+- `index.html`: **tienda pública del comercio**, con su propia marca. No hay acceso visible a Zenix ni selector de roles.
+- `gestion-demo.html`: **vista previa del administrador**; no se enlaza desde la tienda pública. **No es privada ni tiene autenticación**. No cargar datos sensibles.
+- `app/core.js`: estado compartido en `localStorage` (exclusivamente una demo en el mismo navegador).
+- `app/storefront.js` y `app/storefront.css`: plantilla pública adaptable a diferentes comercios.
+- `app/studio.js` y `app/studio.css`: editor de web, catálogo y pedidos de prueba.
+- `docs/modelo-web-incluida.md`: especificación de producto y plan técnico.
+
+## Prueba local
 
 ```bash
-cd zenix-delivery
-python -m http.server 8080
+python3 -m http.server 8080
 ```
 
-Abrir `http://localhost:8080` desde el navegador. También se puede abrir `index.html` directamente (algunas capacidades del navegador requieren servidor local).
+Abrir `http://localhost:8080` y `http://localhost:8080/gestion-demo.html`. Cambiar nombre, portada o producto desde el editor y recargar la tienda. Crear un pedido en la tienda y actualizar su estado desde el editor. Todos los datos son exclusivamente locales.
 
-## Qué funciona en esta demo
+## Limitaciones conocidas
 
-- Navegación entre los cuatro paneles.
-- Catálogo con categorías, búsqueda, visibilidad y modificación de precios.
-- Carrito y creación de pedidos con dirección escrita.
-- Captura opcional de coordenadas GPS del **cliente**, sujeta al permiso del navegador.
-- Gestión de estados de pedidos desde el comercio.
-- Asignación o toma de pedidos por repartidores; solo un pedido activo por conductor en el prototipo.
-- Apertura de la ruta al destino en Google Maps.
-- Confirmación de entrega por conductor o cliente y acreditación de puntos al finalizar.
-- Información de actividad y resumen SaaS de ejemplo.
-- Persistencia en localStorage del navegador.
+El administrador demo **no tiene contraseña ni permisos**. `noindex` y una URL poco visible no sirven como seguridad. No se incluyen cobros reales, autenticación, sincronización entre dispositivos, GPS de repartidores en vivo, carga de imágenes a servidores ni suscripciones activas. La captura opcional de ubicación del comprador necesita HTTPS o localhost.
 
-## Limitaciones deliberadas
+Para producción: backend autenticado, tenant_id por comercio y RLS, validación de precios y pedidos en el servidor, catálogo y CMS almacenados en base de datos, suscripciones y límites, imágenes gestionadas en Storage, interfaz de repartidor con localización autorizada, monitoreo, políticas de privacidad y dominios propios.
 
-**NO ES UN SISTEMA DE PRODUCCIÓN.** No hay autenticación real ni autorización por roles; el selector de roles es solo para demostración. No existe comunicación entre dispositivos, seguimiento GPS de repartidores en vivo, pasarela de pagos, planes cobrables, ni datos seguros de clientes. Las operaciones de asignación no son transaccionales entre dispositivos. No usar con datos personales reales ni aceptar pedidos públicos.
-
-El archivo `db/schema-inicial.sql` es un borrador de base de datos **no ejecutado y pendiente de validación**. La implementación de negocio definitiva necesita servidor, roles seguros, consultas con RLS, tests de integridad y protección de datos.
-
-## Estructura
-
-- `index.html`: punto de entrada.
-- `app/main.js`: flujos del prototipo.
-- `app/styles.css`: interfaz responsive.
-- `manifest.webmanifest`: metadatos de instalación PWA (sin service worker/offline).
-- `db/schema-inicial.sql`: diseño preliminar SQL.
-- `docs/arquitectura.md`: fases hacia producción.
-
-## Próximos hitos
-
-1. Dividir el prototipo en módulos con frontend React + TypeScript y suite de pruebas.
-2. Crear backend seguro (Supabase/PostgreSQL y/o API Workers) y autenticación real.
-3. Implementar multiempresa, roles, migraciones, políticas RLS y estados transaccionales.
-4. Integrar delivery con actualizaciones entre dispositivos y estados auditables.
-5. Integrar GPS en tiempo real con consentimiento y controles de retención.
-6. Conectar puntos transaccionales, cobros, planes, monitoreo y backups.
-7. Realizar pruebas en dispositivos y piloto controlado.
+Esta demo está aislada de la web original del repositorio Doña Lupita y **no modifica** sus páginas públicas.
