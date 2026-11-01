@@ -1,0 +1,11 @@
+.zenix-location-tools{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.zenix-location-tools button{font-size:12px;line-height:1.35;min-height:44px;padding:9px;border:1px solid #ddcdc1;border-radius:10px;background:#f9f0e8;color:#513b34;font-weight:700}
+.zenix-location-tools .map-gps{grid-column:1/-1;background:#f4e8dc}
+#gps-info{display:block;font-size:12px;line-height:1.45;color:#6d615d;margin:8px 0 6px}
+#zenix-map-area{margin:12px 0;border:1px solid #e4d8ce;border-radius:12px;overflow:hidden;background:#fff}
+#zenix-map-area[hidden]{display:none}
+#zenix-address-map{height:260px;width:100%;background:#e6e8e0;z-index:1}
+#zenix-search-result,#gps-coordinates{display:block;padding:7px 12px;font:12px/1.4 system-ui;color:#5c534c}
+.zenix-map-error{padding:24px;font-size:13px}
+.zenix-map-help{padding:10px 12px;background:#fff4e7;color:#6c5541;font:12px/1.5 system-ui;margin:0}
+@media(max-width:420px){.zenix-location-tools{grid-template-columns:1fr}.zenix-location-tools .map-gps{grid-column:auto}#zenix-address-map{height:230px}}
