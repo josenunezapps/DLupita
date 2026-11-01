@@ -152,7 +152,7 @@ function renderVarieties(){
  el.innerHTML=entries.map((p,i)=>{
   const picture=imgs[i%imgs.length];
   const backup=picture===cat.image?imgs[(i+1)%imgs.length]:cat.image;
-  return '<article class="product variety-card">'+imageMarkup(picture,'Imagen ilustrativa de '+cat.name,backup)+'<div class="card-bottom"><div class="card-text"><h2>'+p.name+'</h2><p>'+p.description+'</p></div><button type="button" onclick="add(\''+p.id+'\')">Agregar al carrito +</button></div></article>';
+  return '<article class="product variety-card">'+imageMarkup(picture,'Imagen ilustrativa de '+cat.name,backup)+'<div class="card-bottom"><div class="card-text"><h2>'+p.name+'</h2><p>'+p.description+'</p></div><button type="button" class="add-plus" aria-label="Agregar '+p.name+' al carrito" title="Agregar '+p.name+' al carrito" onclick="add(\''+p.id+'\')"><span aria-hidden="true">+</span></button></div></article>';
  }).join('');
  handleImageFailures(el);
 }
