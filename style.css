@@ -54,3 +54,18 @@ body:not(.home) .iconbtn:hover{background:#201d1912}
 /* Catálogo compacto: cuatro productos por fila en escritorio */
 @media(min-width:1050px){.products{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.product img{height:190px}.product div{padding:5px 15px 0}.product h2{font-size:26px;margin:12px 0 6px}.product p{font-size:12px;line-height:1.5;min-height:37px}.product button{font-size:10px;padding:12px 10px;width:100%;margin-top:8px}.product{padding-bottom:17px}}
 @media(min-width:761px) and (max-width:1049px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Tarjetas fotográficas: textos y botón superpuestos, sin franja blanca */
+.products{align-items:stretch}
+.products .product{position:relative;aspect-ratio:3/4;min-height:315px;display:flex;align-items:flex-end;overflow:hidden;padding:0!important;background:#342d27;isolation:isolate;box-shadow:0 10px 25px rgba(30,24,16,.10)}
+.products .product:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.04) 18%,rgba(0,0,0,.10) 45%,rgba(0,0,0,.82) 100%)}
+.products .product>img{position:absolute;inset:0;z-index:0;width:100%;height:100%!important;object-fit:cover;display:block;transition:transform .45s ease}
+.products .product:hover>img{transform:scale(1.04)}
+.products .product>div{position:relative;z-index:2;width:100%;padding:23px 21px 21px!important;color:#fff;display:flex;flex-direction:column;align-items:flex-start}
+.products .product h2{color:#fff!important;font:400 clamp(25px,2.6vw,36px)/1.08 'Playfair Display',Georgia,serif!important;letter-spacing:-.035em;margin:0 0 7px!important;text-shadow:0 2px 10px #0006}
+.products .product p{color:#f1eae0!important;font-size:12px!important;line-height:1.5!important;min-height:0!important;margin:0 0 14px!important;text-shadow:0 1px 7px #0008}
+.products .product button{width:auto!important;max-width:100%;white-space:normal;text-align:center;border:1px solid #fff;background:#fff;color:#211d19;font-size:10px!important;font-weight:700;letter-spacing:.7px;padding:13px 15px!important;margin:0!important;line-height:1.3;transition:background .2s,color .2s}
+.products .product button:hover{background:transparent;color:white;transform:none}
+@media(min-width:1050px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}.products .product{min-height:315px}.products .product>div{padding:18px 15px 18px!important}.products .product h2{font-size:27px!important}.products .product button{font-size:9px!important;padding:12px 10px!important;width:100%!important}}
+@media(min-width:761px) and (max-width:1049px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.products{grid-template-columns:1fr}.products .product{aspect-ratio:4/4.3;min-height:320px}.products .product>div{padding:22px!important}.products .product h2{font-size:36px!important}.products .product button{font-size:11px!important}}
