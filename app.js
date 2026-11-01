@@ -1,9 +1,9 @@
 /* Doña Lupita - categorías, variedades y lista de consulta */
 const CATEGORIES = [
   {id:'pizzas',name:'Pizzas',description:'A la piedra, en horno de barro',image:'https://img.carta.menu/storage/media/company_gallery/4568481/conversions/contribution_gallery.jpg',href:'pizzas.html'},
-  {id:'empanadas',name:'Empanadas',description:'Al horno o fritas; sabores tradicionales y especiales',image:'https://www.airial.travel/_next/image?q=70&url=https%3A%2F%2Fcoinventmediastorage.blob.core.windows.net%2Frestaurant%2Feb254b849873cecb652ab5c0841c26e09feea8e34a3716d5701905a39a17c606&w=3840',href:'empanadas.html'},
-  {id:'milanesas',name:'Milanesas',description:'Variedades al plato con guarnición',image:'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&auto=format&fit=crop',href:'milanesas.html'},
-  {id:'pastas',name:'Pastas',description:'Opciones de pasta y especialidades del día',image:'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&auto=format&fit=crop',href:'pastas.html'}
+  {id:'empanadas',name:'Empanadas',description:'Al horno o fritas; sabores tradicionales y especiales',image:'https://media-cdn.tripadvisor.com/media/photo-s/19/35/fc/58/empanadas-de-carne-queijo.jpg',href:'empanadas.html'},
+  {id:'milanesas',name:'Milanesas',description:'Variedades al plato con guarnición',image:'https://media.0221.com.ar/p/0e7d23a2d078151f83c22f0948dfcb80/adjuntos/357/imagenes/100/247/0100247840/1400x0/smart/milanesas-2.jpg',href:'milanesas.html'},
+  {id:'pastas',name:'Pastas',description:'Opciones de pasta y especialidades del día',image:'https://infomiba.com.ar/uploads/noticias/5/2024/11/20241101144534_sorrentinos-rellenos-de-jamon-y-queso-con-salsa-marinara.jpg',href:'pastas.html'}
 ];
 const VARIETIES = [
   {id:'pizza-muzzarella',category:'pizzas',name:'Muzzarella',description:'Salsa y muzzarella.'},
@@ -56,9 +56,53 @@ function renderCart(){
    return '<div class="cartitem"><span><strong>'+label+'</strong><small>'+sub+'</small></span><span class="qty"><button type="button" aria-label="Quitar uno de '+label+'" onclick="change(\''+id+'\',-1)">−</button><b>'+Number(n)+'</b><button type="button" aria-label="Agregar uno de '+label+'" onclick="change(\''+id+'\',1)">+</button></span></div>'
  }).join('');
 }
+
+/* La categoría presenta la familia; las fotos de variedades son ilustrativas,
+   salvo las imágenes públicas auténticas identificadas de Doña Lupita. */
+const PHOTO_SETS={
+  pizzas:[
+    'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=850&q=82',
+    'https://img.carta.menu/storage/media/company_gallery/4568481/conversions/contribution_gallery.jpg',
+    'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=850&q=82',
+    'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=850&q=82',
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=850&q=82',
+    'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=850&q=82',
+    'https://images.unsplash.com/photo-1548365328-9f547fb0953a?auto=format&fit=crop&w=850&q=82',
+    'https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=850&q=82'
+  ],
+  empanadas:[
+    'https://media-cdn.tripadvisor.com/media/photo-s/19/35/fc/58/empanadas-de-carne-queijo.jpg',
+    'https://media-cdn.tripadvisor.com/media/photo-s/10/2f/0c/96/20170806-223329-largejpg.jpg',
+    'https://media-cdn.tripadvisor.com/media/photo-s/18/8d/99/59/photo2jpg.jpg'
+  ],
+  milanesas:[
+    'https://media.0221.com.ar/p/0e7d23a2d078151f83c22f0948dfcb80/adjuntos/357/imagenes/100/247/0100247840/1400x0/smart/milanesas-2.jpg',
+    'https://3copas.com.ar/wp-content/uploads/2024/04/mila11.jpeg'
+  ],
+  pastas:[
+    'https://infomiba.com.ar/uploads/noticias/5/2024/11/20241101144534_sorrentinos-rellenos-de-jamon-y-queso-con-salsa-marinara.jpg',
+    'https://media.losandes.com.ar/adjuntos/368/migration/resizer/v2/SXB3R2NHKZGLVMJRJHMVS5QXAY.jpg?auth=dabe63a368dee17b34efb972fd83b9ba727ed97d675c5df6797fea105ed92c8b&height=955&width=1125'
+  ]
+};
+function imageMarkup(source,label,backup){
+ const src=String(source).replaceAll('"','&quot;');
+ const alt=String(label).replaceAll('"','&quot;');
+ const fall=String(backup||'').replaceAll('"','&quot;');
+ return '<img loading="lazy" decoding="async" src="'+src+'" data-fallback="'+fall+'" alt="'+alt+'">';
+}
+function handleImageFailures(scope){
+ scope.querySelectorAll('img').forEach(img=>{
+   img.addEventListener('error',()=>{
+     const next=img.dataset.fallback;
+     if(next&&img.src!==next&&!img.dataset.retried){img.dataset.retried='yes';img.src=next}
+     else{img.style.display='none';img.closest('.product')?.classList.add('image-missing')}
+   });
+ });
+}
 function renderCategories(){
  const el=document.getElementById('products');if(!el)return;
- el.innerHTML=CATEGORIES.map(c=>'<a class="product category-card" href="'+c.href+'"><img loading="lazy" src="'+c.image+'" alt="Imagen de la categoría '+c.name+'"><div><h2>'+c.name+'</h2><p>'+c.description+'</p><span class="category-link">Ver variedades <span aria-hidden="true">↗</span></span></div></a>').join('');
+ el.innerHTML=CATEGORIES.map(c=>'<a class="product category-card" href="'+c.href+'">'+imageMarkup(c.image,'Imagen ilustrativa de '+c.name,PHOTO_SETS[c.id]?.[1])+'<div><h2>'+c.name+'</h2><p>'+c.description+'</p><span class="category-link">Ver variedades <span aria-hidden="true">↗</span></span></div></a>').join('');
+ handleImageFailures(el);
 }
 function renderVarieties(){
  const el=document.getElementById('variety-products');if(!el)return;
@@ -66,7 +110,13 @@ function renderVarieties(){
  const cat=getCategory(categoryId);
  if(!cat){el.innerHTML='<p>Esta categoría no existe.</p>';return}
  const entries=VARIETIES.filter(p=>p.category===categoryId);
- el.innerHTML=entries.map((p,i)=>'<article class="product variety-card"><img loading="lazy" style="object-position:'+(['50% 50%','55% 38%','40% 60%','60% 50%'][i%4])+'" src="'+cat.image+'" alt="Imagen representativa de '+cat.name+'"><div><h2>'+p.name+'</h2><p>'+p.description+'</p><button type="button" onclick="add(\''+p.id+'\')">Agregar al carrito +</button></div></article>').join('');
+ const imgs=PHOTO_SETS[categoryId]||[cat.image];
+ el.innerHTML=entries.map((p,i)=>{
+   const picture=imgs[i%imgs.length];
+   const backup=picture===cat.image?imgs[(i+1)%imgs.length]:cat.image;
+   return '<article class="product variety-card">'+imageMarkup(picture,'Foto ilustrativa de '+cat.name,backup)+'<div><h2>'+p.name+'</h2><p>'+p.description+'</p><button type="button" onclick="add(\''+p.id+'\')">Agregar al carrito +</button></div></article>';
+ }).join('');
+ handleImageFailures(el);
 }
 document.addEventListener('DOMContentLoaded',()=>{
  refresh();renderCart();renderCategories();renderVarieties();
