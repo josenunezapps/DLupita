@@ -92,11 +92,13 @@ function imageMarkup(source,label,backup){
 }
 function handleImageFailures(scope){
  scope.querySelectorAll('img').forEach(img=>{
-   img.addEventListener('error',()=>{
+   const retry=()=>{
      const next=img.dataset.fallback;
      if(next&&img.src!==next&&!img.dataset.retried){img.dataset.retried='yes';img.src=next}
      else{img.style.display='none';img.closest('.product')?.classList.add('image-missing')}
-   });
+   };
+   img.addEventListener('error',retry);
+   if(img.complete && !img.naturalWidth)retry();
  });
 }
 function renderCategories(){
