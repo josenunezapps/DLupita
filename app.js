@@ -30,7 +30,7 @@ const VARIETIES = [
   {id:'emp-bondiola',category:'empanadas',name:'Bondiola desmechada',description:'Bondiola al horno, verduras y especias.'},
   {id:'mila-napolitana',category:'milanesas',name:'Napolitana',description:'Salsa napolitana, jamón y muzzarella.'},
   {id:'mila-margarita',category:'milanesas',name:'Margarita',description:'Muzzarella, tomates cherry y albahaca.'},
-  {id:'mila-solitara',category:'milanesas',name:'Solitária',description:'Milanesa tradicional con guarnición.'},
+  {id:'mila-solitara',category:'milanesas',name:'Solitaria',description:'Milanesa tradicional con guarnición.'},
   {id:'mila-linea-tres',category:'milanesas',name:'Línea de tres',description:'Muzzarella y tres tipos de cebolla.'},
   {id:'mila-del-94',category:'milanesas',name:'Del 94',description:'Salsa, huevos fritos y panceta.'},
   {id:'mila-popeye',category:'milanesas',name:'La de Popeye',description:'Espinaca, salsa blanca y queso.'},
