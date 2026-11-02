@@ -24,6 +24,16 @@
       lunch?'Abierto hasta las 15:00':
       dinner?'Abierto hasta las 00:00':
       now.minutes<720?'Abre hoy a las 12:00':'Vuelve a abrir a las 20:00';
+    /* Misma información en la portada, sin alterar video ni navegación. */
+    var homeStatus=document.getElementById('home-business-status');
+    var homeDetail=document.getElementById('home-business-hours');
+    var homeDot=document.getElementById('home-business-dot');
+    if(homeStatus&&homeDetail&&homeDot){
+      homeStatus.textContent=status.textContent;
+      homeDetail.textContent=detail.textContent;
+      homeDot.classList.toggle('open',open);
+      homeDot.classList.toggle('closed',!open);
+    }
   }
   function init(){
     updateHours();
