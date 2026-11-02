@@ -17,7 +17,9 @@ jobs:
           persist-credentials: true
       - name: Extraer primer fotograma original
         run: |
-          ffmpeg -hide_banner -loglevel error -y -i assets/portada.mp4 -frames:v 1 -vf "scale='min(1600,iw)':-2" -q:v 3 assets/portada-poster.jpg
+          python -m pip install --disable-pip-version-check imageio-ffmpeg
+          FFMPEG="$(python -c 'import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())')"
+          "$FFMPEG" -hide_banner -loglevel error -y -i assets/portada.mp4 -frames:v 1 -vf "scale='min(1600,iw)':-2" -q:v 3 assets/portada-poster.jpg
           test -s assets/portada-poster.jpg
       - name: Guardar imagen del video en el repositorio
         run: |
