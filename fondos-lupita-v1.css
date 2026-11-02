@@ -1,0 +1,49 @@
+/* Fondos por sección de Doña Lupita. Se aplica exclusivamente a estas cinco páginas. */
+body.section-bg { background:#24180f !important; }
+body.section-bg::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(90deg,rgba(20,12,8,.53) 0%,rgba(20,12,8,.48) 48%,rgba(20,12,8,.58) 100%),
+    var(--section-photo);
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center center;
+}
+body.section-bg-pizzas    { --section-photo:url('assets/fondos/pizzas.webp'); }
+body.section-bg-empanadas { --section-photo:url('assets/fondos/empanadas.webp'); }
+body.section-bg-menu      { --section-photo:url('assets/fondos/menu.webp'); }
+body.section-bg-minutas   { --section-photo:url('assets/fondos/minutas.webp'); }
+body.section-bg-bebidas   { --section-photo:url('assets/fondos/bebidas.webp'); }
+body.section-bg > header {position:relative;z-index:10;}
+body.section-bg > main,
+body.section-bg > footer {position:relative;z-index:1;}
+body.section-bg > main.varieties-page{background:transparent;}
+body.section-bg > main.varieties-page h1{color:#fff9f0;text-shadow:0 3px 18px rgba(0,0,0,.20);}
+body.section-bg > main.varieties-page .tag{color:#f4d6a2;}
+body.section-bg > main.varieties-page .breadcrumbs,
+body.section-bg > main.varieties-page .breadcrumbs span,
+body.section-bg > main.varieties-page .breadcrumbs a{color:#f6efe4;}
+body.section-bg > main.varieties-page .breadcrumbs a{border-color:#f4d6a2;}
+body.section-bg > main.varieties-page > p:not(.catalog-note){color:#fff5e8;text-shadow:0 1px 8px #0008;}
+body.section-bg > main.varieties-page > p.menu-source a{color:inherit;}
+body.section-bg > main.varieties-page > .catalog-note{
+  background:rgba(245,235,217,.93);
+  color:#4e3d2e;
+  border-left-color:#c8a46c;
+  text-shadow:none;
+}
+@media(max-width:760px){
+  body.section-bg::before{
+    background-position:67% center;
+    background-image:
+      linear-gradient(90deg,rgba(20,12,8,.60),rgba(20,12,8,.57)),
+      var(--section-photo);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.section-bg::before{transition:none;}
+}
