@@ -46,3 +46,19 @@
  .home header .home-business-info strong{font-size:10px;letter-spacing:0}
  .home header .home-business-info small{font-size:8.5px;line-height:1.2}
 }
+/* Punto de color pegado a la primera línea, no centrado entre ambas líneas. */
+.home header .home-business-status-line{
+  display:inline-flex;align-items:center;justify-content:flex-end;gap:7px;
+  white-space:nowrap;font-weight:700;
+}
+.home header .home-business-status-line #home-business-status{font:inherit;color:inherit}
+.home header .home-business-status-line .home-business-dot{
+  position:static!important;display:inline-block!important;align-self:center;
+  margin:0!important;flex:0 0 9px!important;width:9px;height:9px;
+}
+.home header .home-business-info small{display:block;max-width:245px;}
+@media(max-width:460px){
+  .home header .home-business-status-line{gap:5px}
+  .home header .home-business-status-line .home-business-dot{flex-basis:7px!important;width:7px;height:7px}
+  .home header .home-business-info small{max-width:170px}
+}
