@@ -41,23 +41,35 @@
 </div>
 </aside><main class="cart-page"><section class="cart-stage">
 <span class="tag">Tu selección · Doña Lupita</span><h1>Tu carrito.</h1>
-<p class="cart-intro">Guardá tus sabores favoritos en una lista. Revisá tu selección y consultá directamente al local.</p>
+<p class="cart-intro">Elegí tus productos, ajustá las cantidades y enviá la lista completa por WhatsApp.</p>
 <div class="cart-columns">
 <section class="cart-panel" aria-label="Productos seleccionados">
 <div class="cart-panel-heading"><h2>Tu selección</h2><span>PRODUCTOS</span></div>
 <div class="cartitems" id="cartitems"></div>
 </section>
 <aside class="cart-side">
-<span class="tag">Antes de consultar</span><h2>Elegí, revisá y consultá.</h2>
-<p>Podés agregar variedades desde nuestro catálogo, modificar las cantidades y usar esta lista como referencia.</p>
-<ol>
-<li>Explorá el menú y elegí tus productos.</li>
-<li>Revisá y ajustá las cantidades en el carrito.</li>
-<li>Llamanos para consultar precios y disponibilidad.</li>
-</ol>
-<div class="notice">El carrito no realiza pedidos ni pagos en línea. Los precios y la disponibilidad se confirman con Doña Lupita.</div>
+<span class="tag">Tu pedido</span><h2>Listo para enviar.</h2>
+<p>Revisá los productos y cantidades. Completá los datos y te preparamos el mensaje para enviarlo por WhatsApp.</p>
+<form id="whatsapp-order-form" class="order-form">
+<label for="order-name">Tu nombre <span>(opcional)</span></label>
+<input id="order-name" name="order-name" type="text" autocomplete="name" maxlength="80" placeholder="¿A nombre de quién?">
+<label for="order-mode">¿Cómo querés recibirlo?</label>
+<select id="order-mode" name="order-mode">
+<option value="pickup">Retiro en el local</option>
+<option value="delivery">Envío a domicilio</option>
+</select>
+<div id="delivery-address-wrap" hidden>
+<label for="order-address">Dirección de entrega</label>
+<input id="order-address" name="order-address" type="text" autocomplete="street-address" maxlength="180" placeholder="Calle, número, barrio, referencias">
+</div>
+<label for="order-note">Indicaciones <span>(opcional)</span></label>
+<textarea id="order-note" name="order-note" rows="3" maxlength="350" placeholder="Por ejemplo: sin cebolla, tocar timbre..."></textarea>
+<p class="order-error" id="order-feedback" role="alert" hidden></p>
+<div class="notice">No se cobra en la web. El local confirma precios, disponibilidad y modalidad de entrega por WhatsApp.</div>
 <div class="cart-actions">
-<a id="consultar" class="checkout" href="tel:+542901437675">Llamar para consultar</a>
+<button id="consultar" class="checkout" type="submit">Enviar pedido por WhatsApp ↗</button>
 <a class="button secondary" href="productos.html">Seguir eligiendo</a>
-</div></aside>
-</div></section></main><footer><span>Doña Lupita · Ushuaia, Tierra del Fuego</span><span>Don Bosco 314 · <a href="tel:+542901437675">+54 2901 43-7675</a></span></footer><script src="app-lupita-v10.js"></script><script src="menu-overlay-v1.js"></script></body></html>
+</div>
+<p class="order-help">WhatsApp se abrirá con tu lista completa; revisá el mensaje y tocá «Enviar». El contacto usa el celular para pedidos publicado por Doña Lupita; falta confirmar que tenga WhatsApp activo.</p>
+</form></aside>
+</div></section></main><footer><span>Doña Lupita · Ushuaia, Tierra del Fuego</span><span>Don Bosco 314 · <a href="tel:+542901437675">+54 2901 43-7675</a></span></footer><script src="app-lupita-v10.js"></script><script src="menu-overlay-v1.js"></script><script src="pedido-whatsapp-v1.js"></script></body></html>
