@@ -1,0 +1,64 @@
+/* Fondo exclusivo para la portada de categorías. No toca tarjetas ni carrito. */
+body.catalog-atmosphere{
+  background:#20140e!important;
+  min-height:100vh;
+  position:relative;
+}
+body.catalog-atmosphere::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(21,13,8,.75) 0%,rgba(21,13,8,.65) 48%,rgba(21,13,8,.70) 100%),
+    linear-gradient(180deg,rgba(19,11,6,.28),rgba(19,11,6,.22)),
+    url('assets/categorias/horno-dona-lupita-recreado.webp') center 49% / cover no-repeat;
+}
+body.catalog-atmosphere>header{position:relative;z-index:10}
+body.catalog-atmosphere>main,
+body.catalog-atmosphere>footer{position:relative;z-index:1}
+body.catalog-atmosphere>main.catalog-page{
+  background:transparent;
+  color:#fffaf2;
+  min-height:calc(100svh - 145px);
+  padding-top:70px;
+}
+body.catalog-atmosphere>main.catalog-page .tag{
+  color:#efd3a4;
+  letter-spacing:3px;
+  text-shadow:0 2px 12px #0008;
+}
+body.catalog-atmosphere>main.catalog-page h1{
+  color:#fff9f1;
+  text-shadow:0 3px 20px #0006;
+  margin:8px 0 15px;
+}
+body.catalog-atmosphere>main.catalog-page>p{
+  color:#f9ede0;
+  font-size:15px;
+  line-height:1.75;
+  text-shadow:0 1px 12px #0009;
+  max-width:730px;
+}
+body.catalog-atmosphere>main.catalog-page .products{
+  margin-top:36px;
+}
+body.catalog-atmosphere>main.catalog-page .product{
+  box-shadow:0 17px 42px rgba(10,6,3,.28);
+  outline:1px solid rgba(255,255,255,.2);
+  outline-offset:-1px;
+}
+body.catalog-atmosphere>main.catalog-page .product:hover{
+  box-shadow:0 21px 46px rgba(10,6,3,.45);
+}
+body.catalog-atmosphere>footer{background:#16120f}
+@media(max-width:760px){
+  body.catalog-atmosphere::before{
+    background:
+      linear-gradient(90deg,rgba(21,13,8,.75),rgba(21,13,8,.64)),
+      url('assets/categorias/horno-dona-lupita-recreado.webp') center/cover no-repeat;
+  }
+  body.catalog-atmosphere>main.catalog-page{padding-top:51px;padding-bottom:68px}
+  body.catalog-atmosphere>main.catalog-page .products{margin-top:24px}
+}
