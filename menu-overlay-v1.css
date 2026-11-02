@@ -77,3 +77,27 @@
   }
   .menuoverlay .menu-photo:before{background:linear-gradient(180deg,transparent,rgba(12,8,5,.45))}
 }
+
+/* Enlace oficial de Instagram en el menú compartido. */
+.menuoverlay .menu-instagram{
+ display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+ color:#e8bd85;font:600 12px/1.4 'DM Sans',Arial,sans-serif;
+ letter-spacing:.02em;margin-top:13px;text-decoration:underline;
+ text-underline-offset:5px;text-decoration-color:#e8bd8570;
+ transition:color .2s;
+}
+.menuoverlay .menu-instagram:hover{color:white}
+body:not(.home)>footer .footer-instagram{
+ color:#e9bf8d;text-decoration:underline;text-underline-offset:3px;
+}
+.home .bottom .home-instagram{
+ display:inline-block;color:#f2c992;letter-spacing:1.5px;
+ padding-left:12px;margin-left:9px;border-left:1px solid #e2c29688;
+ font:700 10px 'DM Sans',Arial,sans-serif;text-decoration:none;
+ text-shadow:0 2px 10px #000a;
+}
+.home .bottom .home-instagram:hover{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:760px){
+ .home .bottom .home-instagram{display:block;width:max-content;max-width:100%;margin:9px auto 0;padding:0;border:0}
+ body:not(.home)>footer .footer-instagram{order:3}
+}
