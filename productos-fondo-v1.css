@@ -62,3 +62,65 @@ body.catalog-atmosphere>footer{background:#16120f}
   body.catalog-atmosphere>main.catalog-page{padding-top:51px;padding-bottom:68px}
   body.catalog-atmosphere>main.catalog-page .products{margin-top:24px}
 }
+
+/* CTA editorial integrado: reemplaza únicamente los rectángulos blancos de "Ver variedades". */
+body.catalog-atmosphere main.catalog-page .products .category-card > .card-bottom > .category-link{
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:40px!important;
+  display:inline-flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  flex-wrap:nowrap!important;
+  gap:11px!important;
+  margin:0!important;
+  padding:7px 9px 7px 15px!important;
+  border:1px solid rgba(244,210,163,.83)!important;
+  border-radius:999px!important;
+  background:rgba(25,16,10,.58)!important;
+  color:#fff4e1!important;
+  box-shadow:0 2px 13px rgba(0,0,0,.12)!important;
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+  font:700 10px/1.2 'DM Sans',sans-serif!important;
+  letter-spacing:.01em!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+  text-transform:none!important;
+  transition:background .22s ease,border-color .22s ease,transform .22s ease!important;
+}
+body.catalog-atmosphere main.catalog-page .products .category-card > .card-bottom > .category-link > span{
+  display:grid!important;place-items:center!important;
+  flex:0 0 23px!important;
+  width:23px!important;height:23px!important;
+  border-radius:50%!important;
+  background:#e9c395!important;
+  color:#26170d!important;
+  font:700 15px/1 'DM Sans',sans-serif!important;
+  transition:background .2s,transform .2s!important;
+}
+body.catalog-atmosphere main.catalog-page .products .category-card:hover > .card-bottom > .category-link,
+body.catalog-atmosphere main.catalog-page .products .category-card:focus-visible > .card-bottom > .category-link{
+  background:#e2b882!important;
+  border-color:#e2b882!important;
+  color:#22160e!important;
+  transform:translateY(-2px)!important;
+}
+body.catalog-atmosphere main.catalog-page .products .category-card:hover > .card-bottom > .category-link > span,
+body.catalog-atmosphere main.catalog-page .products .category-card:focus-visible > .card-bottom > .category-link > span{
+  background:#24170e!important;color:#fff9f0!important;transform:rotate(45deg);
+}
+@media(max-width:760px){
+  body.catalog-atmosphere main.catalog-page .products .category-card > .card-bottom > .category-link{
+    padding:8px 10px 8px 15px!important;
+    min-height:43px!important;
+    font-size:11px!important;
+  }
+}
+@media(max-width:390px){
+  body.catalog-atmosphere main.catalog-page .products .category-card > .card-bottom > .category-link{
+    padding:7px 8px 7px 11px!important;gap:6px!important;font-size:9px!important;
+  }
+}
