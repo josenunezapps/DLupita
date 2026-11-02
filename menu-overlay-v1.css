@@ -101,3 +101,50 @@ body:not(.home)>footer .footer-instagram{
  .home .bottom .home-instagram{display:block;width:max-content;max-width:100%;margin:9px auto 0;padding:0;border:0}
  body:not(.home)>footer .footer-instagram{order:3}
 }
+
+/* Redes: mostrar exclusivamente los logos, con nombres accesibles para lectores de pantalla. */
+a.social-icon-link{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ width:43px!important;height:43px!important;min-width:43px!important;min-height:43px!important;
+ padding:7px!important;margin:0!important;border-radius:12px!important;
+ border:1px solid rgba(205,169,120,.36)!important;
+ background:rgba(45,32,21,.12)!important;
+ vertical-align:middle;line-height:0!important;
+ text-decoration:none!important;letter-spacing:0!important;
+ color:inherit!important;transition:transform .18s,background .18s,border-color .18s!important
+}
+a.social-icon-link:hover{transform:translateY(-2px);background:rgba(194,143,79,.16)!important;border-color:rgba(205,169,120,.8)!important}
+a.social-icon-link:focus-visible{outline:2px solid #e9b679!important;outline-offset:4px!important}
+a.social-icon-link img{display:block!important;width:27px!important;height:27px!important;object-fit:contain!important;max-width:none!important}
+.menuoverlay .menu-instagram.social-icon-link{margin-top:18px!important;background:rgba(255,255,255,.08)!important}
+.home .bottom .home-instagram.social-icon-link{
+ width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;
+ margin:0 0 0 15px!important;padding:5px!important;
+ border:1px solid rgba(255,255,255,.45)!important;border-radius:50%!important;
+ background:rgba(12,10,8,.30)!important;
+}
+.home .bottom .home-instagram.social-icon-link img{width:23px!important;height:23px!important}
+body:not(.home)>footer{align-items:center}
+body:not(.home)>footer span:last-child{display:inline-flex;align-items:center;gap:13px;flex-wrap:wrap}
+body:not(.home)>footer .footer-instagram.social-icon-link,
+body:not(.home)>footer .footer-whatsapp.social-icon-link{
+ width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;padding:5px!important;
+ border-radius:50%!important;background:rgba(255,255,255,.04)!important
+}
+body:not(.home)>footer .footer-instagram.social-icon-link img,
+body:not(.home)>footer .footer-whatsapp.social-icon-link img{width:25px!important;height:25px!important}
+body.contact-view .contact-social-icons{display:flex;align-items:center;gap:15px;margin-top:6px}
+body.contact-view .contact-social-icons a.social-icon-link{width:59px!important;height:59px!important;min-width:59px!important;min-height:59px!important;background:#f8e9d5!important;border-color:#d7b78f!important}
+body.contact-view .contact-social-icons a.social-icon-link img{width:37px!important;height:37px!important}
+body.contact-view .contact-actions .contact-whatsapp-cta.social-icon-link{
+ width:54px!important;height:49px!important;min-width:54px!important;min-height:49px!important;
+ padding:8px!important;border:1px solid #ca9c6e!important;border-radius:2px!important;
+ background:transparent!important
+}
+body.contact-view .contact-actions .contact-whatsapp-cta.social-icon-link img{width:29px!important;height:29px!important}
+body.cart-view .order-form #consultar img{width:21px!important;height:21px!important;flex:0 0 21px}
+@media(max-width:760px){
+ body:not(.home)>footer{flex-wrap:wrap;justify-content:space-between;gap:15px}
+ body:not(.home)>footer .footer-instagram.social-icon-link{order:0}
+ .home .bottom .home-instagram.social-icon-link{display:inline-flex!important;margin-left:10px!important}
+}
