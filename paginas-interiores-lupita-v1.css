@@ -132,3 +132,113 @@ body.story-view main .tag,body.contact-view main .tag,body.cart-view main .tag{
  .cart-stage .cart-side{padding:22px}
 }
 @media(prefers-reduced-motion:reduce){.story-actions .button,.contact-actions .button,.cart-actions .button,.cart-actions .checkout{transition:none}}
+
+/* Carrito: formulario claro para preparar y enviar el pedido por WhatsApp. */
+.cart-stage .order-form{display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+.cart-stage .order-form label{
+  display:block;margin:5px 0 -5px;color:#f7e9d8;
+  font:700 12px/1.4 'DM Sans',Arial,sans-serif;
+}
+.cart-stage .order-form label span{color:#bdae9b;font-weight:400}
+.cart-stage .order-form input,.cart-stage .order-form textarea,
+.cart-stage .order-form select{
+  width:100%;min-height:44px;display:block;padding:11px 13px;
+  border:1px solid rgba(248,222,190,.45);border-radius:2px;
+  background:rgba(10,8,6,.58);color:#fffdf9;
+  font:400 13px/1.45 'DM Sans',Arial,sans-serif;outline-offset:3px;
+}
+.cart-stage .order-form select{cursor:pointer}
+.cart-stage .order-form select option{color:#23190f;background:#f7eee0}
+.cart-stage .order-form textarea{min-height:88px;resize:vertical}
+.cart-stage .order-form input::placeholder,.cart-stage .order-form textarea::placeholder{color:#c5b6a4}
+.cart-stage .order-form input:focus-visible,.cart-stage .order-form select:focus-visible,
+.cart-stage .order-form textarea:focus-visible{
+  outline:2px solid #d8aa6b;border-color:#e4bf88;
+}
+.cart-stage .order-form [hidden]{display:none!important}
+.cart-stage .order-form #delivery-address-wrap{margin:0;display:grid;gap:9px}
+.cart-stage .order-form .notice{margin:11px 0 2px!important}
+.cart-stage .order-form .order-help{
+  color:#cfc0ac!important;font-size:10px!important;line-height:1.5!important;
+  margin:4px 0 0!important;
+}
+.cart-stage .order-form .order-error{
+  color:#ffe4da!important;font-size:12px!important;
+  margin:3px 0!important;background:#742d23aa;padding:10px 11px;
+}
+.cart-stage .cart-actions{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+.cart-stage .cart-actions #consultar{
+  cursor:pointer;width:100%;border:1px solid #219e6c!important;
+  background:#168357!important;color:white!important;
+  font:700 12px/1.4 'DM Sans',sans-serif;letter-spacing:.02em!important;
+  padding:15px 12px;min-height:49px;text-transform:none;
+}
+.cart-stage .cart-actions #consultar:hover:not(:disabled){background:#1a9f6c!important}
+.cart-stage .cart-actions #consultar:disabled{opacity:.5;cursor:not-allowed;background:#50534b!important;border-color:#62655c!important}
+.cart-stage .cart-actions .button.secondary{width:100%}
+/* La historia documentada de Doña Lupita y el equipo de IceBridge. */
+.story-nasa{grid-template-columns:minmax(0,1fr) minmax(0,.8fr);min-height:720px;align-items:center}
+.story-nasa .story-copy{max-width:790px}
+.story-nasa .story-copy h1 em{font-weight:400;color:#edc08b;font-style:italic}
+.story-nasa .story-copy h1{font-size:clamp(54px,6.5vw,94px)!important;line-height:1.08!important}
+.story-nasa .story-copy p{font-size:14px;line-height:1.7}
+.story-nasa .story-copy p.story-highlight{
+  font:400 clamp(17px,1.65vw,23px)/1.45 'Playfair Display',Georgia,serif;
+  color:#f4dfc3;text-wrap:pretty;margin-bottom:23px
+}
+.story-nasa .story-copy p strong{color:#ffdfb2}
+.story-nasa .story-copy .story-actions{margin-top:23px}
+.story-nasa .story-copy .story-location{color:#f0cf9d}
+.story-nasa-photo{position:relative;max-height:700px;min-height:560px}
+.story-nasa-photo>img{filter:brightness(.82)}
+.nasa-history-stamp{
+  position:absolute;top:30px;right:25px;z-index:4;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:185px;height:185px;padding:24px 16px;text-align:center;
+  color:#ffe3b5;background:rgba(22,14,11,.84);
+  border:2px solid #e8bd7a;border-radius:50%;
+  box-shadow:0 0 0 6px rgba(22,14,11,.65),0 0 0 7px rgba(232,189,122,.6),0 12px 32px #0009;
+  transform:rotate(9deg);
+}
+.nasa-history-stamp strong{
+  font:700 41px/1 'Playfair Display',Georgia,serif;letter-spacing:-.04em;
+  margin:11px 0 8px;color:#fff0d6;
+}
+.nasa-history-stamp .nasa-stamp-top{
+  font:700 8px/1.5 'DM Sans',Arial,sans-serif;letter-spacing:.11em;
+}
+.nasa-history-stamp .nasa-stamp-bottom{
+  font:700 10px 'DM Sans',Arial,sans-serif;letter-spacing:.12em;
+}
+.nasa-history-stamp .nasa-stamp-star{
+  margin-top:10px;color:#e9bd7c;letter-spacing:3px;font-size:11px;
+}
+.story-verification{
+  display:flex;align-items:center;justify-content:space-between;gap:35px;
+  background:#251b15;border-top:1px solid #e1bb813d;
+  padding:25px max(6vw,calc((100vw - 1300px)/2));
+}
+.story-verification div{max-width:680px}
+.story-verification div>span{
+  font:700 10px 'DM Sans',sans-serif;letter-spacing:.15em;color:#e5bd86
+}
+.story-verification p{font-size:12px!important;line-height:1.6!important;margin:8px 0 0!important}
+.story-verification a{font:700 12px/1.45 'DM Sans',sans-serif;color:#f6d7a7;max-width:260px}
+.story-verification a:hover{text-decoration:underline}
+@media(max-width:850px){
+ .story-nasa{grid-template-columns:1fr}
+ .story-nasa .story-copy{max-width:none}
+ .story-nasa-photo{min-height:360px;max-height:460px}
+ .nasa-history-stamp{width:150px;height:150px;padding:13px;top:20px;right:20px}
+ .nasa-history-stamp strong{font-size:33px}
+ .nasa-history-stamp .nasa-stamp-top{font-size:7px}
+ .nasa-history-stamp .nasa-stamp-bottom{font-size:8px}
+ .story-verification{padding:26px 6vw;align-items:flex-start;flex-direction:column;gap:15px}
+}
+@media(max-width:520px){
+ .story-nasa .story-copy h1{font-size:clamp(49px,12vw,70px)!important}
+ .story-nasa .story-copy p{font-size:13px;line-height:1.65}
+ .story-nasa .story-copy p.story-highlight{font-size:18px}
+ .story-verification{padding:23px 20px}
+ .story-nasa-photo{min-height:300px}
+}
