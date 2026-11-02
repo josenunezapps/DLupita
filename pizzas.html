@@ -1,1 +1,42 @@
-<!doctype html><html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pizzas | Doña Lupita</title><meta name="description" content="Doña Lupita, pizzería de Ushuaia."><link rel="stylesheet" href="style-lupita-v8.css"><link rel="stylesheet" href="fondos-lupita-v1.css"></head><body class="section-bg section-bg-pizzas"><header><a class="brand" href="index.html">Doña Lupita</a><div class="controls"><a class="iconbtn" href="carrito.html" aria-label="Ver carrito"><svg class="cartglyph" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.6 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><sup class="cartcount">0</sup></a><button class="iconbtn" data-menu aria-label="Abrir menú"><span class="dotsglyph" aria-hidden="true">⋮</span></button></div></header><aside class="menuoverlay" id="menuoverlay"><button class="close" data-menu aria-label="Cerrar menú">×</button><nav><a href="index.html">Inicio</a><a href="nosotros.html">Nosotros</a><a href="productos.html">Productos</a><a href="contacto.html">Contacto</a><a href="carrito.html">Carrito</a></nav></aside><main class="page varieties-page" data-category="pizzas"><nav class="breadcrumbs" aria-label="Ruta"><a href="productos.html">Productos</a><span aria-hidden="true"> / </span><span>Pizzas</span></nav><span class="tag">Elegí tu variedad</span><h1>Pizzas.</h1><p>Pizzas a la piedra y al horno de barro. Elegí una variedad para agregar a tu lista.</p><p class="catalog-note">La carta es orientativa y puede cambiar. Precios y disponibilidad a confirmar con Doña Lupita. Las imágenes ilustran las categorías, no necesariamente cada variedad.</p><div class="products" id="variety-products"></div><p class="menu-source">Variedades tomadas de <a href="https://doa-lupita.restaurants-world.net/menu" target="_blank" rel="noopener noreferrer">una carta pública de Doña Lupita</a>; no representan confirmación de stock actual.</p></main><footer><span>Doña Lupita · Ushuaia, Tierra del Fuego</span><span>Don Bosco 314 · <a href="tel:+542901437675">+54 2901 43-7675</a></span></footer><script src="app-lupita-v10.js"></script></body></html>
+<!doctype html><html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pizzas | Doña Lupita</title><meta name="description" content="Doña Lupita, pizzería de Ushuaia."><link rel="stylesheet" href="style-lupita-v8.css"><link rel="stylesheet" href="fondos-lupita-v1.css"><link rel="stylesheet" href="menu-overlay-v1.css"></head><body class="section-bg section-bg-pizzas"><header><a class="brand" href="index.html">Doña Lupita</a><div class="controls"><a class="iconbtn" href="carrito.html" aria-label="Ver carrito"><svg class="cartglyph" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.6 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><sup class="cartcount">0</sup></a><button class="iconbtn" data-menu aria-label="Abrir menú"><span class="dotsglyph" aria-hidden="true">⋮</span></button></div></header><aside class="menuoverlay" id="menuoverlay" aria-label="Menú de Doña Lupita">
+<button class="close" data-menu aria-label="Cerrar menú">×</button>
+<div class="menu-layout">
+  <section class="menu-left">
+    <span class="menu-brand">DOÑA LUPITA · USHUAIA</span>
+    <span class="menu-label">NUESTRA CASA</span>
+    <nav aria-label="Navegación">
+      <a href="index.html">Inicio</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="productos.html">Productos</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+    <a class="menu-cart" href="carrito.html" aria-label="Ver mi carrito">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.6 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+      Mi carrito <sup class="cartcount">0</sup>
+    </a>
+    <p class="menu-motto">EL GUSTO ES NUESTRO</p>
+  </section>
+  <section class="menu-photo" aria-label="Información para visitarnos">
+    <div class="menu-photo-inner">
+      <span class="menu-photo-label">PIZZAS · EMPANADAS · MOMENTOS</span>
+      <h2 class="menu-photo-title">Un lugar para compartir sabores.</h2>
+      <div class="menu-data">
+        <div class="menu-data-item" aria-live="polite" aria-atomic="true">
+          <span class="menu-data-icon"><span id="menu-business-dot" class="menu-status-dot"></span></span>
+          <span class="menu-data-copy"><strong id="menu-business-status">Horario habitual</strong><small id="menu-business-hours">Lunes a sábado · 12:00–15:00 y 20:00–00:00</small></span>
+        </div>
+        <a class="menu-data-item" href="https://www.google.com/maps/search/?api=1&amp;query=Do%C3%B1a%20Lupita%2C%20Don%20Bosco%20314%2C%20Ushuaia%2C%20Argentina" target="_blank" rel="noopener noreferrer" aria-label="Ver calificación y opiniones en Google Maps">
+          <span class="menu-data-icon" aria-hidden="true">★</span>
+          <span class="menu-data-copy"><strong>4,5 / 5 · Google</strong><small>Calificación publicada · ver reseñas</small></span>
+          <span class="menu-data-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="menu-data-item" href="https://www.google.com/maps/dir/?api=1&amp;destination=-54.80657%2C-68.31319&amp;travelmode=driving" target="_blank" rel="noopener noreferrer" aria-label="Cómo llegar a Doña Lupita, Don Bosco 314, Ushuaia con Google Maps">
+          <span class="menu-data-icon" aria-hidden="true">⌖</span>
+          <span class="menu-data-copy"><strong>Don Bosco 314, Ushuaia</strong><small>Tocá para trazar el recorrido en Maps</small></span>
+          <span class="menu-data-arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+</aside><main class="page varieties-page" data-category="pizzas"><nav class="breadcrumbs" aria-label="Ruta"><a href="productos.html">Productos</a><span aria-hidden="true"> / </span><span>Pizzas</span></nav><span class="tag">Elegí tu variedad</span><h1>Pizzas.</h1><p>Pizzas a la piedra y al horno de barro. Elegí una variedad para agregar a tu lista.</p><p class="catalog-note">La carta es orientativa y puede cambiar. Precios y disponibilidad a confirmar con Doña Lupita. Las imágenes ilustran las categorías, no necesariamente cada variedad.</p><div class="products" id="variety-products"></div><p class="menu-source">Variedades tomadas de <a href="https://doa-lupita.restaurants-world.net/menu" target="_blank" rel="noopener noreferrer">una carta pública de Doña Lupita</a>; no representan confirmación de stock actual.</p></main><footer><span>Doña Lupita · Ushuaia, Tierra del Fuego</span><span>Don Bosco 314 · <a href="tel:+542901437675">+54 2901 43-7675</a></span></footer><script src="app-lupita-v10.js"></script><script src="menu-overlay-v1.js"></script></body></html>
