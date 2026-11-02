@@ -2,12 +2,22 @@
 .home header .controls{display:flex;align-items:center;gap:8px}
 .home header .home-business-badge{
  display:flex;align-items:center;justify-content:flex-end;flex-shrink:1;min-width:0;
- margin:0 12px 0 0;padding:0;gap:0;width:auto;max-width:min(41vw,325px);
+ margin:0 12px 0 0;padding:0;gap:8px;width:auto;max-width:min(41vw,325px);
  border:0;background:transparent;color:#fff;box-shadow:none;
  backdrop-filter:none;-webkit-backdrop-filter:none;
  font-family:'DM Sans',Arial,sans-serif;
 }
-.home header .home-business-dot{display:none!important}
+.home header .home-business-dot{
+ display:inline-block;flex:0 0 9px;width:9px;height:9px;
+ border-radius:50%;background:#d6ad75;
+ box-shadow:0 0 0 3px rgba(214,173,117,.15);
+}
+.home header .home-business-dot.open{
+ background:#55de97;box-shadow:0 0 0 3px rgba(85,222,151,.2);
+}
+.home header .home-business-dot.closed{
+ background:#ef9387;box-shadow:0 0 0 3px rgba(239,147,135,.2);
+}
 .home header .home-business-info{
  display:flex;flex-direction:column;gap:3px;min-width:0;
  text-align:right;align-items:flex-end;
@@ -31,7 +41,8 @@
  .home header .brand{font-size:clamp(18px,5vw,23px)}
  .home header .controls{gap:1px}
  .home header .iconbtn{min-width:38px;min-height:38px;padding:6px}
- .home header .home-business-badge{margin-right:3px;max-width:min(43vw,180px)}
+ .home header .home-business-badge{margin-right:3px;max-width:min(43vw,180px);gap:6px}
+ .home header .home-business-dot{flex-basis:7px;width:7px;height:7px}
  .home header .home-business-info strong{font-size:10px;letter-spacing:0}
  .home header .home-business-info small{font-size:8.5px;line-height:1.2}
 }
