@@ -1,0 +1,224 @@
+/* Doña Lupita · formulario de pedido v2. Solo afecta carrito.html. */
+body.cart-view .cart-stage .cart-side{
+  background:#f7f2e9!important;
+  border:1px solid #e4d3ba!important;
+  border-radius:4px;
+  box-shadow:0 18px 50px rgba(0,0,0,.28)!important;
+  color:#241a14!important;
+  padding:clamp(22px,2.8vw,34px)!important;
+  min-width:0;
+}
+body.cart-view .cart-stage .cart-side > .tag{
+  color:#9a6237!important;
+  font-size:10px!important;
+  letter-spacing:.19em!important;
+}
+body.cart-view .cart-stage .cart-side h2{
+  color:#251b16!important;
+  font:400 clamp(30px,2.7vw,40px)/1.13 'Playfair Display',Georgia,serif!important;
+  letter-spacing:-.035em;
+  margin:12px 0 12px!important;
+}
+body.cart-view .cart-stage .cart-side > p{
+  color:#5f5246!important;
+  font-size:13px!important;
+  line-height:1.6!important;
+  margin:0 0 22px!important;
+}
+body.cart-view .cart-stage #whatsapp-order-form.order-form{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:17px!important;
+  width:100%;
+}
+body.cart-view .order-form .order-field{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  width:100%!important;
+  min-width:0!important;
+  gap:7px!important;
+  margin:0!important;
+}
+body.cart-view .order-form label{
+  display:block!important;
+  width:auto!important;
+  font:700 12px/1.45 'DM Sans',Arial,sans-serif!important;
+  color:#33261c!important;
+  margin:0!important;
+  letter-spacing:.005em!important;
+}
+body.cart-view .order-form label span{
+  color:#918174!important;
+  font-weight:400!important;
+}
+body.cart-view .order-form input,
+body.cart-view .order-form textarea,
+body.cart-view .order-form select{
+  -webkit-appearance:none;
+  appearance:none;
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  min-height:48px!important;
+  margin:0!important;
+  padding:13px 15px!important;
+  border:1px solid #d4c5b2!important;
+  border-radius:5px!important;
+  outline:none!important;
+  background:#fffdfa!important;
+  color:#271e18!important;
+  font:500 14px/1.4 'DM Sans',Arial,sans-serif!important;
+  box-shadow:0 1px 2px rgba(27,18,11,.04);
+}
+body.cart-view .order-form select{
+  cursor:pointer;
+  padding-right:39px!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='%23725a43' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;
+  background-size:17px!important;
+  background-position:right 14px center!important;
+}
+body.cart-view .order-form select option{background:#fffdfa!important;color:#271e18!important}
+body.cart-view .order-form textarea{
+  min-height:102px!important;
+  resize:vertical!important;
+}
+body.cart-view .order-form input::placeholder,
+body.cart-view .order-form textarea::placeholder{
+  color:#9b8b7d!important;
+  opacity:1;
+}
+body.cart-view .order-form input:focus-visible,
+body.cart-view .order-form textarea:focus-visible,
+body.cart-view .order-form select:focus-visible{
+  outline:2px solid #ab7540!important;
+  outline-offset:1px!important;
+  border-color:#ab7540!important;
+}
+body.cart-view .order-form #delivery-address-wrap[hidden],
+body.cart-view .order-form [hidden]{display:none!important}
+body.cart-view .order-form #delivery-address-wrap:not([hidden]){
+  display:flex!important;flex-direction:column!important;gap:7px!important;
+}
+body.cart-view .order-form .order-note{
+  display:flex!important;align-items:flex-start;gap:8px!important;
+  color:#67594b!important;
+  font-size:11px!important;line-height:1.5!important;
+  margin:1px 0 0!important;
+}
+body.cart-view .order-form .order-note svg{flex:0 0 15px;margin-top:1px;color:#977449}
+body.cart-view .order-form .order-feedback{
+  color:#8d2824!important;background:#fff1ec!important;
+  border-left:3px solid #ba574b!important;
+  padding:11px 13px!important;margin:0!important;
+  font-size:12px!important;line-height:1.5!important;
+}
+body.cart-view .order-form .cart-actions{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  margin:3px 0 0!important;
+}
+body.cart-view .order-form .cart-actions #consultar{
+  width:100%!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;
+  min-height:55px!important;
+  padding:15px 16px!important;
+  background:#168459!important;border:1px solid #168459!important;
+  border-radius:4px!important;color:#fff!important;
+  font:700 13px/1.3 'DM Sans',Arial,sans-serif!important;
+  text-transform:none!important;letter-spacing:.015em!important;
+  box-shadow:0 5px 14px rgba(14,102,66,.17)!important;
+  cursor:pointer!important;
+}
+body.cart-view .order-form .cart-actions #consultar:hover:not(:disabled){background:#0f704c!important;border-color:#0f704c!important}
+body.cart-view .order-form .cart-actions #consultar:disabled{background:#8e9b90!important;border-color:#8e9b90!important;box-shadow:none!important;cursor:not-allowed!important}
+body.cart-view .order-form .cart-actions .button.secondary{
+  width:100%!important;min-height:43px!important;
+  border:1px solid #d0c0aa!important;background:transparent!important;
+  border-radius:4px!important;color:#3a2b20!important;
+  font:700 11px/1.3 'DM Sans',Arial,sans-serif!important;
+  text-transform:uppercase!important;letter-spacing:.06em!important;
+}
+body.cart-view .order-form .cart-actions .button.secondary:hover{background:#eee3d4!important}
+body.cart-view .order-form .order-help{
+  margin:0!important;
+  color:#837566!important;
+  font-size:11px!important;line-height:1.55!important;
+}
+body.cart-view .order-form .order-help a{color:#805a35;text-decoration:underline}
+body.cart-view .order-form .order-divider{
+  height:1px;width:100%;background:#e0d3c4;margin:1px 0;
+}
+/* Sugerencia de bebidas previa al envío; dialog semántico, sin ventanas emergentes automáticas. */
+body.cart-view .drinks-dialog{
+  position:fixed;
+  inset:0;
+  margin:auto;
+  width:min(430px,calc(100vw - 30px));
+  max-height:calc(100dvh - 36px);
+  overflow-y:auto;
+  box-sizing:border-box;
+  padding:33px 30px 27px;
+  background:#fcf8f1;
+  color:#271c15;
+  border:1px solid #e5cfad;
+  border-radius:9px;
+  box-shadow:0 28px 100px rgba(0,0,0,.38);
+}
+body.cart-view .drinks-dialog::backdrop{
+  background:rgba(14,9,7,.76);
+  backdrop-filter:blur(5px);
+}
+body.cart-view .drinks-dialog:not([open]){display:none!important}
+body.cart-view .drinks-dialog .drinks-dialog-icon{
+  display:grid;place-items:center;
+  width:54px;height:54px;border-radius:50%;
+  background:#f1e2cf;font-size:26px;
+  margin-bottom:19px;
+}
+body.cart-view .drinks-dialog .drinks-eyebrow{
+  color:#a17142;font:700 10px 'DM Sans',Arial,sans-serif;
+  text-transform:uppercase;letter-spacing:.18em;
+}
+body.cart-view .drinks-dialog h2{
+  color:#211a15!important;font:400 clamp(31px,7vw,41px)/1.16 'Playfair Display',Georgia,serif!important;
+  margin:11px 0 13px!important;letter-spacing:-.03em;
+}
+body.cart-view .drinks-dialog p{
+  color:#66584a!important;font:400 14px/1.6 'DM Sans',Arial,sans-serif!important;
+  margin:0 0 24px!important;
+}
+body.cart-view .drinks-dialog .drinks-dialog-actions{display:grid;gap:10px}
+body.cart-view .drinks-dialog .drinks-dialog-actions button{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;min-height:49px;
+  padding:12px 16px;cursor:pointer;
+  border-radius:4px;font:700 12px/1.4 'DM Sans',Arial,sans-serif;
+}
+body.cart-view .drinks-dialog .drinks-add{
+  border:1px solid #b96e32;color:white;background:#b96e32;
+}
+body.cart-view .drinks-dialog .drinks-add:hover{background:#9d5925}
+body.cart-view .drinks-dialog .drinks-skip{
+  background:#fffdfa;border:1px solid #cdbda6;color:#3e2e22;
+}
+body.cart-view .drinks-dialog .drinks-skip:hover{background:#f3e7d7}
+body.cart-view .drinks-dialog .drinks-dismiss{
+  position:absolute;top:13px;right:14px;
+  color:#6b5747;border:0;background:transparent;
+  width:32px;height:32px;border-radius:50%;
+  font-size:25px;line-height:1;
+}
+body.cart-view .drinks-dialog .drinks-dismiss:hover{background:#eee3d7}
+body.cart-view .drinks-dialog button:focus-visible{outline:2px solid #9a6237;outline-offset:3px}
+@media(max-width:900px){
+ body.cart-view .cart-stage .cart-side{padding:25px!important}
+}
+@media(max-width:520px){
+ body.cart-view .cart-stage .cart-side{padding:22px 19px!important}
+ body.cart-view .cart-stage #whatsapp-order-form.order-form{gap:15px!important}
+ body.cart-view .drinks-dialog{padding:31px 22px 24px}
+}
