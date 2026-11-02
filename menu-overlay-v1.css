@@ -50,3 +50,30 @@
  .menuoverlay .menu-data-item{min-height:65px}
 }
 @media(prefers-reduced-motion:reduce){.menuoverlay *, .menuoverlay *:before{transition:none!important;animation:none!important}}
+
+/* 2026-11 · Sin panel gris: una única fotografía a pantalla completa. */
+.menuoverlay{
+  background-color:#20130e;
+  background-image:
+    linear-gradient(90deg,rgba(14,9,6,.84) 0%,rgba(14,9,6,.76) 26%,rgba(14,9,6,.57) 51%,rgba(14,9,6,.38) 100%),
+    linear-gradient(180deg,rgba(18,10,6,.30),rgba(18,10,6,.10) 48%,rgba(12,8,5,.62)),
+    url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=2000&q=85');
+  background-position:center,center,center 46%;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.menuoverlay .menu-layout{background:transparent}
+.menuoverlay .menu-left{background:transparent!important}
+.menuoverlay .menu-photo{background:transparent!important}
+.menuoverlay .menu-photo:before{
+  background:linear-gradient(180deg,transparent 0%,rgba(12,8,5,.08) 35%,rgba(12,8,5,.78) 100%);
+}
+@media(max-width:780px){
+  .menuoverlay{
+    background-image:
+      linear-gradient(180deg,rgba(14,9,6,.78) 0%,rgba(14,9,6,.80) 38%,rgba(14,9,6,.60) 71%,rgba(12,8,5,.88) 100%),
+      url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1400&q=80');
+    background-size:cover;background-position:center 42%;
+  }
+  .menuoverlay .menu-photo:before{background:linear-gradient(180deg,transparent,rgba(12,8,5,.45))}
+}
