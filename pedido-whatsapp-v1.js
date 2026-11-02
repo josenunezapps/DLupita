@@ -80,8 +80,9 @@
       lines.push('','¿Me confirman disponibilidad, importe total y tiempo estimado?','¡Gracias!');
       var link='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(lines.join('\n'));
       /* Solo abre WhatsApp; enviar requiere confirmación manual del cliente. */
-      var opened=window.open(link,'_blank','noopener,noreferrer');
-      if(!opened){window.location.assign(link);}
+      var opened=window.open(link,'_blank');
+      if(opened){try{opened.opener=null;}catch(err){}}
+      else{window.location.assign(link);}
     });
     window.addEventListener('storage',updateButton);
     form.addEventListener('change',clearFormError);
