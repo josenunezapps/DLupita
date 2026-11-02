@@ -1,13 +1,13 @@
 /* Indicador de horario sobre la portada original con video.
    Solo .home .center; no modifica el video ni el menú de tres puntos. */
-.home .center .home-business-badge{
+.home header .home-business-badge{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   width:max-content;
   max-width:100%;
-  margin:19px auto 0;
+  margin:0 11px 0 0;
   padding:11px 16px;
   gap:11px;
   border:1px solid rgba(255,255,255,.34);
@@ -18,7 +18,7 @@
   box-shadow:0 4px 25px rgba(0,0,0,.17);
   font-family:'DM Sans',Arial,sans-serif;
 }
-.home .center .home-business-dot{
+.home header .home-business-dot{
   display:inline-block;
   width:10px;
   height:10px;
@@ -27,34 +27,52 @@
   background:#d4b17d;
   box-shadow:0 0 0 4px rgba(212,177,125,.14);
 }
-.home .center .home-business-dot.open{
+.home header .home-business-dot.open{
   background:#55de97;
   box-shadow:0 0 0 4px rgba(85,222,151,.18);
 }
-.home .center .home-business-dot.closed{
+.home header .home-business-dot.closed{
   background:#ef9387;
   box-shadow:0 0 0 4px rgba(239,147,135,.18);
 }
-.home .center .home-business-info{
+.home header .home-business-info{
   display:flex;
   flex-direction:column;
   text-align:left;
   gap:3px;
 }
-.home .center .home-business-info strong{
+.home header .home-business-info strong{
   font-size:12px;
   line-height:1.2;
   font-weight:700;
   letter-spacing:.03em;
 }
-.home .center .home-business-info small{
+.home header .home-business-info small{
   font-size:10px;
   line-height:1.3;
   letter-spacing:0;
   color:#e3d5c5;
 }
 @media(max-width:760px){
-  .home .center .home-business-badge{margin-top:15px;padding:10px 13px;gap:9px}
-  .home .center .home-business-info strong{font-size:11px}
-  .home .center .home-business-info small{font-size:9px}
+  .home header .home-business-badge{margin-top:15px;padding:10px 13px;gap:9px}
+  .home header .home-business-info strong{font-size:11px}
+  .home header .home-business-info small{font-size:9px}
+}
+
+/* Encaja junto al carrito tanto en escritorio como en móvil. */
+.home header .controls{display:flex;align-items:center;gap:8px}
+.home header .home-business-badge{flex-shrink:0;white-space:nowrap;border-radius:2px}
+.home header .home-business-info small{max-width:230px;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:850px){
+  .home header .home-business-badge{padding:8px 10px;margin-right:2px;gap:7px}
+  .home header .home-business-info small{display:none}
+}
+@media(max-width:460px){
+  .home header{padding-left:15px;padding-right:11px}
+  .home header .brand{font-size:clamp(18px,5vw,23px)}
+  .home header .controls{gap:0}
+  .home header .iconbtn{min-width:38px;min-height:38px;padding:6px}
+  .home header .home-business-badge{padding:7px 8px;gap:6px;margin-right:5px}
+  .home header .home-business-dot{width:8px;height:8px;flex-basis:8px}
+  .home header .home-business-info strong{font-size:10px;letter-spacing:0}
 }
