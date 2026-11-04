@@ -30,7 +30,7 @@ Demo.save(KEY,products);Demo.modal(false);e.currentTarget.reset();render();Demo.
 });
 document.getElementById("exportInventory").addEventListener("click",()=>{
 const escapeCSV=s=>'"'+String(s).replace(/"/g,'""')+'"';
-const csv=[["Código","Producto","Categoría","Stock","Stock mínimo","Precio unitario"],...products.map(p=>[p.id,p.name,p.cat,p.stock,p.min,p.price])].map(row=>row.map(escapeCSV).join(";")).join("\\r\\n");
+const csv=[["Código","Producto","Categoría","Stock","Stock mínimo","Precio unitario"],...products.map(p=>[p.id,p.name,p.cat,p.stock,p.min,p.price])].map(row=>row.map(escapeCSV).join(";")).join("\r\n");
 Demo.download("inventario-demo.csv",csv,"text/csv;charset=utf-8");Demo.toast("Archivo CSV generado");
 });
 render();</script></body></html>
