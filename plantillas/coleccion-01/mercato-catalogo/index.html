@@ -24,6 +24,6 @@ document.getElementById("productSearch").addEventListener("input",e=>{term=e.tar
 document.getElementById("categorySelect").addEventListener("change",e=>{category=e.target.value;render()});
 document.getElementById("openCart").addEventListener("click",()=>Demo.drawer(true));
 document.getElementById("closeCart").addEventListener("click",()=>Demo.drawer(false));
-document.getElementById("copyOrder").addEventListener("click",()=>{let lines=items.filter(p=>cart[p.id]).map(p=>'- '+p.n+' x'+cart[p.id]+' — '+Demo.money(p.p*cart[p.id]));const total=items.reduce((s,p)=>s+p.p*(cart[p.id]||0),0);Demo.copy('Hola, quisiera consultar por estos productos:\\n'+lines.join('\\n')+'\\nTotal estimado: '+Demo.money(total)+'\\n(Pedido de demostración)')});
+document.getElementById("copyOrder").addEventListener("click",()=>{let lines=items.filter(p=>cart[p.id]).map(p=>'- '+p.n+' x'+cart[p.id]+' — '+Demo.money(p.p*cart[p.id]));const total=items.reduce((s,p)=>s+p.p*(cart[p.id]||0),0);Demo.copy('Hola, quisiera consultar por estos productos:\n'+lines.join('\n')+'\nTotal estimado: '+Demo.money(total)+'\n(Pedido de demostración)')});
 document.getElementById("clearCart").addEventListener("click",()=>{cart={};Demo.save(STORE,cart);render();Demo.toast("Carrito vaciado")});
 render();</script></body></html>
