@@ -12,7 +12,7 @@ document.getElementById("historyRows").innerHTML=history.length?history.slice().
 document.getElementById("totalQuotes").textContent=Demo.money(history.reduce((s,q)=>s+q.total,0));
 }
 function saveLines(){Demo.save(KEY,lines);render()}
-document.getElementById("servicePreset").addEventListener("change",e=>{const p=SERVICES[Number(e.target.value)];if(p){document.getElementById("itemName").value=p[0];document.getElementById("itemPrice").value=p[1]}});
+document.getElementById("servicePreset").addEventListener("change",e=>{const p=e.target.value===""?null:SERVICES[Number(e.target.value)];if(p){document.getElementById("itemName").value=p[0];document.getElementById("itemPrice").value=p[1]}});
 document.getElementById("addLine").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.currentTarget),name=String(f.get("name")).trim(),qty=Number(f.get("qty")),price=Number(f.get("price"));if(!name||qty<=0||price<0)return;lines.push({id:String(Date.now())+Math.random().toString(36).slice(2,6),name,qty,price});saveLines();e.currentTarget.reset();document.getElementById("servicePreset").value="";Demo.toast("Ítem agregado")});
 document.getElementById("quoteRows").addEventListener("click",e=>{const b=e.target.closest("[data-remove]");if(!b)return;lines=lines.filter(p=>p.id!==b.dataset.remove);saveLines();Demo.toast("Ítem quitado")});
 [tax,discount].forEach(el=>el.addEventListener("input",render));
