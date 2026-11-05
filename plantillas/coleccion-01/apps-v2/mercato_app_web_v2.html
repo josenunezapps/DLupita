@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mercato — Catálogo interactivo</title>
+  <style>
+    :root{--bg:#f4efe8;--ink:#2a241d;--muted:#756b60;--line:#d8cdbf;--accent:#8a5c37;--accent2:#e6d3bf;--card:#fffaf4;--shadow:0 10px 35px rgba(83,58,33,.10)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{text-decoration:none;color:inherit}button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
+    .wrap{width:min(1320px,calc(100% - 36px));margin:auto}
+    .topbar{background:#241b14;color:#f0e7dc;text-align:center;padding:8px 12px;font-size:12px;letter-spacing:.04em}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px}
+    .brand{font-size:30px;font-weight:800;letter-spacing:-.06em}.brand span{color:var(--accent)}
+    .navlinks{display:flex;gap:28px;color:var(--muted);font-weight:600}.navlinks a:hover{color:var(--ink)}
+    .navside{display:flex;align-items:center;gap:10px}.pill{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px}
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:stretch;padding:20px 0 28px}
+    .hero-copy{background:linear-gradient(135deg,#f8f3ed,#ebddd0);border:1px solid #e2d7ca;border-radius:34px;padding:44px;display:flex;flex-direction:column;justify-content:center;min-height:460px;box-shadow:var(--shadow)}
+    .kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#8b6b4d;font-weight:800}
+    h1{font-size:clamp(48px,6vw,92px);line-height:.94;letter-spacing:-.08em;margin:14px 0}.hero-copy p{color:#5f5549;max-width:540px;line-height:1.7;font-size:17px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:14px;padding:14px 18px;background:var(--accent);color:#fff;font-weight:800}.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--line)}
+    .hero-shot{position:relative;border-radius:34px;overflow:hidden;min-height:460px;box-shadow:var(--shadow);background:url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80') center/cover}
+    .hero-badge{position:absolute;left:22px;bottom:22px;background:rgba(255,250,244,.95);backdrop-filter:blur(10px);padding:16px 18px;border-radius:18px;max-width:230px;box-shadow:var(--shadow)}
+    .hero-badge strong{display:block;font-size:27px}.hero-badge small{color:var(--muted)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding-bottom:22px}.stat{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+    .stat span{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}.stat strong{font-size:32px;letter-spacing:-.05em}
+    .layout{display:grid;grid-template-columns:280px 1fr;gap:24px;padding:8px 0 36px}.filters{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;position:sticky;top:20px;height:fit-content;box-shadow:var(--shadow)}
+    .filters h3,.products-head h2,.drawer-head h3{margin:0 0 10px}.search{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#fcfbf8;margin:12px 0 16px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1px solid var(--line);background:#faf7f1;border-radius:999px;padding:10px 13px;font-size:13px;font-weight:700}.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .range{width:100%}.filter-block{padding:12px 0;border-top:1px solid #efe4d7;margin-top:16px}.muted{color:var(--muted)}
+    .products-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:8px 0 16px}.products-head p{margin:4px 0 0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}.photo{height:220px;background-size:cover;background-position:center;position:relative}.tag{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.94);padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800}
+    .info{padding:18px;display:flex;flex-direction:column;gap:8px;flex:1}.info small{color:var(--muted)}.info h3{margin:0;font-size:21px;letter-spacing:-.04em}.price{font-weight:900;font-size:22px}.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+    .actions{display:flex;gap:10px;margin-top:auto}.actions button{flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800}.actions .add{background:var(--accent);border-color:var(--accent);color:#fff}
+    .floating-cart{position:fixed;right:22px;bottom:22px;z-index:30;background:var(--accent);color:#fff;border:0;border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:12px;font-weight:800;box-shadow:0 18px 42px rgba(97,60,31,.35)}
+    .drawer-backdrop,.modal-backdrop{position:fixed;inset:0;background:rgba(18,14,10,.5);opacity:0;pointer-events:none;transition:.2s;z-index:40}.drawer-backdrop.open,.modal-backdrop.open{opacity:1;pointer-events:auto}
+    .drawer{position:fixed;top:0;right:-420px;width:min(410px,100%);height:100vh;background:#fff;z-index:41;transition:.28s;padding:22px;border-left:1px solid var(--line);box-shadow:-20px 0 40px rgba(0,0,0,.12);display:flex;flex-direction:column}.drawer.open{right:0}
+    .drawer-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid #eee2d5}.iconbtn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:#fff}
+    .cart-items{display:flex;flex-direction:column;gap:12px;padding:16px 0;overflow:auto;flex:1}.cart-item{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:10px;background:#faf7f2}.cart-thumb{width:70px;height:70px;border-radius:14px;background-size:cover;background-position:center}.qty{display:flex;align-items:center;gap:8px}.qty button{width:28px;height:28px;border-radius:10px;border:1px solid var(--line);background:#fff}.drawer-footer{border-top:1px solid #eee2d5;padding-top:14px;display:grid;gap:12px}.row{display:flex;justify-content:space-between;align-items:center}.total{font-size:28px;font-weight:900}
+    .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);width:min(840px,calc(100% - 30px));background:#fff;border-radius:28px;z-index:51;opacity:0;pointer-events:none;transition:.2s;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.18)}.modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+    .modal-grid{display:grid;grid-template-columns:1fr 1fr}.modal-photo{min-height:420px;background-size:cover;background-position:center}.modal-body{padding:28px}.modal-body h3{font-size:38px;letter-spacing:-.06em;margin:8px 0}.swatches{display:flex;gap:8px;margin:12px 0}.swatches span{width:20px;height:20px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.08)}
+    @media (max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.filters{position:static}.stats{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:720px){.navlinks{display:none}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hero-copy,.hero-shot{min-height:360px}.modal-grid{grid-template-columns:1fr}.modal-photo{min-height:260px}.floating-cart{left:14px;right:14px;bottom:14px;justify-content:center}.drawer{width:100%}}
+  </style>
+</head>
+<body>
+  <div class="topbar">DEMO LOCAL · Catálogo premium con carrito y vista rápida · Los pedidos se guardan solo en este navegador</div>
+  <div class="wrap">
+    <header class="nav">
+      <div class="brand">merc<span>ato</span></div>
+      <nav class="navlinks"><a href="#catalogo">Colección</a><a href="#ambientes">Ambientes</a><a href="#carrito">Pedido</a></nav>
+      <div class="navside"><button class="pill" id="clearAll">Vaciar</button><button class="pill" id="topCart">🛒 <span id="topCount">0</span></button></div>
+    </header>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="kicker">Colección hogar / showroom demo</div>
+        <h1>Vendé con una experiencia que <em>enamora</em>.</h1>
+        <p>Mercato está pensada como una tienda digital visual, elegante y fácil de usar. Filtrá, explorá productos, abrí una vista rápida y armá un pedido en segundos.</p>
+        <div class="hero-actions"><a class="btn" href="#catalogo">Explorar catálogo</a><button class="btn alt" id="heroCart">Ver pedido</button></div>
+      </div>
+      <div class="hero-shot">
+        <div class="hero-badge"><small>Curado para</small><strong>Showrooms y tiendas</strong><small>Muebles, deco, iluminación y más</small></div>
+      </div>
+    </section>
+    <section class="stats" id="ambientes">
+      <div class="stat"><span>Productos</span><strong id="statProducts">0</strong></div>
+      <div class="stat"><span>Categorías</span><strong id="statCategories">0</strong></div>
+      <div class="stat"><span>En carrito</span><strong id="statCart">0</strong></div>
+      <div class="stat"><span>Total estimado</span><strong id="statTotal">$0</strong></div>
+    </section>
+    <section class="layout" id="catalogo">
+      <aside class="filters">
+        <h3>Encontrá lo que buscás</h3>
+        <p class="muted">Combiná filtros para descubrir la colección ideal.</p>
+        <input id="search" class="search" placeholder="Buscar por nombre o estilo">
+        <div class="filter-block">
+          <strong>Categorías</strong>
+          <div class="chips" id="categories"></div>
+        </div>
+        <div class="filter-block">
+          <strong>Estilo</strong>
+          <div class="chips" id="styles"></div>
+        </div>
+        <div class="filter-block">
+          <strong>Precio máximo</strong>
+          <input id="priceRange" class="range" type="range" min="30000" max="260000" step="5000" value="260000">
+          <div class="muted" id="rangeLabel"></div>
+        </div>
+      </aside>
+      <div>
+        <div class="products-head">
+          <div>
+            <h2>Catálogo visual</h2>
+            <p id="resultsLabel">Mostrando todos los productos</p>
+          </div>
+          <div class="muted">Vista rápida + pedido local</div>
+        </div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <button class="floating-cart" id="floatingCart">🛒 <span id="floatingCount">0</span> items · <span id="floatingTotal">$0</span></button>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-head"><div><h3>Tu pedido</h3><div class="muted">Guardado localmente</div></div><button class="iconbtn" id="closeDrawer">✕</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="drawer-footer">
+      <div class="row"><span class="muted">Subtotal</span><strong id="subtotal">$0</strong></div>
+      <div class="row"><span class="muted">Envío</span><strong>A coordinar</strong></div>
+      <div class="row"><span>Total</span><div class="total" id="total">$0</div></div>
+      <button class="btn" id="copyOrder">Copiar pedido</button>
+      <button class="btn alt" id="emptyOrder">Vaciar carrito</button>
+    </div>
+  </aside>
+
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal" id="modal">
+    <div class="modal-grid">
+      <div class="modal-photo" id="modalPhoto"></div>
+      <div class="modal-body">
+        <div class="row"><span class="kicker" id="modalCategory"></span><button class="iconbtn" id="closeModal">✕</button></div>
+        <h3 id="modalName"></h3>
+        <p class="muted" id="modalDescription"></p>
+        <div class="swatches" id="swatches"></div>
+        <div class="row" style="margin:18px 0"><strong class="price" id="modalPrice"></strong><small id="modalStyle" class="muted"></small></div>
+        <div class="actions"><button class="add" id="modalAdd">Agregar al carrito</button><button id="modalGoCart">Ver pedido</button></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const money=v=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(v);
+const products=[
+{id:1,name:'Sillón Nórdico Lino',category:'Muebles',style:'Escandinavo',price:189900,stock:8,photo:'photo-1505693416388-ac5ce068fe85',desc:'Tapizado suave, líneas orgánicas y presencia protagonista para livings modernos.',colors:['#d6c7b7','#a28e75','#ece6dc']},
+{id:2,name:'Mesa Aura Roble',category:'Muebles',style:'Orgánico',price:154000,stock:5,photo:'photo-1499933374294-4584851497cc',desc:'Mesa de apoyo con terminación cálida, perfecta para sumar carácter sin recargar.',colors:['#7d5937','#cfb190','#efe2d2']},
+{id:3,name:'Lámpara Arco Terra',category:'Iluminación',style:'Contemporáneo',price:72500,stock:12,photo:'photo-1507473885765-e6ed057f782c',desc:'Iluminación cálida y elegante para comedores o espacios de lectura.',colors:['#2f2f32','#b38754','#f7ecde']},
+{id:4,name:'Maceta Studio',category:'Decoración',style:'Minimalista',price:28500,stock:16,photo:'photo-1485955900006-10f4d324d411',desc:'Pieza simple y versátil para sumar verde con estética depurada.',colors:['#c9baaa','#8f7557','#faf6ed']},
+{id:5,name:'Silla Éter',category:'Muebles',style:'Contemporáneo',price:88500,stock:9,photo:'photo-1503602642458-232111445657',desc:'Silla de comedor con gran balance entre confort, ligereza y estilo.',colors:['#4e5964','#bc8e67','#e8ded2']},
+{id:6,name:'Luz Ambiente Halo',category:'Iluminación',style:'Minimalista',price:39000,stock:18,photo:'photo-1519710164239-da123dc03ef4',desc:'Iluminación puntual para rincones íntimos, mesas de noche o repisas.',colors:['#101010','#f2e9db','#c5c1b9']},
+{id:7,name:'Jarrón Forma',category:'Decoración',style:'Orgánico',price:26000,stock:21,photo:'photo-1578749556568-bc2c40e68b61',desc:'Volumen escultórico para consolas, mesas y estantes con identidad.',colors:['#dbd1c1','#9d6d4c','#776253']},
+{id:8,name:'Banqueta Loft',category:'Muebles',style:'Industrial',price:69500,stock:7,photo:'photo-1538688423619-a81d3f23454b',desc:'Asiento alto ideal para barras o cocinas contemporáneas.',colors:['#1d1f24','#885b3f','#d2c3b0']},
+{id:9,name:'Espejo Curvo',category:'Decoración',style:'Escandinavo',price:82000,stock:4,photo:'photo-1513694203232-719a280e022f',desc:'Espejo vertical con marco fino para ampliar visualmente cualquier ambiente.',colors:['#101010','#d4bf9f','#f6f2ea']}
+];
+const storeKey='mercato_app_v2_cart';
+let cart=JSON.parse(localStorage.getItem(storeKey)||'{}');
+let activeCategory='Todas'; let activeStyle='Todos'; let searchTerm=''; let maxPrice=260000; let currentModal=null;
+const categories=['Todas',...new Set(products.map(p=>p.category))];
+const styles=['Todos',...new Set(products.map(p=>p.style))];
+function save(){localStorage.setItem(storeKey,JSON.stringify(cart))}
+function countItems(){return Object.values(cart).reduce((a,b)=>a+b,0)}
+function totalPrice(){return products.reduce((sum,p)=>sum+(cart[p.id]||0)*p.price,0)}
+function renderFilters(){
+  categoriesEl.innerHTML=categories.map(c=>`<button class="chip ${c===activeCategory?'active':''}" data-cat="${c}">${c}</button>`).join('');
+  stylesEl.innerHTML=styles.map(s=>`<button class="chip ${s===activeStyle?'active':''}" data-style="${s}">${s}</button>`).join('');
+  rangeLabel.textContent='Hasta '+money(maxPrice);
+}
+function filtered(){
+  return products.filter(p=>(activeCategory==='Todas'||p.category===activeCategory) && (activeStyle==='Todos'||p.style===activeStyle) && p.price<=maxPrice && (p.name+p.style+p.category).toLowerCase().includes(searchTerm.toLowerCase()));
+}
+function renderGrid(){
+  const list=filtered();
+  resultsLabel.textContent=list.length+' resultado'+(list.length===1?'':'s')+' · '+(activeCategory==='Todas'?'Todas las categorías':activeCategory);
+  grid.innerHTML=list.map(p=>`<article class="card"><div class="photo" style="background-image:url(https://images.unsplash.com/${p.photo}?auto=format&fit=crop&w=700&q=80)"><span class="tag">${p.category}</span></div><div class="info"><small>${p.style} · Stock ${p.stock}</small><h3>${p.name}</h3><div class="meta"><span>${p.desc.slice(0,54)}...</span></div><div class="row"><span class="price">${money(p.price)}</span><small>${cart[p.id]||0} en carrito</small></div><div class="actions"><button data-quick="${p.id}">Vista rápida</button><button class="add" data-add="${p.id}">Agregar</button></div></div></article>`).join('') || '<div class="card" style="grid-column:1/-1;padding:30px"><h3>Sin resultados</h3><p class="muted">Probá con otra búsqueda o ajustá los filtros.</p></div>';
+  statProducts.textContent=products.length; statCategories.textContent=new Set(products.map(p=>p.category)).size;
+}
+function renderCart(){
+  const items=products.filter(p=>cart[p.id]);
+  cartItems.innerHTML=items.map(p=>`<div class="cart-item"><div class="cart-thumb" style="background-image:url(https://images.unsplash.com/${p.photo}?auto=format&fit=crop&w=220&q=70)"></div><div><strong>${p.name}</strong><div class="muted">${money(p.price)}</div></div><div><div class="qty"><button data-q="-1" data-id="${p.id}">−</button><strong>${cart[p.id]}</strong><button data-q="1" data-id="${p.id}">+</button></div><div style="margin-top:8px;text-align:right;font-size:12px"><button class="pill" data-remove="${p.id}">Quitar</button></div></div></div>`).join('') || '<p class="muted">Todavía no agregaste productos.</p>';
+  const total=totalPrice();
+  subtotal.textContent=money(total); totalEl.textContent=money(total); statCart.textContent=countItems(); statTotal.textContent=money(total); topCount.textContent=countItems(); floatingCount.textContent=countItems(); floatingTotal.textContent=money(total);
+}
+function openDrawer(){drawer.classList.add('open');drawerBackdrop.classList.add('open')}
+function closeDrawer(){drawer.classList.remove('open');drawerBackdrop.classList.remove('open')}
+function openModal(id){const p=products.find(x=>x.id==id); if(!p) return; currentModal=p.id; modalPhoto.style.backgroundImage=`url(https://images.unsplash.com/${p.photo}?auto=format&fit=crop&w=1000&q=82)`; modalCategory.textContent=p.category; modalName.textContent=p.name; modalDescription.textContent=p.desc; modalPrice.textContent=money(p.price); modalStyle.textContent='Estilo '+p.style+' · Stock '+p.stock; swatches.innerHTML=p.colors.map(c=>`<span style="background:${c}"></span>`).join(''); modalBackdrop.classList.add('open'); modal.classList.add('open')}
+function closeModal(){modalBackdrop.classList.remove('open');modal.classList.remove('open')}
+function addItem(id){cart[id]=(cart[id]||0)+1; save(); renderGrid(); renderCart()}
+const categoriesEl=document.getElementById('categories'), stylesEl=document.getElementById('styles'), rangeLabel=document.getElementById('rangeLabel'); const grid=document.getElementById('grid'); const resultsLabel=document.getElementById('resultsLabel'); const statProducts=document.getElementById('statProducts'); const statCategories=document.getElementById('statCategories'); const statCart=document.getElementById('statCart'); const statTotal=document.getElementById('statTotal'); const topCount=document.getElementById('topCount'); const floatingCount=document.getElementById('floatingCount'); const floatingTotal=document.getElementById('floatingTotal'); const cartItems=document.getElementById('cartItems'); const subtotal=document.getElementById('subtotal'); const totalEl=document.getElementById('total'); const drawer=document.getElementById('drawer'); const drawerBackdrop=document.getElementById('drawerBackdrop'); const modalBackdrop=document.getElementById('modalBackdrop'); const modal=document.getElementById('modal'); const modalPhoto=document.getElementById('modalPhoto'); const modalCategory=document.getElementById('modalCategory'); const modalName=document.getElementById('modalName'); const modalDescription=document.getElementById('modalDescription'); const modalPrice=document.getElementById('modalPrice'); const modalStyle=document.getElementById('modalStyle'); const swatches=document.getElementById('swatches');
+renderFilters(); renderGrid(); renderCart();
+document.getElementById('search').oninput=e=>{searchTerm=e.target.value; renderGrid()};
+document.getElementById('priceRange').oninput=e=>{maxPrice=Number(e.target.value); renderFilters(); renderGrid()};
+categoriesEl.onclick=e=>{const b=e.target.closest('[data-cat]'); if(!b) return; activeCategory=b.dataset.cat; renderFilters(); renderGrid()};
+stylesEl.onclick=e=>{const b=e.target.closest('[data-style]'); if(!b) return; activeStyle=b.dataset.style; renderFilters(); renderGrid()};
+grid.onclick=e=>{const quick=e.target.closest('[data-quick]'); const add=e.target.closest('[data-add]'); if(quick) openModal(quick.dataset.quick); if(add) addItem(add.dataset.add)};
+cartItems.onclick=e=>{const q=e.target.closest('[data-q]'); const rem=e.target.closest('[data-remove]'); if(q){const id=q.dataset.id; cart[id]=Math.max(0,(cart[id]||0)+Number(q.dataset.q)); if(cart[id]===0) delete cart[id]; save(); renderGrid(); renderCart()} if(rem){delete cart[rem.dataset.remove]; save(); renderGrid(); renderCart()}};
+[document.getElementById('floatingCart'), document.getElementById('topCart'), document.getElementById('heroCart')].forEach(btn=>btn.onclick=openDrawer);
+document.getElementById('closeDrawer').onclick=closeDrawer; drawerBackdrop.onclick=closeDrawer;
+document.getElementById('emptyOrder').onclick=()=>{cart={}; save(); renderGrid(); renderCart()};
+document.getElementById('clearAll').onclick=()=>{cart={}; save(); renderGrid(); renderCart()};
+document.getElementById('copyOrder').onclick=async()=>{const items=products.filter(p=>cart[p.id]); const text='Hola, quiero consultar por este pedido:%0A'+items.map(p=>`- ${p.name} x${cart[p.id]} = ${money(p.price*cart[p.id])}`).join('%0A')+`%0A%0ATotal estimado: ${money(totalPrice())}%0A(Demo local)`; if(!items.length){alert('Agregá al menos un producto');return} try{await navigator.clipboard.writeText(decodeURIComponent(text));alert('Pedido copiado al portapapeles')}catch{alert('No se pudo copiar. Abrí el sitio con HTTPS y volvé a intentar.')} };
+document.getElementById('closeModal').onclick=closeModal; modalBackdrop.onclick=closeModal; document.getElementById('modalAdd').onclick=()=>{if(currentModal){addItem(currentModal); closeModal()}}; document.getElementById('modalGoCart').onclick=()=>{closeModal(); openDrawer()};
+</script>
+</body>
+</html>
