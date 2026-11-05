@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cotiza — Constructor de presupuestos</title>
+<style>
+:root{--bg:#f6f0f4;--ink:#241826;--muted:#7c6e80;--line:#e2d7e1;--card:#fff;--accent:#b3538a;--accent2:#f4d8e8;--good:#0e916a}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f8f2f6,#f2edf3);font-family:Inter,Arial,sans-serif;color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}
+.wrapper{width:min(1400px,calc(100% - 34px));margin:auto;padding:18px 0 28px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:31px;font-weight:900;letter-spacing:-.06em}.brand span{color:var(--accent)}.note{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(135deg,#fff,#fdeaf4);border:1px solid var(--line);border-radius:28px;padding:28px;margin:14px 0 20px}.hero h1{font-size:clamp(42px,5vw,76px);line-height:.97;letter-spacing:-.07em;margin:10px 0}.hero p{color:var(--muted);max-width:760px;line-height:1.8}
+.layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:0 10px 30px rgba(69,32,56,.06)}.left{padding:22px}.right{padding:0;overflow:hidden}.grid{display:grid;gap:12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.left input,.left select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fbf8fb}.btn{border:0;border-radius:14px;padding:13px 16px;background:var(--accent);color:#fff;font-weight:800}.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.items{display:grid;gap:10px;margin-top:14px}.item{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fcfafc}.item strong{display:block}.item small{color:var(--muted)}
+.dochead{padding:22px;border-bottom:1px solid var(--line);background:#fffafb}.docbody{padding:22px}.doc{background:#fff;min-height:100%}.doc table{width:100%;border-collapse:collapse;margin-top:18px}.doc th,.doc td{padding:12px 8px;border-bottom:1px solid #eee4ec;text-align:left}.doc th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.totals{margin-top:18px;display:grid;gap:8px}.totals .row{padding:10px 0;border-bottom:1px dashed #eadbe6}.totals .grand{font-size:28px;font-weight:900;border-bottom:0}
+.history{margin-top:16px;padding-top:14px;border-top:1px solid #eee4ec;display:grid;gap:10px;max-height:260px;overflow:auto}.hist{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbf9fb}.tag{display:inline-flex;padding:6px 10px;border-radius:999px;background:#f5e4ed;color:#7f315d;font-size:12px;font-weight:800}.msg{margin-top:12px;background:#ebfbf4;color:#146a4f;padding:12px 14px;border-radius:12px;display:none}
+@media (max-width:1050px){.layout{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+@media (max-width:620px){.wrapper{width:calc(100% - 16px)}}
+</style></head><body>
+<div class="wrapper">
+  <div class="head"><div class="brand">cot<span>iza</span></div><div class="note">Demo local · presupuesto editable, historial y exportación por impresión/PDF</div></div>
+  <section class="hero"><div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#a34c7e;font-weight:800">Herramienta comercial</div><h1>Un presupuesto que se construye como presupuesto.</h1><p>Cotiza ahora se organiza en dos planos: a la izquierda cargás ítems y condiciones; a la derecha ves un documento vivo, listo para compartir, imprimir o guardar como PDF desde el navegador.</p></section>
+  <section class="layout">
+    <div class="panel left">
+      <div class="row"><div><h2 style="margin:0">Constructor</h2><div class="note">Armá la propuesta paso a paso.</div></div><button class="btn alt" id="clearCurrent">Vaciar</button></div>
+      <div class="grid2" style="margin-top:14px"><input id="client" placeholder="Nombre del cliente"><input id="project" placeholder="Proyecto / referencia"></div>
+      <div class="grid2" style="margin-top:12px"><select id="preset"><option value="">Elegir servicio sugerido</option><option value="Sitio web|185000">Diseño de sitio web</option><option value="Catálogo web|85000">Catálogo de productos</option><option value="Integración contacto|25000">Integración de contacto</option><option value="Mantenimiento mensual|35000">Mantenimiento mensual</option><option value="Identidad visual básica|65000">Identidad visual básica</option></select><input id="itemName" placeholder="Detalle del ítem"></div>
+      <div class="grid2" style="margin-top:12px"><input id="itemQty" type="number" min="1" value="1" placeholder="Cantidad"><input id="itemPrice" type="number" min="0" placeholder="Precio unitario"></div>
+      <div class="row" style="margin-top:12px"><button class="btn" id="addItem">Agregar ítem</button><button class="btn alt" id="copyQuote">Copiar texto</button></div>
+      <div class="items" id="items"></div>
+      <div class="grid2" style="margin-top:18px"><input id="discount" type="number" min="0" max="100" value="0" placeholder="Descuento %"><select id="vat"><option value="0">Sin IVA</option><option value="21">IVA 21%</option></select></div>
+      <div class="row" style="margin-top:14px"><button class="btn" id="saveQuote">Guardar presupuesto</button><button class="btn alt" id="printBtn">Imprimir / PDF</button></div>
+      <div class="msg" id="msg"></div>
+      <div class="history"><div class="row"><strong>Historial</strong><span class="note">Guardado en este navegador</span></div><div id="history"></div></div>
+    </div>
+    <div class="panel right">
+      <div class="doc">
+        <div class="dochead"><div class="row"><div><div class="brand" style="font-size:26px">cot<span>iza</span></div><div class="note">Propuesta comercial</div></div><span class="tag">DEMO</span></div></div>
+        <div class="docbody">
+          <div class="row"><div><strong id="viewClient">Cliente sin definir</strong><div class="note" id="viewProject">Sin proyecto asignado</div></div><div class="note" id="viewDate"></div></div>
+          <table><thead><tr><th>Concepto</th><th>Cant.</th><th>Precio</th><th>Total</th></tr></thead><tbody id="docRows"></tbody></table>
+          <div class="totals"><div class="row"><span>Subtotal</span><strong id="sub">$0</strong></div><div class="row"><span>Descuento</span><strong id="off">$0</strong></div><div class="row"><span>IVA</span><strong id="iva">$0</strong></div><div class="row grand"><span>Total</span><strong id="grand">$0</strong></div></div>
+          <div class="note" style="margin-top:16px">Documento de ejemplo. No reemplaza factura ni contrato.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+const money=v=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(v);
+let itemsState=JSON.parse(localStorage.getItem('cotiza_v2_current')||'[]'); let historyState=JSON.parse(localStorage.getItem('cotiza_v2_history')||'[]');
+function persist(){localStorage.setItem('cotiza_v2_current',JSON.stringify(itemsState)); localStorage.setItem('cotiza_v2_history',JSON.stringify(historyState))}
+function totals(){const sub=itemsState.reduce((a,b)=>a+b.qty*b.price,0); const off=sub*((+discount.value||0)/100); const base=sub-off; const iva=base*((+vat.value||0)/100); return {sub,off,iva,total:base+iva}}
+function render(){items.innerHTML=itemsState.map(it=>`<div class="item"><div class="row"><div><strong>${it.name}</strong><small>${it.qty} × ${money(it.price)}</small></div><button class="btn alt" data-remove="${it.id}">Quitar</button></div></div>`).join('') || '<div class="note">Todavía no agregaste ítems.</div>'; const t=totals(); sub.textContent=money(t.sub); off.textContent=money(t.off); iva.textContent=money(t.iva); grand.textContent=money(t.total); viewClient.textContent=client.value||'Cliente sin definir'; viewProject.textContent=project.value||'Sin proyecto asignado'; viewDate.textContent=new Date().toLocaleDateString('es-AR'); docRows.innerHTML=itemsState.map(it=>`<tr><td>${it.name}</td><td>${it.qty}</td><td>${money(it.price)}</td><td>${money(it.qty*it.price)}</td></tr>`).join('') || '<tr><td colspan="4" class="note">Aún no hay conceptos cargados.</td></tr>'; document.getElementById('history').innerHTML=historyState.slice().reverse().map(h=>`<div class="hist"><div class="row"><div><strong>${h.client||'Cliente'}</strong><div class="note">${h.project||'Sin proyecto'}</div></div><button class="btn alt" data-load="${h.id}">Abrir</button></div><div class="row" style="margin-top:10px"><span class="tag">${h.items.length} ítems</span><strong>${money(h.total)}</strong></div></div>`).join('') || '<div class="note">Sin presupuestos guardados.</div>'; persist();}
+addItem.onclick=()=>{if(!itemName.value.trim()||itemPrice.value==='') return; itemsState.push({id:Date.now().toString()+Math.random().toString(36).slice(2,5),name:itemName.value,qty:+itemQty.value||1,price:+itemPrice.value||0}); itemName.value=''; itemPrice.value=''; itemQty.value=1; render()};
+preset.onchange=e=>{if(!e.target.value) return; const [n,p]=e.target.value.split('|'); itemName.value=n; itemPrice.value=p};
+items.onclick=e=>{const b=e.target.closest('[data-remove]'); if(!b) return; itemsState=itemsState.filter(x=>x.id!==b.dataset.remove); render()};
+[client,project,discount,vat].forEach(el=>el.oninput=render);
+saveQuote.onclick=()=>{const t=totals(); if(!itemsState.length){msg.style.display='block'; msg.textContent='Agregá al menos un ítem.'; return} historyState.push({id:Date.now().toString(),client:client.value,project:project.value,items:JSON.parse(JSON.stringify(itemsState)),discount:+discount.value||0,vat:+vat.value||0,total:t.total}); msg.style.display='block'; msg.textContent='Presupuesto guardado localmente.'; render()};
+document.getElementById('history').onclick=e=>{const b=e.target.closest('[data-load]'); if(!b) return; const h=historyState.find(x=>x.id===b.dataset.load); if(!h) return; itemsState=JSON.parse(JSON.stringify(h.items)); client.value=h.client; project.value=h.project; discount.value=h.discount; vat.value=h.vat; render()};
+clearCurrent.onclick=()=>{itemsState=[]; client.value=''; project.value=''; discount.value=0; vat.value=0; render()};
+copyQuote.onclick=async()=>{const t=totals(); const txt=`PRESUPUESTO DEMO\nCliente: ${client.value||'Sin definir'}\nProyecto: ${project.value||'Sin definir'}\n\n`+itemsState.map(i=>`- ${i.name}: ${i.qty} x ${money(i.price)} = ${money(i.qty*i.price)}`).join('\n')+`\n\nSubtotal: ${money(t.sub)}\nDescuento: ${money(t.off)}\nIVA: ${money(t.iva)}\nTOTAL: ${money(t.total)}`; await navigator.clipboard.writeText(txt); msg.style.display='block'; msg.textContent='Texto copiado al portapapeles.'};
+printBtn.onclick=()=>window.print();
+render();
+</script></body></html>
