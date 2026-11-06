@@ -1,0 +1,220 @@
+[
+  {
+    "name": "Ejemplo del documento: 3 ventanas + 3 colocaciones + 1 traslado",
+    "items": [
+      {
+        "qty_milli": 3000,
+        "unit_price_minor": 18500000,
+        "discount_bp": 0
+      },
+      {
+        "qty_milli": 3000,
+        "unit_price_minor": 3500000,
+        "discount_bp": 0
+      },
+      {
+        "qty_milli": 1000,
+        "unit_price_minor": 1250050,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": false,
+      "tax_rate_bp": 2100
+    },
+    "expect": {
+      "subtotal": 67250050,
+      "discount": 0,
+      "tax": 0,
+      "total": 67250050
+    }
+  },
+  {
+    "name": "Cantidad decimal con redondeo hacia arriba en la mitad",
+    "items": [
+      {
+        "qty_milli": 2500,
+        "unit_price_minor": 333,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": false,
+      "tax_rate_bp": 0
+    },
+    "expect": {
+      "subtotal": 833,
+      "discount": 0,
+      "tax": 0,
+      "total": 833
+    }
+  },
+  {
+    "name": "Descuento de línea 10 % e IVA 21 %",
+    "items": [
+      {
+        "qty_milli": 1000,
+        "unit_price_minor": 1000000,
+        "discount_bp": 1000
+      },
+      {
+        "qty_milli": 1500,
+        "unit_price_minor": 199999,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": true,
+      "tax_rate_bp": 2100
+    },
+    "expect": {
+      "subtotal": 1199999,
+      "discount": 0,
+      "tax": 252000,
+      "total": 1451999
+    }
+  },
+  {
+    "name": "Descuento general 15 % e IVA 10,5 %",
+    "items": [
+      {
+        "qty_milli": 7000,
+        "unit_price_minor": 123457,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "percent",
+      "discount_value": 1500,
+      "tax_enabled": true,
+      "tax_rate_bp": 1050
+    },
+    "expect": {
+      "subtotal": 864199,
+      "discount": 129630,
+      "tax": 77130,
+      "total": 811699
+    }
+  },
+  {
+    "name": "Descuento general en monto fijo",
+    "items": [
+      {
+        "qty_milli": 2000,
+        "unit_price_minor": 500000,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "amount",
+      "discount_value": 150000,
+      "tax_enabled": false,
+      "tax_rate_bp": 0
+    },
+    "expect": {
+      "subtotal": 1000000,
+      "discount": 150000,
+      "tax": 0,
+      "total": 850000
+    }
+  },
+  {
+    "name": "Milésimas de cantidad: 0,333 × $ 10,00",
+    "items": [
+      {
+        "qty_milli": 333,
+        "unit_price_minor": 1000,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": false,
+      "tax_rate_bp": 0
+    },
+    "expect": {
+      "subtotal": 333,
+      "discount": 0,
+      "tax": 0,
+      "total": 333
+    }
+  },
+  {
+    "name": "Precio cero y descuento de línea 100 %",
+    "items": [
+      {
+        "qty_milli": 1000,
+        "unit_price_minor": 0,
+        "discount_bp": 0
+      },
+      {
+        "qty_milli": 4000,
+        "unit_price_minor": 25000,
+        "discount_bp": 10000
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": true,
+      "tax_rate_bp": 2100
+    },
+    "expect": {
+      "subtotal": 0,
+      "discount": 0,
+      "tax": 0,
+      "total": 0
+    }
+  },
+  {
+    "name": "Redondeo del impuesto: 0,5 centavo sube",
+    "items": [
+      {
+        "qty_milli": 1000,
+        "unit_price_minor": 50,
+        "discount_bp": 0
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": true,
+      "tax_rate_bp": 1000
+    },
+    "expect": {
+      "subtotal": 50,
+      "discount": 0,
+      "tax": 5,
+      "total": 55
+    }
+  },
+  {
+    "name": "Importes grandes sin pérdida de precisión",
+    "items": [
+      {
+        "qty_milli": 999999,
+        "unit_price_minor": 9999999999,
+        "discount_bp": 1
+      }
+    ],
+    "opts": {
+      "discount_type": "none",
+      "discount_value": 0,
+      "tax_enabled": true,
+      "tax_rate_bp": 2100
+    },
+    "expect": {
+      "subtotal": 9998990000000,
+      "discount": 0,
+      "tax": 2099787900000,
+      "total": 12098777900000
+    }
+  }
+]

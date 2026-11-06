@@ -137,6 +137,8 @@ function toApiError(status, data) {
   else if (lower.includes('already registered') || code === 'user_already_exists') friendly = 'Ese email ya tiene una cuenta. Probá ingresar.';
   else if (lower.includes('password should be') || code === 'weak_password') friendly = 'La contraseña es muy débil. Usá al menos 8 caracteres.';
   else if (lower.includes('ya tiene un negocio')) friendly = 'Tu cuenta ya tiene un negocio creado.';
+  // Mensajes propios de las funciones de la base (ya están en español y pensados para el usuario).
+  else if ((code === 'P0001' || code === 'P0002') && msg) friendly = msg;
   else if (lower.includes('row-level security') || status === 403) friendly = 'No tenés permiso para hacer esto.';
   else if (code === '23514') friendly = 'Algún dato no cumple el formato permitido.';
   else if (status >= 500) friendly = 'El servidor no respondió bien. Intentá en unos minutos.';
@@ -246,6 +248,11 @@ export const db = {
       headers: RETURN,
     });
     if (!rows || rows.length === 0) throw new ApiError('No se encontró el registro o no tenés permiso.', { status: 404 });
+    return rows[0];
+  },
+  async remove(table, id) {
+    const rows = await request(`/rest/v1/${table}?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE', headers: RETURN });
+    if (!rows || rows.length === 0) throw new ApiError('No se pudo borrar: no existe o no tenés permiso.', { status: 404 });
     return rows[0];
   },
   rpc(fn, args) {

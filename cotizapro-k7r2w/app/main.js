@@ -6,6 +6,7 @@ import { homeView } from './views/home.js';
 import { customersView, customerFormView } from './views/customers.js';
 import { catalogView, catalogFormView } from './views/catalog.js';
 import { settingsView } from './views/settings.js';
+import { quotesView, quoteRouteView } from './views/quotes.js';
 
 // Todos los módulos cargaron: el aviso de error de index.html ya no aplica.
 window.__cpStarted = true;
@@ -44,7 +45,35 @@ const ctx = {
     state.org = org;
     state.orgLoaded = true;
   },
+  // Cambios sin guardar (editor de presupuestos): se pide confirmación antes de salir.
+  setDirty(value) {
+    dirty = Boolean(value);
+  },
+  replaceHash(hash) {
+    history.replaceState(null, '', hash);
+    lastHash = hash;
+  },
 };
+
+let dirty = false;
+let lastHash = location.hash;
+window.addEventListener('beforeunload', (e) => {
+  if (dirty) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+function onHashChange() {
+  if (dirty && location.hash !== lastHash) {
+    if (!window.confirm('Tenés cambios sin guardar en el presupuesto. ¿Salir igual?')) {
+      history.replaceState(null, '', lastHash);
+      return;
+    }
+    dirty = false;
+  }
+  lastHash = location.hash;
+  render();
+}
 
 let renderSeq = 0;
 async function render() {
@@ -81,6 +110,7 @@ async function render() {
     if (state.org && route.name === 'negocio-nuevo') return go('inicio');
   }
 
+  lastHash = location.hash;
   const view = pickView(route);
   if (!view) return go(session ? 'inicio' : 'ingresar');
   window.scrollTo(0, 0);
@@ -98,6 +128,7 @@ function pickView(route) {
     case 'clientes': return route.id ? customerFormView : customersView;
     case 'conceptos': return route.id ? catalogFormView : catalogView;
     case 'configuracion': return settingsView;
+    case 'presupuestos': return route.id ? quoteRouteView : quotesView;
     default: return null;
   }
 }
@@ -127,5 +158,5 @@ window.addEventListener('online', updateOnline);
 window.addEventListener('offline', updateOnline);
 updateOnline();
 
-window.addEventListener('hashchange', render);
+window.addEventListener('hashchange', onHashChange);
 render();

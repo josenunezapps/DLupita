@@ -8,6 +8,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
+import { quoteTotals, lineAmounts } from '../app/lib/calc.js';
 
 const require = createRequire(import.meta.url);
 let chromium;
@@ -37,7 +39,8 @@ const BASE = `http://127.0.0.1:${server.address().port}/cotizapro-k7r2w/`;
 function createBackend() {
   const users = new Map(); // email -> {id, email, password}
   const tokens = new Map(); // token -> userId
-  const db = { organizations: [], organization_members: [], customers: [], catalog_items: [] };
+  const db = { organizations: [], organization_members: [], customers: [], catalog_items: [], quotes: [], quote_items: [], quote_versions: [], quote_events: [] };
+  const counters = new Map();
   const calls = [];
   let seq = 0;
   const uuid = () => `00000000-0000-4000-8000-${String(++seq).padStart(12, '0')}`;
@@ -74,7 +77,7 @@ function createBackend() {
     const order = params.get('order');
     if (order) {
       const [col, dir] = order.split('.');
-      out = [...out].sort((a, b) => String(a[col]).localeCompare(String(b[col]), 'es') * (dir === 'desc' ? -1 : 1));
+      out = [...out].sort((a, b) => (typeof a[col] === 'number' ? a[col] - b[col] : String(a[col]).localeCompare(String(b[col]), 'es')) * (dir === 'desc' ? -1 : 1));
     }
     const limit = Number(params.get('limit') || 0);
     return limit ? out.slice(0, limit) : out;
@@ -127,11 +130,92 @@ function createBackend() {
       db.organization_members.push({ organization_id: org.id, user_id: uid, role: 'owner' });
       return json(200, org.id);
     }
+    // ---- Presupuestos (réplica simplificada de las funciones de la base) ----
+    const org = db.organizations.find((o) => mine.includes(o.id));
+    const itemsOf = (qid) => db.quote_items.filter((i) => i.quote_id === qid).sort((a, b) => a.position - b.position);
+    const totalsOf = (q) => {
+      if (q.status !== 'borrador') return { subtotal: q.subtotal_minor, discount: q.discount_minor, tax: q.tax_minor, total: q.total_minor };
+      return quoteTotals(itemsOf(q.id), { discount_type: q.discount_type, discount_value: q.discount_value, tax_enabled: org.tax_enabled, tax_rate_bp: org.tax_rate_bp });
+    };
+    const myQuote = (id) => db.quotes.find((q) => q.id === id && mine.includes(q.organization_id));
+    const err = (message) => json(400, { code: 'P0001', message });
+    if (url.pathname === '/rest/v1/rpc/save_draft') {
+      const d = body.p_data;
+      if (d.customer_id && !db.customers.some((c) => c.id === d.customer_id && c.organization_id === org.id)) return err('El cliente no pertenece a este negocio');
+      let q;
+      if (!body.p_id) {
+        q = { id: uuid(), organization_id: org.id, number: null, status: 'borrador', currency: org.currency, created_at: now(),
+              valid_until: d.valid_until || new Date(Date.now() + org.default_validity_days * 864e5).toISOString().slice(0, 10) };
+        db.quotes.push(q);
+      } else {
+        q = myQuote(body.p_id);
+        if (!q || q.status !== 'borrador') return err('Este presupuesto ya fue emitido o no existe: no se puede editar');
+        db.quote_items = db.quote_items.filter((i) => i.quote_id !== q.id);
+      }
+      Object.assign(q, { customer_id: d.customer_id || null, title: d.title || null, notes: d.notes || null, discount_type: d.discount_type, discount_value: d.discount_value, valid_until: d.valid_until || q.valid_until });
+      d.items.forEach((it, i) => db.quote_items.push({ id: uuid(), quote_id: q.id, organization_id: org.id, position: i, ...it }));
+      return json(200, q.id);
+    }
+    if (url.pathname === '/rest/v1/rpc/issue_quote') {
+      const q = myQuote(body.p_id);
+      if (!q) return json(404, { code: 'P0002', message: 'No se encontró el presupuesto' });
+      if (q.status !== 'borrador') return err('Este presupuesto ya fue emitido');
+      if (!q.customer_id) return err('Elegí un cliente antes de emitir');
+      const t = totalsOf(q);
+      const n = (counters.get(org.id) || 0) + 1;
+      counters.set(org.id, n);
+      const c = db.customers.find((x) => x.id === q.customer_id);
+      Object.assign(q, { status: 'emitido', number: n, issued_at: now(), subtotal_minor: t.subtotal, discount_minor: t.discount, tax_minor: t.tax, total_minor: t.total });
+      db.quote_versions.push({ id: uuid(), quote_id: q.id, organization_id: org.id, version: 1, snapshot: {
+        schema: 1, number: n, title: q.title, currency: q.currency, issued_at: q.issued_at, valid_until: q.valid_until, notes: q.notes,
+        issuer: { name: org.name, legal_name: org.legal_name, tax_id: org.tax_id, phone: org.phone, email: org.email, address: org.address, brand_color: org.brand_color, logo_data_url: org.logo_data_url, terms: org.terms },
+        customer: { name: c.name, tax_id: c.tax_id, phone: c.phone, email: c.email, address: c.address },
+        items: itemsOf(q.id).map((it) => { const a = lineAmounts(it); return { ...it, gross_minor: Number(a.gross), discount_minor: Number(a.discount), net_minor: Number(a.net) }; }),
+        discount: { type: q.discount_type, value: q.discount_value },
+        tax: { enabled: org.tax_enabled, name: org.tax_name, rate_bp: org.tax_rate_bp },
+        totals: { subtotal_minor: t.subtotal, discount_minor: t.discount, tax_minor: t.tax, total_minor: t.total },
+      } });
+      db.quote_events.push({ quote_id: q.id, organization_id: org.id, from_status: 'borrador', to_status: 'emitido', created_at: now() });
+      return json(200, { id: q.id, number: n, total_minor: t.total });
+    }
+    if (url.pathname === '/rest/v1/rpc/set_quote_status') {
+      const q = myQuote(body.p_id);
+      if (!q) return json(404, { code: 'P0002', message: 'No se encontró el presupuesto' });
+      const allowed = { emitido: ['enviado', 'aceptado', 'rechazado', 'cancelado'], enviado: ['aceptado', 'rechazado', 'cancelado'] }[q.status] || [];
+      if (!allowed.includes(body.p_status)) return err(`No se puede pasar de ${q.status} a ${body.p_status}`);
+      db.quote_events.push({ quote_id: q.id, organization_id: org.id, from_status: q.status, to_status: body.p_status, created_at: now() });
+      q.status = body.p_status;
+      return json(200, q.status);
+    }
+    if (url.pathname === '/rest/v1/rpc/duplicate_quote') {
+      const src = myQuote(body.p_id);
+      if (!src) return json(404, { code: 'P0002', message: 'No se encontró el presupuesto' });
+      const q = { id: uuid(), organization_id: org.id, number: null, status: 'borrador', currency: src.currency, created_at: now(),
+                  customer_id: src.customer_id, title: `${src.title || 'Presupuesto'} (copia)`, notes: src.notes, discount_type: src.discount_type,
+                  discount_value: src.discount_value, valid_until: new Date(Date.now() + org.default_validity_days * 864e5).toISOString().slice(0, 10) };
+      db.quotes.push(q);
+      itemsOf(src.id).forEach((it) => db.quote_items.push({ ...it, id: uuid(), quote_id: q.id }));
+      return json(200, q.id);
+    }
     const table = url.pathname.replace('/rest/v1/', '');
     if (!db[table]) return json(404, { message: 'tabla desconocida' });
     const visible = (r) => mine.includes(table === 'organizations' ? r.id : r.organization_id);
 
-    if (method === 'GET') return json(200, applyFilters(db[table].filter(visible), url.searchParams));
+    if (method === 'GET') {
+      let rows = applyFilters(db[table].filter(visible), url.searchParams);
+      if (table === 'quotes') {
+        rows = rows.map((q) => ({ ...q, quote_total: totalsOf(q).total, customers: q.customer_id ? { name: db.customers.find((c) => c.id === q.customer_id)?.name } : null }));
+      }
+      return json(200, rows);
+    }
+    if (method === 'DELETE') {
+      const id = url.searchParams.get('id').replace('eq.', '');
+      const row = db[table].find((r) => r.id === id && visible(r));
+      if (!row || (table === 'quotes' && row.status !== 'borrador')) return json(200, []);
+      db[table] = db[table].filter((r) => r !== row);
+      if (table === 'quotes') db.quote_items = db.quote_items.filter((i) => i.quote_id !== id);
+      return json(200, [row]);
+    }
     if (method === 'POST') {
       if (table === 'organizations') return json(403, { message: 'permission denied' });
       if (!mine.includes(body.organization_id)) return json(403, { code: '42501', message: 'new row violates row-level security policy' });
@@ -174,6 +258,7 @@ async function run(viewportName, viewport) {
   const p = `[${viewportName}]`;
   const email = `russo+${viewportName}@ejemplo.com`;
 
+  try {
   // 1. Sin sesión → login
   await page.goto(BASE);
   await page.waitForSelector('h1:has-text("Ingresá a tu cuenta")');
@@ -182,6 +267,7 @@ async function run(viewportName, viewport) {
 
   // 2. Registro con validaciones
   await page.click('text=Creala gratis');
+  await page.waitForSelector('h1:has-text("Creá tu cuenta")');
   await page.fill('[name=email]', email);
   await page.fill('[name=password]', 'clave1234');
   await page.fill('[name=password2]', 'otra-clave');
@@ -298,6 +384,102 @@ async function run(viewportName, viewport) {
   await page.waitForSelector('.row-item');
   check(`${p} Recargar conserva sesión y datos`, (await page.$$('.row-item')).length === 2 && page.url().includes('#/conceptos'));
 
+  // 7b. Presupuestos: armar, validar, vista previa, guardar, emitir
+  const nav = (label) => (viewportName === 'movil' ? `.tabbar >> text=${label}` : `.sidenav >> text=${label}`);
+  await page.click(nav('Presupuestos'));
+  await page.waitForSelector('text=Todavía no hiciste presupuestos');
+  await page.click('text=Hacer el primero');
+  await page.waitForSelector('h1:has-text("Nuevo presupuesto")');
+  const options = await page.$$eval('#q-customer option', (os) => os.map((o) => o.textContent));
+  check(`${p} Editor: clientes archivados no se ofrecen`, options.includes('Juan Pérez') && !options.includes('María López'), options.join(', '));
+  await page.selectOption('#q-customer', { label: 'Juan Pérez' });
+  await page.fill('#q-title', 'Ventanas living');
+  await page.click('button:has-text("+ Del catálogo")');
+  await page.click('.picker-item:has-text("Ventana aluminio")');
+  await page.click('.picker-item:has-text("Colocación de ventana")');
+  const lines = page.locator('.line');
+  check(`${p} El catálogo agrega líneas con precio`, (await lines.count()) === 2 && (await lines.nth(0).locator('[name=price]').inputValue()) === '185.400,50');
+  await lines.nth(0).locator('[name=qty]').fill('3');
+  await lines.nth(1).locator('[name=qty]').fill('3');
+  await lines.nth(1).locator('[name=disc]').fill('10');
+  const totals = await page.$$eval('.totals dd', (els) => els.map((e) => e.textContent));
+  check(`${p} Totales en vivo: subtotal, IVA 10,5 % y total`, totals[0] === '$ 596.701,50' && totals[1] === '$ 62.653,66' && totals[2] === '$ 659.355,16', totals.join(' | '));
+
+  await page.click('button:has-text("+ Línea libre")');
+  await lines.nth(2).locator('[name=description]').fill('Extra');
+  await lines.nth(2).locator('[name=qty]').fill('0');
+  await page.click('.summary-actions button:has-text("Emitir")');
+  check(`${p} No deja emitir con una línea inválida`, (await page.isVisible('text=Revisá las líneas marcadas.')) && !(await page.isVisible('dialog')));
+  await lines.nth(2).locator('button[aria-label^="Quitar"]').click();
+  check(`${p} Quitar línea recalcula el total`, (await page.textContent('.total-value')) === '$ 659.355,16');
+  await shot('08-editor');
+
+  await page.click('button:has-text("Vista previa")');
+  await page.waitForSelector('dialog .doc-watermark');
+  const prev = await page.textContent('dialog .doc');
+  check(`${p} Vista previa muestra BORRADOR, cliente y total`, prev.includes('BORRADOR') && prev.includes('Juan Pérez') && prev.includes('$ 659.355,16'));
+  await page.screenshot({ path: path.join(shotsDir, `${viewportName}-09-vista-previa.png`) });
+  await page.click('dialog button:has-text("Cerrar")');
+
+  await page.click('button:has-text("Guardar borrador")');
+  await page.waitForFunction(() => /#\/presupuestos\/[0-9a-f-]{36}$/.test(location.hash));
+  const draft = backend.db.quotes[0];
+  check(`${p} Borrador guardado sin número y con 2 líneas`, draft.status === 'borrador' && draft.number === null && backend.db.quote_items.filter((i) => i.quote_id === draft.id).length === 2);
+  check(`${p} Cantidades y descuentos llegan en enteros`, backend.db.quote_items.some((i) => i.qty_milli === 3000 && i.discount_bp === 1000 && i.unit_price_minor === 1500000));
+
+  await page.click('.summary-actions button:has-text("Emitir")');
+  await page.waitForSelector('dialog >> text=Emitir presupuesto');
+  await page.click('dialog button:has-text("Emitir")');
+  await page.waitForSelector('h1:has-text("N.º 0001")');
+  const quoteId = draft.id;
+  check(`${p} Emitido con número 0001`, (await page.textContent('.doc-number')) === 'N.º 0001');
+  check(`${p} El documento emitido muestra el total del snapshot`, (await page.textContent('.doc-total')) === '$ 659.355,16' && backend.db.quote_versions[0].snapshot.totals.total_minor === 65935516);
+  await shot('10-emitido');
+
+  const wa = await page.getAttribute('a:has-text("Enviar por WhatsApp")', 'href');
+  check(`${p} WhatsApp: número del cliente y texto con N.º y total`, wa.startsWith('https://wa.me/5491144445555?text=') && decodeURIComponent(wa).includes('N.º 0001') && decodeURIComponent(wa).includes('$ 659.355,16'), wa.slice(0, 48));
+
+  await page.evaluate(() => { window.print = () => { window.__printed = (window.__printed || 0) + 1; }; });
+  await page.click('button:has-text("Descargar PDF")');
+  await page.waitForFunction(() => window.__printed === 1);
+  check(`${p} PDF: nombre de archivo PRES-0001-Juan-Perez`, (await page.title()) === 'PRES-0001-Juan-Perez');
+  if (viewportName === 'escritorio') {
+    const pdfPath = path.join(shotsDir, 'PRES-0001-Juan-Perez.pdf');
+    await page.emulateMedia({ media: 'print' });
+    await page.pdf({ path: pdfPath, preferCSSPageSize: true, printBackground: true });
+    await page.emulateMedia({ media: 'screen' });
+    const pages = Number(execFileSync('pdfinfo', [pdfPath]).toString().match(/Pages:\s+(\d+)/)[1]);
+    const text = execFileSync('pdftotext', ['-layout', pdfPath, '-']).toString();
+    check(`${p} PDF real: 1 página A4`, pages === 1, `${pages} página(s)`);
+    check(`${p} PDF real: número, cliente, líneas y total`, ['N.º 0001', 'Juan Pérez', 'Ventana aluminio 120x100', 'Colocación de ventana', '$ 659.355,16', 'IVA 10,5 %'].every((t) => text.includes(t)));
+    check(`${p} PDF real: sin menús ni botones de la app`, !text.includes('Descargar PDF') && !text.includes('Conceptos'));
+  }
+  await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+  check(`${p} Después de imprimir vuelve la pantalla normal`, !(await page.evaluate(() => document.body.classList.contains('print-mode'))));
+
+  await page.click('button:has-text("Marcar como enviado")');
+  await page.waitForSelector('.issued-head .badge:has-text("Enviado")');
+  await page.click('button:has-text("Aceptado")');
+  await page.waitForSelector('.issued-head .badge:has-text("Aceptado")');
+  check(`${p} Estados: enviado → aceptado, sin más acciones`, !(await page.isVisible('.status-card')) && (await page.$$('.timeline li')).length === 3);
+
+  await page.click('button:has-text("Duplicar")');
+  await page.waitForSelector('h1:has-text("Ventanas living (copia)")');
+  check(`${p} Duplicar abre un borrador con las mismas líneas`, (await page.locator('.line').count()) === 2);
+  await page.fill('#q-title', 'Ventanas living v2');
+  page.once('dialog', (d) => d.dismiss());
+  await page.click(nav('Clientes'));
+  await page.waitForTimeout(300);
+  check(`${p} Cambios sin guardar: pide confirmar y deja quedarse`, page.url().includes('#/presupuestos/') && (await page.isVisible('#q-title')));
+  page.once('dialog', (d) => d.accept());
+  await page.click(nav('Presupuestos'));
+  await page.waitForSelector('.chip');
+  const chipText = await page.$$eval('.chip', (cs) => cs.map((c) => c.textContent));
+  check(`${p} Lista y filtros: 2 presupuestos, 1 borrador, 1 aceptado`, (await page.$$('.list .row-item')).length === 2 && chipText.includes('Borradores1') && chipText.includes('Aceptados1'), chipText.join(' '));
+  await page.click('.chip:has-text("Aceptados")');
+  check(`${p} Filtro Aceptados muestra solo el emitido`, (await page.$$('.list .row-item')).length === 1);
+  await shot('11-presupuestos');
+
   // 8. Salir y volver a entrar
   await page.click(viewportName === 'movil' ? '.topbar >> text=Salir' : '.sidenav >> text=Salir');
   await page.waitForSelector('h1:has-text("Ingresá a tu cuenta")');
@@ -310,11 +492,12 @@ async function run(viewportName, viewport) {
   await page.click('button:has-text("Ingresar")');
   await page.waitForSelector('.stat-n');
   const nums = await page.$$eval('.stat-n', (els) => els.map((e) => e.textContent));
-  check(`${p} Al volver a entrar los datos siguen`, nums[0] === '1' && nums[1] === '2', nums.join(','));
+  check(`${p} Al volver a entrar los datos siguen`, nums[0] === '0' && nums[1] === '1' && nums[2] === '1', nums.join(','));
 
   // 9. Segunda cuenta no ve nada de la primera
   await page.click(viewportName === 'movil' ? '.topbar >> text=Salir' : '.sidenav >> text=Salir');
   await page.click('text=Creala gratis');
+  await page.waitForSelector('h1:has-text("Creá tu cuenta")');
   await page.fill('[name=email]', `otro+${viewportName}@ejemplo.com`);
   await page.fill('[name=password]', 'clave5678');
   await page.fill('[name=password2]', 'clave5678');
@@ -328,6 +511,9 @@ async function run(viewportName, viewport) {
   await page.goto(`${BASE}#/clientes/${juanId}`);
   await page.waitForSelector('text=No encontramos ese cliente.');
   check(`${p} Segunda cuenta no abre un cliente ajeno por URL`, true);
+  await page.goto(`${BASE}#/presupuestos/${quoteId}`);
+  await page.waitForSelector('text=No encontramos ese presupuesto.');
+  check(`${p} Segunda cuenta no abre un presupuesto ajeno por URL`, true);
 
   // 10. Higiene
   check(`${p} Toda llamada a Supabase usa la clave publicable`, backend.calls.every((c) => c.apikey === 'sb_publishable_oh890vH4eoyGd1L7F-Ag8g_fBQIpafm'));
@@ -340,8 +526,13 @@ async function run(viewportName, viewport) {
   check(`${p} Solo el 4xx provocado aparece como error de red`, networkErrors.length === 1, `${networkErrors.length} error(es) de red`);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
   check(`${p} Sin scroll horizontal`, !overflow);
-
-  await browser.close();
+  } catch (e) {
+    await page.screenshot({ path: path.join(shotsDir, `${viewportName}-ERROR.png`) }).catch(() => {});
+    console.log(`${p} URL al fallar: ${page.url()}`);
+    throw e;
+  } finally {
+    await browser.close();
+  }
 }
 
 // Si un archivo de la app no carga, la pantalla debe explicar el problema en vez de quedar en blanco.
