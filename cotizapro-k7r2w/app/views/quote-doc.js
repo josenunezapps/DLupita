@@ -7,6 +7,12 @@ import { formatDate, formatIssued, quoteNumber, todayISO } from '../lib/quotes.j
 
 const A4_WIDTH = 794; // px a 96 dpi
 
+/** CUIT/CUIL de 11 dígitos con guiones (20-35715704-9); cualquier otro valor se muestra tal cual. */
+export function formatTaxId(v) {
+  const d = String(v || '').replace(/\D/g, '');
+  return d.length === 11 ? `${d.slice(0, 2)}-${d.slice(2, 10)}-${d.slice(10)}` : String(v || '');
+}
+
 function pct(bp) {
   const n = Number(bp) || 0;
   const i = Math.trunc(n / 100);
@@ -17,7 +23,7 @@ function pct(bp) {
 export function renderDoc(m, { draft = false } = {}) {
   const money = (v) => formatMoney(v, m.currency);
   const color = /^#[0-9A-Fa-f]{6}$/.test(m.issuer.brand_color || '') ? m.issuer.brand_color : '#C2410C';
-  const contact = [m.issuer.phone, m.issuer.email, m.issuer.address].filter(Boolean);
+  const contact = [m.issuer.phone, m.issuer.email].filter(Boolean);
   const hasLineDiscount = m.items.some((it) => Number(it.discount_bp) > 0);
   const t = m.totals;
 
@@ -30,8 +36,9 @@ export function renderDoc(m, { draft = false } = {}) {
         h('div', {},
           h('div', { class: 'doc-issuer-name' }, m.issuer.name),
           m.issuer.legal_name && m.issuer.legal_name !== m.issuer.name ? h('div', { class: 'doc-small' }, m.issuer.legal_name) : null,
-          m.issuer.tax_id ? h('div', { class: 'doc-small' }, `CUIT ${m.issuer.tax_id}`) : null,
+          m.issuer.tax_id ? h('div', { class: 'doc-small' }, `CUIT ${formatTaxId(m.issuer.tax_id)}`) : null,
           contact.length ? h('div', { class: 'doc-small' }, contact.join(' · ')) : null,
+          m.issuer.address ? h('div', { class: 'doc-small' }, m.issuer.address) : null,
         ),
       ),
       h('div', { class: 'doc-meta' },
@@ -50,7 +57,7 @@ export function renderDoc(m, { draft = false } = {}) {
         m.customer
           ? [
               h('div', { class: 'doc-strong' }, m.customer.name),
-              m.customer.tax_id ? h('div', { class: 'doc-small' }, `CUIT/DNI ${m.customer.tax_id}`) : null,
+              m.customer.tax_id ? h('div', { class: 'doc-small' }, `CUIT/DNI ${formatTaxId(m.customer.tax_id)}`) : null,
               [m.customer.phone, m.customer.email].filter(Boolean).length
                 ? h('div', { class: 'doc-small' }, [m.customer.phone, m.customer.email].filter(Boolean).join(' · '))
                 : null,
