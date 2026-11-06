@@ -380,7 +380,7 @@ body.offline .offline-banner { display: block; padding: 10px 14px; border-radius
 .dialog-wide .doc-frame { margin: 14px; }
 
 /* ---------- Documento A4 (siempre claro, también en modo oscuro) ---------- */
-.doc-frame { position: relative; overflow: hidden; border-radius: 6px; box-shadow: 0 2px 12px rgba(0,0,0,.12); background: #fff; }
+.doc-frame { position: relative; overflow: hidden; width: 100%; max-width: 794px; margin: 0 auto; border-radius: 6px; box-shadow: 0 2px 12px rgba(0,0,0,.12); background: #fff; }
 .doc-scale { width: 794px; transform-origin: top left; }
 .doc {
   --doc-accent: #C2410C;
