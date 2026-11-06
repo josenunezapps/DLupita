@@ -108,6 +108,8 @@ select,input[type=text],input[type=search]{border:1px solid var(--line);border-r
 .vrow:first-child{border-top:0}
 .vrow.sel{background:var(--accent-soft)}
 .vrow .name{font-weight:700}
+.hear{margin-top:8px;color:var(--accent);border-color:color-mix(in srgb, var(--accent) 45%, var(--line))}
+.hear[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .vrow .sub{font:.76rem/1.4 var(--f-mono);color:var(--muted)}
 .vrow .acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden;width:80px}
@@ -239,6 +241,7 @@ const ORT_DIST = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
 const PHON_WASM = 'https://cdn.jsdelivr.net/npm/@diffusionstudio/piper-wasm@1.0.0/build/piper_phonemize';
 const LAME = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js';
 const CACHE_NAME = 'locutor-voces-v1';
+const SAMPLES = ['https://rhasspy.github.io/piper-samples/samples/', 'https://raw.githubusercontent.com/rhasspy/piper-samples/master/samples/'];
 const QUALITY = {x_low:'Muy baja', low:'Baja', medium:'Media', high:'Alta'};
 const COUNTRY = {Argentina:'Argentina', Mexico:'México', Spain:'España', Colombia:'Colombia', Chile:'Chile', Peru:'Perú', 'United States':'EE. UU.', 'United Kingdom':'Reino Unido', Brazil:'Brasil', Portugal:'Portugal'};
 const SAMPLE = `Hola, esto es Locutor. Pegá cualquier texto, elegí una voz y descargalo como audio.
@@ -589,6 +592,40 @@ function drawWave(){
   ctx.globalAlpha = 1;
 }
 
+/* ---------- muestras: escuchar una voz sin descargarla ---------- */
+const preview = new Audio();
+preview.preload = 'none';
+let previewKey = null;
+function sampleUrls(key, sid){
+  const onnx = voiceFiles(catalog[key]).onnx; if(!onnx) return [];
+  const dir = onnx.replace(/\/[^/]+$/, '');
+  const urls = [];
+  for(const sp of [sid || 0, 0]) for(const base of SAMPLES) urls.push(`${base}${dir}/speaker_${sp}.mp3`);
+  return [...new Set(urls)];
+}
+function stopPreview(){ preview.pause(); previewKey = null; refreshPreviewButtons(); }
+function playPreview(key, sid){
+  if(previewKey === key){ stopPreview(); return; }
+  const urls = sampleUrls(key, sid); let i = 0;
+  if(!urls.length) return setStatus('No hay muestra disponible para esta voz.', true);
+  previewKey = key; refreshPreviewButtons();
+  preview.onerror = () => {
+    i++;
+    if(i < urls.length){ preview.src = urls[i]; preview.play().catch(() => {}); }
+    else { stopPreview(); setStatus('No hay muestra disponible para esta voz.', true); }
+  };
+  preview.onended = stopPreview;
+  preview.src = urls[0];
+  preview.play().catch(() => {});
+}
+function refreshPreviewButtons(){
+  document.querySelectorAll('button[data-act="hear"]').forEach(b => {
+    const on = (b.dataset.key || b.closest('.vrow')?.dataset.key) === previewKey;
+    b.textContent = on ? '■ Detener' : '▶ Escuchar muestra';
+    b.setAttribute('aria-pressed', String(on));
+  });
+}
+
 /* ---------- interfaz ---------- */
 function setStatus(msg, err){ const s = $('#status'); s.textContent = msg; s.classList.toggle('err', !!err); }
 function setBar(p){ $('#bar').style.width = p + '%'; }
@@ -602,6 +639,7 @@ function renderVoiceCard(){
     <div class="tags"><span class="tag">${esc(voiceRegion(v) || v.language?.code || '')}</span>
     <span class="tag">Calidad ${esc(QUALITY[v.quality] || v.quality)}</span>
     ${installed.has(state.voice) ? '<span class="tag ok">Descargada</span>' : `<span class="tag">${(f.size/1048576).toFixed(0)} MB</span>`}</div>
+    <div><button class="btn small hear" data-act="hear" data-key="${esc(state.voice)}" type="button">▶ Escuchar muestra</button></div>
     ${f.card ? `<a class="hint" href="${HF + f.card}" target="_blank" rel="noopener" style="color:inherit">Ver ficha y licencia</a>` : ''}`;
   const n = v.num_speakers || 1; const sw = $('#speakerWrap'); const sel = $('#speaker');
   if(n > 1){
@@ -612,6 +650,7 @@ function renderVoiceCard(){
     if(state.sid >= n) state.sid = 0;
     sel.value = String(state.sid);
   } else { sw.hidden = true; state.sid = 0; }
+  refreshPreviewButtons();
 }
 
 function renderLangs(){
@@ -635,13 +674,15 @@ function renderList(){
     const spk = (v.num_speakers || 1) > 1 ? ` · ${v.num_speakers} hablantes` : '';
     return `<div class="vrow${k === state.voice ? ' sel' : ''}" data-key="${esc(k)}">
       <div><div class="name">${esc(voiceLabel(v))} <span class="tag">${esc(voiceRegion(v) || v.language?.code)}</span></div>
-      <div class="sub">${esc(QUALITY[v.quality] || v.quality)}${spk} · ${(f.size/1048576).toFixed(0)} MB</div></div>
+      <div class="sub">${esc(QUALITY[v.quality] || v.quality)}${spk} · ${(f.size/1048576).toFixed(0)} MB</div>
+      <button class="btn small hear" data-act="hear" type="button">▶ Escuchar muestra</button></div>
       <div class="acts">
         ${dl ? `<div class="bar"><span style="width:${Math.round(downloading.get(k)*100)}%"></span></div>` : ''}
         ${k === state.voice ? '<span class="tag ok">En uso</span>' : `<button class="btn small" data-act="use" type="button">Usar</button>`}
         ${inst ? `<button class="btn small ghost" data-act="del" type="button">Quitar</button>` : (dl ? '' : `<button class="btn small" data-act="get" type="button">Descargar</button>`)}
       </div></div>`;
   }).join('');
+  refreshPreviewButtons();
 }
 function updateRowBar(key, p){ const el = document.querySelector(`.vrow[data-key="${CSS.escape(key)}"] .bar span`); if(el) el.style.width = Math.round(p * 100) + '%'; }
 
@@ -703,13 +744,15 @@ $('#speaker').addEventListener('change', e => { state.sid = Number(e.target.valu
 $('#dialogue').checked = state.dialogue;
 $('#dialogue').addEventListener('change', e => { state.dialogue = e.target.checked; store.set('dialogue', state.dialogue); renderRoles(); });
 $('#roles').addEventListener('change', e => { const r = e.target.dataset.role; if(r){ state.roles[r] = e.target.value; store.set('roles', state.roles); } });
-$('#go').addEventListener('click', generate);
+$('#go').addEventListener('click', () => { stopPreview(); generate(); });
+$('#voicecard').addEventListener('click', e => { const b = e.target.closest('button[data-act="hear"]'); if(b) playPreview(b.dataset.key, state.sid); });
 $('#lang').addEventListener('change', e => { state.lang = e.target.value; store.set('lang', state.lang); renderList(); });
 $('#search').addEventListener('input', renderList);
 $('#list').addEventListener('click', async e => {
   const btn = e.target.closest('button[data-act]'); if(!btn) return;
   const key = btn.closest('.vrow').dataset.key;
   try{
+    if(btn.dataset.act === 'hear'){ playPreview(key, 0); return; }
     if(btn.dataset.act === 'use'){ state.voice = key; state.sid = 0; store.set('voice', key); store.set('sid', 0); renderVoiceCard(); renderList(); renderRoles(); }
     if(btn.dataset.act === 'get'){ await installVoice(key); }
     if(btn.dataset.act === 'del'){ await removeVoice(key); }
