@@ -234,9 +234,10 @@ footer a{color:inherit}
 </div>
 
 <script type="module">
+import { createPiperPhonemize } from './piper-phonemize.js';
 const HF = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/';
 const ORT_DIST = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
-const PHONEMIZER = 'https://cdn.jsdelivr.net/npm/phonemizer@1.2.1/+esm';
+const PHON_WASM = 'https://cdn.jsdelivr.net/npm/@diffusionstudio/piper-wasm@1.0.0/build/piper_phonemize';
 const LAME = 'https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js';
 const CACHE_NAME = 'locutor-voces-v1';
 const QUALITY = {x_low:'Muy baja', low:'Baja', medium:'Media', high:'Alta'};
@@ -387,30 +388,27 @@ async function loadVoice(key, onProg){
 }
 
 /* ---------- síntesis ---------- */
-let phonemizeFn = null;
-async function getPhonemizer(){
-  if(phonemizeFn) return phonemizeFn;
-  const mod = await import(PHONEMIZER);
-  phonemizeFn = mod.phonemize || mod.default?.phonemize;
-  if(!phonemizeFn) throw new Error('No se pudo iniciar el fonemizador.');
-  return phonemizeFn;
+// Fonemizador oficial de Piper (eSpeak NG con todos los idiomas) compilado a WebAssembly.
+// Devuelve directamente los IDs de fonemas que espera el modelo.
+function phonemeIds(text, espeakVoice){
+  return new Promise((resolve, reject) => {
+    let done = false;
+    const finish = (fn, v) => { if(!done){ done = true; fn(v); } };
+    setTimeout(() => finish(reject, new Error('El fonemizador tardó demasiado en responder.')), 30000);
+    createPiperPhonemize({
+      print: data => { try{ finish(resolve, JSON.parse(data).phoneme_ids); }catch(e){ finish(reject, e); } },
+      printErr: msg => console.warn('[fonemizador]', msg),
+      locateFile: url => url.endsWith('.wasm') ? PHON_WASM + '.wasm' : url.endsWith('.data') ? PHON_WASM + '.data' : url,
+    }).then(mod => {
+      try{ mod.callMain(['-l', espeakVoice, '--input', JSON.stringify([{ text }]), '--espeak_data', '/espeak-ng-data']); }
+      catch(e){ if(!(e && e.name === 'ExitStatus')) finish(reject, e); }
+    }, err => finish(reject, err));
+  });
 }
 
-function toIds(phonemes, map){
-  const pad = map['_'] ? map['_'][0] : 0;
-  const ids = [...(map['^'] || [1]), pad];
-  for(const ch of Array.from(phonemes)){
-    const v = map[ch];
-    if(!v) continue;
-    ids.push(...v, pad);
-  }
-  ids.push(...(map['$'] || [2]));
-  return ids;
-}
-
-async function synth(entry, phonemes, sid, speed, vary){
+async function synth(entry, rawIds, sid, speed, vary){
   const { session, config } = entry;
-  const ids = toIds(phonemes, config.phoneme_id_map);
+  const ids = rawIds.map(Number);
   const inf = config.inference || {};
   const feeds = {
     input: new ort.Tensor('int64', BigInt64Array.from(ids, BigInt), [1, ids.length]),
@@ -490,8 +488,6 @@ async function generate(){
   try{
     ort.env.wasm.wasmPaths = ORT_DIST;
     ort.env.wasm.numThreads = 1;
-    setStatus('Preparando el fonemizador…');
-    const phonemize = await getPhonemizer();
     const jobs = buildJobs(raw);
     const voices = [...new Set(jobs.map(j => j.voice))];
     for(const key of voices){
@@ -507,12 +503,11 @@ async function generate(){
       setStatus(`Leyendo frase ${i + 1} de ${jobs.length}…`); setBar((i / jobs.length) * 100);
       await tick();
       const lang = entry.config.espeak?.voice || 'es';
-      let ph;
-      try{ ph = await phonemize(job.text, lang); }
-      catch(e){ throw new Error(`El fonemizador no reconoce el idioma "${lang}" de esta voz.`); }
-      const phStr = Array.isArray(ph) ? ph.join(' ') : String(ph);
-      if(!phStr.trim()) continue;
-      const audio = resample(await synth(entry, phStr, job.sid, speed, vary), entry.config.audio?.sample_rate || 22050, rate);
+      let ids;
+      try{ ids = await phonemeIds(job.text, lang); }
+      catch(e){ console.error(e); throw new Error(`No se pudo procesar la pronunciación (${lang}): ${e.message || e}`); }
+      if(!ids || ids.length < 3) continue;
+      const audio = resample(await synth(entry, ids, job.sid, speed, vary), entry.config.audio?.sample_rate || 22050, rate);
       pieces.push(audio);
       subs.push({ start: t, end: t + audio.length / rate, text: job.display });
       t += audio.length / rate;
