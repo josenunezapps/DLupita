@@ -344,7 +344,27 @@ async function run(viewportName, viewport) {
   await browser.close();
 }
 
+// Si un archivo de la app no carga, la pantalla debe explicar el problema en vez de quedar en blanco.
+async function bootFailure() {
+  const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome', headless: true });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.route('**/app/views/home.js', (r) => r.abort());
+  await page.goto(BASE);
+  await page.waitForSelector('text=No se pudo cargar CotizaPro', { timeout: 10000 });
+  check('[arranque] Un archivo faltante muestra un aviso y botón Reintentar', await page.isVisible('#boot-retry'));
+  await page.screenshot({ path: path.join(shotsDir, 'movil-00-error-carga.png') });
+  const slow = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await slow.route('**/app/main.js*', async (r) => { await new Promise((ok) => setTimeout(ok, 1500)); r.continue(); });
+  await slow.goto(BASE, { waitUntil: 'commit' });
+  await slow.waitForSelector('text=Cargando CotizaPro…', { timeout: 5000 });
+  check('[arranque] Mientras carga se ve "Cargando CotizaPro…"', true);
+  await slow.waitForSelector('h1:has-text("Ingresá a tu cuenta")');
+  check('[arranque] Con conexión lenta termina en el login', true);
+  await browser.close();
+}
+
 try {
+  await bootFailure();
   await run('movil', { width: 390, height: 844 });
   await run('escritorio', { width: 1280, height: 800 });
 } catch (err) {

@@ -8,12 +8,49 @@
   <meta name="theme-color" content="#151412" media="(prefers-color-scheme: dark)">
   <title>CotizaPro</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23C2410C'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' font-weight='700' text-anchor='middle' fill='%23fff'%3EC%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="app/styles.css">
+  <link rel="stylesheet" href="app/styles.css?v=2">
+  <!-- Descarga todos los módulos en paralelo en vez de en cascada. -->
+  <link rel="modulepreload" href="app/main.js?v=2">
+  <link rel="modulepreload" href="app/config.js">
+  <link rel="modulepreload" href="app/lib/api.js">
+  <link rel="modulepreload" href="app/lib/dom.js">
+  <link rel="modulepreload" href="app/lib/money.js">
+  <link rel="modulepreload" href="app/lib/validate.js">
+  <link rel="modulepreload" href="app/views/shell.js">
+  <link rel="modulepreload" href="app/views/auth.js">
+  <link rel="modulepreload" href="app/views/onboarding.js">
+  <link rel="modulepreload" href="app/views/home.js">
+  <link rel="modulepreload" href="app/views/customers.js">
+  <link rel="modulepreload" href="app/views/catalog.js">
+  <link rel="modulepreload" href="app/views/settings.js">
 </head>
 <body>
   <div id="app">
-    <noscript>CotizaPro necesita JavaScript activado.</noscript>
+    <!-- Visible desde el primer instante, antes de que cargue el JavaScript. -->
+    <div class="boot" id="boot">
+      <div class="spinner" id="boot-spinner" aria-hidden="true"></div>
+      <p id="boot-msg" role="status">Cargando CotizaPro…</p>
+      <button class="btn btn-primary" id="boot-retry" type="button" hidden onclick="location.reload()">Reintentar</button>
+    </div>
+    <noscript><p class="boot">CotizaPro necesita JavaScript activado.</p></noscript>
   </div>
-  <script type="module" src="app/main.js"></script>
+  <script>
+    // Si la app no arranca, mostrar el motivo en pantalla en vez de dejarla en blanco.
+    window.__cpFail = function (msg) {
+      if (window.__cpStarted) return;
+      var m = document.getElementById('boot-msg');
+      var r = document.getElementById('boot-retry');
+      var s = document.getElementById('boot-spinner');
+      if (m) m.textContent = 'No se pudo cargar CotizaPro. ' + msg;
+      if (r) r.hidden = false;
+      if (s) s.hidden = true;
+    };
+    window.addEventListener('error', function (e) {
+      window.__cpFail('Detalle: ' + (e.message || 'error al cargar un archivo') + (e.filename ? ' (' + e.filename.split('/').pop() + ')' : ''));
+    });
+    setTimeout(function () { window.__cpFail('Está tardando demasiado: revisá tu conexión.'); }, 20000);
+  </script>
+  <script type="module" src="app/main.js?v=2" onerror="__cpFail('Falta un archivo de la app o tu navegador no es compatible.')"></script>
+  <script nomodule>window.__cpFail('Tu navegador es muy antiguo. Actualizá Chrome o abrilo en otro navegador.');</script>
 </body>
 </html>

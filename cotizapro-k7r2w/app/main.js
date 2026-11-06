@@ -7,6 +7,9 @@ import { customersView, customerFormView } from './views/customers.js';
 import { catalogView, catalogFormView } from './views/catalog.js';
 import { settingsView } from './views/settings.js';
 
+// Todos los módulos cargaron: el aviso de error de index.html ya no aplica.
+window.__cpStarted = true;
+
 const app = document.getElementById('app');
 const state = { org: null, orgLoaded: false };
 
