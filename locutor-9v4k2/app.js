@@ -22,7 +22,7 @@ const ST_MODELS = ['duration_predictor', 'text_encoder', 'vector_estimator', 'vo
 const ST_VOICES = ['F1', 'F2', 'F3', 'F4', 'F5', 'M1', 'M2', 'M3', 'M4', 'M5'];
 const ST_STEPS = 5;
 
-const QUALITY = { x_low: 'Muy baja', low: 'Baja', medium: 'Media', high: 'Alta' };
+const QUALITY = { x_low: 'Muy baja · muy rápida', low: 'Baja · rápida', medium: 'Media', high: 'Alta · más lenta' };
 const COUNTRY = { Argentina: 'Argentina', Mexico: 'México', Spain: 'España', Colombia: 'Colombia', Chile: 'Chile', Peru: 'Perú', 'United States': 'EE. UU.', 'United Kingdom': 'Reino Unido', Brazil: 'Brasil', Portugal: 'Portugal' };
 const ENGINE_LABEL = { kokoro: 'Kokoro', supertonic: 'Supertonic' };
 const SAMPLE = `Hola, esto es Locutor. Pegá cualquier texto, elegí una voz y descargalo como audio.
@@ -45,7 +45,7 @@ const loaded = new Map();      // clave -> datos listos para sintetizar
 const downloading = new Map(); // clave -> progreso 0..1
 const memFiles = new Map();    // respaldo si el navegador no permite caché
 let kokoroModel = null, stModel = null;
-let busy = false, result = null;
+let busy = false, cancelRequested = false, result = null;
 
 const state = {
   voice: store.get('voice', null),
@@ -101,7 +101,25 @@ async function ensureOrt() {
     await loadScript(ORT_DIST + 'ort.min.js');
   }
   ort.env.wasm.wasmPaths = ORT_DIST;
-  ort.env.wasm.numThreads = 1;
+  ort.env.wasm.numThreads = threadCount();
+}
+
+function threadCount() {
+  if (!window.crossOriginIsolated || store.get('nothreads', false)) return 1;
+  return Math.max(1, Math.min(4, navigator.hardwareConcurrency || 2));
+}
+
+async function createSession(blob) {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  try {
+    return await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+  } catch (e) {
+    if (threadCount() > 1) {
+      store.set('nothreads', true);
+      throw new Error('El motor no pudo usar varios núcleos en este dispositivo. Recargá la página: va a seguir en modo simple.');
+    }
+    throw e;
+  }
 }
 
 /* ---------- registro de voces ---------- */
@@ -242,13 +260,13 @@ async function loadVoice(key, onProg) {
   if (v.engine === 'piper') {
     const config = JSON.parse(await (await cachedBlob(v.jsonUrl)).text());
     const blob = await cachedBlob(v.onnxUrl);
-    const session = await ort.InferenceSession.create(new Uint8Array(await blob.arrayBuffer()), { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+    const session = await createSession(blob);
     entry = { engine: 'piper', session, config, rate: config.audio?.sample_rate || 22050 };
   } else if (v.engine === 'kokoro') {
     if (!kokoroModel) {
       const cfg = JSON.parse(await (await cachedBlob(KOKORO.config)).text());
       const blob = await cachedBlob(KOKORO.model);
-      const session = await ort.InferenceSession.create(new Uint8Array(await blob.arrayBuffer()), { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
+      const session = await createSession(blob);
       kokoroModel = { session, vocab: cfg.vocab || {} };
     }
     const r = await fetch(`./kokoro/${v.id}.bin`);
@@ -261,7 +279,7 @@ async function loadVoice(key, onProg) {
       const sessions = [];
       for (const m of ST_MODELS) {
         const blob = await cachedBlob(`${ST_BASE}onnx/${m}.onnx`);
-        sessions.push(await ort.InferenceSession.create(new Uint8Array(await blob.arrayBuffer()), { executionProviders: ['wasm'], graphOptimizationLevel: 'all' }));
+        sessions.push(await createSession(blob));
       }
       stModel = new TextToSpeech(cfgs, new UnicodeProcessor(indexer), ...sessions);
     }
@@ -274,28 +292,45 @@ async function loadVoice(key, onProg) {
 }
 
 /* ---------- pronunciación (fonemizador oficial de Piper, eSpeak NG) ---------- */
-function phonemize(text, espeakVoice) {
-  return new Promise((resolve, reject) => {
-    let done = false;
-    const finish = (fn, v) => { if (!done) { done = true; fn(v); } };
-    setTimeout(() => finish(reject, new Error('El fonemizador tardó demasiado en responder.')), 30000);
-    createPiperPhonemize({
-      print: data => { try { finish(resolve, JSON.parse(data)); } catch (e) { finish(reject, e); } },
-      printErr: msg => console.warn('[fonemizador]', msg),
-      locateFile: url => url.endsWith('.wasm') ? PHON_WASM + '.wasm' : url.endsWith('.data') ? PHON_WASM + '.data' : url,
-    }).then(mod => {
-      try { mod.callMain(['-l', espeakVoice, '--input', JSON.stringify([{ text }]), '--espeak_data', '/espeak-ng-data']); }
-      catch (e) { if (!(e && e.name === 'ExitStatus')) finish(reject, e); }
-    }, err => finish(reject, err));
-  });
+// Se crea una sola vez por sesión. Sus archivos (18 MB) se guardan en la caché de Locutor
+// y se le pasan ya cargados, para no volver a descargarlos en cada frase.
+let phonPromise = null, phonOut = [];
+function getPhonemizer(onProg) {
+  if (!phonPromise) {
+    phonPromise = (async () => {
+      const wasm = new Uint8Array(await (await cachedBlob(PHON_WASM + '.wasm', 635_212)).arrayBuffer());
+      const data = await (await cachedBlob(PHON_WASM + '.data', 18_077_249, onProg)).arrayBuffer();
+      return createPiperPhonemize({
+        print: line => phonOut.push(line),
+        printErr: msg => console.warn('[fonemizador]', msg),
+        wasmBinary: wasm,
+        getPreloadedPackage: () => data,
+        locateFile: url => url.endsWith('.wasm') ? PHON_WASM + '.wasm' : url.endsWith('.data') ? PHON_WASM + '.data' : url,
+      });
+    })();
+    phonPromise.catch(() => { phonPromise = null; });
+  }
+  return phonPromise;
+}
+
+async function phonemizeAll(texts, espeakVoice) {
+  if (!texts.length) return [];
+  const mod = await getPhonemizer();
+  const run = list => {
+    phonOut = [];
+    try { mod.callMain(['-l', espeakVoice, '--input', JSON.stringify(list.map(text => ({ text }))), '--espeak_data', '/espeak-ng-data']); }
+    catch (e) { if (!(e && e.name === 'ExitStatus')) throw e; }
+    return phonOut.map(l => JSON.parse(l));
+  };
+  const all = run(texts);
+  if (all.length === texts.length) return all;
+  return texts.map(t => run([t])[0] || { phoneme_ids: [], phonemes: [] });
 }
 
 /* ---------- síntesis por motor ---------- */
-async function synthPiper(entry, text, sid, speed, vary) {
+async function synthPiper(entry, ph, sid, speed, vary) {
   const { session, config } = entry;
-  const lang = config.espeak?.voice || 'es';
-  const res = await phonemize(text, lang);
-  const ids = (res.phoneme_ids || []).map(Number);
+  const ids = (ph?.phoneme_ids || []).map(Number);
   if (ids.length < 3) return new Float32Array(0);
   const inf = config.inference || {};
   const feeds = {
@@ -308,9 +343,8 @@ async function synthPiper(entry, text, sid, speed, vary) {
   return out[session.outputNames[0]].data;
 }
 
-async function synthKokoro(entry, text, speed) {
-  const res = await phonemize(text, KOKORO.espeak);
-  const ph = (res.phonemes || []).join('');
+async function synthKokoro(entry, phRes, speed) {
+  const ph = (phRes?.phonemes || []).join('');
   const tokens = Array.from(ph).map(c => kokoroModel.vocab[c]).filter(v => v != null).slice(0, 510);
   if (!tokens.length) return new Float32Array(0);
   const ids = [0, ...tokens, 0];
@@ -385,12 +419,40 @@ function buildJobs(raw) {
   return jobs;
 }
 
+/* ---------- escuchar mientras se genera ---------- */
+let actx = null, live = null;
+function startLive() {
+  if (!$('#liveplay').checked) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    actx.resume();
+    live = { t: 0, sources: [] };
+  } catch { live = null; }
+}
+function liveAppend(audio, rate, gapAfter) {
+  if (!live || !actx || !audio.length) return;
+  const buf = actx.createBuffer(1, audio.length, rate);
+  buf.copyToChannel(audio, 0);
+  const src = actx.createBufferSource(); src.buffer = buf; src.connect(actx.destination);
+  const at = Math.max(live.t, actx.currentTime + 0.08);
+  src.start(at); live.sources.push(src);
+  live.t = at + buf.duration + gapAfter;
+}
+function stopLive() { if (live) { live.sources.forEach(s => { try { s.stop(); } catch { } }); live = null; } }
+
+function setBusy(on) {
+  busy = on; setOnAir(on);
+  const b = $('#go'); b.textContent = on ? 'Detener' : 'Generar audio'; b.classList.toggle('stop', on);
+}
+
 async function generate() {
   if (busy) return;
   const raw = $('#text').value.trim();
   if (!raw) return setStatus('Escribí o pegá un texto primero.', true);
   if (!state.voice) return setStatus('Elegí una voz del catálogo.', true);
-  busy = true; setOnAir(true); $('#go').disabled = true; setBar(0);
+  cancelRequested = false; stopLive(); startLive(); // el audio en vivo se habilita con este toque
+  setBusy(true); setBar(0);
+  const pieces = [], subs = []; let t = 0, rate = 22050, stopped = false;
   try {
     await ensureOrt();
     const jobs = buildJobs(raw);
@@ -399,18 +461,36 @@ async function generate() {
       const label = voices.get(key)?.name || key;
       setStatus(installed.has(key) ? `Cargando la voz ${label}…` : `Descargando la voz ${label}…`);
       await loadVoice(key, p => { setBar(p * 100); setStatus(`Descargando la voz ${label}… ${Math.round(p * 100)} %`); });
+      if (cancelRequested) throw new Error('Generación detenida.');
     }
-    const rate = Math.max(...keys.map(k => loaded.get(k).rate));
+    rate = Math.max(...keys.map(k => loaded.get(k).rate));
+
+    // Pronunciación de todas las frases de una vez, agrupadas por idioma.
+    const byLang = new Map();
+    jobs.forEach((job, i) => {
+      const e = loaded.get(job.voice);
+      const lang = e.engine === 'piper' ? (e.config.espeak?.voice || 'es') : e.engine === 'kokoro' ? KOKORO.espeak : null;
+      if (lang) { if (!byLang.has(lang)) byLang.set(lang, []); byLang.get(lang).push(i); }
+    });
+    if (byLang.size) {
+      setStatus('Preparando la pronunciación…');
+      await getPhonemizer(p => { setBar(p * 100); setStatus(`Descargando el motor de pronunciación (solo la primera vez)… ${Math.round(p * 100)} %`); });
+      for (const [lang, idx] of byLang) {
+        const res = await phonemizeAll(idx.map(i => jobs[i].text), lang);
+        idx.forEach((i, k) => { jobs[i].ph = res[k]; });
+      }
+    }
+
     const speed = Number($('#speed').value), pause = Number($('#pause').value), vary = Number($('#vary').value);
-    const pieces = [], subs = []; let t = 0;
     for (let i = 0; i < jobs.length; i++) {
+      if (cancelRequested) { stopped = true; break; }
       const job = jobs[i]; const entry = loaded.get(job.voice);
-      setStatus(`Leyendo frase ${i + 1} de ${jobs.length}…`); setBar((i / jobs.length) * 100);
+      setStatus(`Leyendo frase ${i + 1} de ${jobs.length}…${live ? ' Ya podés ir escuchando.' : ''}`); setBar((i / jobs.length) * 100);
       await tick();
       let audio;
       try {
-        if (entry.engine === 'piper') audio = await synthPiper(entry, job.text, job.sid, speed, vary);
-        else if (entry.engine === 'kokoro') audio = await synthKokoro(entry, job.text, speed);
+        if (entry.engine === 'piper') audio = await synthPiper(entry, job.ph, job.sid, speed, vary);
+        else if (entry.engine === 'kokoro') audio = await synthKokoro(entry, job.ph, speed);
         else audio = await synthSupertonic(entry, job.text, speed);
       } catch (e) {
         console.error(e);
@@ -418,15 +498,14 @@ async function generate() {
       }
       if (!audio.length) continue;
       audio = resample(audio, entry.rate, rate);
+      const gap = i < jobs.length - 1 ? (job.paraEnd ? pause * 2 : pause) : 0;
+      liveAppend(audio, rate, gap);
       pieces.push(audio);
       subs.push({ start: t, end: t + audio.length / rate, text: job.display });
       t += audio.length / rate;
-      if (i < jobs.length - 1) {
-        const gap = job.paraEnd ? pause * 2 : pause;
-        pieces.push(new Float32Array(Math.round(gap * rate))); t += gap;
-      }
+      if (gap) { pieces.push(new Float32Array(Math.round(gap * rate))); t += gap; }
     }
-    if (!pieces.length) throw new Error('No se generó audio. Revisá que el texto tenga palabras.');
+    if (!pieces.length) throw new Error(stopped ? 'Generación detenida.' : 'No se generó audio. Revisá que el texto tenga palabras.');
     const total = pieces.reduce((n, p) => n + p.length, 0);
     const samples = new Float32Array(total); let off = 0, peak = 0;
     for (const p of pieces) { samples.set(p, off); off += p.length; }
@@ -434,12 +513,13 @@ async function generate() {
     if (peak > 0) { const g = Math.min(0.95 / peak, 4); for (let i = 0; i < samples.length; i++) samples[i] *= g; }
     result = { samples, rate, subs, name: slug(raw) };
     showResult();
-    setBar(100); setStatus(`Listo: ${fmtTime(samples.length / rate)} de audio.`);
+    setBar(100);
+    setStatus(stopped ? `Detenido: se guardaron ${fmtTime(samples.length / rate)} de audio.` : `Listo: ${fmtTime(samples.length / rate)} de audio.`);
   } catch (e) {
-    console.error(e);
+    console.error(e); stopLive();
     setStatus(e.message || 'Algo falló al generar el audio. Probá de nuevo.', true); setBar(0);
   } finally {
-    busy = false; setOnAir(false); $('#go').disabled = false;
+    setBusy(false);
   }
 }
 
@@ -746,7 +826,12 @@ $('#speaker').addEventListener('change', e => { state.sid = Number(e.target.valu
 $('#dialogue').checked = state.dialogue;
 $('#dialogue').addEventListener('change', e => { state.dialogue = e.target.checked; store.set('dialogue', state.dialogue); renderRoles(); });
 $('#roles').addEventListener('change', e => { const r = e.target.dataset.role; if (r) { state.roles[r] = e.target.value; store.set('roles', state.roles); } });
-$('#go').addEventListener('click', () => { stopPreview(); generate(); });
+$('#go').addEventListener('click', () => {
+  if (busy) { cancelRequested = true; stopLive(); setStatus('Deteniendo después de la frase actual…'); return; }
+  stopPreview(); generate();
+});
+$('#liveplay').checked = store.get('liveplay', true);
+$('#liveplay').addEventListener('change', e => { store.set('liveplay', e.target.checked); if (!e.target.checked) stopLive(); });
 $('#voicecard').addEventListener('click', e => { const b = e.target.closest('button[data-act="hear"]'); if (b) playPreview(b.dataset.key, state.sid); });
 $('#lang').addEventListener('change', e => { state.lang = e.target.value; store.set('lang', state.lang); renderList(); });
 $('#search').addEventListener('input', renderList);
@@ -778,6 +863,7 @@ $('#dlMp3').addEventListener('click', async () => {
   catch { setStatus('No se pudo crear el MP3. Descargá el WAV.', true); }
 });
 const player = $('#player');
+player.addEventListener('play', stopLive);
 player.addEventListener('timeupdate', drawWave);
 player.addEventListener('seeked', drawWave);
 $('#wave').addEventListener('click', e => { if (!player.duration) return; const r = e.currentTarget.getBoundingClientRect(); player.currentTime = ((e.clientX - r.left) / r.width) * player.duration; });

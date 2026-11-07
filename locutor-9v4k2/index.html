@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Locutor</title>
 <meta name="robots" content="noindex, nofollow">
+<script>
+/* Habilita varios núcleos del procesador para el motor de voz (aislamiento entre orígenes vía service worker). */
+(function () {
+  try {
+    if (window.crossOriginIsolated || !window.isSecureContext || !('serviceWorker' in navigator)) return;
+    if (!('credentialless' in HTMLIFrameElement.prototype)) return; // solo navegadores Chromium
+    navigator.serviceWorker.register('./coi-sw.js').then(function (reg) {
+      if (navigator.serviceWorker.controller) return; // ya controlada: no recargar en bucle
+      try { if (sessionStorage.getItem('locutor-coi')) return; sessionStorage.setItem('locutor-coi', '1'); } catch (e) { return; }
+      var sw = reg.installing || reg.waiting || reg.active;
+      if (!sw) return;
+      if (sw.state === 'activated') location.reload();
+      else sw.addEventListener('statechange', function () { if (sw.state === 'activated') location.reload(); });
+    }).catch(function () {});
+  } catch (e) {}
+})();
+</script>
 <meta name="description" content="Pasá texto a audio con voces neuronales en español que corren en tu navegador. Descargá en WAV, MP3 y subtítulos SRT.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,6 +88,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;fl
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.primary:hover{filter:brightness(1.06)}
+.btn.stop{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .btn.big{width:100%;justify-content:center;padding:14px;font-size:1rem;letter-spacing:.01em}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
 .btn.ghost:hover{color:var(--ink)}
@@ -175,6 +193,7 @@ footer a{color:inherit}
       </div>
 
       <div style="display:flex;flex-direction:column;gap:10px">
+        <label class="switch"><input type="checkbox" id="liveplay" checked> Escuchar mientras se genera</label>
         <label class="switch"><input type="checkbox" id="dialogue"> Modo diálogo</label>
         <p class="hint" id="dialogueHint" hidden>Escribí cada línea como <b>Nombre: texto</b> y asigná una voz a cada personaje.</p>
         <div class="roles" id="roles"></div>
