@@ -11,7 +11,7 @@ const log=(title,detail='')=>{state.events.unshift({at:date(),title,detail});sav
 const toast=t=>{let el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2300)};
 const pName=id=>state.projects.find(p=>p.id===id)?.name||'Proyecto';
 const badge=s=>'<span class="pill '+String(s).toLowerCase().replaceAll('_','-').replaceAll(' ','-')+'">'+escape(String(s).replaceAll('_',' '))+'</span>';
-const btn=(txt,action,kind='')=>'<button class="btn '+kind+'" data-action="'+action+'">'+txt+'</button>';
+const btn=(txt,action,kind='')=>'<button type="button" class="btn '+kind+'" data-action="'+action+'">'+txt+'</button>';
 const panel=(title,body,extra='')=>'<section class="panel"><div class="panelhead"><h2>'+title+'</h2>'+extra+'</div>'+body+'</section>';
 const noData=msg=>'<div class="empty">'+msg+'</div>';
 const taskBy=id=>state.tasks.find(t=>t.id===id);
