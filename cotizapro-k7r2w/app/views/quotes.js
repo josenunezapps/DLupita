@@ -558,7 +558,7 @@ async function issuedView(ctx, q) {
   const status = h('div', { class: 'form-status' });
   const fileName = pdfFileName(m);
 
-  const pdfBtn = h('button', { type: 'button', class: 'btn btn-primary', onclick: () => printDoc(doc, fileName) }, 'Descargar PDF');
+  const pdfBtn = h('button', { type: 'button', class: 'btn btn-primary', onclick: () => printDoc(doc, fileName) }, 'Guardar como PDF');
   const phone = waPhone(m.customer?.phone);
   const waHref = `https://wa.me/${phone || ''}?text=${encodeURIComponent(whatsappText(m))}`;
   const waBtn = h('a', { class: 'btn btn-secondary', href: waHref, target: '_blank', rel: 'noopener' }, 'Enviar por WhatsApp');
