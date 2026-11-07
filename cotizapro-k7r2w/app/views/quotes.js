@@ -558,7 +558,7 @@ async function issuedView(ctx, q) {
   const status = h('div', { class: 'form-status' });
   const fileName = pdfFileName(m);
 
-  const pdfBtn = h('button', { type: 'button', class: 'btn btn-primary', onclick: () => printDoc(doc, fileName) }, 'Descargar PDF');
+  const pdfBtn = h('button', { type: 'button', class: 'btn btn-primary', onclick: () => printDoc(doc, fileName) }, 'Guardar como PDF');
   const phone = waPhone(m.customer?.phone);
   const waHref = `https://wa.me/${phone || ''}?text=${encodeURIComponent(whatsappText(m))}`;
   const waBtn = h('a', { class: 'btn btn-secondary', href: waHref, target: '_blank', rel: 'noopener' }, 'Enviar por WhatsApp');
@@ -615,7 +615,7 @@ async function issuedView(ctx, q) {
     st === 'vencido' ? banner('info', `Venció el ${formatDate(q.valid_until)}. Si el cliente lo acepta igual, podés marcarlo como aceptado o duplicarlo con precios nuevos.`) : null,
     h('div', { class: 'action-bar' }, pdfBtn, waBtn, copyBtn, dupBtn),
     phone ? null : h('p', { class: 'hint' }, 'El cliente no tiene un celular completo cargado: WhatsApp te va a pedir que elijas el contacto.'),
-    h('p', { class: 'hint' }, 'WhatsApp no permite adjuntar el PDF automáticamente: descargalo y adjuntalo en el chat.'),
+    h('p', { class: 'hint' }, 'Para obtener el archivo, elegí «Guardar como PDF» en el diálogo del navegador. Si lo compartís por WhatsApp, adjuntalo manualmente en el chat.'),
     statusBtns.length ? h('section', { class: 'card status-card' }, h('h2', {}, 'Estado'), h('div', { class: 'status-actions' }, statusBtns)) : null,
     status,
     docFrame(doc),

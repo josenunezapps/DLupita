@@ -119,7 +119,7 @@ export function whatsappText(model) {
     `Te paso el presupuesto N.º ${quoteNumber(model.number)} de ${model.issuer.name}${model.title ? `: ${model.title}` : ''}.`,
     `Total: ${formatMoney(model.totals.total_minor, model.currency)}.`,
     model.valid_until ? `Válido hasta el ${formatDate(model.valid_until)}.` : '',
-    'Te adjunto el PDF. Cualquier consulta, avisame.',
+    'Cualquier consulta, avisame.',
   ];
   return parts.filter(Boolean).join(' ');
 }
