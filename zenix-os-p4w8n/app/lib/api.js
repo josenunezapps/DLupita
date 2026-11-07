@@ -229,20 +229,25 @@ export const auth = {
 
 const RETURN = { Prefer: 'return=representation' };
 
+// Zenix OS comparte el proyecto Supabase con CotizaPro: sus tablas y funciones llevan el prefijo zos_.
+// Las vistas usan nombres cortos (products, customers…) y acá se traducen.
+const P = 'zos_';
+const T = (table) => `${P}${table}`;
+
 export const db = {
   select(table, query = '') {
-    return request(`/rest/v1/${table}?${query}`);
+    return request(`/rest/v1/${T(table)}?${query}`);
   },
   async one(table, query) {
-    const rows = await request(`/rest/v1/${table}?${query}&limit=1`);
+    const rows = await request(`/rest/v1/${T(table)}?${query}&limit=1`);
     return rows && rows[0] ? rows[0] : null;
   },
   async insert(table, row) {
-    const rows = await request(`/rest/v1/${table}`, { method: 'POST', body: row, headers: RETURN });
+    const rows = await request(`/rest/v1/${T(table)}`, { method: 'POST', body: row, headers: RETURN });
     return rows[0];
   },
   async update(table, id, patch) {
-    const rows = await request(`/rest/v1/${table}?id=eq.${encodeURIComponent(id)}`, {
+    const rows = await request(`/rest/v1/${T(table)}?id=eq.${encodeURIComponent(id)}`, {
       method: 'PATCH',
       body: patch,
       headers: RETURN,
@@ -251,15 +256,15 @@ export const db = {
     return rows[0];
   },
   async remove(table, id) {
-    const rows = await request(`/rest/v1/${table}?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE', headers: RETURN });
+    const rows = await request(`/rest/v1/${T(table)}?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE', headers: RETURN });
     if (!rows || rows.length === 0) throw new ApiError('No se pudo borrar: no existe o no tenés permiso.', { status: 404 });
     return rows[0];
   },
   rpc(fn, args) {
-    return request(`/rest/v1/rpc/${fn}`, { method: 'POST', body: args });
+    return request(`/rest/v1/rpc/${T(fn)}`, { method: 'POST', body: args });
   },
   async count(table, query = '') {
-    const rows = await request(`/rest/v1/${table}?select=id&${query}`);
+    const rows = await request(`/rest/v1/${T(table)}?select=id&${query}`);
     return rows.length;
   },
 };

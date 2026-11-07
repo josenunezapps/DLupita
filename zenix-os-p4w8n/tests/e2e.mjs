@@ -79,6 +79,10 @@ function createBackend() {
   async function handle(route) {
     const req = route.request();
     const url = new URL(req.url());
+    // La app agrega el prefijo zos_ a tablas y funciones; el simulador trabaja sin prefijo.
+    const prefixed = url.pathname.startsWith('/rest/v1/');
+    if (prefixed && !/^\/rest\/v1\/(rpc\/)?zos_/.test(url.pathname)) return route.fulfill({ status: 404, contentType: 'application/json', body: '{"message":"tabla sin prefijo zos_"}' });
+    url.pathname = url.pathname.replace('/rest/v1/zos_', '/rest/v1/').replace('/rpc/zos_', '/rpc/');
     const method = req.method();
     const body = req.postData() ? JSON.parse(req.postData()) : null;
     const authz = req.headers()['authorization'] || '';
@@ -171,7 +175,7 @@ function createBackend() {
       if (table === 'invitations' && !isRole('owner')) return json(200, []);
       let rows = applyFilters(db[table].filter(visible), url.searchParams);
       if (table === 'products') rows = rows.map((p) => ({ ...p, stock_milli: stockOf(p.id) }));
-      if (table === 'stock_movements') rows = rows.map((m) => { const p = db.products.find((x) => x.id === m.product_id); return { ...m, products: { name: p.name, unit: p.unit } }; });
+      if (table === 'stock_movements') rows = rows.map((m) => { const p = db.products.find((x) => x.id === m.product_id); return { ...m, zos_products: { name: p.name, unit: p.unit } }; });
       return json(200, rows);
     }
     if (method === 'POST') {

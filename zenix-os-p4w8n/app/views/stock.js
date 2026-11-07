@@ -73,14 +73,14 @@ export async function stockView(ctx) {
 
   async function loadHistory() {
     try {
-      const q = `select=id,product_id,qty_milli,kind,reason,created_at,products(name,unit)&order=created_at.desc&limit=50${focus ? `&product_id=eq.${encodeURIComponent(focus)}` : ''}`;
+      const q = `select=id,product_id,qty_milli,kind,reason,created_at,zos_products(name,unit)&order=created_at.desc&limit=50${focus ? `&product_id=eq.${encodeURIComponent(focus)}` : ''}`;
       const rows = await db.select('stock_movements', q);
-      if (focus) historyTitle.textContent = `Movimientos de ${rows[0]?.products?.name || products.find((p) => p.id === focus)?.name || 'este producto'}`;
+      if (focus) historyTitle.textContent = `Movimientos de ${rows[0]?.zos_products?.name || products.find((p) => p.id === focus)?.name || 'este producto'}`;
       history.replaceChildren(...(rows.length ? rows.map((m) => {
         const [label, cls] = KIND[m.kind] || [m.kind, ''];
         return h('div', { class: 'row-item' },
           h('span', { class: 'row-main' },
-            h('span', { class: 'row-title' }, focus ? label : m.products?.name),
+            h('span', { class: 'row-title' }, focus ? label : m.zos_products?.name),
             h('span', { class: 'row-sub' }, [focus ? null : label, m.reason && m.reason !== label ? m.reason : null, fmtDateTime(m.created_at, org.timezone)].filter(Boolean).join(' · ')),
           ),
           h('span', { class: `stock ${cls}` }, `${m.qty_milli > 0 ? '+' : ''}${formatQty(m.qty_milli)}`),
