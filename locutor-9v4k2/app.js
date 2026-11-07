@@ -330,7 +330,7 @@ async function phonemizeAll(texts, espeakVoice) {
 /* ---------- síntesis por motor ---------- */
 async function synthPiper(entry, ph, sid, speed, vary) {
   const { session, config } = entry;
-  const ids = (ph?.phoneme_ids || []).map(Number);
+  const ids = strengthenR((ph?.phoneme_ids || []).map(Number), config.phoneme_id_map);
   if (ids.length < 3) return new Float32Array(0);
   const inf = config.inference || {};
   const feeds = {
@@ -399,6 +399,31 @@ function applyDict(text) {
   return t;
 }
 
+// Siglas: las pronunciables se leen como palabra (IVA, AFIP, ANSES); el resto, letra por letra (YPF, DNI).
+const VOW = 'aeiouáéíóúü';
+const PRONOUNCEABLE = new RegExp(`^[^${VOW}]?[${VOW}]`);
+const HARD_CLUSTER = new RegExp(`[^${VOW}]{3}`);
+function fixAcronyms(text) {
+  if (!$('#acronyms').checked) return text;
+  return text.replace(/(?<![\p{L}\p{N}])\p{Lu}{2,6}(?![\p{L}\p{N}])/gu, w => {
+    const l = w.toLocaleLowerCase('es');
+    return PRONOUNCEABLE.test(l) && !HARD_CLUSTER.test(l) ? l : [...w].join(' ');
+  });
+}
+
+// Erre fuerte: repite el fonema /r/ (vibrante múltiple) para que la voz lo marque más.
+function strengthenR(ids, map) {
+  if (!$('#strongr').checked) return ids;
+  const r = map?.r?.[0], pad = map?._?.[0] ?? 0;
+  if (r == null) return ids;
+  const out = [];
+  for (let i = 0; i < ids.length; i++) {
+    out.push(ids[i]);
+    if (ids[i] === r && ids[i + 1] === pad) out.push(pad, r);
+  }
+  return out;
+}
+
 const ROLE_RE = /^\s*([\p{L}\p{N}][\p{L}\p{N} _-]{0,23}):\s*(.+)$/u;
 
 function buildJobs(raw) {
@@ -414,7 +439,7 @@ function buildJobs(raw) {
       }
     }
     const sentences = splitSentences(body);
-    sentences.forEach((s, i) => jobs.push({ display: s, text: applyDict(s), voice, sid, paraEnd: i === sentences.length - 1 }));
+    sentences.forEach((s, i) => jobs.push({ display: s, text: fixAcronyms(applyDict(s)), voice, sid, paraEnd: i === sentences.length - 1 }));
   }
   return jobs;
 }
@@ -831,6 +856,10 @@ $('#go').addEventListener('click', () => {
   stopPreview(); generate();
 });
 $('#liveplay').checked = store.get('liveplay', true);
+for (const id of ['acronyms', 'strongr']) {
+  $('#' + id).checked = store.get(id, true);
+  $('#' + id).addEventListener('change', e => store.set(id, e.target.checked));
+}
 $('#liveplay').addEventListener('change', e => { store.set('liveplay', e.target.checked); if (!e.target.checked) stopLive(); });
 $('#voicecard').addEventListener('click', e => { const b = e.target.closest('button[data-act="hear"]'); if (b) playPreview(b.dataset.key, state.sid); });
 $('#lang').addEventListener('change', e => { state.lang = e.target.value; store.set('lang', state.lang); renderList(); });
