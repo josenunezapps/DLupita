@@ -5,7 +5,8 @@ self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.mode !== 'navigate') return;
-  e.respondWith(fetch(req).then(res => {
+  // Siempre consulta la versión más nueva de la página (sin esperar el caché de 10 minutos).
+  e.respondWith(fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(res => {
     if (!res || res.status === 0) return res;
     const headers = new Headers(res.headers);
     headers.set('Cross-Origin-Opener-Policy', 'same-origin');

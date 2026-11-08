@@ -1,7 +1,7 @@
 // Locutor — texto a voz en el navegador.
 // Motores: Piper (voces oficiales e importadas), Kokoro y Supertonic 3. Todo corre en el dispositivo.
-import { createPiperPhonemize } from './piper-phonemize.js';
-import { TextToSpeech, UnicodeProcessor, Style } from './supertonic.js';
+import { createPiperPhonemize } from './piper-phonemize.js?v=202611081723';
+import { TextToSpeech, UnicodeProcessor, Style } from './supertonic.js?v=202611081723';
 
 const HF = 'https://huggingface.co/rhasspy/piper-voices/resolve/main/';
 const ORT_DIST = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
