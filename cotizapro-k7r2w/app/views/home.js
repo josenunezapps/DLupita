@@ -8,7 +8,7 @@ import { statusBadge } from './quotes.js';
 export async function homeView(ctx) {
   const org = ctx.state.org;
   const stats = h('div', { class: 'stats' }, [1, 2, 3, 4].map(() => h('div', { class: 'skeleton stat' })));
-  const chartBox = h('div', { class: 'dash-chart-bars' });
+  const chartBox = h('div', { class: 'dash-chart-line' });
   const chartTotal = h('div', { class: 'dash-chart-total' }, '—');
   const donutBox = h('div', { class: 'dash-donut-wrap' });
   const recent = h('div', { class: 'list' }, [1, 2].map(() => h('div', { class: 'skeleton row' })));
@@ -17,16 +17,17 @@ export async function homeView(ctx) {
 
   shell(ctx, {
     section: 'inicio',
-    title: 'Inicio',
+    title: '¡Bienvenido a CotizaPro!',
     actions: h('a', { class: 'btn btn-primary', href: '#/presupuestos/nuevo' }, '+ Nuevo presupuesto'),
   },
-    h('div', { class: 'dashboard-header' }, h('div', {}, h('div', { class: 'dashboard-eyebrow' }, 'PANEL DE CONTROL'), h('p', { class: 'dashboard-intro' }, 'Gestioná presupuestos, clientes y trabajos en un solo lugar.'))),
+    h('div', { class: 'dashboard-header' }, h('div', {}, h('div', { class: 'dashboard-eyebrow' }, 'PANEL DE CONTROL'), h('p', { class: 'dashboard-intro' }, 'Gestioná tus presupuestos, clientes y facturación desde un solo lugar.'))),
     stats,
     h('div', { class: 'dash-grid' },
       h('section', { class: 'card dash-panel' }, h('h2', {}, 'Evolución del monto presupuestado'), h('p', { class: 'muted' }, 'Últimos seis meses · presupuestos emitidos'), chartTotal, chartBox),
       h('section', { class: 'card dash-panel' }, h('h2', {}, 'Estado de presupuestos'), h('p', { class: 'muted' }, 'Distribución de presupuestos emitidos'), donutBox)),
-    h('section', { class: 'stack-sm' },
-      h('div', { class: 'section-head' }, h('h2', {}, 'Últimos presupuestos'), h('a', { href: '#/presupuestos' }, 'Ver todos')),
+    h('section', { class: 'stack-sm recent-budget-panel' },
+      h('div', { class: 'section-head' }, h('h2', {}, '▤  Últimos presupuestos'), h('a', { href: '#/presupuestos' }, 'Ver todos los presupuestos →')),
+      h('div', { class: 'recent-table-head' }, h('span', {}, 'N.º'), h('span', {}, 'Cliente / trabajo'), h('span', {}, 'Fecha'), h('span', {}, 'Monto'), h('span', {}, 'Estado')),
       recent,
     ),
     checkCard,
@@ -48,10 +49,10 @@ export async function homeView(ctx) {
     const thisMonth = issuedRows.filter(q => String(q.created_at || '').startsWith(monthKey));
     const monthTotal = thisMonth.reduce((sum,q) => sum + (Number(q.quote_total) || 0), 0);
     stats.replaceChildren(
-      statCard('Presupuestos emitidos', String(issuedRows.length), '#/presupuestos'),
-      statCard('Aceptados', String(accepted.length), '#/presupuestos', accepted.length ? formatMoney(acceptedTotal, org.currency) : null),
-      statCard('Pendientes', String(open.length), '#/presupuestos'),
-      statCard('Total del mes', formatMoney(monthTotal, org.currency), '#/presupuestos')
+      statCard('Presupuestos emitidos', String(issuedRows.length), '#/presupuestos', null, '▤'),
+      statCard('Aceptados', String(accepted.length), '#/presupuestos', null, '✓'),
+      statCard('Pendientes', String(open.length), '#/presupuestos', null, '◷'),
+      statCard('Total del mes', formatMoney(monthTotal, org.currency), '#/presupuestos', null, '▣')
     );
     const n=issuedRows.length, a=accepted.length, p=open.length;
     const others=Math.max(0,n-a-p);
@@ -75,9 +76,34 @@ export async function homeView(ctx) {
     }
     const max=Math.max(1,...months.map(m=>m.amount));
     chartTotal.textContent=formatMoney(monthTotal,org.currency);
-    chartBox.replaceChildren(...months.map(m=>h('div',{class:'dash-chart-col',title:m.label+': '+formatMoney(m.amount,org.currency)},
-      h('div',{class:'dash-chart-bar',style:'height:'+Math.max(3,Math.round(m.amount/max*134))+'px'}),
-      h('span',{class:'dash-chart-label'},m.label))));
+    const width=620, height=190, left=40, right=12, top=14, bottom=26;
+    const plotW=width-left-right,plotH=height-top-bottom;
+    const xy=months.map((m,i)=>[left+i*plotW/(months.length-1),top+plotH-(m.amount/max)*plotH]);
+    const coords=xy.map(p=>p.join(',')).join(' ');
+    const line='M '+xy.map(p=>p.join(' ')).join(' L ');
+    const fill=line+' L '+xy[xy.length-1][0]+' '+(top+plotH)+' L '+left+' '+(top+plotH)+' Z';
+    const ns='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(ns,'svg');
+    svg.setAttribute('viewBox','0 0 '+width+' '+height);
+    svg.setAttribute('role','img');
+    svg.setAttribute('aria-label','Evolución de importes cotizados en los últimos seis meses');
+    const el=(tag, attrs, value)=>{const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(value!==undefined)e.textContent=value;return e;};
+    const defs=el('defs',{});
+    const gradient=el('linearGradient',{id:'cotiAreaGradient',x1:'0',x2:'0',y1:'0',y2:'1'});
+    gradient.append(el('stop',{offset:'0%','stop-color':'#eb6c1c','stop-opacity':'.23'}),el('stop',{offset:'100%','stop-color':'#eb6c1c','stop-opacity':'.015'}));
+    defs.append(gradient);svg.append(defs);
+    for(let i=0;i<=4;i++){
+      const y=top+plotH*i/4;
+      svg.append(el('line',{x1:left,x2:width-right,y1:y,y2:y,stroke:'#e9ded3','stroke-width':1}));
+      svg.append(el('text',{x:left-7,y:y+4,'text-anchor':'end',fill:'#947e70','font-size':11},i===4?'0':String(Math.round(max*(1-i/4)/100)/10)+'k'));
+    }
+    svg.append(el('path',{d:fill,fill:'url(#cotiAreaGradient)'}));
+    svg.append(el('path',{d:line,fill:'none',stroke:'#e85d13','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round'}));
+    xy.forEach(([x,y],i)=>{
+      svg.append(el('circle',{cx:x,cy:y,r:i===xy.length-1?5:3.5,fill:'#fff',stroke:'#e65b12','stroke-width':2.5}));
+      svg.append(el('text',{x,y:height-4,'text-anchor':'middle',fill:'#8e7568','font-size':12},months[i].label));
+    });
+    chartBox.replaceChildren(svg);
 
 
     if (quotes.length === 0) {
@@ -88,11 +114,10 @@ export async function homeView(ctx) {
     } else {
       recent.replaceChildren(...quotes.slice(0, 5).map((q) => h('a', { class: 'row-item', href: `#/presupuestos/${q.id}` },
         h('span', { class: 'qnum' }, q.number ? quoteNumber(q.number) : '—'),
-        h('span', { class: 'row-main' },
-          h('span', { class: 'row-title' }, q.title || 'Sin título'),
-          h('span', { class: 'row-sub' }, statusBadge(effectiveStatus(q, today)), ' ', q.customers?.name || 'Sin cliente'),
-        ),
+        h('span', { class: 'row-main' }, h('span', { class: 'row-title' }, q.customers?.name || 'Sin cliente'), h('span', { class: 'row-sub' }, q.title || 'Sin título')),
+        h('span', { class: 'row-date' }, q.created_at ? new Intl.DateTimeFormat('es-AR',{day:'2-digit',month:'short',year:'numeric'}).format(new Date(q.created_at)) : '—'),
         h('span', { class: 'amount' }, formatMoney(q.quote_total ?? 0, q.currency || org.currency)),
+        statusBadge(effectiveStatus(q, today)),
       )));
     }
 
@@ -112,8 +137,9 @@ export async function homeView(ctx) {
   }
 }
 
-function statCard(label, n, href, extra = null) {
+function statCard(label, n, href, extra = null, symbol = '▤') {
   return h('a', { class: 'stat', href },
+    h('span', { class: 'stat-icon', 'aria-hidden':'true' }, symbol),
     h('span', { class: 'stat-n' }, n),
     h('span', { class: 'stat-label' }, label),
     extra ? h('span', { class: 'stat-extra' }, extra) : null,
