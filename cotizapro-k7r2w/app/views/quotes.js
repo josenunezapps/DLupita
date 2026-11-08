@@ -507,17 +507,13 @@ export async function quoteEditor(ctx, quote) {
     state.notes = t.notes;
     state.discount_type = t.discount_type;
     state.discount_text = t.discount_text;
-    state.lines = t.lines.map(newLine);
+    state.lines = t.lines.map(l => ({ ...l, key: ++lineSeq }));
     markDirty();
-    // Reconstruir editor para que todos los campos reflejen la nueva plantilla.
-    // No sobrescribimos un borrador existente: si ya tiene ID, se aplican cambios en él.
     titleIn.value = state.title;
-    const notesInput = document.querySelector('[name="notes"]');
-    if (notesInput) notesInput.value = state.notes;
-    const discountTypeInput = document.querySelector('[name="discount_type"]');
-    if (discountTypeInput) { discountTypeInput.value = state.discount_type; discountTypeInput.dispatchEvent(new Event('change')); }
-    const discountInput = document.querySelector('[name="discount_value"]');
-    if (discountInput) { discountInput.value = state.discount_text; discountInput.dispatchEvent(new Event('input')); }
+    notesIn.value = state.notes;
+    discType.value = state.discount_type;
+    syncDisc();
+    discVal.value = state.discount_text;
     paintLines();
     updateTotals();
     toast('Plantilla aplicada; guardá el borrador cuando esté listo');
