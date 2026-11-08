@@ -472,6 +472,7 @@ function setBusy(on) {
 
 async function generate() {
   if (busy) return;
+  if (sampling) return setStatus('Esperá a que termine la muestra que se está preparando.', true);
   const raw = $('#text').value.trim();
   if (!raw) return setStatus('Escribí o pegá un texto primero.', true);
   if (!state.voice) return setStatus('Elegí una voz del catálogo.', true);
@@ -687,10 +688,15 @@ function drawWave() {
   ctx.globalAlpha = 1;
 }
 
-/* ---------- muestras: escuchar una voz sin descargarla ---------- */
+/* ---------- muestras ---------- */
+// Piper oficial: grabación publicada por el proyecto (no hace falta descargar la voz).
+// Kokoro, Supertonic e importadas: Locutor genera la muestra con la voz misma.
 const preview = new Audio();
 preview.preload = 'none';
-let previewKey = null;
+let previewKey = null, sampling = false;
+const sampleCache = new Map();
+const SAMPLE_TEXT = name => `Hola, soy ${name}. Así sueno leyendo un texto en español.`;
+
 function sampleUrls(key, sid) {
   const v = voices.get(key); if (!v?.sampleDir) return [];
   const urls = [];
@@ -698,25 +704,73 @@ function sampleUrls(key, sid) {
   return [...new Set(urls)];
 }
 function stopPreview() { preview.pause(); previewKey = null; refreshPreviewButtons(); }
+
+async function synthSample(key) {
+  const v = voices.get(key);
+  await ensureOrt();
+  const entry = await loadVoice(key, p => setStatus(`Descargando ${v.name}… ${Math.round(p * 100)} %`));
+  const text = SAMPLE_TEXT(v.name);
+  let audio;
+  if (entry.engine === 'supertonic') audio = await synthSupertonic(entry, text, 1);
+  else {
+    setStatus(`Preparando la muestra de ${v.name}…`);
+    await getPhonemizer(p => setStatus(`Descargando el motor de pronunciación (solo la primera vez)… ${Math.round(p * 100)} %`));
+    const lang = entry.engine === 'piper' ? (entry.config.espeak?.voice || 'es') : KOKORO.espeak;
+    const [ph] = await phonemizeAll([text], lang);
+    audio = entry.engine === 'piper' ? await synthPiper(entry, ph, 0, 1, 1) : await synthKokoro(entry, ph, 1);
+  }
+  let peak = 0; for (const x of audio) peak = Math.max(peak, Math.abs(x));
+  const out = Float32Array.from(audio, x => peak ? x * Math.min(0.95 / peak, 4) : x);
+  return toWav(out, entry.rate);
+}
+
+async function playGenerated(key) {
+  const v = voices.get(key);
+  if (busy || sampling) { stopPreview(); return setStatus('Esperá a que termine lo que se está generando.', true); }
+  try {
+    let url = sampleCache.get(key);
+    if (!url) {
+      sampling = true; refreshPreviewButtons();
+      setStatus(`Preparando la muestra de ${v.name}…`);
+      url = URL.createObjectURL(await synthSample(key));
+      sampleCache.set(key, url);
+      setStatus('');
+    }
+    if (previewKey !== key) return;
+    preview.onerror = stopPreview; preview.onended = stopPreview;
+    preview.src = url; preview.play().catch(() => { });
+  } catch (e) {
+    console.error(e); stopPreview(); setStatus(e.message || 'No se pudo generar la muestra.', true);
+  } finally { sampling = false; refreshPreviewButtons(); }
+}
+
 function playPreview(key, sid) {
   if (previewKey === key) { stopPreview(); return; }
-  const urls = sampleUrls(key, sid); let i = 0;
-  if (!urls.length) return setStatus('Esta voz no tiene muestra: descargala y generá un texto corto para escucharla.', true);
+  stopPreview();
   previewKey = key; refreshPreviewButtons();
+  const urls = sampleUrls(key, sid); let i = 0;
+  if (!urls.length) { playGenerated(key); return; }
   preview.onerror = () => {
     i++;
     if (i < urls.length) { preview.src = urls[i]; preview.play().catch(() => { }); }
-    else { stopPreview(); setStatus('No hay muestra disponible para esta voz.', true); }
+    else if (installed.has(key)) playGenerated(key);
+    else { stopPreview(); setStatus('No hay muestra publicada para esta voz: descargala y probala.', true); }
   };
   preview.onended = stopPreview;
   preview.src = urls[0];
   preview.play().catch(() => { });
 }
+
+function previewLabel(key) {
+  if (key === previewKey) return sampling ? '… Preparando' : '■ Detener';
+  const v = voices.get(key);
+  return v?.sampleDir || installed.has(key) || sampleCache.has(key) ? '▶ Escuchar muestra' : '▶ Descargar y probar';
+}
 function refreshPreviewButtons() {
   document.querySelectorAll('button[data-act="hear"]').forEach(b => {
-    const on = (b.dataset.key || b.closest('.vrow')?.dataset.key) === previewKey;
-    b.textContent = on ? '■ Detener' : '▶ Escuchar muestra';
-    b.setAttribute('aria-pressed', String(on));
+    const key = b.dataset.key || b.closest('.vrow')?.dataset.key;
+    b.textContent = previewLabel(key);
+    b.setAttribute('aria-pressed', String(key === previewKey));
   });
 }
 
@@ -742,7 +796,7 @@ function renderVoiceCard() {
   box.innerHTML = `<strong>${esc(v.name)}</strong>
     <div class="tags">${tagsHtml(v)}<span class="tag">${esc(v.quality)}</span>
     ${installed.has(v.key) ? '<span class="tag ok">Descargada</span>' : (sizeText(v) ? `<span class="tag">${esc(sizeText(v))}</span>` : '')}</div>
-    ${v.sampleDir ? `<div><button class="btn small hear" data-act="hear" data-key="${esc(v.key)}" type="button">▶ Escuchar muestra</button></div>` : ''}
+    <div><button class="btn small hear" data-act="hear" data-key="${esc(v.key)}" type="button">${previewLabel(v.key)}</button></div>
     ${v.card ? `<a class="hint" href="${esc(v.card)}" target="_blank" rel="noopener" style="color:inherit">Ver ficha y licencia</a>` : ''}`;
   const sw = $('#speakerWrap'); const sel = $('#speaker');
   if (v.engine === 'piper' && v.speakers > 1) {
@@ -782,7 +836,7 @@ function renderList() {
     return `<div class="vrow${v.key === state.voice ? ' sel' : ''}" data-key="${esc(v.key)}">
       <div><div class="name">${esc(v.name)} ${tagsHtml(v)}</div>
       <div class="sub">${esc(v.quality)}${spk}${size ? ' · ' + esc(size) : ''}</div>
-      ${v.sampleDir ? '<button class="btn small hear" data-act="hear" type="button">▶ Escuchar muestra</button>' : ''}</div>
+      <button class="btn small hear" data-act="hear" type="button">${previewLabel(v.key)}</button></div>
       <div class="acts">
         ${dl ? `<div class="bar"><span style="width:${Math.round(downloading.get(v.key) * 100)}%"></span></div>` : ''}
         ${v.key === state.voice ? '<span class="tag ok">En uso</span>' : '<button class="btn small" data-act="use" type="button">Usar</button>'}
