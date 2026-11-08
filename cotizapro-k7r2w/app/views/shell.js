@@ -56,7 +56,7 @@ export function shell(ctx, { section, title, actions = null, back = null }, ...c
       h('div', { class: 'main-col' },
         h('header', { class: 'topbar' },
           h('form', { class: 'global-search', role: 'search', onsubmit: (e) => { e.preventDefault(); const term=e.currentTarget.elements.namedItem('search')?.value?.trim(); if (term) { sessionStorage.setItem('cotizapro.search', term); ctx.go('presupuestos'); } } }, h('span', { 'aria-hidden':'true' }, '⌕'), h('input', { type:'search', name:'search', placeholder:'Buscar presupuestos o clientes…', 'aria-label':'Buscar presupuestos o clientes' }), h('span', { class:'search-shortcut', 'aria-hidden':'true' }, '↵')),
-          h('div', { class: 'topbar-actions' }, h('a', { class:'btn btn-primary top-new', href:'#/presupuestos/nuevo' }, '+ Nuevo presupuesto'), h('div', { class: 'topbar-org' }, brandDot, h('span', { class: 'org-name' }, org?.name || 'Mi negocio' }))),
+          h('div', { class: 'topbar-actions' }, h('a', { class:'btn btn-primary top-new', href:'#/presupuestos/nuevo' }, '+ Nuevo presupuesto'), h('div', { class: 'topbar-org' }, brandDot, h('span', { class: 'org-name' }, org?.name || 'Mi negocio')))),
           h('div', { class: 'topbar-right mobile-only' }, logoutButton()),
         ),
         h('main', { class: 'content', id: 'main' },
