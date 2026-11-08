@@ -10,6 +10,7 @@ import { renderDoc, docFrame, printDoc } from './quote-doc.js';
 import { shell } from './shell.js';
 import { quotesCSV } from '../lib/export-quotes.js';
 import { listTemplates, saveTemplate, removeTemplate } from '../lib/quote-templates.js';
+import { invoiceChecklist, invoiceSummary } from '../lib/invoice-prep.js';
 
 // ---------------------------------------------------------------------------
 // Lista
@@ -657,6 +658,29 @@ async function issuedView(ctx, q) {
       try { await navigator.clipboard.writeText(whatsappText(m)); toast('Texto copiado'); } catch { toast('No se pudo copiar'); }
     },
   }, 'Copiar texto');
+  // Etapa 1: preparación, sin certificado ni conexión al webservice de ARCA.
+  const invoiceBtn = q.status === 'aceptado'
+    ? h('button', { type: 'button', class: 'btn btn-secondary', onclick: () => {
+      const issues = invoiceChecklist(m);
+      const dlg = h('dialog', { class: 'dialog', 'aria-label': 'Preparar factura ARCA' },
+        h('h2', {}, 'Preparar factura · ARCA'),
+        banner('info', 'Esto NO emite facturas, NO genera CAE ni modifica el presupuesto.'),
+        h('p', {}, 'Antes de facturar verificá tipo de comprobante, condición fiscal, documento del receptor, IVA y punto de venta en ARCA.'),
+        issues.length ? banner('error', issues.join(' ')) : banner('info', 'Los datos comerciales básicos están completos. Aún falta verificar los datos fiscales.'),
+        h('div', { class: 'action-bar' },
+          h('button', { type: 'button', class: 'btn btn-secondary', onclick: async () => {
+            try { await navigator.clipboard.writeText(invoiceSummary(m)); toast('Resumen copiado'); }
+            catch { toast('No se pudo copiar el resumen'); }
+          } }, 'Copiar datos'),
+          h('a', { class: 'btn btn-secondary', href: 'https://www.arca.gob.ar/fe/emision-autorizacion/solicitud-autorizacion.asp', target: '_blank', rel: 'noopener noreferrer' }, 'Guía oficial ARCA'),
+          h('button', { type: 'button', class: 'btn btn-ghost', onclick: () => dlg.close() }, 'Cerrar'),
+        ),
+      );
+      dlg.addEventListener('close', () => dlg.remove());
+      document.body.append(dlg);
+      dlg.showModal();
+    } }, 'Preparar factura ARCA')
+    : null;
   const dupBtn = h('button', { type: 'button', class: 'btn btn-ghost' }, 'Duplicar');
   dupBtn.addEventListener('click', async () => {
     try {
@@ -702,7 +726,7 @@ async function issuedView(ctx, q) {
       h('span', { class: 'muted' }, `${m.customer?.name || ''} · ${formatMoney(m.totals.total_minor, m.currency)}`),
     ),
     st === 'vencido' ? banner('info', `Venció el ${formatDate(q.valid_until)}. Si el cliente lo acepta igual, podés marcarlo como aceptado o duplicarlo con precios nuevos.`) : null,
-    h('div', { class: 'action-bar' }, pdfBtn, waBtn, copyBtn, dupBtn),
+    h('div', { class: 'action-bar' }, pdfBtn, waBtn, copyBtn, dupBtn, invoiceBtn),
     phone ? null : h('p', { class: 'hint' }, 'El cliente no tiene un celular completo cargado: WhatsApp te va a pedir que elijas el contacto.'),
     h('p', { class: 'hint' }, 'Para obtener el archivo, elegí «Guardar como PDF» en el diálogo del navegador. Si lo compartís por WhatsApp, adjuntalo manualmente en el chat.'),
     statusBtns.length ? h('section', { class: 'card status-card' }, h('h2', {}, 'Estado'), h('div', { class: 'status-actions' }, statusBtns)) : null,
