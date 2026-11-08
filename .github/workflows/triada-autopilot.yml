@@ -12,6 +12,11 @@ on:
         type: string
         required: true
         default: "triada-lab-7b4e91/app.js"
+      dry_run:
+        description: "Primero validar sin llamar a ninguna IA ni gastar dinero"
+        required: true
+        type: boolean
+        default: true
       authorize_paid_api_calls:
         description: "Autorizo ESTE intento: una llamada a Claude y una a OpenAI (pueden tener costo)"
         required: true
@@ -25,7 +30,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   agents:
-    if: ${{ inputs.authorize_paid_api_calls == true && github.actor == 'josenunezapps' }}
+    if: ${{ github.actor == 'josenunezapps' && (inputs.dry_run == true || inputs.authorize_paid_api_calls == true) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -39,6 +44,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TRIADA_DRY_RUN: ${{ inputs.dry_run }}
           TRIADA_TASK: ${{ inputs.task }}
           TRIADA_FILES: ${{ inputs.files }}
           TRIADA_RUN_ID: ${{ github.run_id }}
