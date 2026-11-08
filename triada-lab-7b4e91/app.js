@@ -45,7 +45,7 @@ function autoPanel(){
  '<div class="detailrow"><label>Archivo autorizado de ejemplo</label><p class="mono">triada-lab-7b4e91/app.js</p></div>'+
  '<div class="detailrow"><label>Estado real</label><p>Preparado en GitHub. API de Claude / OpenAI: no configuradas ni probadas; no se realizaron llamadas pagas. Solo admite rutas dentro de triada-lab-7b4e91/.</p></div>'+
  '<div class="actions">'+btn('Copiar objetivo','copyAutoTask')+btn('Copiar ruta','copyAutoPaths','alt')+'<a class="btn" href="'+url+'" target="_blank" rel="noopener noreferrer">Abrir GitHub Actions ↗</a></div>'+
- '<p class="muted-sm" style="margin-top:14px">Para activarlo: configurar ANTHROPIC_API_KEY y OPENAI_API_KEY como Secrets del repositorio; ir a Actions → TRÍADA → Run workflow, pegar objetivo y rutas, marcar autorización para esa ejecución. Nunca pegues claves en esta web.</p>'
+ '<p class="muted-sm" style="margin-top:14px">Para activarlo: configurar ANTHROPIC_API_KEY y OPENAI_API_KEY como Secrets del repositorio; ir a Actions → TRÍADA → Run workflow. Primero usar dry_run activado (sin costo). Para una ejecución real, desactivar dry_run y marcar autorización explícita de llamadas pagas. Nunca pegues claves en esta web.</p>'
  )+'</div>';
 }
 
