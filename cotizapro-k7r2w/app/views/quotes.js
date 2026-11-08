@@ -8,6 +8,7 @@ import {
 } from '../lib/quotes.js';
 import { renderDoc, docFrame, printDoc } from './quote-doc.js';
 import { shell } from './shell.js';
+import { quotesCSV } from '../lib/export-quotes.js';
 
 // ---------------------------------------------------------------------------
 // Lista
@@ -31,6 +32,7 @@ export async function quotesView(ctx) {
   const currency = ctx.state.org.currency;
   const list = h('div', { class: 'list', 'aria-live': 'polite' });
   const search = h('input', { type: 'search', class: 'search', placeholder: 'Buscar por título o cliente', 'aria-label': 'Buscar presupuestos', autocomplete: 'off' });
+  const exportBtn = h('button', { type: 'button', class: 'btn btn-secondary btn-sm', disabled: true }, 'Exportar CSV');
   let filter = 'todos';
   const chips = h('div', { class: 'chips', role: 'tablist', 'aria-label': 'Filtrar por estado' });
 
@@ -38,7 +40,7 @@ export async function quotesView(ctx) {
     section: 'presupuestos',
     title: 'Presupuestos',
     actions: h('a', { class: 'btn btn-primary', href: '#/presupuestos/nuevo' }, '+ Nuevo presupuesto'),
-  }, chips, h('div', { class: 'toolbar' }, search), list);
+  }, chips, h('div', { class: 'toolbar' }, search, exportBtn), list);
 
   let rows = [];
   const today = todayISO();
@@ -53,13 +55,29 @@ export async function quotesView(ctx) {
     }));
   }
 
-  function paintList() {
+  function filteredRows() {
     const test = FILTERS.find(([k]) => k === filter)[2];
     const term = search.value.trim().toLowerCase();
-    const visible = rows.filter((r) => test(effectiveStatus(r, today)) && (!term
+    return rows.filter((r) => test(effectiveStatus(r, today)) && (!term
       || (r.title || '').toLowerCase().includes(term)
       || (r.customers?.name || '').toLowerCase().includes(term)
       || quoteNumber(r.number).includes(term)));
+  }
+
+  exportBtn.addEventListener('click', () => {
+    const selected = filteredRows();
+    if (!selected.length) return;
+    const url = URL.createObjectURL(new Blob([quotesCSV(selected, currency, today)], { type: 'text/csv;charset=utf-8' }));
+    const link = h('a', { href: url, download: `cotizapro-presupuestos-${today}.csv` });
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  function paintList() {
+    const visible = filteredRows();
+    exportBtn.disabled = visible.length === 0;
     if (rows.length === 0) {
       list.replaceChildren(h('div', { class: 'empty' },
         h('p', { class: 'empty-title' }, 'Todavía no hiciste presupuestos'),
