@@ -2,7 +2,7 @@ import { h, mount, field, showErrors, formValues, banner, busy, toast, debounce 
 import { db, searchTerm } from '../lib/api.js';
 import { parseMoney, formatMoney, minorToInput } from '../lib/money.js';
 import * as v from '../lib/validate.js';
-import { shell } from './shell.js';
+import { shell } from './shell.js?v=20261108-fix2';
 
 export const KINDS = [
   ['material', 'Material'],
