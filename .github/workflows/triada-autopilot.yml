@@ -1,0 +1,55 @@
+name: "TRÍADA · Claude + auditoría OpenAI"
+run-name: "TRÍADA · ${{ inputs.task }}"
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Objetivo aprobado (máximo 1800 caracteres)"
+        type: string
+        required: true
+      files:
+        description: "Hasta 3 rutas exactas separadas por coma (solo triada-lab-7b4e91/)"
+        type: string
+        required: true
+        default: "triada-lab-7b4e91/app.js"
+      authorize_paid_api_calls:
+        description: "Autorizo ESTE intento: una llamada a Claude y una a OpenAI (pueden tener costo)"
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: triada-autopilot-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  agents:
+    if: ${{ inputs.authorize_paid_api_calls == true }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - name: Verificar y coordinar agentes
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TRIADA_TASK: ${{ inputs.task }}
+          TRIADA_FILES: ${{ inputs.files }}
+          TRIADA_RUN_ID: ${{ github.run_id }}
+          TRIADA_CLAUDE_MODEL: ${{ vars.TRIADA_CLAUDE_MODEL }}
+          TRIADA_OPENAI_MODEL: ${{ vars.TRIADA_OPENAI_MODEL }}
+        run: node triada-lab-7b4e91/agent/runner.cjs
+      - name: Guardar evidencia de ejecución
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: triada-informe-${{ github.run_id }}
+          path: triada-agent-report.md
+          if-no-files-found: ignore
+          retention-days: 14
