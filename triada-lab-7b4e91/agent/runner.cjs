@@ -42,6 +42,7 @@ async function run(){
  const files=targets.map(p=>{const f=full(p);if(fs.statSync(f).size>34000)fail('Archivo mayor de 34 KB: '+p);return {path:p,content:fs.readFileSync(f,'utf8')}});
  if(files.reduce((n,f)=>n+f.content.length,0)>50000)fail('Contexto demasiado grande');
  note('## Objetivo aprobado\n'+task+'\n\nArchivos: '+targets.join(', '));
+ if(process.env.TRIADA_DRY_RUN==='true'){note('**DRY RUN: OK** · rutas/archivos verificados; llamadas de IA: NO EJECUTADO; costo API: 0; PR: NO CREADO');return;}
  if(!process.env.ANTHROPIC_API_KEY||!process.env.OPENAI_API_KEY)fail('Faltan claves ANTHROPIC_API_KEY / OPENAI_API_KEY. Ninguna llamada fue realizada');
  if(!process.env.GITHUB_TOKEN)fail('Token efímero de GitHub no disponible');
  const developerRules=[
