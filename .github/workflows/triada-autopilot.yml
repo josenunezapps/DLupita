@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   agents:
-    if: ${{ inputs.authorize_paid_api_calls == true }}
+    if: ${{ inputs.authorize_paid_api_calls == true && github.actor == 'josenunezapps' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
