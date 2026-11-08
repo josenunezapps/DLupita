@@ -3,10 +3,10 @@ import { auth } from '../lib/api.js';
 
 const NAV = [
   ['inicio', 'Inicio', 'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z'],
-  ['presupuestos', 'Presupuestos', 'M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM14 3v5h5M9 13h6M9 17h4'],
   ['clientes', 'Clientes', 'M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0zM4 21c0-4 4-6 8-6s8 2 8 6'],
   ['conceptos', 'Conceptos', 'M4 6h16M4 12h16M4 18h10'],
-  ['configuracion', 'Negocio', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12l2-1-1-3-2 .5-1.5-1.5L17 5l-3-1-1 2h-2l-1-2-3 1 .5 2L6 8.5 4 8l-1 3 2 1v0l-2 1 1 3 2-.5L7.5 16 7 18l3 1 1-2h2l1 2 3-1-.5-2 1.5-1.5 2 .5 1-3z'],
+  ['presupuestos', 'Presupuestos', 'M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM14 3v5h5M9 13h6M9 17h4'],
+  ['configuracion', 'Configuración', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19 12l2-1-1-3-2 .5-1.5-1.5L17 5l-3-1-1 2h-2l-1-2-3 1 .5 2L6 8.5 4 8l-1 3 2 1v0l-2 1 1 3 2-.5L7.5 16 7 18l3 1 1-2h2l1 2 3-1-.5-2 1.5-1.5 2 .5 1-3z'],
 ];
 
 function icon(d) {
@@ -49,13 +49,13 @@ export function shell(ctx, { section, title, actions = null, back = null }, ...c
     ctx.app,
     h('div', { class: 'layout' },
       h('aside', { class: 'sidenav' },
-        h('div', { class: 'brand' }, h('span', { class: 'brand-mark' }, 'C'), h('span', {}, 'CotizaPro')),
-        h('nav', { 'aria-label': 'Secciones' }, navItems),
-        h('div', { class: 'sidenav-foot' }, logoutButton()),
+        h('div', { class: 'brand' }, h('span', { class: 'brand-mark' }, '▤'), h('span', { class: 'brand-word' }, h('span', {}, 'CotizaPro'), h('span', { class: 'brand-caption' }, 'by Zenix AR · Gestión comercial'))),
+        h('nav', { 'aria-label': 'Secciones' }, navItems, h('a', { href: '#/presupuestos', class: 'nav-item', title: 'Las facturas todavía se preparan desde presupuestos aceptados' }, icon('M5 3h14v18l-3-2-4 2-4-2-3 2zM9 8h6M9 12h6'), h('span', {}, 'Facturación · preparación'))),
+        h('div', { class: 'sidenav-foot' }, h('span', { class: 'brand-credit' }, '✦ Zenix AR'), h('span', { class: 'brand-caption' }, 'Soluciones de gestión para tu negocio'), logoutButton()),
       ),
       h('div', { class: 'main-col' },
         h('header', { class: 'topbar' },
-          h('div', { class: 'topbar-org' }, brandDot, h('span', { class: 'org-name' }, org?.name || '')),
+          h('div', { class: 'topbar-org' }, brandDot, h('span', { class: 'org-name' }, org?.name || ''), h('span', { class: 'mobile-only' }, ' · CotizaPro')),
           h('div', { class: 'topbar-right mobile-only' }, logoutButton()),
         ),
         h('main', { class: 'content', id: 'main' },
