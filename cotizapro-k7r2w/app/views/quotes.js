@@ -119,6 +119,12 @@ export async function quotesView(ctx) {
   }
   paintChips();
   paintList();
+  const initialSearch = sessionStorage.getItem('cotizapro.search');
+  if (initialSearch) {
+    sessionStorage.removeItem('cotizapro.search');
+    search.value = initialSearch;
+    paintList();
+  }
   search.addEventListener('input', debounce(paintList, 150));
 }
 
