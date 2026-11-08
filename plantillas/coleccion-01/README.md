@@ -1,4 +1,4 @@
-# Colección 01 — 10 plantillas web para negocios
+# Colección 01 — 9 plantillas web para negocios
 
 **Catálogo:** https://josenunezapps.github.io/DLupita/plantillas/coleccion-01/
 
@@ -16,17 +16,16 @@ Esta carpeta es independiente de la página principal y de las demás demos del 
 
 Los formularios de estas cinco páginas **no envían ni almacenan solicitudes**. Muestran una confirmación local explicando que son demostraciones.
 
-## Cinco aplicaciones web
+## Cuatro aplicaciones web
 
 | Carpeta | Modelo | Funciones ya implementadas |
 | --- | --- | --- |
 | `mercato-catalogo/` | Mercato | Búsqueda, filtros, carrito, cantidades, copiar pedido |
-| `turnia-turnos/` | Turnia | Elegir servicio, fecha y horario; crear/cancelar turnos; bloquear horas ocupadas |
 | `flujo-pedidos/` | Flujo | Kanban; crear, avanzar, reabrir y borrar pedidos; indicadores |
 | `nexo-inventario/` | Nexo Stock | Crear/eliminar productos, modificar cantidades, detectar bajo stock, exportar CSV |
 | `cotiza-presupuestos/` | Cotiza | Ítems, cantidades, precios, descuentos, IVA opcional, guardar/reabrir, copiar e imprimir/PDF |
 
-Los datos de las cinco apps se guardan **exclusivamente en localStorage** del navegador, bajo claves diferentes, con información ficticia inicial cuando corresponda. Esto permite probarlas sin alojamiento de backend ni claves de API. **No es persistencia multiusuario ni apta para producción.** Para una venta a un cliente se debe implementar autenticación, permisos, base de datos, validación en servidor y demás integraciones necesarias.
+Los datos de las cuatro apps se guardan **exclusivamente en localStorage** del navegador, bajo claves diferentes, con información ficticia inicial cuando corresponda. Esto permite probarlas sin alojamiento de backend ni claves de API. **No es persistencia multiusuario ni apta para producción.** Para una venta a un cliente se debe implementar autenticación, permisos, base de datos, validación en servidor y demás integraciones necesarias.
 
 ## Archivos comunes
 
@@ -45,14 +44,14 @@ Cada demo tiene `index.html` propio. Las imágenes de los sitios de presentació
 5. Configurar formularios y envío real, controles de acceso y las integraciones que el negocio necesite.
 6. Probar con datos reales, revisar accesibilidad, seguridad, SEO, leyes locales y políticas de privacidad antes de publicar para un cliente.
 
-## Pruebas realizadas
+## Pruebas históricas de la colección original
 
 - Creación de 10 rutas independientes en GitHub Pages y comprobación de respuesta de las 10.
 - Comprobación de carga del catálogo y de ambos archivos compartidos.
 - Verificación sintáctica de los scripts principales de las 5 apps.
 - Chequeo estático de referencias a elementos `id` en las 5 apps.
 
-**No se realizaron pruebas de extremo a extremo de todos los botones mediante un navegador automatizado.**
+**Las verificaciones indicadas arriba pertenecen a la colección original de diez plantillas. Después de retirar una plantilla quedan nueve. No se realizaron pruebas nuevas de extremo a extremo de todas las aplicaciones.**
 
 ## Licencias y uso comercial
 

@@ -1,10 +1,10 @@
-# TurnoFácil — Laboratorio V2 (antes de Supabase)
+# TurnoFácil — Versión única de trabajo (antes de Supabase)
 
 ## Alcance del primer cambio
 
-Ruta: `turnofacil-lab-v2/index.html`
+Ruta: `turnofacil-x9q4m2/index.html`
 
-Origen sin modificar: `turnofacil-x9q4m2/index.html`.
+Se consolidó el laboratorio V2 en la ruta original de TurnoFácil; la versión anterior permanece recuperable en el historial de Git.
 
 - Se conserva la interfaz y el flujo funcional original.
 - El repositorio de demostración se inicializa desde una copia local válida, si existe.
