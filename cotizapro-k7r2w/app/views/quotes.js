@@ -9,6 +9,7 @@ import {
 import { renderDoc, docFrame, printDoc } from './quote-doc.js';
 import { shell } from './shell.js';
 import { quotesCSV } from '../lib/export-quotes.js';
+import { listTemplates, saveTemplate, removeTemplate } from '../lib/quote-templates.js';
 
 // ---------------------------------------------------------------------------
 // Lista
@@ -469,7 +470,81 @@ export async function quoteEditor(ctx, quote) {
     return id;
   }
 
+  // Plantillas del trabajo: sin datos del cliente; guardadas en este dispositivo.
+  const templateSelect = h('select', { 'aria-label': 'Elegir plantilla de presupuesto' });
+  const templateStatus = h('p', { class: 'hint' }, 'Las plantillas se guardan solo en este navegador; no se sincronizan.');
+  const templateSaveBtn = h('button', { type: 'button', class: 'btn btn-secondary btn-sm' }, 'Guardar como plantilla');
+  const templateApplyBtn = h('button', { type: 'button', class: 'btn btn-secondary btn-sm' }, 'Usar plantilla');
+  const templateDeleteBtn = h('button', { type: 'button', class: 'btn btn-ghost btn-sm' }, 'Eliminar plantilla');
+  function refreshTemplates() {
+    const all = listTemplates(org.id);
+    const previous = templateSelect.value;
+    templateSelect.replaceChildren(h('option', { value: '' }, 'Elegí una plantilla…'),
+      ...all.map(t => h('option', { value: t.id }, t.name)));
+    if (all.some(t => t.id === previous)) templateSelect.value = previous;
+    templateApplyBtn.disabled = templateDeleteBtn.disabled = !templateSelect.value;
+  }
+  templateSelect.addEventListener('change', () => {
+    templateApplyBtn.disabled = templateDeleteBtn.disabled = !templateSelect.value;
+  });
+  templateSaveBtn.addEventListener('click', () => {
+    if (!collectForSave(false)) return;
+    const name = window.prompt('Nombre de la plantilla (máximo 80 caracteres):', state.title.trim());
+    if (name === null) return;
+    try {
+      const saved = saveTemplate(org.id, name, state);
+      refreshTemplates();
+      templateSelect.value = saved.id;
+      templateApplyBtn.disabled = templateDeleteBtn.disabled = false;
+      toast('Plantilla guardada en este dispositivo');
+    } catch (err) { mount(status, banner('error', err.message)); }
+  });
+  templateApplyBtn.addEventListener('click', async () => {
+    const t = listTemplates(org.id).find(t => t.id === templateSelect.value);
+    if (!t) return;
+    if (dirty && !(await confirmDialog({ title: 'Usar plantilla', body: ['Esto reemplazará las líneas y condiciones actuales sin guardar. No cambia el cliente seleccionado.'], confirm: 'Aplicar' }))) return;
+    state.title = t.title;
+    state.notes = t.notes;
+    state.discount_type = t.discount_type;
+    state.discount_text = t.discount_text;
+    state.lines = t.lines.map(newLine);
+    markDirty();
+    // Reconstruir editor para que todos los campos reflejen la nueva plantilla.
+    // No sobrescribimos un borrador existente: si ya tiene ID, se aplican cambios en él.
+    titleIn.value = state.title;
+    const notesInput = document.querySelector('[name="notes"]');
+    if (notesInput) notesInput.value = state.notes;
+    const discountTypeInput = document.querySelector('[name="discount_type"]');
+    if (discountTypeInput) { discountTypeInput.value = state.discount_type; discountTypeInput.dispatchEvent(new Event('change')); }
+    const discountInput = document.querySelector('[name="discount_value"]');
+    if (discountInput) { discountInput.value = state.discount_text; discountInput.dispatchEvent(new Event('input')); }
+    paintLines();
+    updateTotals();
+    toast('Plantilla aplicada; guardá el borrador cuando esté listo');
+  });
+  templateDeleteBtn.addEventListener('click', async () => {
+    const t = listTemplates(org.id).find(t => t.id === templateSelect.value);
+    if (!t) return;
+    if (!(await confirmDialog({ title: 'Eliminar plantilla', body: [`Se eliminará «${t.name}» de este dispositivo. No afecta presupuestos existentes.`], confirm: 'Eliminar', danger: true }))) return;
+    try { removeTemplate(org.id, t.id); refreshTemplates(); toast('Plantilla eliminada'); }
+    catch (err) { mount(status, banner('error', err.message)); }
+  });
+  refreshTemplates();
+  const templateCard = h('section', { class: 'card stack-sm' },
+    h('h2', {}, 'Plantillas reutilizables'),
+    h('div', { class: 'toolbar' }, templateSelect, templateApplyBtn, templateSaveBtn, templateDeleteBtn),
+    templateStatus);
   const saveBtn = h('button', { type: 'button', class: 'btn btn-secondary' }, 'Guardar borrador');
+  const dupDraftBtn = !isNew ? h('button', { type: 'button', class: 'btn btn-ghost btn-sm' }, 'Duplicar borrador') : null;
+  dupDraftBtn?.addEventListener('click', async () => {
+    if (dirty && !(await confirmDialog({ title: 'Duplicar borrador', body: ['Los cambios sin guardar no se incluirán en la copia.'], confirm: 'Duplicar' }))) return;
+    try {
+      const id = await busy(dupDraftBtn, () => db.rpc('duplicate_quote', { p_id: state.id }), 'Duplicando…');
+      ctx.setDirty?.(false);
+      toast('Copia creada como nuevo borrador');
+      ctx.go(`presupuestos/${id}`);
+    } catch (err) { mount(status, banner('error', err.message)); }
+  });
   const previewBtn = h('button', { type: 'button', class: 'btn btn-ghost' }, 'Vista previa');
   const issueBtn = h('button', { type: 'button', class: 'btn btn-primary' }, 'Emitir');
   const deleteBtn = isNew ? null : h('button', { type: 'button', class: 'btn btn-ghost btn-sm' }, 'Borrar borrador');
@@ -532,11 +607,11 @@ export async function quoteEditor(ctx, quote) {
     section: 'presupuestos',
     title: isNew ? 'Nuevo presupuesto' : `Borrador${state.title ? `: ${state.title}` : ''}`,
     back: 'presupuestos',
-    actions: deleteBtn,
+    actions: h('div', { class: 'toolbar' }, dupDraftBtn, deleteBtn),
   },
     customers.length === 0 ? banner('info', 'Para emitir necesitás al menos un cliente. Podés armar el borrador igual.') : null,
     h('div', { class: 'editor' },
-      h('div', { class: 'editor-main' }, headCard, linesCard, adjustCard, status),
+      h('div', { class: 'editor-main' }, templateCard, headCard, linesCard, adjustCard, status),
       h('aside', { class: 'editor-side' },
         h('div', { class: 'summary card' },
           h('h2', {}, 'Resumen'),
