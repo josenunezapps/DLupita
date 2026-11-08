@@ -7,7 +7,7 @@ import {
   draftModel, pdfFileName, whatsappText, waPhone,
 } from '../lib/quotes.js';
 import { renderDoc, docFrame, printDoc } from './quote-doc.js';
-import { shell } from './shell.js';
+import { shell } from './shell.js?v=20261108-fix2';
 import { quotesCSV } from '../lib/export-quotes.js';
 import { listTemplates, saveTemplate, removeTemplate } from '../lib/quote-templates.js';
 import { invoiceChecklist, invoiceSummary } from '../lib/invoice-prep.js';
