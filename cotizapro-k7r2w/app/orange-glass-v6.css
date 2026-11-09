@@ -1,0 +1,141 @@
+/* CotizaPro | ORANGE GLASS VI — diseño naranja de alto impacto
+   Override final independiente. No modifica lógica, PDF ni impresión. */
+:root {--accent:#ff740a;--accent-soft:#ffd8aa;--line:#e99850;--line-strong:#d77730}
+body {background:#f9c18b}
+.layout {background:transparent}
+.main-col {
+  background:
+    radial-gradient(ellipse 75% 55% at 87% 19%,rgba(249,116,17,.52),transparent 76%),
+    radial-gradient(ellipse 65% 55% at 5% 80%,rgba(226,82,11,.32),transparent 70%),
+    linear-gradient(135deg,#ffe2bb 0%,#f8b773 46%,#ffd3a1 100%);
+  background-attachment:fixed;
+  isolation:isolate;
+}
+@media (min-width:900px) {
+  .layout {grid-template-columns:272px minmax(0,1fr)}
+  .layout .sidenav {
+    background:linear-gradient(169deg,#562006 0%,#9f3a07 42%,#fa7910 77%,#7f2905 100%)!important;
+    border-right:2px solid #fda33e;
+    box-shadow:12px 0 36px rgba(117,38,3,.23),inset -1px 0 rgba(255,242,210,.32);
+  }
+  .layout .sidenav nav{gap:10px}
+  .layout .sidenav .nav-item{
+    background:linear-gradient(110deg,#ffae27 0%,#fb7910 49%,#d44704 100%)!important;
+    border:1px solid rgba(255,233,182,.66)!important;
+    box-shadow:0 8px 16px rgba(59,13,0,.20),inset 0 2px rgba(255,246,203,.35)!important;
+    color:#fff!important;
+    font-size:15px;font-weight:750;
+    min-height:50px;
+    border-radius:13px;
+  }
+  .layout .sidenav .nav-item .icon {color:#fff}
+  .layout .sidenav .nav-item:hover {
+    background:linear-gradient(115deg,#ffd348,#ff9020,#d95104)!important;
+    transform:translateX(3px);
+    box-shadow:0 11px 22px rgba(56,12,0,.30)!important;
+  }
+  .layout .sidenav .nav-item.active {
+    background:linear-gradient(100deg,#ffe186 0%,#ffb82c 35%,#f36e0b 79%,#bc3b03)!important;
+    color:#4e1b05!important;
+    border:2px solid rgba(255,250,214,.87)!important;
+    box-shadow:0 0 0 3px rgba(255,225,144,.19),0 12px 25px rgba(40,10,0,.38),inset 0 2px rgba(255,255,255,.65)!important;
+  }
+  .layout .sidenav .nav-item.active .icon {color:#713006}
+}
+.sidenav .brand {
+  background:linear-gradient(125deg,rgba(255,208,126,.31),rgba(108,32,5,.22))!important;
+  border:1px solid rgba(255,222,165,.43)!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.25);
+}
+.sidenav-foot{background:rgba(94,28,4,.30)!important;border-color:rgba(255,220,164,.48)!important}
+.main-col .topbar {
+  background:rgba(255,183,103,.54)!important;
+  border-bottom:1px solid rgba(177,62,7,.41)!important;
+  box-shadow:0 9px 25px rgba(140,54,5,.10)!important;
+  backdrop-filter:blur(28px) saturate(1.6)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(1.6)!important;
+}
+.main-col .content {position:relative}
+.section-inicio .page-head {
+  background:linear-gradient(105deg,rgba(255,252,231,.46),rgba(255,125,16,.39))!important;
+  border:1px solid rgba(241,128,28,.45);
+  border-radius:22px;
+  padding:22px 25px!important;
+  box-shadow:inset 0 1px rgba(255,255,255,.7),0 12px 26px rgba(124,45,4,.11);
+}
+.section-inicio .page-head h1{color:#5b2005;font-size:clamp(2.1rem,3vw,3rem)}
+.main-col .content .card,
+.main-col .content .list,
+.main-col .content .stat,
+.main-col .content .dash-panel,
+.main-col .content .recent-budget-panel {
+  background:linear-gradient(125deg,rgba(255,255,248,.42),rgba(255,222,183,.28))!important;
+  border:1px solid rgba(255,137,31,.76)!important;
+  box-shadow:0 13px 37px rgba(149,55,5,.16),inset 0 1px 1px rgba(255,255,255,.78)!important;
+  backdrop-filter:blur(21px) saturate(1.32)!important;
+  -webkit-backdrop-filter:blur(21px) saturate(1.32)!important;
+}
+.main-col .content .card:hover,
+.main-col .content .stat:hover,
+.main-col .content .recent-budget-panel:hover {
+  border-color:#ff8814!important;
+  box-shadow:0 17px 39px rgba(143,50,4,.22),inset 0 1px rgba(255,255,255,.7)!important;
+}
+.section-inicio .stats .stat {
+  background:linear-gradient(115deg,rgba(255,252,228,.56),rgba(255,189,112,.36))!important;
+  border-left:5px solid #f47d15!important;
+  min-height:145px;
+}
+.section-inicio .stats .stat:nth-child(2){border-left-color:#c5580b!important}
+.section-inicio .stats .stat:nth-child(3){border-left-color:#ff9b1c!important}
+.section-inicio .stats .stat:nth-child(4) {
+  background:linear-gradient(120deg,rgba(255,179,86,.68),rgba(247,105,19,.42))!important;
+  border-left-color:#a93704!important;
+}
+.section-inicio .stat-icon{
+  background:linear-gradient(130deg,#ffcb69,#ff9138)!important;
+  color:#773008!important;
+  box-shadow:0 5px 13px rgba(167,56,7,.15);
+}
+.main-col .content .dash-panel h2,
+.main-col .content .recent-budget-panel h2{color:#7e2e04}
+.main-col .recent-table-head{
+  background:rgba(255,152,48,.36)!important;
+  border:1px solid rgba(193,87,12,.43)!important;
+}
+.main-col .row-item:hover{background:rgba(255,167,70,.28)!important}
+.main-col .btn-primary,.main-col .top-new,.topbar .top-new {
+  background:linear-gradient(115deg,#ffc031,#fc7708 52%,#b83403)!important;
+  color:#fff!important;
+  box-shadow:0 10px 23px rgba(189,58,2,.32),inset 0 1px rgba(255,255,255,.4)!important;
+}
+.main-col .global-search{background:rgba(255,249,230,.56)!important;border-color:#e8964d!important}
+.main-col input,.main-col select,.main-col textarea{background:rgba(255,251,240,.65)!important}
+.main-col .content .chip {
+  background:rgba(255,164,66,.47)!important;
+  border-color:rgba(193,76,8,.59)!important;
+}
+.main-col .content .chip.active{background:linear-gradient(110deg,#ffb12b,#d44903)!important;color:#fff!important}
+.main-col .content .editor .card,.main-col .content .summary{
+  background:linear-gradient(130deg,rgba(255,244,220,.55),rgba(255,187,120,.35))!important;
+}
+.tabbar {
+ background:rgba(255,169,81,.77)!important;
+ border-top:2px solid #f4770b!important;
+ backdrop-filter:blur(18px);
+}
+.tab{color:#752c08!important;font-weight:700}
+.tab.active{color:#fff!important;background:linear-gradient(#ff9a1e,#d14b05);border-radius:13px}
+@media (max-width:899px) {
+  .main-col{background:linear-gradient(145deg,#ffdeb4,#f7ad6c,#ffdcac)}
+  .section-inicio .page-head{padding:17px!important}
+  .section-inicio .page-head h1{font-size:1.8rem}
+  .main-col .content .stat{min-height:116px}
+}
+@media (prefers-reduced-transparency:reduce) {
+  .main-col .content .card,.main-col .content .list,.main-col .content .stat,.main-col .content .dash-panel,.main-col .content .recent-budget-panel{background:#ffe4c2!important;backdrop-filter:none!important}
+}
+@media print {
+  .main-col{background:white!important}
+  .doc,#print-root .doc{background:#fff!important;backdrop-filter:none!important}
+}
