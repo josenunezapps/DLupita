@@ -2,7 +2,7 @@ import { h, mount, field, showErrors, formValues, banner, busy, toast } from '..
 import { db } from '../lib/api.js';
 import { parsePercentToBp, bpToPercentText } from '../lib/money.js';
 import * as v from '../lib/validate.js';
-import { shell } from './shell.js?v=20261108-fix2';
+import { shell } from './shell.js?v=approved-20261109-3';
 
 const MAX_LOGO_CHARS = 300000;
 
