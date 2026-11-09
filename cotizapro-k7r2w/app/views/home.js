@@ -2,7 +2,7 @@ import { h, banner } from '../lib/dom.js';
 import { db } from '../lib/api.js';
 import { formatMoney } from '../lib/money.js';
 import { effectiveStatus, quoteNumber, todayISO } from '../lib/quotes.js';
-import { shell } from './shell.js?v=20261108-fix2';
+import { shell } from './shell.js?v=approved-20261109-3';
 import { statusBadge } from './quotes.js';
 
 export async function homeView(ctx) {
