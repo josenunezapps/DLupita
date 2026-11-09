@@ -1,7 +1,7 @@
 import { h, mount, field, showErrors, formValues, banner, busy, toast, debounce } from '../lib/dom.js';
 import { db, searchTerm } from '../lib/api.js';
 import * as v from '../lib/validate.js';
-import { shell } from './shell.js?v=20261108-fix2';
+import { shell } from './shell.js?v=approved-20261109-3';
 
 export async function customersView(ctx) {
   const list = h('div', { class: 'list', 'aria-live': 'polite' });
