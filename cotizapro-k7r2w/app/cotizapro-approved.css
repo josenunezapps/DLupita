@@ -217,3 +217,121 @@ input:focus,select:focus,textarea:focus{border-color:#dd6c1d;box-shadow:0 0 0 3p
 .section-inicio .page-head>div:first-child{position:relative;z-index:1}
 .section-inicio .page-head .hero-subtitle{margin-top:9px;color:#746158;font-size:14px;line-height:1.5}
 @media(max-width:899px){.section-inicio .page-head .hero-subtitle{font-size:12px}}
+
+
+/* ============================================================
+   TERMINACIÓN VISUAL APROBADA · panel referencia 09/11/2026
+   Ajuste específico de geometría y microdetalles.
+   ============================================================ */
+:root {
+ --bg:#fcf7f1;--surface:#fffdfb;--surface-2:#f8efe7;
+ --line:#eadacf;--line-strong:#dcc6b5;--accent:#e76008;
+ --shadow:0 8px 28px rgba(72,33,13,.065),0 2px 8px rgba(72,33,13,.035);
+}
+body,.layout{background:#fcf7f1}
+.main-col{background:radial-gradient(ellipse at 66% 8%,#fff5ec 0%,transparent 48%),#fcf7f1}
+.topbar{min-height:85px;gap:clamp(10px,2vw,28px);background:rgba(255,251,247,.93)}
+.topbar-actions{margin-left:auto;gap:17px}
+.top-icon{
+ border:0;background:transparent;color:#48251c;display:inline-flex;align-items:center;justify-content:center;
+ width:35px;height:40px;padding:6px;cursor:pointer;text-decoration:none;border-radius:10px;flex:none;
+ transition:background .16s,color .16s;
+}
+.top-icon:hover{background:#fff0e2;color:#d95708}
+.top-icon .icon{width:23px;height:23px}
+.topbar .global-search{min-width:180px}
+.topbar .global-search .icon{width:20px;height:20px;color:#57372b;flex:none}
+.topbar .search-shortcut{background:#f5eee9;color:#684f42;border-radius:5px;font-size:11px}
+.section-inicio .page-head{
+ min-height:122px;padding:20px 34px;border-radius:22px;
+ background:linear-gradient(108deg,#fffaf5 0%,#fff1e6 66%,#ffead8 100%);
+ box-shadow:0 7px 25px rgba(109,55,20,.045);
+}
+.section-inicio .page-head:before{
+ content:"";position:absolute;right:0;bottom:-2px;width:33%;height:63%;
+ background:linear-gradient(140deg,transparent 25%,rgba(249,174,103,.26) 50%,rgba(238,128,52,.23) 100%);
+ border-radius:90% 20% 0 0;transform:rotate(-6deg);
+ pointer-events:none;
+}
+.section-inicio .page-head:after{right:-20px;bottom:-82px;width:34%;height:172px;
+ background:linear-gradient(135deg,rgba(251,176,105,.28),rgba(239,120,40,.17));transform:rotate(-16deg)}
+.section-inicio .page-head h1{font-size:clamp(2rem,2.75vw,2.9rem);font-weight:750}
+.section-inicio .page-head .hero-subtitle{font-size:14px;color:#74665c;margin-top:8px}
+.section-inicio .stats{gap:14px}
+.section-inicio .stat{
+ min-height:133px;border:1px solid #eadacc;
+ padding:19px 18px;
+ background:linear-gradient(120deg,rgba(255,254,252,.94),rgba(255,250,246,.85));
+ transition:transform .16s,box-shadow .16s;
+}
+.section-inicio .stat:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(105,46,12,.11)}
+.section-inicio .stat-icon{box-shadow:none;border-radius:12px}
+.section-inicio .stat:nth-child(2) .stat-icon{background:#e6f4de;color:#23763b}
+.section-inicio .stat:nth-child(3) .stat-icon{background:#fff0de;color:#e2720a}
+.section-inicio .stat:nth-child(4) .stat-icon{background:#fff0de;color:#e2720a}
+.section-inicio .stat-label{font-size:12px;color:#33221b}
+.section-inicio .stat-n{font-size:clamp(1.4rem,2vw,2.15rem);font-weight:830}
+.dash-panel{min-height:314px;padding:23px 24px;border-radius:18px}
+.dash-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.dash-panel-heading h2{margin:0}
+.dash-period{border:1px solid #eadbcf;background:#fffbf8;border-radius:9px;padding:8px 11px;
+ font-size:12px;font-weight:640;color:#644636;white-space:nowrap}
+.dash-period:before{content:"▦";font-size:15px;margin-right:7px;color:#a0522b}
+.dash-grid{grid-template-columns:minmax(0,1.66fr) minmax(305px,1fr);gap:15px}
+.dash-chart-total{font-size:1.77rem}
+.dash-chart-line{height:207px}
+.dash-donut-wrap{margin:30px 0 12px;gap:18px;justify-content:space-between}
+.dash-donut{width:167px;height:167px}
+.dash-donut:before{inset:32px}
+.dash-donut span{font-size:29px}
+.dash-legend{gap:12px}
+.dash-legend-row{font-size:12px;padding-bottom:10px}
+.recent-budget-panel{padding:22px 19px 16px;margin-top:3px}
+.recent-budget-panel .section-head{align-items:center;padding:0 4px 11px}
+.recent-budget-panel .section-head h2{font-size:19px}
+.recent-budget-panel .row-item{transition:background .14s}
+.recent-budget-panel .row-title{font-size:13px}
+.recent-budget-panel .row-date{color:#69544b}
+.recent-budget-panel .row-item .badge{font-size:11px;font-weight:720}
+.recent-budget-panel .row-item .amount{font-weight:750}
+.dialog.cp-help{width:min(480px,calc(100vw - 24px));padding:24px}
+.dialog.cp-help h2{margin-bottom:12px}
+.dialog.cp-help p{line-height:1.6;margin-bottom:12px}
+.auth-card,.card,.list,.stat,.recent-budget-panel,.dash-panel,.dialog{
+ border-color:#eadbd0;box-shadow:var(--shadow)}
+/* Todos los módulos tienen el mismo lenguaje visual sobrio. */
+.content>.toolbar,.content>.stack,.content>.editor,.content>.issued-head{min-width:0}
+.editor-side .summary,.editor .card,.picker,.line{border:1px solid #ead9ce}
+.editor .card,.editor-side .summary{box-shadow:0 10px 25px rgba(74,34,13,.055)}
+.input:focus,.field input:focus,.field textarea:focus{border-color:#e46f18}
+@media(max-width:1280px) and (min-width:900px){
+ .dash-grid{grid-template-columns:1fr}
+ .section-inicio .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .topbar-actions{gap:11px}
+}
+@media(max-width:899px){
+ .topbar{min-height:61px}
+ .top-icon{width:31px;height:34px}
+ .top-icon .icon{width:19px;height:19px}
+ .topbar-actions{gap:5px}
+ .section-inicio .page-head{min-height:106px;padding:19px}
+ .section-inicio .page-head h1{font-size:1.8rem}
+ .section-inicio .page-head .hero-subtitle{font-size:12px}
+ .section-inicio .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .section-inicio .stat{min-height:112px;padding:13px 11px}
+ .section-inicio .stat-n{font-size:1.23rem}
+ .dash-grid{grid-template-columns:1fr}
+ .dash-panel{min-height:0;padding:19px 16px}
+ .dash-chart-line{height:190px}
+ .dash-donut-wrap{justify-content:center}
+}
+@media(max-width:540px){
+ .topbar .global-search{min-width:0}
+ .topbar-actions .top-icon{display:none}
+ .section-inicio .page-head h1{font-size:1.6rem}
+ .section-inicio .stat-n{font-size:1.07rem}
+ .dash-donut-wrap{flex-wrap:wrap}
+}
+@media print{
+ .top-icon,.cp-help,.topbar,.sidenav,.tabbar{display:none!important}
+}
