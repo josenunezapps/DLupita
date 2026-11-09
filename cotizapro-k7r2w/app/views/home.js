@@ -10,6 +10,7 @@ export async function homeView(ctx) {
   const stats = h('div', { class: 'stats' }, [1, 2, 3, 4].map(() => h('div', { class: 'skeleton stat' })));
   const chartBox = h('div', { class: 'dash-chart-line' });
   const chartTotal = h('div', { class: 'dash-chart-total' }, '—');
+  const chartPeriod = h('span', { class: 'dash-period' }, 'Últimos 30 días');
   const donutBox = h('div', { class: 'dash-donut-wrap' });
   const recent = h('div', { class: 'list' }, [1, 2].map(() => h('div', { class: 'skeleton row' })));
   const checklist = h('ol', { class: 'checklist' });
@@ -23,7 +24,7 @@ export async function homeView(ctx) {
     h('div', { class: 'dashboard-header' }, h('div', {}, h('div', { class: 'dashboard-eyebrow' }, 'PANEL DE CONTROL'), h('p', { class: 'dashboard-intro' }, 'Gestioná tus presupuestos, clientes y facturación desde un solo lugar.'))),
     stats,
     h('div', { class: 'dash-grid' },
-      h('section', { class: 'card dash-panel' }, h('h2', {}, 'Evolución del monto presupuestado'), h('p', { class: 'muted' }, 'Últimos seis meses · presupuestos emitidos'), chartTotal, chartBox),
+      h('section', { class: 'card dash-panel' }, h('div', { class: 'dash-panel-heading' }, h('h2', {}, 'Evolución del monto presupuestado'), chartPeriod), h('p', { class: 'muted' }, 'Últimos 30 días · presupuestos emitidos'), chartTotal, chartBox),
       h('section', { class: 'card dash-panel' }, h('h2', {}, 'Estado de presupuestos'), h('p', { class: 'muted' }, 'Distribución de presupuestos emitidos'), donutBox)),
     h('section', { class: 'stack-sm recent-budget-panel' },
       h('div', { class: 'section-head' }, h('h2', {}, '▤  Últimos presupuestos'), h('a', { href: '#/presupuestos' }, 'Ver todos los presupuestos →')),
@@ -57,54 +58,61 @@ export async function homeView(ctx) {
     const n=issuedRows.length, a=accepted.length, p=open.length;
     const others=Math.max(0,n-a-p);
     const pct=v=>n?100*v/n:0;
-    const circle=h('div',{class:'dash-donut',style:'background:conic-gradient(#65946c 0% '+pct(a)+'%,#f29138 '+pct(a)+'% '+pct(a+p)+'%,#dbb9a1 '+pct(a+p)+'% 100%)'},
+    const circle=h('div',{class:'dash-donut',style:'background:conic-gradient(#fb8718 0% '+pct(a)+'%,#79bd67 '+pct(a)+'% '+pct(a+p)+'%,#ded9d3 '+pct(a+p)+'% 100%)'},
       h('span',{},String(n),h('small',{},'Total')));
     const legend=h('div',{class:'dash-legend'},...[
-      ['Aceptados',a,'#65946c'],['Pendientes',p,'#f29138'],['Otros estados',others,'#dbb9a1']
+      ['Aceptados',a,'#fb8718'],['Pendientes',p,'#79bd67'],['Otros estados',others,'#ded9d3']
     ].map(([name,count,color])=>h('div',{class:'dash-legend-row'},
       h('span',{class:'dash-dot',style:'background:'+color}),h('span',{},name),
       h('strong',{},String(count)+' ('+Math.round(pct(count))+'%)'))));
     donutBox.replaceChildren(circle,legend);
+    // Ventana diaria móvil: usa fechas e importes reales; sin proyecciones inventadas.
     const now=new Date(today+'T12:00:00Z');
-    const months=[];
-    for(let i=5;i>=0;i--){
-      const date=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()-i,1));
-      const key=date.toISOString().slice(0,7);
-      const amount=issuedRows.filter(q=>String(q.created_at||'').startsWith(key))
+    const days=[];
+    for(let i=29;i>=0;i--){
+      const date=new Date(now.getTime()-i*86400000);
+      const key=date.toISOString().slice(0,10);
+      const dayTotal=issuedRows.filter(q=>String(q.created_at||'').slice(0,10)===key)
         .reduce((sum,q)=>sum+(Number(q.quote_total)||0),0);
-      months.push({label:new Intl.DateTimeFormat('es-AR',{month:'short',timeZone:'UTC'}).format(date),amount});
+      days.push({key,date,amount:dayTotal});
     }
-    const max=Math.max(1,...months.map(m=>m.amount));
-    chartTotal.textContent=formatMoney(monthTotal,org.currency);
-    const width=620, height=190, left=40, right=12, top=14, bottom=26;
+    let running=0;
+    const cumulative=days.map(day=>({date:day.date,amount:(running+=day.amount)}));
+    const max=Math.max(1,...cumulative.map(day=>day.amount));
+    const last30Total=cumulative[cumulative.length-1].amount;
+    chartTotal.textContent=formatMoney(last30Total,org.currency);
+    const width=620,height=208,left=91,right=16,top=13,bottom=30;
     const plotW=width-left-right,plotH=height-top-bottom;
-    const xy=months.map((m,i)=>[left+i*plotW/(months.length-1),top+plotH-(m.amount/max)*plotH]);
-    const coords=xy.map(p=>p.join(',')).join(' ');
+    const xy=cumulative.map((m,i)=>[left+i*plotW/(cumulative.length-1),top+plotH-(m.amount/max)*plotH]);
     const line='M '+xy.map(p=>p.join(' ')).join(' L ');
     const fill=line+' L '+xy[xy.length-1][0]+' '+(top+plotH)+' L '+left+' '+(top+plotH)+' Z';
     const ns='http://www.w3.org/2000/svg';
     const svg=document.createElementNS(ns,'svg');
     svg.setAttribute('viewBox','0 0 '+width+' '+height);
     svg.setAttribute('role','img');
-    svg.setAttribute('aria-label','Evolución de importes cotizados en los últimos seis meses');
-    const el=(tag, attrs, value)=>{const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(value!==undefined)e.textContent=value;return e;};
+    svg.setAttribute('aria-label','Evolución de los importes presupuestados durante los últimos treinta días');
+    const el=(tag,attrs,value)=>{const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));if(value!==undefined)e.textContent=value;return e;};
     const defs=el('defs',{});
     const gradient=el('linearGradient',{id:'cotiAreaGradient',x1:'0',x2:'0',y1:'0',y2:'1'});
-    gradient.append(el('stop',{offset:'0%','stop-color':'#eb6c1c','stop-opacity':'.23'}),el('stop',{offset:'100%','stop-color':'#eb6c1c','stop-opacity':'.015'}));
+    gradient.append(el('stop',{offset:'0%','stop-color':'#ee7217','stop-opacity':'.26'}),el('stop',{offset:'100%','stop-color':'#ee7217','stop-opacity':'.025'}));
     defs.append(gradient);svg.append(defs);
+    const moneyTick=value=>new Intl.NumberFormat('es-AR',{notation:'compact',maximumFractionDigits:1}).format(value);
     for(let i=0;i<=4;i++){
-      const y=top+plotH*i/4;
+      const y=top+plotH*i/4,value=max*(1-i/4);
       svg.append(el('line',{x1:left,x2:width-right,y1:y,y2:y,stroke:'#e9ded3','stroke-width':1}));
-      svg.append(el('text',{x:left-7,y:y+4,'text-anchor':'end',fill:'#947e70','font-size':11},i===4?'0':String(Math.round(max*(1-i/4)/100)/10)+'k'));
+      svg.append(el('text',{x:left-10,y:y+4,'text-anchor':'end',fill:'#947e70','font-size':11},moneyTick(value)));
     }
     svg.append(el('path',{d:fill,fill:'url(#cotiAreaGradient)'}));
-    svg.append(el('path',{d:line,fill:'none',stroke:'#e85d13','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round'}));
+    svg.append(el('path',{d:line,fill:'none',stroke:'#ec6510','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round'}));
     xy.forEach(([x,y],i)=>{
-      svg.append(el('circle',{cx:x,cy:y,r:i===xy.length-1?5:3.5,fill:'#fff',stroke:'#e65b12','stroke-width':2.5}));
-      svg.append(el('text',{x,y:height-4,'text-anchor':'middle',fill:'#8e7568','font-size':12},months[i].label));
+      if(i===xy.length-1)svg.append(el('circle',{cx:x,cy:y,r:5,fill:'#fff',stroke:'#e65b12','stroke-width':2.5}));
+      if(i%5===0||i===xy.length-1){
+        const day=cumulative[i].date;
+        svg.append(el('text',{x,y:height-6,'text-anchor':'middle',fill:'#8e7568','font-size':11},
+          new Intl.DateTimeFormat('es-AR',{day:'numeric',month:'short',timeZone:'UTC'}).format(day)));
+      }
     });
     chartBox.replaceChildren(svg);
-
 
     if (quotes.length === 0) {
       recent.replaceChildren(h('div', { class: 'empty' },
