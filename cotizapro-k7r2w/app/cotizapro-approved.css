@@ -211,3 +211,9 @@ input:focus,select:focus,textarea:focus{border-color:#dd6c1d;box-shadow:0 0 0 3p
  body.print-mode #print-root{display:block!important}
  #print-root .doc{background:#fff!important;color:#1c1b19!important}
 }
+
+/* Hero exacto de la maqueta: título y descripción juntos */
+.section-inicio .dashboard-header{display:none}
+.section-inicio .page-head>div:first-child{position:relative;z-index:1}
+.section-inicio .page-head .hero-subtitle{margin-top:9px;color:#746158;font-size:14px;line-height:1.5}
+@media(max-width:899px){.section-inicio .page-head .hero-subtitle{font-size:12px}}
