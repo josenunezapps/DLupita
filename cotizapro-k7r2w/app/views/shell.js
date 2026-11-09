@@ -64,6 +64,7 @@ export function shell(ctx, { section, title, actions = null, back = null }, ...c
             h('div', {},
               back ? h('a', { href: `#/${back}`, class: 'back-link' }, '← Volver') : null,
               h('h1', {}, title),
+              section === 'inicio' ? h('p', { class: 'hero-subtitle' }, 'Gestioná tus presupuestos, clientes y facturación desde un solo lugar.') : null,
             ),
             actions,
           ),
