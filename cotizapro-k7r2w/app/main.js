@@ -2,11 +2,11 @@ import { consumeAuthRedirect, getSession, onSessionChange, db } from './lib/api.
 import { h, mount, banner } from './lib/dom.js';
 import { loginView, registerView, recoverView, newPasswordView } from './views/auth.js';
 import { createOrgView } from './views/onboarding.js';
-import { homeView } from './views/home.js';
-import { customersView, customerFormView } from './views/customers.js';
-import { catalogView, catalogFormView } from './views/catalog.js';
-import { settingsView } from './views/settings.js';
-import { quotesView, quoteRouteView } from './views/quotes.js';
+import { homeView } from './views/home.js?v=approved-20261109-3';
+import { customersView, customerFormView } from './views/customers.js?v=approved-20261109-3';
+import { catalogView, catalogFormView } from './views/catalog.js?v=approved-20261109-3';
+import { settingsView } from './views/settings.js?v=approved-20261109-3';
+import { quotesView, quoteRouteView } from './views/quotes.js?v=approved-20261109-3';
 
 // Todos los módulos cargaron: el aviso de error de index.html ya no aplica.
 window.__cpStarted = true;
