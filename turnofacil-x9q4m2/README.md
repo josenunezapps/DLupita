@@ -50,3 +50,9 @@ No se declara ningún caso OK hasta probarlo en navegador.
 - La clave de `localStorage` pasó a `turnofacil-lab-v2` para que se carguen los datos nuevos.
 - Correcciones: enlace del pie a zenix.com.ar, título de la pestaña y formato de teléfonos con característica de 4 dígitos (2901).
 - Estos cambios se aplicaron sobre el `index.html` compilado; falta llevarlos a las fuentes (`shared/validate.ts`, `shared/demo-seed.ts`, `shared/messages.ts`, `shared/core.ts` y las páginas de reservas y agenda).
+
+## Cambio del 11/11/2026 (2): inicio directo en la barbería e ingreso en /admin
+
+- La raíz muestra directamente la página de reservas de La Esquina Barbería; se quitó la pantalla de presentación de TurnoFácil.
+- El panel ya no se abre libremente: `admin/` (o `#/admin`) pide usuario y contraseña, y las rutas `#/app/...` redirigen ahí si no se ingresó.
+- **Limitación:** la comprobación se hace en el navegador contra un hash SHA-256 incluido en el `index.html` y la sesión vive en `sessionStorage`. Es una barrera de presentación para la demo, no seguridad real; la autenticación verdadera llega con el backend.
