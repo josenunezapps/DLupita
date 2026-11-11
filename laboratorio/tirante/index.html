@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es-AR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tirante, laboratorio de estructuras</title>
+  <meta name="description" content="Dibujá un puente o una estructura de barras y mirá en vivo qué barras se estiran, cuáles se aplastan y cuánta carga aguanta antes de caerse.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0A2340">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A2340'/%3E%3Cpath d='M4 24h24M4 24l6-14h12l6 14M10 10l6 14 6-14' fill='none' stroke='%23FFC233' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <script>
+    // Aplica el tema guardado antes del primer pintado para evitar el destello.
+    try {
+      var saved = JSON.parse(localStorage.getItem('tirante.v1') || '{}').prefs || {};
+      var theme = saved.theme || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.dataset.theme = theme;
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="boot" class="boot" role="status" aria-label="Cargando Tirante">
+    <svg viewBox="0 0 240 90" aria-hidden="true">
+      <path class="boot-truss" pathLength="1" d="M10 70H230M10 70L45 20H195L230 70M45 20L80 70L115 20L150 70L185 20" />
+      <path class="boot-ground" d="M2 78h16M222 78h16" />
+    </svg>
+    <p>Tirante</p>
+  </div>
+
+  <div class="app" id="app">
+    <header class="top">
+      <div class="brand" aria-label="Tirante">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 25h26M3 25l7-16h12l7 16M10 9l6 16 6-16" /></svg>
+        <span>Tirante</span>
+      </div>
+      <label class="proj">
+        <span class="sr">Nombre del proyecto</span>
+        <input id="projName" type="text" maxlength="80" spellcheck="false" autocomplete="off">
+      </label>
+      <span id="saveState" class="save-state" aria-live="polite"></span>
+      <button id="btnPalette" class="cmd" type="button" aria-haspopup="dialog">
+        <i data-icon="search"></i><span>Buscar una acción</span><kbd>Ctrl K</kbd>
+      </button>
+      <div class="top-actions">
+        <button id="btnUndo" class="icon-btn" type="button" aria-label="Deshacer" title="Deshacer (Ctrl Z)"><i data-icon="undo"></i></button>
+        <button id="btnRedo" class="icon-btn" type="button" aria-label="Rehacer" title="Rehacer (Ctrl Mayús Z)"><i data-icon="redo"></i></button>
+        <button id="btnTheme" class="icon-btn" type="button" aria-label="Cambiar entre plano azul y papel" title="Cambiar tema (T)"><i data-icon="theme"></i></button>
+        <button id="btnHelp" class="icon-btn" type="button" aria-label="Ayuda y atajos" title="Ayuda y atajos (?)"><i data-icon="help"></i></button>
+      </div>
+    </header>
+
+    <main class="stage" id="stage">
+      <canvas id="sheet" tabindex="0" role="application" aria-label="Hoja de dibujo. Con las flechas movés el nudo seleccionado; Suprimir lo borra." aria-describedby="srSummary"></canvas>
+      <canvas id="view3d" hidden aria-label="Vista en tres dimensiones. Arrastrá para girar."></canvas>
+      <p id="srSummary" class="sr" aria-live="polite"></p>
+
+      <nav class="tools" id="tools" role="toolbar" aria-label="Herramientas de dibujo" aria-orientation="vertical">
+        <button type="button" data-tool="select" aria-label="Seleccionar y mover" title="Seleccionar y mover (V)"><i data-icon="select"></i><kbd>V</kbd></button>
+        <button type="button" data-tool="node" aria-label="Agregar nudo" title="Agregar nudo (N)"><i data-icon="node"></i><kbd>N</kbd></button>
+        <button type="button" data-tool="member" aria-label="Dibujar barra" title="Dibujar barra (B)"><i data-icon="member"></i><kbd>B</kbd></button>
+        <button type="button" data-tool="support" aria-label="Poner o cambiar apoyo" title="Apoyo (A): tocá un nudo para cambiar el tipo"><i data-icon="support"></i><kbd>A</kbd></button>
+        <button type="button" data-tool="load" aria-label="Poner carga" title="Carga (C)"><i data-icon="load"></i><kbd>C</kbd></button>
+        <button type="button" data-tool="erase" aria-label="Borrar" title="Borrar (X)"><i data-icon="erase"></i><kbd>X</kbd></button>
+      </nav>
+
+      <div class="hud" role="group" aria-label="Vista">
+        <div class="seg" role="radiogroup" aria-label="Tipo de vista">
+          <button type="button" role="radio" data-view="2d" aria-checked="true">Plano</button>
+          <button type="button" role="radio" data-view="3d" aria-checked="false">3D</button>
+        </div>
+        <button id="btnSnap" class="chip" type="button" aria-pressed="true" title="Ajustar a la grilla (G)"><i data-icon="magnet"></i><span>Grilla</span></button>
+        <button id="btnFit" class="chip" type="button" title="Encuadrar todo (F)"><i data-icon="fit"></i><span>Encuadrar</span></button>
+      </div>
+
+      <div id="status" class="status" role="alert" hidden></div>
+      <div id="tip" class="tip" hidden>
+        <p></p><button type="button" class="link" data-act="tip-close">Entendido</button>
+      </div>
+
+      <div id="empty" class="empty" hidden>
+        <h2>Hoja en blanco</h2>
+        <p>Tocá la hoja para poner el primer nudo, o partí de una estructura ya armada.</p>
+        <div class="empty-actions" id="emptyExamples"></div>
+      </div>
+
+      <div id="vehicle" class="vehicle" hidden>
+        <button id="btnPlay" class="icon-btn" type="button" aria-label="Hacer cruzar el vehículo"><i data-icon="play"></i></button>
+        <label class="vehicle-range"><span class="sr">Posición del vehículo sobre el tablero</span>
+          <input id="vehiclePos" type="range" min="0" max="1000" value="0" step="1">
+        </label>
+        <output id="vehicleLabel" for="vehiclePos"></output>
+        <button id="btnEnvelope" class="link" type="button">Ver el peor caso</button>
+      </div>
+
+      <aside id="cajetin" class="cajetin" aria-label="Resumen del cálculo">
+        <div class="cj-cell"><span>Peso</span><b id="cjMass">0 kg</b></div>
+        <div class="cj-cell cj-cost"><span>Costo estimado</span><b id="cjCost">0</b></div>
+        <div class="cj-cell"><span>Más exigida</span><button id="cjWorst" class="cj-link" type="button">sin barras</button></div>
+        <div class="cj-cell cj-defl"><span>Mayor descenso</span><b id="cjDefl">0 mm</b></div>
+        <div class="cj-stamp" id="cjStamp" data-state="idle"><span>Sin calcular</span></div>
+        <small id="cjTime"></small>
+      </aside>
+
+      <div id="testOverlay" class="test" hidden>
+        <div class="test-gauge" aria-live="polite"><span>Carga aplicada</span><b id="testLambda">×0,00</b></div>
+        <div class="test-card" id="testCard" hidden>
+          <h2 id="testTitle"></h2>
+          <p id="testBody"></p>
+          <p class="fine">Ensayo lineal, con rotura frágil y sin coeficiente de seguridad. La animación de la caída es ilustrativa; los números salen del cálculo.</p>
+          <div class="row">
+            <button type="button" class="btn" data-act="test-again">Repetir</button>
+            <button type="button" class="btn primary" data-act="test-close">Volver al plano</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="drop" class="drop" hidden><p>Soltá el archivo para importarlo</p></div>
+    </main>
+
+    <aside class="panel" id="panel" aria-label="Panel">
+      <div class="tabs" role="tablist" aria-label="Secciones">
+        <button role="tab" id="t-sel" data-tab="sel" aria-controls="tab-sel" aria-selected="true"><i data-icon="inspect"></i><span>Selección</span></button>
+        <button role="tab" id="t-bars" data-tab="bars" aria-controls="tab-bars" aria-selected="false"><i data-icon="table"></i><span>Barras</span></button>
+        <button role="tab" id="t-calc" data-tab="calc" aria-controls="tab-calc" aria-selected="false"><i data-icon="calc"></i><span>Cálculo</span></button>
+        <button role="tab" id="t-lib" data-tab="lib" aria-controls="tab-lib" aria-selected="false"><i data-icon="folder"></i><span>Proyectos</span></button>
+      </div>
+      <div class="panel-body">
+        <section id="tab-sel" role="tabpanel" aria-labelledby="t-sel" tabindex="-1"></section>
+        <section id="tab-bars" role="tabpanel" aria-labelledby="t-bars" tabindex="-1" hidden></section>
+        <section id="tab-calc" role="tabpanel" aria-labelledby="t-calc" tabindex="-1" hidden></section>
+        <section id="tab-lib" role="tabpanel" aria-labelledby="t-lib" tabindex="-1" hidden></section>
+      </div>
+    </aside>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+
+  <dialog id="palette" class="palette" aria-label="Buscar una acción">
+    <div class="palette-input"><i data-icon="search"></i>
+      <input id="paletteInput" type="text" placeholder="Escribí qué querés hacer: exportar, aligerar, B7…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="paletteList" aria-autocomplete="list">
+      <kbd>Esc</kbd>
+    </div>
+    <ul id="paletteList" role="listbox"></ul>
+  </dialog>
+
+  <dialog id="dialog" class="dialog"></dialog>
+  <input id="file" type="file" accept=".json,application/json" hidden>
+
+  <noscript><p class="noscript">Tirante necesita JavaScript para dibujar y calcular.</p></noscript>
+  <script type="module" src="js/main.js"></script>
+  <script nomodule>document.getElementById('boot').innerHTML = '<p>Este navegador es demasiado viejo para abrir Tirante. Probá con una versión actual de Chrome, Firefox o Safari.</p>';</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "tirante",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Laboratorio de estructuras reticuladas en el navegador",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "node tests/e2e/run.mjs"
+  }
+}
