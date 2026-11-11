@@ -41,3 +41,12 @@ Esta versión sigue siendo **solo una demostración**. Los datos son locales al 
 - Dos turnos superpuestos del mismo profesional → el segundo debe ser rechazado.
 
 No se declara ningún caso OK hasta probarlo en navegador.
+
+## Cambio del 11/11/2026: imágenes de muestra y avisos por correo
+
+- La demo "La Esquina Barbería" usa las imágenes de `img/` (logo, portada, galería, fotos de profesionales y de servicios) mediante rutas relativas `./img/...`; el validador de imágenes las acepta además de `data:` y `https:`.
+- El negocio admite dos campos opcionales nuevos, `cover` y `gallery`, que la página pública muestra como portada y galería deslizable. Todavía no se editan desde Configuración.
+- Avisos por correo, además de WhatsApp: botón "Avisar por correo" en la confirmación del cliente y sección "Correo electrónico" en el detalle del turno del panel (recordatorio, cambio, cancelación y mensaje libre). Ambos abren la aplicación de correo con el texto escrito (`mailto:`); **no hay envío automático**, que requiere backend y proveedor de correo.
+- La clave de `localStorage` pasó a `turnofacil-lab-v2` para que se carguen los datos nuevos.
+- Correcciones: enlace del pie a zenix.com.ar, título de la pestaña y formato de teléfonos con característica de 4 dígitos (2901).
+- Estos cambios se aplicaron sobre el `index.html` compilado; falta llevarlos a las fuentes (`shared/validate.ts`, `shared/demo-seed.ts`, `shared/messages.ts`, `shared/core.ts` y las páginas de reservas y agenda).
