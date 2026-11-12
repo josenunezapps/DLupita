@@ -1,0 +1,11 @@
+{
+  "name": "remarca",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Carteles de oferta, etiquetas de góndola y remarcado de precios para comercios",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "node tests/e2e/run.mjs"
+  }
+}
