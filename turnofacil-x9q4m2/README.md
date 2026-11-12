@@ -56,3 +56,8 @@ No se declara ningún caso OK hasta probarlo en navegador.
 - La raíz muestra directamente la página de reservas de La Esquina Barbería; se quitó la pantalla de presentación de TurnoFácil.
 - El panel ya no se abre libremente: `admin/` (o `#/admin`) pide usuario y contraseña, y las rutas `#/app/...` redirigen ahí si no se ingresó.
 - **Limitación:** la comprobación se hace en el navegador contra un hash SHA-256 incluido en el `index.html` y la sesión vive en `sessionStorage`. Es una barrera de presentación para la demo, no seguridad real; la autenticación verdadera llega con el backend.
+
+## Cambio del 12/11/2026: panel de la demo sin usuario ni contraseña
+
+- `admin/` (o `#/admin`) abre el panel directo, sin pedir credenciales, para que los interesados prueben la demo sin trabas. Siguen existiendo los usuarios de prueba en `#/login`, que conserva la pantalla de ingreso.
+- Al salir del panel se vuelve a la página de reservas.
