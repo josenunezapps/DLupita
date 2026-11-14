@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060810">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Zenix AR. Diseñamos software que resuelve problemas reales: experiencias web, aplicaciones y automatizaciones. Explorá nuestro laboratorio digital.">
+  <meta property="og:title" content="Zenix AR — El software tiene otra dimensión">
+  <meta property="og:description" content="Una experiencia interactiva de Zenix AR. Ideas complejas. Soluciones claras.">
+  <title>Zenix AR — El software tiene otra dimensión</title>
+  <link rel="icon" href="https://zenix.com.ar/assets/logo-zx.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div id="preloader" class="preloader" aria-label="Preparando experiencia">
+    <div class="load-orbit load-orbit-a"></div><div class="load-orbit load-orbit-b"></div>
+    <div class="loader-center"><span class="eyebrow">UN NUEVO PUNTO DE VISTA</span><strong>ZENIX<span class="period">.</span></strong><span class="load-sub">Diseño, ingeniería y movimiento.</span></div>
+    <div class="load-footer"><span>INICIALIZANDO EL UNIVERSO</span><span class="load-count"><span id="loadNumber">00</span><small>%</small></span></div>
+    <div class="load-track"><div id="loadFill"></div></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header id="siteHeader" class="site-header">
+    <a href="#inicio" class="brand" aria-label="Zenix AR, ir al inicio">
+      <span class="brand-icon"><img src="https://zenix.com.ar/assets/logo-zx.webp" alt=""></span>
+      <span class="brand-text">ZENIX<span class="brand-dot">.</span><small>AR</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Navegación principal">
+      <div id="navHighlight" class="nav-highlight" aria-hidden="true"></div>
+      <span id="navBeam" class="nav-beam" aria-hidden="true"></span>
+      <a href="#inicio" data-nav="inicio" class="is-active">Inicio</a>
+      <a href="#servicios" data-nav="servicios">Servicios</a>
+      <a href="#apps" data-nav="apps">Aplicaciones</a>
+      <a href="#proyectos" data-nav="proyectos">Proyectos</a>
+    </nav>
+    <div class="header-actions">
+      <span class="availability"><span></span> DISPONIBLES PARA NUEVOS PROYECTOS</span>
+      <a class="header-contact" href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Quiero%20hablar%20sobre%20un%20proyecto." target="_blank" rel="noopener noreferrer">Hablemos <span aria-hidden="true">↗</span></a>
+      <button class="mobile-menu-button" id="menuButton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+    </div>
+  </header>
+  <nav id="mobileMenu" class="mobile-menu" aria-label="Menú móvil" inert>
+    <div class="mobile-menu-top"><span>EXPLORÁ ZENIX</span><span>01 — 05</span></div>
+    <a href="#inicio"><span>01</span> Inicio <b>↗</b></a>
+    <a href="#servicios"><span>02</span> Servicios <b>↗</b></a>
+    <a href="#apps"><span>03</span> Aplicaciones <b>↗</b></a>
+    <a href="#proyectos"><span>04</span> Proyectos <b>↗</b></a>
+    <a href="#contacto"><span>05</span> Contacto <b>↗</b></a>
+    <p>HECHO EN USHUAIA · ARGENTINA</p>
+  </nav>
+
+  <main>
+    <section id="inicio" class="story" aria-label="Experiencia Zenix AR">
+      <div class="story-stage" id="storyStage">
+        <canvas id="universe" class="universe" aria-hidden="true"></canvas>
+        <div class="stage-vignette" aria-hidden="true"></div>
+        <div class="stage-grid" aria-hidden="true"></div>
+        <div class="stage-glow" aria-hidden="true"></div>
+
+        <div class="hero-topline"><span class="live-dot"></span><span>ESTUDIO DIGITAL INDEPENDIENTE</span><span class="hero-topline-right">USHUAIA, ARGENTINA / 54°48'S</span></div>
+
+        <div class="artifact-shell" id="artifact" aria-hidden="true">
+          <div class="artifact-halo"></div>
+          <div class="orbit-ring orbit-ring-one"></div>
+          <div class="orbit-ring orbit-ring-two"></div>
+          <div class="orbit-ring orbit-ring-three"></div>
+          <div class="artifact-aura"></div>
+          <div class="glass-object">
+            <div class="cube-face cube-front"><span class="cube-z">Z</span><span class="face-detail">ZN / 001</span></div>
+            <div class="cube-face cube-back"><span class="cube-z">Z</span></div>
+            <div class="cube-face cube-right"><span class="face-stripe"></span></div>
+            <div class="cube-face cube-left"><span class="face-stripe"></span></div>
+            <div class="cube-face cube-top"></div>
+            <div class="cube-face cube-bottom"></div>
+          </div>
+          <div class="object-tag object-tag-top">[ 01 ]<br>EL NÚCLEO</div>
+          <div class="object-tag object-tag-bottom">SISTEMAS CONECTADOS <span>↗</span></div>
+        </div>
+
+        <div class="story-copies">
+          <article class="story-copy is-visible" data-story="0">
+            <div class="story-heading"><div class="section-kicker"><i></i> BIENVENIDO AL UNIVERSO ZENIX</div><h1>El software tiene<br><em>otra dimensión.</em></h1></div>
+            <div class="story-description"><p>Convertimos ideas en experiencias digitales que se sienten diferentes. Y funcionan de verdad.</p><a class="primary-button" href="#servicios">Entrar al universo <span>↗</span></a></div>
+          </article>
+          <article class="story-copy" data-story="1">
+            <div class="story-heading"><div class="section-kicker"><i></i> PENSAR DISTINTO PARA CREAR MEJOR</div><h2>Ideas complejas.<br><em>Soluciones claras.</em></h2></div>
+            <div class="story-description"><p>De una necesidad cotidiana a un producto digital completo. Diseñamos cada capa para que la tecnología trabaje a tu favor.</p><span class="small-caption">01 / ESTRATEGIA & INGENIERÍA</span></div>
+          </article>
+          <article class="story-copy" data-story="2">
+            <div class="story-heading"><div class="section-kicker"><i></i> MENOS PROMESAS, MÁS PRODUCTOS</div><h2>Tecnología real.<br><em>Resultados visibles.</em></h2></div>
+            <div class="story-description"><p>Apps en funcionamiento, herramientas útiles y experiencias para probar. No nos quedamos en las ideas.</p><a class="primary-button" href="#apps">Explorar las apps <span>↗</span></a></div>
+          </article>
+        </div>
+        <div class="story-bottom"><div class="scroll-hint"><span class="scroll-icon"><span></span></span> DESLIZÁ PARA EXPLORAR</div><div class="chapter-index"><span id="chapterCurrent">01</span><span class="chapter-separator"></span>03</div><div class="story-progress"><div id="storyProgress"></div></div></div>
+      </div>
+    </section>
+
+    <section id="servicios" class="section services-section">
+      <div class="section-inner">
+        <div class="section-heading-row"><div class="section-index"><span>01 / 05</span><span class="line"></span> LO QUE HACEMOS</div><p class="right-eyebrow">DESDE LA IDEA HASTA EL PRODUCTO</p></div>
+        <div class="services-intro"><h2>Hacemos que<br>lo <em>imposible</em><br>parezca simple<span class="accent-dot">.</span></h2><p>El mejor software no se nota: se siente en el tiempo que recuperás, en lo que vendés y en todo lo que ahora podés hacer.</p></div>
+        <div class="services-grid">
+          <article class="service-card service-one" tabindex="0"><div class="service-top"><span>01 / WEB</span><span class="card-arrow">↗</span></div><div class="service-visual visual-web" aria-hidden="true"><div class="web-window"><div class="web-bar"><i></i><i></i><i></i></div><div class="web-lines"><b></b><b></b><b></b></div><div class="web-chart"><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="service-bottom"><h3>Experiencias web<br>que dejan huella.</h3><p>Páginas y aplicaciones que transmiten confianza y convierten visitas en oportunidades.</p><span class="service-tags">DISEÑO · DESARROLLO · E-COMMERCE</span></div></article>
+          <article class="service-card service-two" tabindex="0"><div class="service-top"><span>02 / SOFTWARE</span><span class="card-arrow">↗</span></div><div class="service-visual visual-app" aria-hidden="true"><div class="app-device"><div class="app-island"></div><div class="app-metric">+24.8<small>%</small></div><div class="app-row"><i></i><i></i><i></i></div><div class="app-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="device-shadow"></div></div><div class="service-bottom"><h3>Aplicaciones que<br>resuelven de verdad.</h3><p>Sistemas, herramientas y apps pensadas para hacer tu trabajo más simple.</p><span class="service-tags">ANDROID · SISTEMAS · PRODUCTOS</span></div></article>
+          <article class="service-card service-three" tabindex="0"><div class="service-top"><span>03 / AUTOMATIZACIÓN</span><span class="card-arrow">↗</span></div><div class="service-visual visual-flow" aria-hidden="true"><div class="flow-node node-a"><span>✦</span></div><div class="flow-node node-b"><span>⌘</span></div><div class="flow-node node-c"><span>✓</span></div><svg viewBox="0 0 320 180" class="flow-svg"><path d="M75 85 C140 85 118 45 170 45 S224 85 246 85 M170 45 C170 98 185 136 245 136" fill="none" stroke="rgba(150,160,255,.45)" stroke-width="1.4" stroke-dasharray="5 7"/></svg></div><div class="service-bottom"><h3>Automatizaciones<br>que liberan tiempo.</h3><p>Conectamos procesos y eliminamos tareas repetitivas para que puedas enfocarte en crecer.</p><span class="service-tags">INTEGRACIONES · IA · FLUJOS</span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee-band" aria-hidden="true"><div class="marquee-track">IMAGINAR <span>✳</span> DISEÑAR <span>✳</span> CONSTRUIR <span>✳</span> EVOLUCIONAR <span>✳</span> IMAGINAR <span>✳</span> DISEÑAR <span>✳</span> CONSTRUIR <span>✳</span> EVOLUCIONAR <span>✳</span></div></div>
+
+    <section id="apps" class="section apps-section">
+      <div class="section-inner">
+        <div class="section-heading-row"><div class="section-index"><span>02 / 05</span><span class="line"></span> LABORATORIO ZENIX</div><p class="right-eyebrow">SOFTWARE REAL. PROBALO EN VIVO.</p></div>
+        <div class="apps-head"><div><h2>No es una maqueta.<br><em>Es tecnología en acción.</em></h2><p>Estas aplicaciones ya existen. Elegí una, descubrí qué resuelve y abrí la demo real.</p></div><span class="apps-counter"><span id="appIndex">01</span> / 04</span></div>
+        <div class="app-tabs" role="tablist" aria-label="Elegí una aplicación">
+          <button type="button" role="tab" aria-selected="true" aria-controls="appShowcase" class="app-tab active" data-app="caja"><span>01</span> Zenix Caja <b>↗</b></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="appShowcase" class="app-tab" data-app="cotiza"><span>02</span> Zenix Cotiza <b>↗</b></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="appShowcase" class="app-tab" data-app="club"><span>03</span> Zenix Club <b>↗</b></button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="appShowcase" class="app-tab" data-app="escaner"><span>04</span> Zenix Escáner <b>↗</b></button>
+        </div>
+        <div id="appShowcase" class="app-showcase" role="tabpanel" aria-live="polite">
+          <div class="app-info"><div class="app-info-top"><span id="appCategory" class="mini-badge">SISTEMA DE VENTAS</span><span class="app-status"><i></i> DEMO FUNCIONAL</span></div><h3 id="appTitle">Vendé, cobrá y cerrá la caja sin papeles.</h3><p id="appDescription">Un punto de venta sencillo para administrar el día a día de tu comercio.</p><ul id="appFeatures"><li>Control de stock con lector de códigos</li><li>Ventas y medios de pago</li><li>Arqueo de caja y resumen diario</li></ul><div class="app-actions"><button id="openDemo" type="button" class="primary-button">Abrir demo real <span>↗</span></button><a id="externalDemo" class="text-link" href="https://zenix.com.ar/zenix-caja/" target="_blank" rel="noopener noreferrer">Abrir en otra pestaña ↗</a></div></div>
+          <div class="app-preview" aria-label="Vista conceptual de la aplicación seleccionada"><div class="preview-shine"></div><div class="preview-browser"><div class="preview-top"><div class="preview-dots"><i></i><i></i><i></i></div><span id="previewDomain">ZENIX / CAJA</span><span>✦</span></div><div id="previewContent" class="preview-content"></div></div><span class="preview-note">VISTA ILUSTRATIVA · ABRÍ LA DEMO PARA USAR LA APP</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="proyectos" class="section projects-section">
+      <div class="section-inner">
+        <div class="section-heading-row"><div class="section-index"><span>03 / 05</span><span class="line"></span> PROYECTOS PUBLICADOS</div><p class="right-eyebrow">IDEAS QUE YA SALIERON AL MUNDO</p></div>
+        <div class="projects-title"><h2>Del concepto<br><em>a tus manos.</em></h2><p>El código cobra sentido cuando alguien lo usa. Estos son algunos productos que desarrollamos y publicamos.</p></div>
+        <div class="projects-grid">
+          <article class="project-card project-mili"><div class="project-image"><div class="project-orb orb-mili"></div><img src="https://zenix.com.ar/assets/milibropdf-icon.webp" alt="Ícono de MiLibroPDF" loading="lazy"><span class="project-float">ANDROID / LECTURA</span></div><div class="project-info"><div><span class="project-number">01 — EN GOOGLE PLAY</span><h3>MiLibroPDF</h3><p>Tus libros, tu ritmo. Leé PDF y EPUB, escuchá en voz alta y retomá exactamente donde dejaste.</p></div><a href="https://play.google.com/store/apps/details?id=com.josenunezapps.milibropdf" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Ver MiLibroPDF en Google Play">↗</a></div></article>
+          <article class="project-card project-distra"><div class="project-image"><div class="project-orb orb-distra"></div><img src="https://zenix.com.ar/assets/distraguard-icon.webp" alt="Ícono de DistraGuard" loading="lazy"><span class="project-float">CHROME / PRODUCTIVIDAD</span></div><div class="project-info"><div><span class="project-number">02 — EN CHROME WEB STORE</span><h3>DistraGuard</h3><p>Más foco, menos distracciones. Controlá Shorts, canales y contenido que te desvía de lo importante.</p></div><a href="https://chromewebstore.google.com/detail/distraguard/adgjbpgkeaeeflnolcejdofnmalghkcl" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="Ver DistraGuard en Chrome Web Store">↗</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="proceso" class="section process-section">
+      <div class="section-inner">
+        <div class="section-heading-row"><div class="section-index"><span>04 / 05</span><span class="line"></span> CÓMO TRABAJAMOS</div><p class="right-eyebrow">SIMPLE, CERCANO Y CONCRETO</p></div>
+        <div class="process-content"><div class="process-left"><h2>Una buena idea<br>merece <em>cobrar vida.</em></h2><p>No necesitás hablar en código para trabajar con nosotros. Necesitás una idea, una necesidad o algo que querés mejorar.</p><a class="outline-button" href="#contacto">Contanos tu idea <span>↗</span></a></div><div class="steps">
+          <article><span>01</span><div><h3>Nos contás qué necesitás.</h3><p>Entendemos tu objetivo antes de elegir la tecnología.</p></div><b>↗</b></article>
+          <article><span>02</span><div><h3>Lo convertimos en algo real.</h3><p>Diseñamos una primera versión que podés ver y probar.</p></div><b>↗</b></article>
+          <article><span>03</span><div><h3>Lo mejoramos con vos.</h3><p>Escuchamos tus comentarios y pulimos cada detalle.</p></div><b>↗</b></article>
+        </div></div>
+      </div>
+    </section>
+
+    <section id="contacto" class="contact-section">
+      <div class="contact-glow"></div><div class="contact-grid"></div>
+      <div class="section-inner contact-inner"><div class="section-index contact-index"><span>05 / 05</span><span class="line"></span> EMPECEMOS ALGO</div><p class="contact-kicker">TU PRÓXIMA GRAN IDEA EMPIEZA ACÁ</p><h2>¿Y si hacemos<br><em>algo increíble?</em></h2><p class="contact-text">Contanos qué tenés en mente. Lo pensamos juntos y lo transformamos en una solución real.</p><a href="https://wa.me/5492901471353?text=Hola%20Zenix!%20Tengo%20una%20idea%20para%20un%20proyecto." target="_blank" rel="noopener noreferrer" class="contact-button">Hablemos de tu proyecto <span>↗</span></a></div>
+      <footer class="site-footer"><div class="footer-brand">ZENIX<span>.</span> <small>AR</small></div><div>DISEÑADO Y DESARROLLADO EN USHUAIA, ARGENTINA</div><div class="footer-links"><a href="https://zenix.com.ar" target="_blank" rel="noopener noreferrer">WEB OFICIAL ↗</a><a href="https://www.instagram.com/zenix.com.ar/" target="_blank" rel="noopener noreferrer">INSTAGRAM ↗</a><a href="#inicio">VOLVER ARRIBA ↑</a></div><span class="footer-year">© <span id="year">2026</span></span></footer>
+    </section>
+  </main>
+  <dialog id="demoDialog" class="demo-dialog" aria-label="Aplicación de Zenix AR">
+    <div class="demo-dialog-head"><span><i></i> <span id="demoTitle">ZENIX CAJA</span> <small>DEMO INTERACTIVA</small></span><div><a id="demoNewWindow" href="#" target="_blank" rel="noopener noreferrer" class="demo-window-link">ABRIR EN PESTAÑA ↗</a><button id="closeDemo" type="button" aria-label="Cerrar demo">✕</button></div></div>
+    <iframe id="demoFrame" title="Demo interactiva de Zenix AR" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </dialog>
+  <noscript><style>#preloader{display:none!important}.story-copy[data-story="0"]{opacity:1!important;visibility:visible!important;transform:none!important}</style></noscript>
+</body>
+</html>
