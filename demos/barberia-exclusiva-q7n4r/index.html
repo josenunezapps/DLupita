@@ -169,10 +169,14 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 @media(max-width:375px){.header .button{display:none}.hero h1{font-size:42px}.hero{min-height:425px}.booking-head{gap:9px}.opening{gap:5px}.opening svg{display:none}.booking{padding:18px 10px}.column{padding:18px 12px}.benefits{grid-template-columns:1fr}.benefit,.benefit:nth-child(odd){border-right:0}.footer-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 @media print{body{background:#fff;color:#111}.header,.hero,.steps,.column:not(:last-child),.benefits,.footer,.demo-note,.confirm,.summary-foot{display:none!important}.shell{width:100%}.booking{margin:0;padding:10px;box-shadow:none;border:none}.columns{display:block;border:none}.column:last-child{background:#fff;border:none}.summary-line strong,.summary-total{color:#000}.booking-head{margin-bottom:30px}}
+.field textarea{min-height:78px;border:1px solid #45403a;background:#111;color:#f9f4ed;border-radius:5px;padding:11px 12px;outline:none;resize:vertical;width:100%}.field textarea:focus{border-color:var(--gold)}
+.booking-customer-actions{display:flex;justify-content:flex-end;align-items:center;gap:9px;margin-bottom:16px;flex-wrap:wrap}.booking-customer-actions .button{font-size:10px;min-height:35px;padding:7px 14px}
+.time:disabled{opacity:.26;cursor:not-allowed;text-decoration:line-through}
+@media(max-width:740px){.booking-customer-actions{justify-content:center}.booking-customer-actions .button{flex:1;text-align:center;font-size:9px;min-width:125px}}
 </style>
 </head>
 <body>
-<!-- Sitio demo: personalizá CONFIG al final del archivo. No incorpora un servidor de reservas. -->
+<!-- Sitio demo: persistencia local con agenda, sin backend ni seguridad para datos reales. -->
 <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs>
 <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.1 8.1 20 20M14.3 9.7 20 4M8.1 15.9 11 13"/></symbol>
 <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18M8 15h3"/></symbol>
@@ -212,7 +216,7 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
     </div></section>
     <section class="shell booking" id="reservas" aria-labelledby="booking-title">
       <div class="booking-head"><div><h2 id="booking-title">Agendá tu horario</h2><span class="accent-rule"></span></div><div class="opening"><svg><use href="#i-clock" /></svg><span><small>HORARIO DE ATENCIÓN</small><strong>LUN – SÁB: 09 a 20 h</strong></span></div></div>
-      <div class="steps" aria-label="Etapas de la reserva">
+      <div class="booking-customer-actions"><button id="my-bookings-top" class="button secondary" type="button">CONSULTAR MIS TURNOS</button><a class="button outline" href="./admin/">PANEL DE AGENDA DEMO</a></div><div class="steps" aria-label="Etapas de la reserva">
         <button type="button" class="step active" data-step="1"><span class="step-circle">1</span><span class="step-label">Servicio<small>Elegí un servicio</small></span></button>
         <button type="button" class="step" data-step="2"><span class="step-circle">2</span><span class="step-label">Barbero<small>Elegí tu profesional</small></span></button>
         <button type="button" class="step" data-step="3"><span class="step-circle">3</span><span class="step-label">Fecha y hora<small>Seleccioná tu turno</small></span></button>
@@ -221,10 +225,10 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
       <div class="columns">
         <section class="column" id="servicios" aria-label="Elegí el servicio"><h3 class="column-title"><svg><use href="#i-scissors" /></svg>Elegí el servicio</h3><div id="service-list" class="selection-list"></div><div class="mini-note"><svg><use href="#i-info" /></svg><span>Todos nuestros servicios incluyen toalla caliente y terminación profesional.</span></div></section>
         <section class="column" id="barberos" aria-label="Elegí el barbero"><h3 class="column-title"><svg><use href="#i-person" /></svg>Elegí el barbero</h3><div id="barber-list" class="selection-list"></div><button class="text-link" id="all-barbers" type="button">Conocé a nuestros profesionales <svg><use href="#i-right" /></svg></button></section>
-        <section class="column" id="fechas" aria-label="Elegí fecha y horario"><h3 class="column-title"><svg><use href="#i-calendar" /></svg>Elegí la fecha</h3><div class="calendar-head"><button type="button" class="cal-arrow" id="prev-month" aria-label="Mes anterior"><svg><use href="#i-left" /></svg></button><span class="month-title" id="month-label"></span><button type="button" class="cal-arrow" id="next-month" aria-label="Mes siguiente"><svg><use href="#i-right" /></svg></button></div><div class="cal-week" aria-hidden="true"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><div class="cal-grid" id="calendar" role="group" aria-label="Días disponibles"></div><h4 class="time-label">Elegí un horario</h4><div class="time-grid" id="times" role="group" aria-label="Horarios de ejemplo"></div></section>
-        <section class="column" id="resumen" aria-label="Resumen de la reserva"><h3 class="column-title"><svg><use href="#i-clipboard" /></svg>Resumen del turno</h3><div class="summary" id="summary"></div><div class="summary-total"><span>Total</span><b id="total"></b></div><button class="button confirm" id="confirm-button" type="button">CONTINUAR CON LA RESERVA</button><div class="summary-foot"><svg><use href="#i-shield" /></svg>Tu información se usa solo para preparar tu solicitud</div></section>
+        <section class="column" id="fechas" aria-label="Elegí fecha y horario"><h3 class="column-title"><svg><use href="#i-calendar" /></svg>Elegí la fecha</h3><div class="calendar-head"><button type="button" class="cal-arrow" id="prev-month" aria-label="Mes anterior"><svg><use href="#i-left" /></svg></button><span class="month-title" id="month-label"></span><button type="button" class="cal-arrow" id="next-month" aria-label="Mes siguiente"><svg><use href="#i-right" /></svg></button></div><div class="cal-week" aria-hidden="true"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><div class="cal-grid" id="calendar" role="group" aria-label="Días disponibles"></div><h4 class="time-label">Elegí un horario</h4><div class="time-grid" id="times" role="group" aria-label="Horarios disponibles de la agenda demo"></div></section>
+        <section class="column" id="resumen" aria-label="Resumen de la reserva"><h3 class="column-title"><svg><use href="#i-clipboard" /></svg>Resumen del turno</h3><div class="summary" id="summary"></div><div class="summary-total"><span>Total</span><b id="total"></b></div><button class="button confirm" id="confirm-button" type="button">CONFIRMAR TURNO DEMO</button><div class="summary-foot"><svg><use href="#i-shield" /></svg>Agenda de demostración · Sin sincronización entre dispositivos</div></section>
       </div>
-      <div class="demo-note"><svg><use href="#i-info" /></svg><span><strong>Plantilla de demostración.</strong> Precios, barberos y horarios son de ejemplo. Para recibir reservas reales se debe configurar el WhatsApp del negocio o conectar un sistema de turnos.</span></div>
+      <div class="demo-note"><svg><use href="#i-info" /></svg><span><strong>Plantilla de demostración.</strong> Podés registrar y gestionar turnos en este navegador, como en la demo de TurnoFácil. Los datos NO se comparten entre dispositivos y no son reservas reales de un negocio.</span></div>
     </section>
     <section class="shell benefits" aria-label="Beneficios">
       <div class="benefit"><svg><use href="#i-calendar" /></svg><div><strong>Reserva simple y rápida</strong><p>Elegí tu horario en pocos pasos desde cualquier dispositivo.</p></div></div>
@@ -235,7 +239,7 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
   </main>
   <footer class="footer" id="contacto"><div class="shell"><div class="footer-grid">
     <div><a href="#inicio" class="brand"><span class="brand-emblem"><svg><use href="#i-scissors" /></svg></span><span class="brand-text">BARBERÍA<strong>EXCLUSIVA</strong></span></a><p>Más que un corte, una experiencia.<br>Estilo, actitud y calidad en<br>cada detalle.</p><div class="social"><button type="button" aria-label="Consultar redes sociales" data-contact><svg><use href="#i-person" /></svg></button><button type="button" aria-label="Consultar WhatsApp" data-contact><svg><use href="#i-phone" /></svg></button></div></div>
-    <div><h3>NAVEGACIÓN</h3><ul><li><a href="#inicio">Inicio</a></li><li><a href="#servicios">Servicios</a></li><li><a href="#barberos">Barberos</a></li><li><a href="#galeria" data-gallery>Galería</a></li><li><a href="#contacto">Contacto</a></li></ul></div>
+    <div><h3>NAVEGACIÓN</h3><ul><li><a href="#inicio">Inicio</a></li><li><a href="#servicios">Servicios</a></li><li><a href="#barberos">Barberos</a></li><li><a href="#galeria" data-gallery>Galería</a></li><li><a href="#contacto">Contacto</a></li><li><a href="#reservas" id="my-bookings-link">Mis turnos</a></li><li><a href="./admin/">Panel demo</a></li></ul></div>
     <div><h3>SERVICIOS</h3><ul><li><a href="#servicios">Corte de cabello</a></li><li><a href="#servicios">Barba</a></li><li><a href="#servicios">Corte + barba</a></li><li><a href="#servicios">Cejas</a></li><li><a href="#servicios">Otros servicios</a></li></ul></div>
     <div><h3>CONTACTO</h3><ul class="contact-list"><li><svg><use href="#i-phone" /></svg><span>WhatsApp configurable</span></li><li><svg><use href="#i-mail" /></svg><span>contacto@tubarberia.com</span></li><li><svg><use href="#i-pin" /></svg><span>Dirección de tu negocio<br>Tu ciudad, Argentina</span></li></ul></div>
     <div><h3>HORARIO DE ATENCIÓN</h3><ul><li>Lunes a viernes<br>09:00 a 20:00</li><li>Sábados<br>09:00 a 20:00</li><li>Domingos<br>Cerrado</li></ul></div>
@@ -263,7 +267,28 @@ const barbers=[
   {id:'rafael',name:'Rafael Lima',rating:'4.9',initials:'RL',photo:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&h=100&q=80'},
   {id:'matheus',name:'Matheus Alves',rating:'4.7',initials:'MA',photo:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80'}
 ];
+const SETTINGS_KEY='bx-demo-settings-v1';
+function applySettings(){let settings={};try{settings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}')||{}}catch{}for(const [src,overrides] of [[services,settings.services],[barbers,settings.staff]])for(const item of src){const value=Array.isArray(overrides)?overrides.find(x=>x.id===item.id):null;if(value){if(typeof value.name==='string'&&value.name.trim())item.name=value.name.trim();if(Number.isFinite(value.price)&&value.price>=0)item.price=value.price;if(Number.isFinite(value.duration)&&value.duration>=15&&value.duration<=300)item.duration=value.duration;item.active=value.active!==false}else item.active=true}}
+applySettings();
+const BOOKING_KEY='bx-demo-bookings-v1';
+const BLOCK_KEY='bx-demo-blocks-v1';
 const el=id=>document.getElementById(id);
+function readList(key){try{const data=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(data)?data:[]}catch{return []}}
+function writeList(key,data){try{localStorage.setItem(key,JSON.stringify(data));return true}catch{toast('No se pudo guardar. Revisá el almacenamiento del navegador.');return false}}
+const mins=t=>{const v=String(t||'').split(':').map(Number);return v.length===2&&v.every(Number.isFinite)?v[0]*60+v[1]:NaN};
+const hhmm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+function freeSlot(date,time,barberId,serviceId,exceptId=''){
+ const sv=services.find(x=>x.id===serviceId);if(!sv||sv.active===false||!barbers.some(x=>x.id===barberId&&x.active!==false))return false;
+ const d=fromKey(date),a=mins(time),b=a+sv.duration,now=new Date();
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(d.getTime())||!validDay(d)||a<540||b>1200||a%30!==0||!Number.isFinite(a))return false;
+ if(a<840&&b>780)return false; // descanso 13:00 a 14:00
+ if(new Date(d.getFullYear(),d.getMonth(),d.getDate(),Math.floor(a/60),a%60)<=now)return false;
+ const overlaps=(q,r)=>a<r&&b>q;
+ if(readList(BLOCK_KEY).some(x=>x.date===date&&(x.barberId===barberId||x.barberId==='all')&&overlaps(mins(x.start),mins(x.end))))return false;
+ return !readList(BOOKING_KEY).some(x=>x.id!==exceptId&&x.status!=='cancelled'&&x.date===date&&x.barberId===barberId&&overlaps(mins(x.time),mins(x.time)+Number(x.duration||30)));
+}
+function slotList(date){const list=[];for(let m=540;m<=1170;m+=30){const time=hhmm(m);list.push({time,disabled:!freeSlot(date,time,state.barber,state.service)})}return list}
+
 const icon=(id)=>`<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><use href="#i-${id}"></use></svg>`;
 // The SVG sprite is outline-based; icons inherit their stroke from this CSS-friendly wrapper.
 document.querySelectorAll('svg:not([xmlns])').forEach(s=>{s.setAttribute('fill','none');s.setAttribute('stroke','currentColor');s.setAttribute('stroke-width','1.7');s.setAttribute('stroke-linecap','round');s.setAttribute('stroke-linejoin','round')});
@@ -276,7 +301,7 @@ const validDay=d=>d>=start&&d<=maxDate&&d.getDay()!==0;
 const firstDate=(()=>{let d=new Date(start);d.setDate(d.getDate()+1);while(!validDay(d))d.setDate(d.getDate()+1);return d})();
 const money=v=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(v);
 const formatDate=d=>new Intl.DateTimeFormat('es-AR',{day:'numeric',month:'long',year:'numeric'}).format(d);
-let state={service:'corte',barber:'lucas',date:key(firstDate),time:'16:00',activeStep:1};
+let state={service:'corte',barber:'lucas',date:key(firstDate),time:'',activeStep:1};
 try{const saved=JSON.parse(localStorage.getItem('barberia-demo-selection')||'null');if(saved&&services.some(x=>x.id===saved.service)&&barbers.some(x=>x.id===saved.barber)){state.service=saved.service;state.barber=saved.barber;if(/^\d{4}-\d{2}-\d{2}$/.test(saved.date||'')&&validDay(fromKey(saved.date)))state.date=saved.date;if(/^\d\d:\d\d$/.test(saved.time||''))state.time=saved.time}}catch(e){}
 let month=new Date(fromKey(state.date).getFullYear(),fromKey(state.date).getMonth(),1);
 let lastFocus=null;
@@ -285,8 +310,8 @@ const service=()=>services.find(x=>x.id===state.service);
 const barber=()=>barbers.find(x=>x.id===state.barber);
 function persist(){try{localStorage.setItem('barberia-demo-selection',JSON.stringify(state))}catch(e){}}
 function toast(text){const node=el('toast');node.textContent=text;node.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>node.classList.remove('show'),2700)}
-function renderServices(){el('service-list').innerHTML=services.map(s=>`<button class="select-card ${s.id===state.service?'selected':''}" data-service="${s.id}" type="button" aria-pressed="${s.id===state.service}"><span class="card-copy"><strong>${s.name}</strong><small>${money(s.price)} · ${s.duration} min</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
-function renderBarbers(){el('barber-list').innerHTML=barbers.map(b=>`<button class="select-card ${b.id===state.barber?'selected':''}" data-barber="${b.id}" type="button" aria-pressed="${b.id===state.barber}"><span class="avatar" aria-hidden="true"><img src="${b.photo}" loading="lazy" alt="" onerror="this.remove()">${b.initials}</span><span class="card-copy"><strong>${b.name}</strong><small class="stars">${icon('star')} ${b.rating} · Profesional</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
+function renderServices(){el('service-list').innerHTML=services.filter(s=>s.active!==false).map(s=>`<button class="select-card ${s.id===state.service?'selected':''}" data-service="${s.id}" type="button" aria-pressed="${s.id===state.service}"><span class="card-copy"><strong>${s.name}</strong><small>${money(s.price)} · ${s.duration} min</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
+function renderBarbers(){el('barber-list').innerHTML=barbers.filter(b=>b.active!==false).map(b=>`<button class="select-card ${b.id===state.barber?'selected':''}" data-barber="${b.id}" type="button" aria-pressed="${b.id===state.barber}"><span class="avatar" aria-hidden="true"><img src="${b.photo}" loading="lazy" alt="" onerror="this.remove()">${b.initials}</span><span class="card-copy"><strong>${b.name}</strong><small class="stars">${icon('star')} ${b.rating} · Profesional</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
 function renderCalendar(){
  const first=new Date(month.getFullYear(),month.getMonth(),1);
  const days=new Date(month.getFullYear(),month.getMonth()+1,0).getDate();
@@ -297,21 +322,15 @@ function renderCalendar(){
  el('next-month').disabled=month.getFullYear()===maxDate.getFullYear()&&month.getMonth()===maxDate.getMonth();
  let cells='';for(let i=0;i<offset;i++)cells+='<span class="cal-cell empty" aria-hidden="true"></span>';
  for(let day=1;day<=days;day++){
-   const d=new Date(month.getFullYear(),month.getMonth(),day),dk=key(d),disabled=!validDay(d),selected=state.date===dk;
+   const d=new Date(month.getFullYear(),month.getMonth(),day),dk=key(d),disabled=!validDay(d)||!slotList(dk).some(t=>!t.disabled),selected=state.date===dk;
    cells+=`<button type="button" class="cal-cell ${dk===key(start)?'today':''} ${selected?'selected':''}" data-date="${dk}" ${disabled?'disabled':''} aria-label="${formatDate(d)}" aria-pressed="${selected}">${day}</button>`;
  }
  el('calendar').innerHTML=cells;
 }
 function renderTimes(){
- const now=new Date();const day=fromKey(state.date);let times=[];
- for(let hr=9;hr<20;hr++){
-  const candidate=new Date(day.getFullYear(),day.getMonth(),day.getDate(),hr,0);
-  const ends=hr*60+service().duration;
-  const disabled=candidate<=now||ends>20*60;
-  times.push({time:`${String(hr).padStart(2,'0')}:00`,disabled});
- }
+ const times=slotList(state.date);
  if(!times.some(t=>t.time===state.time&&!t.disabled))state.time=times.find(t=>!t.disabled)?.time||'';
- el('times').innerHTML=times.map(t=>`<button type="button" class="time ${t.time===state.time?'selected':''}" data-time="${t.time}" ${t.disabled?'disabled':''} aria-pressed="${t.time===state.time}">${t.time}</button>`).join('');
+ el('times').innerHTML=times.map(t=>`<button type="button" class="time ${t.time===state.time?'selected':''}" data-time="${t.time}" ${t.disabled?'disabled':''} aria-label="${t.time}${t.disabled?', ocupado o no disponible':''}" aria-pressed="${t.time===state.time}">${t.time}</button>`).join('');
 }
 function renderSummary(){
  const s=service(),b=barber(),d=fromKey(state.date);
@@ -321,23 +340,35 @@ function renderSummary(){
  el('confirm-button').style.opacity=state.time?'1':'.45';
 }
 function renderSteps(){document.querySelectorAll('[data-step]').forEach(b=>{const n=Number(b.dataset.step);b.classList.toggle('active',n===state.activeStep);b.classList.toggle('done',n<state.activeStep)})}
-function render(){renderServices();renderBarbers();renderCalendar();renderTimes();renderSummary();renderSteps();persist()}
+function render(){if(service()?.active===false)state.service=services.find(x=>x.active!==false)?.id||state.service;if(barber()?.active===false)state.barber=barbers.find(x=>x.active!==false)?.id||state.barber;if(!slotList(state.date).some(x=>!x.disabled)){let d=fromKey(state.date);for(let i=0;i<75;i++){d.setDate(d.getDate()+1);if(d>maxDate)break;if(slotList(key(d)).some(x=>!x.disabled)){state.date=key(d);month=new Date(d.getFullYear(),d.getMonth(),1);break}}}renderServices();renderBarbers();renderCalendar();renderTimes();renderSummary();renderSteps();persist()}
 function activate(n){state.activeStep=n;renderSteps()}
 function openModal(id){lastFocus=document.activeElement;el(id).classList.add('open');document.body.style.overflow='hidden';el(id).querySelector('.close')?.focus()}
 function closeModals(){for(const o of document.querySelectorAll('.overlay'))o.classList.remove('open');document.body.style.overflow='';if(lastFocus?.focus)lastFocus.focus()}
 function openReservation(){
+ if(!state.time||!freeSlot(state.date,state.time,state.barber,state.service)){render();toast('Ese horario ya no está disponible');return}
  const s=service(),b=barber();
- el('modal-content').innerHTML=`<p class="eyebrow">ÚLTIMO PASO</p><h2 id="modal-title">Prepará tu reserva</h2><p>Completá tus datos. Esta plantilla prepara una solicitud; no bloquea el horario en una agenda real.</p><div class="modal-overview"><span>${icon('scissors')} ${s.name} · ${money(s.price)}</span><span>${icon('person')} ${b.name}</span><span>${icon('calendar')} ${formatDate(fromKey(state.date))} · ${state.time}</span></div><form id="booking-form"><div class="field"><label for="customer-name">Nombre y apellido *</label><input id="customer-name" name="name" type="text" placeholder="Tu nombre completo" autocomplete="name" minlength="3" maxlength="80" required></div><div class="field"><label for="customer-phone">Teléfono / WhatsApp *</label><input id="customer-phone" name="phone" type="tel" placeholder="Ej.: 2901 123456" autocomplete="tel" minlength="8" maxlength="30" required></div><div class="modal-actions"><button type="button" class="button secondary" data-close>Cancelar</button><button class="button" type="submit">PREPARAR SOLICITUD</button></div></form>`;
+ el('modal-content').innerHTML=`<p class="eyebrow">ÚLTIMO PASO</p><h2 id="modal-title">Confirmá tu turno</h2><p>El turno se registrará en la agenda de esta demostración. No se sincroniza con otros dispositivos ni con un negocio real.</p><div class="modal-overview"><span>${icon('scissors')} ${s.name} · ${money(s.price)}</span><span>${icon('person')} ${b.name}</span><span>${icon('calendar')} ${formatDate(fromKey(state.date))} · ${state.time}</span></div><form id="booking-form"><div class="field"><label for="customer-name">Nombre y apellido *</label><input id="customer-name" name="name" type="text" placeholder="Tu nombre completo" autocomplete="name" minlength="3" maxlength="80" required></div><div class="field"><label for="customer-phone">Teléfono / WhatsApp *</label><input id="customer-phone" name="phone" type="tel" placeholder="Ej.: 2901 123456" autocomplete="tel" minlength="8" maxlength="30" required></div><div class="field"><label for="customer-email">Correo (opcional)</label><input id="customer-email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" maxlength="120"></div><div class="field"><label for="customer-notes">Comentario (opcional)</label><textarea id="customer-notes" name="notes" maxlength="250" placeholder="Alguna preferencia..." rows="2"></textarea></div><div class="modal-actions"><button type="button" class="button secondary" data-close>Cancelar</button><button class="button" type="submit">REGISTRAR TURNO</button></div></form>`;
  openModal('reservation-overlay');
  setTimeout(()=>el('customer-name')?.focus(),50);
 }
-function makeBookingText(name,phone){return `Hola, quiero solicitar un turno en ${CONFIG.business}.\n\nCliente: ${name}\nTeléfono: ${phone}\nServicio: ${service().name}\nProfesional: ${barber().name}\nFecha: ${formatDate(fromKey(state.date))}\nHorario: ${state.time}\nDuración: ${service().duration} minutos\nTotal de referencia: ${money(service().price)}\n\n¿Me confirman la disponibilidad?`}
-function safeText(s){return String(s).replace(/[&<>"']/g,character=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]))}
-function success(name,phone){
- currentText=makeBookingText(name,phone);
- try{const old=JSON.parse(localStorage.getItem('barberia-demo-requests')||'[]');old.push({name,phone,...state,createdAt:new Date().toISOString()});localStorage.setItem('barberia-demo-requests',JSON.stringify(old.slice(-20)))}catch(e){}
+function makeBookingText(booking){const sv=services.find(x=>x.id===booking.serviceId),b=barbers.find(x=>x.id===booking.barberId);return `Hola, registré un turno de demostración en ${CONFIG.business}.\n\nNº: ${booking.id}\nCliente: ${booking.name}\nTeléfono: ${booking.phone}\nServicio: ${sv?.name||booking.serviceId}\nProfesional: ${b?.name||booking.barberId}\nFecha: ${formatDate(fromKey(booking.date))}\nHorario: ${booking.time}\nDuración: ${booking.duration} minutos\nPrecio de referencia: ${money(booking.price)}\n\nQuisiera consultar por disponibilidad real.`}
+function safeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+let currentBooking=null;
+function downloadCalendar(b){const startDate=b.date.replace(/-/g,'')+'T'+b.time.replace(':','')+'00';const endDateObj=new Date(fromKey(b.date).getFullYear(),fromKey(b.date).getMonth(),fromKey(b.date).getDate(),Math.floor(mins(b.time)/60),mins(b.time)%60+b.duration);const endDate=key(endDateObj).replace(/-/g,'')+'T'+hhmm(endDateObj.getHours()*60+endDateObj.getMinutes()).replace(':','')+'00';const escapeIcs=x=>String(x).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Barberia Exclusiva//Turnos Demo//ES','BEGIN:VEVENT','UID:'+b.id+'@barberia-demo','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'').replace(/Z$/,'Z'),'DTSTART:'+startDate,'DTEND:'+endDate,'SUMMARY:'+escapeIcs((services.find(x=>x.id===b.serviceId)?.name||'Turno')+' · Barbería Exclusiva'),'DESCRIPTION:'+escapeIcs('Demo local, no reserva real.'),'END:VEVENT','END:VCALENDAR'].join('\r\n');const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='turno-'+b.date+'.ics';a.click();setTimeout(()=>URL.revokeObjectURL(u),2500)}
+function success(name,phone,email,notes){
+ if(!freeSlot(state.date,state.time,state.barber,state.service)){toast('Ese turno acaba de ocuparse. Elegí otro horario.');closeModals();render();return}
+ const s=service(),b=barber(),booking={id:'BX-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase(),name,phone,email,notes,serviceId:s.id,barberId:b.id,date:state.date,time:state.time,duration:s.duration,price:s.price,status:'confirmed',createdAt:new Date().toISOString()};
+ if(!writeList(BOOKING_KEY,[...readList(BOOKING_KEY),booking]))return;
+ currentBooking=booking;currentText=makeBookingText(booking);
  const whatsapp=CONFIG.whatsapp.replace(/\D/g,'');
- el('modal-content').innerHTML=`<div class="success-icon">${icon('check')}</div><h2 id="modal-title">Solicitud preparada</h2><p>Gracias, <strong style="color:#e8c39b">${safeText(name)}</strong>. Tu selección quedó guardada en este navegador. ${whatsapp?'Enviá el mensaje para que el negocio confirme el turno.':'Copiá estos datos y envialos al negocio para consultar disponibilidad.'}</p><div class="modal-overview"><span>${safeText(service().name)} · ${money(service().price)}</span><span>${safeText(barber().name)}</span><span>${formatDate(fromKey(state.date))} · ${state.time}</span></div><div class="modal-actions"><button type="button" class="button secondary" id="copy-request">${icon('copy')} COPIAR DATOS</button>${whatsapp?`<a href="https://wa.me/${whatsapp}?text=${encodeURIComponent(currentText)}" target="_blank" rel="noopener noreferrer" class="button">ENVIAR POR WHATSAPP</a>`:`<button type="button" class="button" id="download-request">GUARDAR SOLICITUD</button>`}</div><p style="font-size:10px;margin:18px 0 0">Esta acción no confirma una reserva en tiempo real.</p>`;
+ el('modal-content').innerHTML=`<div class="success-icon">${icon('check')}</div><p class="eyebrow">REGISTRO Nº ${safeText(booking.id)}</p><h2 id="modal-title">Turno registrado en la demo</h2><p>Gracias, <strong style="color:#e8c39b">${safeText(name)}</strong>. Tu turno aparece en el panel de agenda de <strong>este navegador</strong>. No es una reserva real ni se sincroniza con otros dispositivos.</p><div class="modal-overview"><span>${safeText(s.name)} · ${money(s.price)}</span><span>${safeText(b.name)}</span><span>${formatDate(fromKey(booking.date))} · ${booking.time} (${s.duration} min)</span></div><div class="modal-actions"><button class="button secondary" type="button" id="download-ics">${icon('calendar')} AÑADIR A CALENDARIO</button><button class="button" type="button" id="show-my-turns">VER MIS TURNOS</button></div><div class="modal-actions" style="margin-top:9px"><button class="button secondary" type="button" id="copy-request">${icon('copy')} COPIAR DATOS</button>${whatsapp?`<a class="button" href="https://wa.me/${whatsapp}?text=${encodeURIComponent(currentText)}" target="_blank" rel="noopener noreferrer">CONSULTAR POR WHATSAPP</a>`:'<button class="button secondary" type="button" id="download-request">DESCARGAR RESUMEN</button>'}</div>`;
+ render();
+}
+function showMyBookings(phone=''){
+ const own=readList(BOOKING_KEY).filter(x=>phone&&x.phone.replace(/\D/g,'')===phone.replace(/\D/g,'')).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+ const cards=phone?(own.length?own.map(x=>{const s=services.find(z=>z.id===x.serviceId),b=barbers.find(z=>z.id===x.barberId);return `<div class="modal-overview"><strong>${safeText(s?.name||x.serviceId)} · ${money(x.price)}</strong><span>${safeText(b?.name||x.barberId)} · ${formatDate(fromKey(x.date))} · ${x.time}</span><span>Estado: <strong>${x.status==='cancelled'?'Cancelado':x.status==='pending'?'Pendiente':'Registrado'}</strong> · Nº ${safeText(x.id)}</span>${x.status!=='cancelled'?`<button type="button" class="button secondary" data-cancel-own="${safeText(x.id)}">CANCELAR ESTE TURNO</button>`:''}</div>`}).join(''):'<p>No encontramos turnos en la agenda de este navegador para ese teléfono.</p>'):'<p>Ingresá el mismo número que usaste al reservar para ver o cancelar turnos guardados en este dispositivo.</p>';
+ el('modal-content').innerHTML=`<p class="eyebrow">MI AGENDA</p><h2 id="modal-title">Mis turnos</h2><p>Consulta local de demostración. No sirve para consultar reservas desde otro equipo.</p><form id="lookup-form"><div class="field"><label for="lookup-phone">WhatsApp / teléfono</label><input type="tel" required name="phone" id="lookup-phone" value="${safeText(phone)}" placeholder="2901 123456"></div><button type="submit" class="button" style="width:100%">BUSCAR MIS TURNOS</button></form><div style="margin-top:20px">${cards}</div>`;
+ openModal('reservation-overlay');
 }
 async function copyText(){try{await navigator.clipboard.writeText(currentText);toast('Datos copiados correctamente')}catch(e){const area=document.createElement('textarea');area.value=currentText;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();try{document.execCommand('copy');toast('Datos copiados correctamente')}catch(err){toast('No se pudo copiar automáticamente')}area.remove()}}
 function downloadText(){const data=new Blob([currentText],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(data);const a=document.createElement('a');a.href=u;a.download='solicitud-turno-barberia.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000)}
@@ -356,13 +387,20 @@ document.addEventListener('click',e=>{
  if(e.target.classList.contains('overlay')){closeModals();return}
  if(e.target.closest('#copy-request')){copyText();return}
  if(e.target.closest('#download-request')){downloadText();return}
+ if(e.target.closest('#download-ics')){if(currentBooking)downloadCalendar(currentBooking);return}
+ if(e.target.closest('#show-my-turns')){showMyBookings(currentBooking?.phone||'');return}
+ if(e.target.closest('#my-bookings-top')){showMyBookings();return}
+ if(e.target.closest('#my-bookings-link')){e.preventDefault();showMyBookings();return}
+ const ownCancel=e.target.closest('[data-cancel-own]');if(ownCancel){const id=ownCancel.dataset.cancelOwn,phone=el('lookup-phone')?.value||'';const all=readList(BOOKING_KEY),b=all.find(x=>x.id===id&&x.phone.replace(/\D/g,'')===phone.replace(/\D/g,''));if(!b)return toast('No se encontró ese turno');if(!confirm('¿Cancelar este turno guardado en esta demo?'))return;b.status='cancelled';if(writeList(BOOKING_KEY,all)){showMyBookings(phone);render()}return}
 });
 el('prev-month').addEventListener('click',()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);renderCalendar()});
 el('next-month').addEventListener('click',()=>{month=new Date(month.getFullYear(),month.getMonth()+1,1);renderCalendar()});
 el('mobile-menu').addEventListener('click',()=>{const menu=el('main-nav');const showing=menu.classList.toggle('open');el('mobile-menu').setAttribute('aria-expanded',String(showing))});
 el('main-nav').addEventListener('click',e=>{if(e.target.closest('a')){el('main-nav').classList.remove('open');el('mobile-menu').setAttribute('aria-expanded','false')}});
-document.addEventListener('submit',e=>{if(e.target.id==='booking-form'){e.preventDefault();const data=new FormData(e.target);const name=String(data.get('name')).trim(),phone=String(data.get('phone')).trim();if(name.length<3||phone.length<8){toast('Completá nombre y teléfono válidos');return}success(name,phone)}});
+document.addEventListener('submit',e=>{if(e.target.id==='booking-form'){e.preventDefault();const data=new FormData(e.target);const name=String(data.get('name')).trim(),phone=String(data.get('phone')).trim();if(name.length<3||phone.replace(/\D/g,'').length<8){toast('Completá nombre y teléfono válidos');return}const email=String(data.get('email')||'').trim(),notes=String(data.get('notes')||'').trim();if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Revisá el correo electrónico');return}success(name,phone,email,notes)}else if(e.target.id==='lookup-form'){e.preventDefault();showMyBookings(String(new FormData(e.target).get('phone')||'').trim())}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals()});
+window.addEventListener('storage',e=>{if(e.key===SETTINGS_KEY)location.reload();else if(e.key===BOOKING_KEY||e.key===BLOCK_KEY)render()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 el('year').textContent=new Date().getFullYear();
 render();
 })();
