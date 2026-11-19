@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu Pizzería - Pizzas, Empanadas y más</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Kaushan+Script&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#170d0a; --bg2:#22130e; --red:#c8211b; --red2:#a8170f; --cream:#f7efe4; --cream2:#efe3d3;
+  --ink:#2a1a14; --muted:#6b5a50; --green:#25c25b; --line:#e3d4c1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+img{display:block}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+
+/* Placeholder de foto: si la imagen no existe se ve el rótulo */
+.ph{position:relative;overflow:hidden;background:linear-gradient(135deg,#7a2a16,#c4581f 55%,#e8a64a);}
+.ph::before{content:attr(data-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font:600 11px/1.3 'Barlow',sans-serif;color:rgba(255,255,255,.75);letter-spacing:.04em}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .bgimg img{object-position:70% 50%}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:50;background:rgba(23,13,10,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.05)}
+.nav{display:flex;align-items:center;height:96px;gap:40px}
+.logo{display:flex;align-items:center;gap:12px;color:#fff}
+.logo svg{width:54px;height:54px}
+.logo span{font-family:'Kaushan Script',cursive;font-size:40px;line-height:1;position:relative;padding-bottom:6px}
+.logo span::after{content:"";position:absolute;left:30px;right:0;bottom:-4px;height:10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10'%3E%3Cpath d='M2 8 C40 2 80 1 118 4' stroke='%23c8211b' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
+.menu{display:flex;gap:34px;margin-left:auto;font-size:16px;color:#f1e6dc}
+.menu a{position:relative;padding:8px 2px}
+.menu a.active{font-weight:600;color:#fff}
+.menu a.active::after{content:"";position:absolute;left:-6px;right:-6px;bottom:-8px;height:3px;border-radius:3px;background:var(--red)}
+.menu a:hover{color:#fff}
+.nav-actions{display:flex;align-items:center;gap:14px;margin-left:24px}
+.wa-pill{display:flex;align-items:center;gap:10px;border:2px solid var(--green);border-radius:14px;padding:8px 16px;color:#fff;font-size:13px;line-height:1.15}
+.wa-pill svg{width:30px;height:30px;color:var(--green)}
+.cart-btn{position:relative;width:46px;height:46px;border-radius:12px;background:var(--red);display:grid;place-items:center;color:#fff}
+.cart-btn svg{width:24px;height:24px}
+.badge{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;border-radius:11px;background:var(--red);border:2px solid var(--bg);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 4px}
+.burger{display:none;color:#fff}
+.burger svg{width:28px;height:28px}
+
+/* HERO */
+.hero{position:relative;min-height:470px;overflow:hidden;background:var(--bg)}
+.hero .bgimg{position:absolute;right:0;top:0;bottom:0;width:66%;
+  background:radial-gradient(ellipse at 40% 30%,#ff8a2a 0%,#9b2c10 30%,#3a160c 60%,transparent 75%)}
+.hero .bgimg.ph::before{align-items:flex-end;padding-bottom:40px}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 30%,rgba(23,13,10,.75) 45%,rgba(23,13,10,0) 65%);pointer-events:none}
+.hero-in{position:relative;z-index:2;padding-top:44px;padding-bottom:70px}
+.eyebrow{font-family:'Barlow Condensed',sans-serif;letter-spacing:.18em;font-size:15px;color:#e9ddd2;font-weight:500}
+.hero h1{font-family:'Fraunces',serif;font-weight:700;color:#f7ecdf;font-size:62px;line-height:1.02;margin:16px 0 18px;letter-spacing:-.5px}
+.hero p{color:#e6d8cb;font-size:18px;line-height:1.4;max-width:450px}
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:28px}
+.btn-red{display:inline-flex;align-items:center;gap:14px;background:var(--red);color:#fff;font-weight:600;font-size:18px;padding:16px 28px;border-radius:14px;box-shadow:0 10px 30px rgba(200,33,27,.35);transition:.2s}
+.btn-red:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-red svg{width:24px;height:24px}
+.pill-open{background:rgba(23,13,10,.55);display:inline-flex;align-items:center;gap:9px;border:1.5px solid var(--green);color:#dff5e6;border-radius:999px;padding:8px 16px;font-size:14px}
+.pill-open i{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(37,194,91,.2)}
+.pill-open.closed{border-color:#a55;color:#f3d6d6}.pill-open.closed i{background:#e14b4b;box-shadow:0 0 0 4px rgba(225,75,75,.2)}
+.pill-wa{background:rgba(23,13,10,.55);backdrop-filter:blur(6px);display:inline-flex;align-items:center;gap:9px;border:1.5px solid rgba(255,255,255,.35);color:#f2e8de;border-radius:999px;padding:7px 16px;font-size:14px}
+.pill-wa svg{width:24px;height:24px;color:var(--green)}
+
+/* MENU SECTION */
+.menu-sec{position:relative;z-index:3;margin-top:-10px;background:var(--cream);border-radius:22px 22px 0 0;padding:44px 0 0}
+.menu-grid{display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:start}
+.menu-grid{grid-template-columns:1fr 270px}
+h2.title{font-family:'Fraunces',serif;font-size:38px;color:#1e110c;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:18px;margin-top:6px}
+.tabs{display:flex;gap:14px;margin:24px 0 26px;flex-wrap:wrap}
+.tab{display:flex;align-items:center;justify-content:center;gap:12px;min-width:160px;padding:14px 22px;border-radius:12px;background:var(--cream2);color:#3a2a22;font-size:16px;font-weight:500;transition:.2s}
+.tab svg{width:26px;height:26px;color:var(--red)}
+.tab.active{background:var(--red);color:#fff;font-weight:600;box-shadow:0 8px 20px rgba(200,33,27,.25)}
+.tab.active svg{color:#fff}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:#fff;border-radius:14px;padding:8px;box-shadow:0 2px 10px rgba(60,30,10,.06);display:flex;flex-direction:column}
+.card .ph{aspect-ratio:1.45/1;border-radius:10px}
+.tag-pop{position:absolute;z-index:2;top:10px;left:10px;background:var(--red);color:#fff;font-size:12px;font-weight:600;padding:4px 9px;border-radius:7px;display:flex;align-items:center;gap:4px}
+.card h3{font-family:'Barlow',sans-serif;font-weight:700;font-size:17px;margin:12px 6px 4px;color:#1e110c}
+.card p{font-size:13px;color:var(--muted);margin:0 6px;line-height:1.3;flex:1}
+.card .row{display:flex;align-items:center;justify-content:space-between;margin:12px 6px 6px}
+.price{font-weight:700;font-size:20px;color:#1e110c}
+.add{width:34px;height:34px;border-radius:50%;border:1.5px solid #e6b8ae;color:var(--red);display:grid;place-items:center;font-size:22px;line-height:1;transition:.2s}
+.add:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* CART */
+.cart{background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(60,30,10,.1);padding:18px;position:sticky;top:112px}
+.cart-head{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.cart-head svg{width:24px;height:24px;color:var(--red)}
+.cart-head h3{font-size:18px;font-weight:700;color:#1e110c}
+.cart-head button{margin-left:auto;color:var(--red);font-size:12px;text-decoration:underline}
+.ci{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.ci .ph{width:52px;height:44px;border-radius:8px}
+.ci .ph::before{font-size:0}
+.ci b{font-size:13px;display:block;color:#1e110c}
+.qty{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:8px;padding:2px 8px;margin-top:6px;font-size:14px}
+.qty button{font-size:16px;width:16px}
+.ci .r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-size:13px;font-weight:600}
+.ci .x{color:#8a7a70;font-size:16px;line-height:1}
+.empty{padding:26px 0;text-align:center;color:var(--muted);font-size:14px}
+.sum{display:flex;justify-content:space-between;font-size:14px;color:#4a3a32;padding:14px 0 8px}
+.tot{display:flex;justify-content:space-between;font-size:20px;font-weight:700;color:#1e110c;padding:8px 0 16px;border-top:1px solid var(--line)}
+.btn-finish{width:100%;justify-content:center;font-size:16px;padding:14px;border-radius:12px}
+
+/* FEATURES */
+.features{background:var(--cream);padding:34px 0 40px}
+.feat{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);padding-top:30px}
+.f{display:flex;gap:14px;align-items:center;padding:0 24px;border-left:1px solid var(--line)}
+.f:first-child{border-left:0;padding-left:0}
+.f svg{width:40px;height:40px;color:var(--red);flex:none}
+.f b{display:block;font-size:15px;color:#1e110c}
+.f small{font-size:12px;color:var(--muted)}
+
+
+/* NOSOTROS */
+.about{background:var(--bg);color:#f1e6dc;padding:60px 0}
+.about-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:stretch}
+.about h2{font-family:'Fraunces',serif;font-size:36px;color:#f7ecdf;line-height:1.1}
+.about p{color:#d8c9bc;line-height:1.55;margin-top:14px}
+.about .ph{border-radius:16px;min-height:260px}
+.about .ph span{position:absolute;left:14px;bottom:14px;z-index:2;background:rgba(23,13,10,.8);color:#fff;font-size:13px;font-weight:600;padding:6px 12px;border-radius:999px}
+@media (max-width:860px){.about-grid{grid-template-columns:1fr}.about .ph{min-height:210px}.about h2{font-size:28px}}
+
+/* Modal checkout */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.open{display:flex}
+.modal-box{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:24px}
+.modal-box h3{font-family:'Fraunces',serif;font-size:24px;margin-bottom:12px}
+.modal-box label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.modal-box input,.modal-box select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.modal-box .acts{display:flex;gap:10px;margin-top:18px}
+.modal-box .acts a,.modal-box .acts button{flex:1;justify-content:center}
+.btn-ghost{border:1px solid var(--line);border-radius:12px;padding:12px;font-weight:600}
+.toast{opacity:0;position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:#1e110c;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;transition:.3s;z-index:120}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* MOBILE */
+.cart-fab{display:none}
+@media (max-width:1080px){
+  .menu-grid{grid-template-columns:1fr}
+  .cart{position:static}
+  .products{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:860px){
+  .wrap{padding:0 18px}
+  .menu,.wa-pill{display:none}
+  .nav{height:72px}
+  .logo svg{width:40px;height:40px}.logo span{font-size:30px}
+  .burger{display:block}
+  .hero{min-height:auto}
+  .hero::after{background:linear-gradient(180deg,var(--bg) 52%,rgba(23,13,10,.2) 80%,rgba(23,13,10,0))}
+  .hero .bgimg{top:auto;height:260px;width:100%}
+  .hero-in{padding-top:26px;padding-bottom:230px}
+  .hero h1{font-size:40px}
+  .hero p{font-size:15px}
+  .eyebrow{font-size:11px}
+  .btn-red{font-size:15px;padding:13px 20px}
+  h2.title{font-size:28px}
+  .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .tab{min-width:0;flex-direction:column;gap:6px;padding:10px 4px;font-size:12px}
+  .products{grid-template-columns:1fr}
+  .card{flex-direction:row;gap:12px;align-items:stretch}
+  .card .ph{width:110px;aspect-ratio:1;flex:none}
+  .card .info{display:flex;flex-direction:column;flex:1}
+  .card h3{margin-top:4px}
+  .add{background:var(--red);color:#fff;border-color:var(--red);border-radius:8px}
+  .tag-pop{font-size:10px;padding:3px 6px;top:6px;left:6px}
+  .feat{grid-template-columns:1fr 1fr;gap:20px}
+  .f{border-left:0;padding:0}
+  .cart-fab{display:flex;position:fixed;left:16px;right:16px;bottom:16px;z-index:60;justify-content:center}
+}
+.menu-mobile{display:none;flex-direction:column;background:var(--bg2);padding:10px 18px 18px}
+.menu-mobile a{color:#f1e6dc;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.menu-mobile.open{display:flex}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" class="logo" aria-label="Tu Pizzería">
+      <svg viewBox="0 0 64 64" fill="none"><path d="M6 10 Q32 0 58 10 L34 58 Q32 62 30 58 Z" stroke="#c8211b" stroke-width="5" stroke-linejoin="round"/><path d="M11 17 Q32 9 53 17" stroke="#c8211b" stroke-width="4"/><circle cx="26" cy="26" r="4.5" fill="#c8211b"/><circle cx="39" cy="28" r="3.5" fill="#c8211b"/><circle cx="31" cy="40" r="3.5" fill="#c8211b"/></svg>
+      <span>Tu Pizzería</span>
+    </a>
+    <nav class="menu">
+      <a href="#inicio" class="active">Inicio</a>
+      <a href="#menu">Menú</a>
+      <a href="#promos">Promociones</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="wa-pill js-wa" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3Z"/></svg>
+        <span>Pedido por<br><b>WhatsApp</b></span>
+      </a>
+      <button class="cart-btn" onclick="goCart()" aria-label="Ver pedido">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg>
+        <span class="badge js-count">0</span>
+      </button>
+      <button class="burger" onclick="document.querySelector('.menu-mobile').classList.toggle('open')" aria-label="Menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="menu-mobile">
+    <a href="#inicio">Inicio</a><a href="#menu">Menú</a><a href="#promos">Promociones</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a>
+  </div>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="bgimg ph" data-label="FOTO: img/pizza-hero.jpg"><img src="img/pizza-hero.jpg" alt="Pizza recién salida del horno" onerror="this.remove()"></div>
+  <div class="wrap hero-in">
+    <div class="eyebrow">PIZZAS · EMPANADAS · BEBIDAS · PAPAS FRITAS</div>
+    <h1>La mejor pizza<br>de tu ciudad</h1>
+    <p>Pizzas artesanales, ingredientes de primera calidad y el sabor que siempre te hace volver.</p>
+    <div class="hero-cta">
+      <a href="#menu" class="btn-red">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg>
+        Hacer mi pedido ahora
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <span class="pill-open js-open"><i></i><span>Abierto ahora</span></span>
+      <a class="pill-wa js-wa" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.5-.3Z"/></svg>
+        Pedido por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="menu-sec" id="menu">
+  <div class="wrap menu-grid">
+    <div>
+      <h2 class="title">Nuestro menú</h2>
+      <p class="sub">Elegí tus favoritos y hacé tu pedido online.</p>
+      <div class="tabs" id="tabs"></div>
+      <div class="products" id="products"></div>
+    </div>
+    <aside class="cart" id="cart">
+      <div class="cart-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg>
+        <h3>Tu pedido (<span class="js-count">0</span>)</h3>
+        <button onclick="clearCart()">Vaciar</button>
+      </div>
+      <div id="cartItems"></div>
+      <div class="sum"><span>Subtotal</span><span id="subtotal">$0</span></div>
+      <div class="tot"><span>Total</span><span id="total">$0</span></div>
+      <button class="btn-red btn-finish" onclick="openCheckout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg>
+        Finalizar pedido
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </aside>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap feat">
+    <div class="f"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><path d="M4 14h24v20H4zM28 20h8l6 7v7h-14z"/><circle cx="12" cy="36" r="4" fill="#f7efe4"/><circle cx="35" cy="36" r="4" fill="#f7efe4"/><path d="M1 20h7M1 26h5"/></svg><div><b>Envío rápido</b><small>en tu zona</small></div></div>
+    <div class="f"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><circle cx="24" cy="18" r="12"/><circle cx="24" cy="18" r="6"/><path d="M16 27l-4 16 7-4 5 6 2-12M32 27l4 16-7-4"/></svg><div><b>Calidad premium</b><small>ingredientes seleccionados</small></div></div>
+    <div class="f"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40C8 20 20 8 42 6c-2 22-14 34-34 34Z"/><path d="M8 40 30 18"/></svg><div><b>Recetas artesanales</b><small>con el verdadero sabor de pizzería</small></div></div>
+    <div class="f" id="contacto"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="24" cy="24" r="18"/><path d="M24 13v11l7 5"/></svg><div><b>Pedí fácil</b><small>online o por WhatsApp</small></div></div>
+  </div>
+</section>
+
+
+<section class="about" id="nosotros">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow">NOSOTROS</div>
+      <h2 style="margin-top:12px">Horno a leña, masa propia y mucho cariño</h2>
+      <p>Somos una pizzería de barrio que hace todo como en casa: masa de fermentación lenta, salsa casera e ingredientes frescos todos los días. Vení a comer al salón o pedí y te la llevamos calentita.</p>
+      <a href="#menu" class="btn-red" style="margin-top:22px;font-size:16px;padding:13px 22px">Ver el menú</a>
+    </div>
+    <div class="ph" data-label="img/interior.jpg"><img src="img/interior.jpg" alt="Salón de la pizzería con horno a leña" onerror="this.remove()"><span>Nuestro salón</span></div>
+    <div class="ph" data-label="img/entrega.jpg"><img src="img/entrega.jpg" alt="Entrega de una pizza a domicilio" onerror="this.remove()"><span>Envío a domicilio</span></div>
+  </div>
+</section>
+
+<div class="cart-fab"><button class="btn-red" style="width:100%;justify-content:center" onclick="goCart()">Ver mi pedido (<span class="js-count">0</span>) · <span class="js-total">$0</span></button></div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeCheckout()">
+  <div class="modal-box">
+    <h3>Confirmar pedido</h3>
+    <label>Tu nombre</label><input id="cName" placeholder="Ej: Juan">
+    <label>Entrega</label>
+    <select id="cMode"><option>Envío a domicilio</option><option>Retiro en el local</option></select>
+    <label>Dirección (si es envío)</label><input id="cAddr" placeholder="Calle y número">
+    <label>Pago</label>
+    <select id="cPay"><option>Efectivo</option><option>Transferencia</option><option>Mercado Pago</option></select>
+    <div class="acts">
+      <button class="btn-ghost" onclick="closeCheckout()">Volver</button>
+      <a class="btn-red" id="sendWa" href="#" target="_blank" rel="noopener" style="font-size:15px;padding:12px">Enviar por WhatsApp</a>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">Se abre WhatsApp con el detalle del pedido listo para enviar.</p>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== CONFIGURACIÓN ======
+const WHATSAPP = "5492901000000";      // número del local (con código de país, sin +)
+const HORARIO = {abre: 19, cierra: 24}; // horario para el cartel "Abierto ahora"
+
+const ICONS = {
+  pizzas:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 7Q16 2 28 7L17 29Q16 30 15 29Z"/><circle cx="13" cy="13" r="1.8" fill="currentColor"/><circle cx="19" cy="14" r="1.5" fill="currentColor"/><circle cx="16" cy="20" r="1.5" fill="currentColor"/></svg>',
+  empanadas:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 22Q16 2 29 22Z"/><path d="M7 19l2-2M11 15l2-2M16 13v-3M21 15l-2-2M25 19l-2-2"/></svg>',
+  bebidas:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><path d="M8 9h16l-2 20H10Z"/><path d="M8 13h16M18 9l2-6h4"/></svg>',
+  papas:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><path d="M7 14h18l-3 15H10Z"/><path d="M10 14 9 4M14 14l-1-11M18 14l1-11M22 14l1-9"/></svg>'
+};
+const CATS = [
+  {id:'pizzas',name:'Pizzas'},{id:'empanadas',name:'Empanadas'},{id:'bebidas',name:'Bebidas'},{id:'papas',name:'Papas fritas'}
+];
+const PRODUCTS = [
+  {id:'napo',cat:'pizzas',name:'Pizza Napolitana',desc:'Salsa de tomate, mozzarella, tomate y orégano.',price:9500,img:'img/pizza-napolitana.jpg',pop:true},
+  {id:'pepe',cat:'pizzas',name:'Pizza Pepperoni',desc:'Mozzarella, pepperoni y salsa de tomate.',price:10500,img:'img/pizza-pepperoni.jpg'},
+  {id:'4q',cat:'pizzas',name:'Pizza 4 Quesos',desc:'Mozzarella, provolone, azul y parmesano.',price:11500,img:'img/pizza-4-quesos.jpg'},
+  {id:'esp',cat:'pizzas',name:'Pizza Especial',desc:'Mozzarella, jamón crudo, rúcula y parmesano.',price:12500,img:'img/pizza-especial.jpg'},
+  {id:'emp6',cat:'empanadas',name:'Empanadas (6 u.)',desc:'Carne, pollo, jamón y queso o humita.',price:6500,img:'img/empanadas.jpg',pop:true},
+  {id:'emp12',cat:'empanadas',name:'Empanadas (12 u.)',desc:'Docena surtida a elección.',price:12000,img:'img/empanadas.jpg'},
+  {id:'empcar',cat:'empanadas',name:'Empanada de carne',desc:'Carne cortada a cuchillo, al horno.',price:1200,img:'img/empanadas.jpg'},
+  {id:'empjq',cat:'empanadas',name:'Empanada jamón y queso',desc:'Clásica, bien cargada.',price:1100,img:'img/empanadas.jpg'},
+  {id:'coca',cat:'bebidas',name:'Gaseosa 1,5 L',desc:'Línea Coca-Cola o Pepsi.',price:3500,img:'img/bebidas.jpg'},
+  {id:'cerv',cat:'bebidas',name:'Cerveza 1 L',desc:'Rubia bien fría.',price:4200,img:'img/bebidas.jpg'},
+  {id:'agua',cat:'bebidas',name:'Agua 500 ml',desc:'Con o sin gas.',price:1500,img:'img/bebidas.jpg'},
+  {id:'limo',cat:'bebidas',name:'Limonada 1 L',desc:'Con menta y jengibre.',price:3800,img:'img/bebidas.jpg'},
+  {id:'papas',cat:'papas',name:'Papas fritas',desc:'Porción grande, crocantes.',price:4200,img:'img/papas-fritas.jpg',pop:true},
+  {id:'papasch',cat:'papas',name:'Papas con cheddar',desc:'Con cheddar y panceta.',price:5800,img:'img/papas-fritas.jpg'},
+  {id:'papasp',cat:'papas',name:'Papas provenzal',desc:'Ajo y perejil.',price:4800,img:'img/papas-fritas.jpg'},
+  {id:'papasx',cat:'papas',name:'Papas para compartir',desc:'Porción XL con dos salsas.',price:6900,img:'img/papas-fritas.jpg'}
+];
+let current = 'pizzas';
+let cart = {napo:1, emp6:1, papas:1}; // pedido de ejemplo
+
+const $ = s => document.querySelector(s);
+const money = n => '$' + n.toLocaleString('es-AR');
+const byId = id => PRODUCTS.find(p => p.id === id);
+const photo = (src,label,cls='') => `<div class="ph ${cls}" data-label="${label}"><img src="${src}" alt="" onerror="this.remove()"></div>`;
+
+function renderTabs(){
+  $('#tabs').innerHTML = CATS.map(c => `<button class="tab ${c.id===current?'active':''}" onclick="setCat('${c.id}')">${ICONS[c.id]}<span>${c.name}</span></button>`).join('');
+}
+function setCat(id){current=id;renderTabs();renderProducts()}
+function renderProducts(){
+  $('#products').innerHTML = PRODUCTS.filter(p=>p.cat===current).map(p=>`
+    <article class="card">
+      <div style="position:relative">${p.pop?'<span class="tag-pop">🔥 Más popular</span>':''}${photo(p.img,p.img)}</div>
+      <div class="info">
+        <h3>${p.name}</h3><p>${p.desc}</p>
+        <div class="row"><span class="price">${money(p.price)}</span><button class="add" onclick="add('${p.id}')" aria-label="Agregar">+</button></div>
+      </div>
+    </article>`).join('');
+}
+function add(id){cart[id]=(cart[id]||0)+1;renderCart();toast(byId(id).name+' agregado al pedido')}
+function chg(id,d){cart[id]+=d;if(cart[id]<=0)delete cart[id];renderCart()}
+function del(id){delete cart[id];renderCart()}
+function clearCart(){cart={};renderCart()}
+function totals(){let n=0,t=0;for(const id in cart){n+=cart[id];t+=cart[id]*byId(id).price}return{n,t}}
+function renderCart(){
+  const ids = Object.keys(cart);
+  $('#cartItems').innerHTML = ids.length ? ids.map(id=>{const p=byId(id);return`
+    <div class="ci">${photo(p.img,'')}
+      <div><b>${p.name}</b><span class="qty"><button onclick="chg('${id}',-1)">−</button>${cart[id]}<button onclick="chg('${id}',1)">+</button></span></div>
+      <div class="r"><button class="x" onclick="del('${id}')" aria-label="Quitar">×</button>${money(p.price*cart[id])}</div>
+    </div>`}).join('') : '<div class="empty">Tu pedido está vacío.<br>Agregá algo rico del menú 🍕</div>';
+  const {n,t} = totals();
+  document.querySelectorAll('.js-count').forEach(e=>e.textContent=n);
+  document.querySelectorAll('.js-total').forEach(e=>e.textContent=money(t));
+  $('#subtotal').textContent = money(t); $('#total').textContent = money(t);
+}
+function goCart(){$('#cart').scrollIntoView({behavior:'smooth',block:'center'})}
+function waLink(msg){return 'https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg)}
+function buildMsg(){
+  const lines = Object.keys(cart).map(id=>`• ${cart[id]} x ${byId(id).name} — ${money(byId(id).price*cart[id])}`);
+  const mode=$('#cMode').value, addr=$('#cAddr').value.trim();
+  return `¡Hola! Quiero hacer un pedido 🍕\n\n${lines.join('\n')}\n\nTotal: ${money(totals().t)}\nNombre: ${$('#cName').value.trim()||'-'}\nEntrega: ${mode}${mode.startsWith('Envío')&&addr?' — '+addr:''}\nPago: ${$('#cPay').value}`;
+}
+function openCheckout(){
+  if(!Object.keys(cart).length){toast('Agregá productos a tu pedido');return}
+  $('#modal').classList.add('open');updateWa();
+}
+function closeCheckout(){$('#modal').classList.remove('open')}
+function updateWa(){$('#sendWa').href = waLink(buildMsg())}
+['#cName','#cMode','#cAddr','#cPay'].forEach(s=>$(s).addEventListener('input',updateWa));
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1800)}
+
+// Abierto / cerrado según horario
+(function(){const h=new Date().getHours();const open=h>=HORARIO.abre&&h<HORARIO.cierra;
+  document.querySelectorAll('.js-open').forEach(e=>{e.classList.toggle('closed',!open);e.querySelector('span').textContent=open?'Abierto ahora':'Cerrado · abrimos a las '+HORARIO.abre+' h'})})();
+document.querySelectorAll('.js-wa').forEach(a=>a.href=waLink('¡Hola! Quiero hacer un pedido 🍕'));
+document.querySelectorAll('.menu-mobile a').forEach(a=>a.addEventListener('click',()=>$('.menu-mobile').classList.remove('open')));
+
+renderTabs();renderProducts();renderCart();
+</script>
+</body>
+</html>
