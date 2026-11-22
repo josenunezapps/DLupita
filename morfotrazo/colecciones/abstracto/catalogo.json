@@ -1,0 +1,44 @@
+{
+  "name": "Abstracto",
+  "slug": "abstracto",
+  "count": 4,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-reloj-de-mundos",
+      "title": "Reloj de los mundos",
+      "category": "Abstracto",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/bf002925-89f4-40dc-8c82-ea8413560591.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/bf002925-89f4-40dc-8c82-ea8413560591.jpg"
+    },
+    {
+      "id": "morfotrazo-camino-solar",
+      "title": "Camino hacia el sol",
+      "category": "Abstracto",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d6c59d3b-0f87-48bf-8a5e-b9c0391247b0.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d6c59d3b-0f87-48bf-8a5e-b9c0391247b0.jpg"
+    },
+    {
+      "id": "morfotrazo-camino-al-sol",
+      "title": "Camino al sol",
+      "category": "Abstracto",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f8782f65-55c2-4931-aaaa-0e7369952c2d.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f8782f65-55c2-4931-aaaa-0e7369952c2d.jpg"
+    },
+    {
+      "id": "luces-abstractas",
+      "title": "Luz infinita",
+      "category": "Abstracto",
+      "device": "PC",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=max&w=3840&q=95"
+    }
+  ]
+}
