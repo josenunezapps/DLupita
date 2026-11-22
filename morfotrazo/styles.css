@@ -26,3 +26,24 @@
 @media(max-width:1000px){.folder-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.folder-card{min-height:120px;padding:11px}.folder-label{font-size:17px}}
 @media(max-width:750px){.folder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.folder-card{min-height:115px}.folder-label{font-size:17px}}
 @media(max-width:600px){.folders-section{margin-top:0;padding:5px 1px 14px}.folders-caption{font-size:10px}.folders-heading{margin-bottom:12px}.folder-grid{gap:9px}.folder-card{min-height:109px;padding:10px;border-radius:12px}.folder-label{font-size:16px;gap:6px}.folder-label svg{width:17px;height:17px}.folder-count{font-size:10px;padding:3px 6px}}
+
+
+/* Selector premium de descargas responsive */
+.preview-info{padding:29px 25px}
+.preview-info h2{font-size:clamp(23px,2.3vw,33px)}
+.download-panel{margin:19px 0 12px;border:1px solid rgba(3,228,235,.29);border-radius:16px;padding:14px;background:linear-gradient(155deg,rgba(6,53,65,.48),rgba(4,19,31,.66))}
+.download-panel-title{font:800 14px Outfit,system-ui,sans-serif;letter-spacing:.01em;margin-bottom:11px}
+.device-switch{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:13px;padding:4px;border:1px solid rgba(134,191,210,.22);background:rgba(4,17,28,.76);border-radius:12px}
+.device-option{border:1px solid transparent;border-radius:10px;background:transparent;color:#9dabb8;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 4px;font-size:12px;font-weight:800;transition:.2s}
+.device-option svg{width:17px;height:17px}
+.device-option.is-selected{background:linear-gradient(160deg,rgba(0,203,218,.24),rgba(2,72,94,.35));border-color:rgba(0,228,239,.68);color:#fff;box-shadow:0 0 12px rgba(2,205,214,.16)}
+.download-label{display:flex;flex-direction:column;gap:6px;margin-top:10px;color:#c8d9e3;font-size:11px;font-weight:750}
+.download-label select{color:#f7fbff;background:#0b2230;border:1px solid rgba(125,191,217,.47);border-radius:10px;padding:10px 11px;font-size:12px;font-weight:680;outline:0;width:100%}
+.download-label select:focus{border-color:#10dfeb;box-shadow:0 0 0 3px rgba(0,225,232,.1)}
+.download-help{color:#9eb3c2!important;font-size:10px!important;line-height:1.48;margin:12px 0 0!important}
+.preview-actions{gap:8px;margin-top:15px}
+.preview-actions>.btn-orange{width:100%;font-size:13px}
+.preview-actions>.btn-outline{flex:1;font-size:11px}
+.download-result{color:#57dfd9!important;font-size:11px!important;line-height:1.45;min-height:0;margin:10px 0 0!important}
+@media(max-width:800px){.preview-modal{grid-template-columns:1.06fr 1fr}.preview-info{padding:24px 16px}.download-panel{padding:12px}.device-option{font-size:11px}}
+@media(max-width:600px){.preview-info{padding:16px}.download-panel{margin:12px 0;padding:12px}.preview-info h2{font-size:24px}.preview-actions>.btn-orange{font-size:12px}.preview-actions>.btn-outline{padding:10px}.download-result{font-size:10px!important}}
