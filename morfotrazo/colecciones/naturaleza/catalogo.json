@@ -1,9 +1,53 @@
 {
   "name": "Naturaleza",
   "slug": "naturaleza",
-  "count": 6,
+  "count": 10,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "vidrio-2026-mariposa-de-cristal",
+      "title": "Mariposa del jardín cósmico",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/284ba720-b6ce-4bf4-aed9-f963988407e6.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/284ba720-b6ce-4bf4-aed9-f963988407e6.png"
+    },
+    {
+      "id": "vidrio-2026-valle-de-cristal",
+      "title": "Valle encantado de cristal",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "quality": "1672 × 941",
+      "width": 1672,
+      "height": 941,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4346ec9b-033c-4100-8a64-49b5acf624e7.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4346ec9b-033c-4100-8a64-49b5acf624e7.png"
+    },
+    {
+      "id": "vidrio-2026-colibri-de-cristal",
+      "title": "Colibrí de cristal entre orquídeas",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e246d55b-e20c-45a4-999c-519402e30a2c.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e246d55b-e20c-45a4-999c-519402e30a2c.png"
+    },
+    {
+      "id": "vidrio-2026-tigre-blanco-de-cristal",
+      "title": "Tigre blanco de cristal",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4ce0ca0e-3521-4205-81e7-f71b4f60c1f9.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4ce0ca0e-3521-4205-81e7-f71b4f60c1f9.png"
+    },
     {
       "id": "morfotrazo-colibri-colores",
       "title": "Colibrí de los colores",
