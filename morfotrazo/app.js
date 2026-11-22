@@ -9,6 +9,9 @@
   let wallpapers=[],filter='Todas',query='',showMode='normal',favoriteOnly=false,active=null,uploadObjectURL=null;
   const collections=[
     {name:'Fantasía',slug:'fantasia',icon:'spark'},
+    {name:'Fantasía espacial',slug:'fantasia-espacial',icon:'spark'},
+    {name:'Blanco y negro',slug:'blanco-y-negro',icon:'moon'},
+    {name:'Oscuro',slug:'oscuro',icon:'moon'},
     {name:'Arte',slug:'arte',icon:'palette'},
     {name:'Espacio',slug:'espacio',icon:'spark'},
     {name:'Naturaleza',slug:'naturaleza',icon:'leaf'},
@@ -23,8 +26,8 @@
   try{const stored=JSON.parse(localStorage.getItem('morfotrazo:favs:v1')||'[]');favorites=new Set(Array.isArray(stored)?stored:[])}catch{}
   const fmtDevice=d=>d==='Ambos'?'Celular y PC':d==='PC'?'Computadora':'Celular';
   const imageUrl=p=>safeUrl(p.localUrl||p.image);
-  const hasPhone=p=>p.device!=='PC';
-  const hasPC=p=>p.device!=='Celular';
+  const hasPhone=p=>p.variantsEnabled===true||p.device!=='PC';
+  const hasPC=p=>p.variantsEnabled===true||p.device!=='Celular';
   function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3700)}
   function saveFav(){try{localStorage.setItem('morfotrazo:favs:v1',JSON.stringify([...favorites]))}catch{}}
   function openModal(id){$('#'+id).hidden=false;document.body.classList.add('modal-open')}
@@ -52,7 +55,7 @@
     if(favoriteOnly&&!favorites.has(p.id))return false;
     const inCat=filter==='Todas'||(filter==='Celular'&&hasPhone(p))||(filter==='PC'&&hasPC(p))||p.category===filter;
     if(!inCat)return false;
-    const hay=(p.title+' '+p.category+' '+fmtDevice(p.device)).toLocaleLowerCase('es');
+    const hay=(p.title+' '+p.category+' '+fmtDevice(p.device)+' '+(p.tags||[]).join(' ')).toLocaleLowerCase('es');
     return !query||hay.includes(query.toLocaleLowerCase('es'));
   }
   function appendCards(container,items){container.replaceChildren(...items.map(card))}
@@ -105,29 +108,139 @@
     const liked=active&&favorites.has(active.id);
     $('#modalFavorite').innerHTML=icon('heart')+(liked?' Guardado':' Guardar');
   }
+  const downloadSizes={
+    phone:[
+      {key:'phone-720',w:720,h:1280,label:'HD · 720 × 1280'},
+      {key:'phone-1080',w:1080,h:1920,label:'Full HD · 1080 × 1920'},
+      {key:'phone-1440',w:1440,h:2560,label:'QHD · 1440 × 2560'},
+      {key:'phone-2160',w:2160,h:3840,label:'4K (reescalado) · 2160 × 3840'}
+    ],
+    pc:[
+      {key:'pc-1366',w:1366,h:768,label:'HD · 1366 × 768'},
+      {key:'pc-1920',w:1920,h:1080,label:'Full HD · 1920 × 1080'},
+      {key:'pc-2560',w:2560,h:1440,label:'QHD · 2560 × 1440'},
+      {key:'pc-3840',w:3840,h:2160,label:'4K (reescalado) · 3840 × 2160'}
+    ]
+  };
+  let selectedDevice='phone',downloadBusy=false;
+  const originalDimensions=p=>p.width&&p.height?p.width+' × '+p.height:(p.quality||'desconocida');
+  function setDownloadDevice(device){
+    selectedDevice=device==='pc'?'pc':'phone';
+    const select=$('#downloadSize');select.replaceChildren();
+    for(const size of downloadSizes[selectedDevice]){
+      const option=document.createElement('option');option.value=size.key;option.textContent=size.label;select.appendChild(option);
+    }
+    select.value=selectedDevice==='phone'?'phone-1080':'pc-1920';
+    document.querySelectorAll('.device-option').forEach(button=>{
+      const active=button.dataset.device===selectedDevice;
+      button.classList.toggle('is-selected',active);button.setAttribute('aria-pressed',String(active));
+    });
+    updateDownloadHelp();
+  }
+  function updateDownloadHelp(){
+    if(!active)return;
+    const mode=$('#downloadFit').value;
+    $('#downloadHelp').textContent='Original: '+originalDimensions(active)+
+      (mode==='cover'?'. El fondo se ajustará recortando los bordes si es necesario.':'. La composición se conserva y los bordes libres se completan con un fondo suavizado.')+
+      ' Las dimensiones mayores se reescalan: no agregan detalle real.';
+  }
   function preview(id){
     const p=findPhoto(id);if(!p)return;active=p;
     $('#previewImage').src=imageUrl(p);$('#previewImage').alt=p.title;$('#previewTitle').textContent=p.title;
-    $('#previewMeta').textContent=p.category+' · '+fmtDevice(p.device)+' · '+(p.quality||'HD')+(p.source?' · '+p.source:'');
-    updateModalFavorite();
-    openModal('previewModal');
+    $('#previewMeta').textContent=p.category+' · Original '+originalDimensions(p)+(p.source?' · '+p.source:'');
+    $('#downloadResult').textContent='';
+    $('#downloadFit').value='contain';
+    setDownloadDevice(window.matchMedia&&window.matchMedia('(max-width:600px)').matches?'phone':'pc');
+    updateModalFavorite();openModal('previewModal');
   }
-  async function download(id){
-    const p=findPhoto(id);if(!p)return;
-    const link=safeUrl(p.download||p.image);if(!link){toast('La imagen no está disponible');return}
-    const filename='morfotrazo-'+slug(p.title)+'.'+(link.includes('.webp')?'webp':link.includes('.png')?'png':'jpg');
+  function download(id){preview(id)}
+  function deliverBlob(blob,filename){
+    const temporary=URL.createObjectURL(blob);
+    const anchor=document.createElement('a');anchor.href=temporary;anchor.download=filename;
+    document.body.appendChild(anchor);anchor.click();anchor.remove();
+    setTimeout(()=>URL.revokeObjectURL(temporary),3000);
+  }
+  async function downloadOriginal(){
+    if(!active)return;
+    const source=safeUrl(active.download||active.image);if(!source){toast('El archivo original no está disponible');return}
+    const path=new URL(source).pathname.toLowerCase();
+    const extension=path.endsWith('.png')?'png':path.endsWith('.webp')?'webp':'jpg';
+    const filename='morfotrazo-'+slug(active.title)+'-original.'+extension;
     try{
-      toast('Preparando descarga...');
-      const result=await fetch(link,{mode:'cors'});
-      if(!result.ok)throw Error('HTTP '+result.status);
-      const blob=await result.blob();
-      const temporary=URL.createObjectURL(blob);
-      const anchor=document.createElement('a');anchor.href=temporary;anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();
-      setTimeout(()=>URL.revokeObjectURL(temporary),2500);
+      $('#downloadResult').textContent='Preparando archivo original...';
+      const response=await fetch(source,{mode:'cors'});
+      if(!response.ok)throw Error('No se pudo obtener la imagen');
+      const blob=await response.blob();deliverBlob(blob,filename);
+      $('#downloadResult').textContent='Archivo original descargado.';
       toast('¡Descarga lista!');
     }catch(e){
-      const anchor=document.createElement('a');anchor.href=link;anchor.target='_blank';anchor.rel='noopener noreferrer';anchor.download=filename;document.body.appendChild(anchor);anchor.click();anchor.remove();
-      toast('Abrimos el fondo para que puedas guardarlo');
+      const a=document.createElement('a');a.href=source;a.target='_blank';a.rel='noopener noreferrer';
+      document.body.appendChild(a);a.click();a.remove();
+      $('#downloadResult').textContent='Se abrió el original en otra pestaña. Desde allí podés guardarlo.';
+      toast('Abrimos el original para guardarlo');
+    }
+  }
+  function imageFromUrl(url){
+    return new Promise((resolve,reject)=>{
+      const image=new Image();image.crossOrigin='anonymous';
+      image.onload=()=>{image.width&&image.height?resolve(image):reject(Error('Imagen sin dimensiones'))};
+      image.onerror=()=>reject(Error('El servidor de imágenes no permite procesar este archivo'));
+      image.src=url;
+    });
+  }
+  async function loadForCanvas(source){
+    try{return await imageFromUrl(source)}catch(firstError){
+      if(!source.startsWith('https://'))throw firstError;
+      // La copia CORS permite redimensionar imágenes externas sin modificar la original.
+      const proxy='https://wsrv.nl/?url='+encodeURIComponent(source)+'&output=jpg&q=95';
+      return imageFromUrl(proxy);
+    }
+  }
+  function drawAdapted(canvas,image,fit){
+    const ctx=canvas.getContext('2d',{alpha:false});
+    if(!ctx)throw Error('Este navegador no admite el procesador de imágenes');
+    const w=canvas.width,h=canvas.height,iw=image.naturalWidth,ih=image.naturalHeight;
+    if(!iw||!ih)throw Error('La imagen no tiene dimensiones válidas');
+    const cover=Math.max(w/iw,h/ih),contain=Math.min(w/iw,h/ih);
+    if(fit==='cover'||Math.abs(w/h-iw/ih)<.015){
+      const dw=iw*cover,dh=ih*cover;
+      ctx.drawImage(image,(w-dw)/2,(h-dh)/2,dw,dh);
+      return;
+    }
+    // Relleno de vidrio desenfocado: preserva toda la ilustración sin deformarla.
+    ctx.fillStyle='#061019';ctx.fillRect(0,0,w,h);
+    ctx.save();
+    ctx.filter='blur('+Math.ceil(Math.min(w,h)*.043)+'px) brightness(.65) saturate(1.18)';
+    const dw=iw*cover*1.13,dh=ih*cover*1.13;
+    ctx.drawImage(image,(w-dw)/2,(h-dh)/2,dw,dh);
+    ctx.restore();
+    const fgW=iw*contain,fgH=ih*contain;
+    ctx.drawImage(image,(w-fgW)/2,(h-fgH)/2,fgW,fgH);
+  }
+  async function downloadSized(){
+    if(!active||downloadBusy)return;
+    const size=downloadSizes[selectedDevice].find(item=>item.key===$('#downloadSize').value);
+    if(!size)return;
+    const p=active,source=safeUrl(p.download||p.image),mode=$('#downloadFit').value;
+    const button=$('#modalDownload'),note=$('#downloadResult');
+    if(!source){note.textContent='No se encontró la imagen original.';return}
+    downloadBusy=true;button.disabled=true;button.textContent='Preparando '+size.w+' × '+size.h+'...';
+    note.textContent='Creando el fondo con la resolución elegida...';
+    try{
+      const image=await loadForCanvas(source);
+      const canvas=document.createElement('canvas');canvas.width=size.w;canvas.height=size.h;
+      drawAdapted(canvas,image,mode);
+      const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('No fue posible exportar el archivo')),'image/jpeg',.94));
+      if(!blob)throw Error('No se pudo exportar la imagen');
+      deliverBlob(blob,'morfotrazo-'+slug(p.title)+'-'+selectedDevice+'-'+size.w+'x'+size.h+'.jpg');
+      note.textContent='Descarga lista: '+size.w+' × '+size.h+'.';
+      toast('Fondo descargado en '+size.w+' × '+size.h);
+      canvas.width=1;canvas.height=1;
+    }catch(e){
+      note.textContent='No se pudo crear este tamaño: '+(e.message||'error desconocido')+'. Podés descargar el original.';
+      toast('No se pudo convertir el fondo. Probá con el original.');
+    }finally{
+      downloadBusy=false;button.disabled=false;button.innerHTML=icon('download')+' Descargar tamaño elegido';
     }
   }
   async function load(){
@@ -169,7 +282,12 @@
   $('#moreRecent').addEventListener('click',()=>{showMode=showMode==='allRecent'?'normal':'allRecent';render();(showMode==='allRecent'?$('#recientes'):$('#explorar')).scrollIntoView({behavior:'smooth'})});
   $('#closingExplore').addEventListener('click',()=>{reset();$('#explorar').scrollIntoView({behavior:'smooth'})});
   $('#modalFavorite').addEventListener('click',()=>{if(active)toggleFav(active.id)});
-  $('#modalDownload').addEventListener('click',()=>{if(active)download(active.id)});
+  $('#modalDownload').addEventListener('click',downloadSized);
+  $('#downloadOriginal').addEventListener('click',downloadOriginal);
+  $('#downloadDevice').addEventListener('click',e=>{
+    const button=e.target.closest('[data-device]');if(button)setDownloadDevice(button.dataset.device);
+  });
+  $('#downloadFit').addEventListener('change',updateDownloadHelp);
   ['topUpload','heroUpload'].forEach(id=>$('#'+id).addEventListener('click',()=>openModal('uploadModal')));
   $('#menuToggle').addEventListener('click',()=>{
     const nav=$('#mainNav'),expanded=nav.classList.toggle('is-open');
@@ -240,7 +358,8 @@
       if(!Array.isArray(data.wallpapers))throw Error('Formato del catálogo inválido');
       await githubRequest(path,token,'PUT',{message:'MORFOTRAZO: publicar imagen '+title,content:String(imageData).split(',')[1],branch:BRANCH});
       resultBox.textContent='Imagen subida. Actualizando la galería...';
-      const item={id,title,category,folder,device:$('#imageDevice').value,featured:false,createdAt:new Date().toISOString(),quality:'Original',image:'./imagenes/'+folder+'/'+id+'.'+extension,download:'./imagenes/'+folder+'/'+id+'.'+extension,source:'MORFOTRAZO'};
+      const nativeWidth=$('#uploadPreview').naturalWidth||0,nativeHeight=$('#uploadPreview').naturalHeight||0;
+      const item={id,title,category,folder,device:'Ambos',originalOrientation:$('#imageDevice').value==='PC'?'horizontal':'vertical',variantsEnabled:true,featured:false,createdAt:new Date().toISOString(),quality:nativeWidth&&nativeHeight?nativeWidth+' × '+nativeHeight:'Original',width:nativeWidth,height:nativeHeight,image:'./imagenes/'+folder+'/'+id+'.'+extension,download:'./imagenes/'+folder+'/'+id+'.'+extension,source:'MORFOTRAZO'};
       data.wallpapers.unshift(item);
       await githubRequest(ROOT+'/data.json',token,'PUT',{message:'MORFOTRAZO: agregar '+title+' al catálogo',content:encodeGithub(JSON.stringify(data,null,2)+'\n'),sha:original.sha,branch:BRANCH});
       let catalogFolderUpdated=true;
