@@ -1,9 +1,27 @@
 {
   "name": "Naturaleza",
   "slug": "naturaleza",
-  "count": 4,
+  "count": 6,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "morfotrazo-colibri-colores",
+      "title": "Colibrí de los colores",
+      "category": "Naturaleza",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/9bf09a20-5733-4e8e-8ee3-3863be3ee984.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/9bf09a20-5733-4e8e-8ee3-3863be3ee984.jpg"
+    },
+    {
+      "id": "morfotrazo-tigre-luna",
+      "title": "Tigre de la luna",
+      "category": "Naturaleza",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/ec34ccbc-d56d-4b8c-8d37-b86f7cef9ab2.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/ec34ccbc-d56d-4b8c-8d37-b86f7cef9ab2.jpg"
+    },
     {
       "id": "horizonte-fuego",
       "title": "Horizonte de fuego",
