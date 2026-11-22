@@ -1,9 +1,45 @@
 {
   "name": "Fantasía",
   "slug": "fantasia",
-  "count": 6,
+  "count": 10,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "morfotrazo-buho-del-tiempo",
+      "title": "Búho del tiempo",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3648c2eb-ac9f-4930-92b1-12277b31c1a2.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3648c2eb-ac9f-4930-92b1-12277b31c1a2.jpg"
+    },
+    {
+      "id": "morfotrazo-cabana-hongos-magicos",
+      "title": "Cabaña de hongos mágicos",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/60f683b5-5507-417f-bb87-52965aece857.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/60f683b5-5507-417f-bb87-52965aece857.jpg"
+    },
+    {
+      "id": "morfotrazo-zorro-invierno",
+      "title": "Zorro de invierno",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/852aa908-ecb9-4a5f-8bc9-3d00ee42f795.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/852aa908-ecb9-4a5f-8bc9-3d00ee42f795.jpg"
+    },
+    {
+      "id": "morfotrazo-elefantes-eclipse",
+      "title": "Elefantes del eclipse",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3aac49d7-15b4-4f32-b71a-c1bd94adb0d4.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3aac49d7-15b4-4f32-b71a-c1bd94adb0d4.jpg"
+    },
     {
       "id": "morfotrazo-palacio-medusas",
       "title": "Palacio de las medusas",
