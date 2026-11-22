@@ -1,9 +1,108 @@
 {
   "name": "Fantasía",
   "slug": "fantasia",
-  "count": 10,
+  "count": 19,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "vidrio-2026-fenix-de-cristal",
+      "title": "Fénix de cristal al amanecer",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b9b0300c-3f85-4acc-ab41-825917eb2e86.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b9b0300c-3f85-4acc-ab41-825917eb2e86.png"
+    },
+    {
+      "id": "vidrio-2026-unicornio-de-cristal",
+      "title": "Unicornio bajo auroras",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/ebb0730b-f3de-4995-9cef-ac1a0cbe0050.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/ebb0730b-f3de-4995-9cef-ac1a0cbe0050.png"
+    },
+    {
+      "id": "vidrio-2026-medusa-de-cristal",
+      "title": "Medusa del templo sumergido",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/6fc0292c-0c9f-4b81-bd8d-a4fbc61a6a50.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/6fc0292c-0c9f-4b81-bd8d-a4fbc61a6a50.png"
+    },
+    {
+      "id": "vidrio-2026-lobo-de-cristal",
+      "title": "Lobo cristalino de la luna",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/622a697a-33ff-4711-b037-2b4aa810490b.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/622a697a-33ff-4711-b037-2b4aa810490b.png"
+    },
+    {
+      "id": "vidrio-2026-buho-de-cristal",
+      "title": "Búho de cristal del tiempo",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7d8cdc10-5d55-4b1a-bb95-541c901e9aa9.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7d8cdc10-5d55-4b1a-bb95-541c901e9aa9.png"
+    },
+    {
+      "id": "vidrio-2026-dragon-de-cristal",
+      "title": "Dragón de islas flotantes",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/14b1c3b7-c61f-4f78-a1bc-ac8f5590e419.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/14b1c3b7-c61f-4f78-a1bc-ac8f5590e419.png"
+    },
+    {
+      "id": "vidrio-2026-elefantes-vidrio-eclipse",
+      "title": "Elefantes de vidrio al eclipse",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e52c5ceb-6fb3-49c3-947c-4353de038049.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e52c5ceb-6fb3-49c3-947c-4353de038049.png"
+    },
+    {
+      "id": "vidrio-2026-ciudadela-cristal-dragones",
+      "title": "Ciudadela de cristal y dragones",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "1672 × 941",
+      "width": 1672,
+      "height": 941,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/bf726542-c566-41bc-b87a-14e64a1c658c.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/bf726542-c566-41bc-b87a-14e64a1c658c.png"
+    },
+    {
+      "id": "vidrio-2026-caravana-elefantes-cristal",
+      "title": "Caravana de elefantes cristalinos",
+      "category": "Fantasía",
+      "device": "Ambos",
+      "quality": "1672 × 941",
+      "width": 1672,
+      "height": 941,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/9e0b060d-738a-452a-9d56-5b5f56a374d2.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/9e0b060d-738a-452a-9d56-5b5f56a374d2.png"
+    },
     {
       "id": "morfotrazo-buho-del-tiempo",
       "title": "Búho del tiempo",
