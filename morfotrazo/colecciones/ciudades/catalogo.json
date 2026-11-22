@@ -1,9 +1,20 @@
 {
   "name": "Ciudades",
   "slug": "ciudades",
-  "count": 3,
+  "count": 4,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "vidrio-2026-ciudad-de-cristal-tormenta",
+      "title": "Ciudad de cristal en tormenta",
+      "category": "Ciudades",
+      "device": "Ambos",
+      "quality": "1672 × 941",
+      "width": 1672,
+      "height": 941,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/32684942-2cd6-4647-9c9a-189065fc4cdf.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/32684942-2cd6-4647-9c9a-189065fc4cdf.png"
+    },
     {
       "id": "morfotrazo-metropolis-lunar-dorada",
       "title": "Metrópolis lunar",
