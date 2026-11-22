@@ -196,6 +196,15 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.8px}
   .hero h2{max-width:75%}
   .left>.card:nth-child(4){grid-column:1/-1}
 }
+/* Pantalla vertical ancha (tablet o "sitio de escritorio" en el celu): alto según el contenido */
+@media (orientation:portrait) and (min-width:761px){
+  body{overflow:auto}
+  .app{height:auto;min-height:0;align-items:flex-start}
+  .main{overflow:visible;align-self:stretch}
+  .view{min-height:0}
+  .side{position:sticky;top:18px}
+  .spacer{flex:0 0 40px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
