@@ -1,0 +1,30 @@
+{
+  "name": "Fantasía espacial",
+  "slug": "fantasia-espacial",
+  "count": 2,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "vidrio-2026-ballena-cristal-cosmos",
+      "title": "Ballena de cristal cósmica",
+      "category": "Fantasía espacial",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/653ff441-fcbf-42d9-a79b-004a3514d543.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/653ff441-fcbf-42d9-a79b-004a3514d543.png"
+    },
+    {
+      "id": "vidrio-2026-ciudad-espacial-cristal",
+      "title": "Ciudad cristalina entre galaxias",
+      "category": "Fantasía espacial",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/ae04b21b-9143-4406-b6f1-12a8d8390399.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/ae04b21b-9143-4406-b6f1-12a8d8390399.png"
+    }
+  ]
+}
