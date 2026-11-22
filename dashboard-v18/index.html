@@ -14,12 +14,18 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:#e9e7f2;color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
 button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 
-.app{display:flex;gap:18px;height:100vh;padding:18px}
+.orbs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.orbs i{position:absolute;border-radius:50%;filter:blur(60px);opacity:.75;animation:drift 22s ease-in-out infinite alternate}
+.orbs i:nth-child(1){width:46vw;height:46vw;background:#b9adf7;left:8%;top:-12%}
+.orbs i:nth-child(2){width:38vw;height:38vw;background:#f6b9dc;right:-6%;top:22%;animation-duration:26s}
+.orbs i:nth-child(3){width:34vw;height:34vw;background:#b6e8d2;left:28%;bottom:-18%;animation-duration:30s}
+@keyframes drift{to{transform:translate(6vw,5vh) scale(1.12)}}
+.app{display:flex;gap:18px;height:100vh;padding:18px;position:relative;z-index:1}
 /* ---------- Sidebar ---------- */
-.side{width:64px;flex:none;background:#0d0d10;border-radius:40px;display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:6px;position:relative;z-index:5}
+.side{width:64px;flex:none;background:rgba(13,13,16,.88);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:40px;display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:6px;position:relative;z-index:5}
 .logo{color:#fff;font-weight:800;font-style:italic;font-size:20px;letter-spacing:-2px;margin-bottom:22px}
 .nav{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#9a9aa6;position:relative;transition:color .25s}
 .nav svg{width:19px;height:19px;position:relative;z-index:1}
@@ -32,17 +38,22 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .spacer{flex:1}
 
 /* ---------- Main ---------- */
-.main{flex:1;background:var(--panel);border-radius:30px;overflow:auto;position:relative;scrollbar-width:none}
+.main{flex:1;background:rgba(255,255,255,.32);-webkit-backdrop-filter:blur(30px) saturate(150%);backdrop-filter:blur(30px) saturate(150%);border:1px solid rgba(255,255,255,.6);border-radius:30px;overflow:auto;position:relative;scrollbar-width:none}
 .main::-webkit-scrollbar{display:none}
 .view{padding:28px 30px 40px;min-height:100%}
-.view.enter{animation:viewIn .7s var(--ease) both}
-@keyframes viewIn{from{opacity:0;filter:blur(14px);transform:scale(.985)}to{opacity:1;filter:none;transform:none}}
+.view.enter{animation:viewIn .8s var(--ease) both}
+@keyframes viewIn{from{opacity:.25;filter:blur(18px) saturate(.4) brightness(1.15);transform:scale(.985)}to{opacity:1;filter:none;transform:none}}
+.view.leave{animation:viewOut .28s ease-in forwards;pointer-events:none}
+@keyframes viewOut{to{opacity:.3;filter:blur(14px) saturate(.3) brightness(1.2);transform:scale(.99)}}
+.veil{position:absolute;inset:0;background:rgba(255,255,255,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);pointer-events:none;opacity:0;z-index:3;border-radius:inherit}
+.veil.on{animation:veil .9s var(--ease)}
+@keyframes veil{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
 .view.enter .rv{animation:rise .7s var(--ease) both;animation-delay:calc(var(--i,0)*60ms + 80ms)}
 @keyframes rise{from{opacity:0;transform:translateY(16px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
 
 h1{font-size:30px;font-weight:600;letter-spacing:-.8px}
 .sub{color:var(--mute);font-size:13px;margin-top:4px}
-.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:0 1px 0 rgba(0,0,0,.02);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.card{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,.75);border-radius:var(--r);padding:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 8px 30px -14px rgba(60,40,140,.18);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
 .card.hv:hover{transform:translateY(-5px);box-shadow:0 18px 40px -18px rgba(40,30,120,.25)}
 .ct{font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:space-between}
 .chip{font-size:11px;font-weight:600;background:#0d0d10;color:#fff;border-radius:20px;padding:3px 9px}
@@ -75,7 +86,7 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.8px}
 .tabs{display:flex;gap:4px;background:var(--bg);border-radius:20px;padding:3px}
 .tabs button{font-size:11px;padding:4px 10px;border-radius:16px;font-weight:600;color:var(--mute);transition:.25s}
 .tabs button.on{background:#0d0d10;color:#fff}
-.mini{background:var(--panel);border-radius:16px;padding:14px;text-align:center;font-size:11px;color:var(--mute)}
+.mini{background:rgba(255,255,255,.5);border-radius:16px;padding:14px;text-align:center;font-size:11px;color:var(--mute)}
 .ring{display:block;width:56px;height:56px;margin:0 auto 6px}
 .ring circle{fill:none;stroke-width:6;stroke-linecap:round}
 .promo{background:#0d0d10;color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;min-height:180px}
@@ -92,7 +103,7 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.8px}
 .cal button:hover{background:var(--bg)}
 .cal button.on{background:#0d0d10;color:#fff}
 .vids{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.vid{border-radius:14px;background:var(--panel);padding:8px;font-size:11px;font-weight:500}
+.vid{border-radius:14px;background:rgba(255,255,255,.5);padding:8px;font-size:11px;font-weight:500}
 .vid .th{height:74px;border-radius:10px;background:#f0eef8;display:grid;place-items:center;margin-bottom:6px;position:relative}
 .vid .th svg{width:62px}
 .vid .th .chip{position:absolute;top:6px;left:6px;font-size:9px}
@@ -189,6 +200,7 @@ h1{font-size:30px;font-weight:600;letter-spacing:-.8px}
 </style>
 </head>
 <body>
+<div class="orbs"><i></i><i></i><i></i></div>
 <div class="app">
   <aside class="side" id="side">
     <div class="logo">//'</div>
@@ -256,16 +268,24 @@ function movePill(btn){
   if(mobile){pill.style.transform=`translateX(${btn.offsetLeft}px)`}
   else{pill.style.transform=`translateY(${btn.offsetTop}px)`}
 }
+let navId=0;
 function go(v){
   if(v==='logout'){v='grid'}
   const btn=side.querySelector(`[data-v="${v}"]`);
   side.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b===btn));
   movePill(btn);
-  main.innerHTML=`<div class="view enter">${(VIEWS[v]||VIEWS.grid)()}</div>`;
-  main.scrollTop=0;
-  main.querySelectorAll('.rv').forEach((e,i)=>e.style.setProperty('--i',i));
-  requestAnimationFrame(()=>requestAnimationFrame(()=>afterRender(v)));
   try{history.replaceState(null,'','#'+v)}catch(e){}
+  const cur=main.querySelector('.view'), myTurn=++navId;
+  const render=()=>{
+    if(myTurn!==navId)return;
+    main.innerHTML=`<div class="veil"></div><div class="view enter">${(VIEWS[v]||VIEWS.grid)()}</div>`;
+    main.scrollTop=0;
+    main.querySelectorAll('.rv').forEach((e,i)=>e.style.setProperty('--i',i));
+    main.querySelector('.veil').classList.add('on');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>afterRender(v)));
+  };
+  if(cur&&!matchMedia('(prefers-reduced-motion:reduce)').matches){cur.classList.remove('enter');cur.classList.add('leave');setTimeout(render,260)}
+  else render();
 }
 side.addEventListener('click',e=>{const b=e.target.closest('.nav');if(b)go(b.dataset.v)});
 addEventListener('resize',()=>{const b=side.querySelector('.nav.on');if(b)movePill(b)});
