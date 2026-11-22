@@ -79,14 +79,25 @@
     </section>
 
     <div class="main-shell" id="explorar">
+      <section class="folders-section" id="carpetas" aria-labelledby="foldersTitle">
+        <div class="section-heading folders-heading">
+          <h2 id="foldersTitle"><svg class="section-icon section-icon-cyan"><use href="#i-layers"></use></svg> Explorar carpetas</h2>
+          <span class="folders-caption">Elegí una colección</span>
+        </div>
+        <div class="folder-grid" id="folderGrid" aria-label="Colecciones por temática"></div>
+      </section>
       <div class="categories" id="categories" role="toolbar" aria-label="Filtrar fondos">
         <button class="category active" data-filter="Todas"><svg><use href="#i-grid"></use></svg> Todas</button>
         <button class="category" data-filter="Celular"><svg><use href="#i-phone"></use></svg> Celular</button>
         <button class="category" data-filter="PC"><svg><use href="#i-monitor"></use></svg> PC</button>
+        <button class="category" data-filter="Fantasía"><svg><use href="#i-spark"></use></svg> Fantasía</button>
         <button class="category" data-filter="Arte"><svg><use href="#i-palette"></use></svg> Arte</button>
+        <button class="category" data-filter="Ciencia ficción"><svg><use href="#i-spark"></use></svg> Ciencia ficción</button>
         <button class="category" data-filter="Abstracto"><svg><use href="#i-layers"></use></svg> Abstracto</button>
         <button class="category" data-filter="Oscuro"><svg><use href="#i-moon"></use></svg> Oscuro</button>
         <button class="category" data-filter="Naturaleza"><svg><use href="#i-leaf"></use></svg> Naturaleza</button>
+        <button class="category" data-filter="Ciudades"><svg><use href="#i-home"></use></svg> Ciudades</button>
+        <button class="category" data-filter="Minimalista"><svg><use href="#i-layers"></use></svg> Minimalista</button>
         <button class="category" data-filter="Espacio"><svg><use href="#i-spark"></use></svg> Espacio</button>
       </div>
       <div class="gallery-toolbar"><p id="filterStatus" aria-live="polite">Explorá nuestros fondos</p><button id="clearFilters" hidden>Limpiar filtros <svg><use href="#i-close"></use></svg></button></div>
@@ -121,7 +132,7 @@
       <div class="upload-modal-head"><span class="upload-badge"><svg><use href="#i-upload"></use></svg> PANEL DE PUBLICACIÓN</span><h2 id="uploadTitle">Subí tu próximo fondo</h2><p>Publicá imágenes que todos puedan ver y descargar. Esta sección es para la administración de MORFOTRAZO.</p></div>
       <form id="uploadForm">
         <label class="file-drop" for="imageFile" id="dropZone"><span class="drop-icon"><svg><use href="#i-upload"></use></svg></span><strong id="dropTitle">Elegí una imagen o arrastrala acá</strong><small>JPG, PNG o WebP · Máximo 15 MB</small><input id="imageFile" name="image" type="file" accept="image/jpeg,image/png,image/webp" required><img id="uploadPreview" alt="Vista previa de la imagen seleccionada" hidden></label>
-        <div class="form-row"><label>Nombre del fondo<input id="imageTitle" maxlength="80" placeholder="Ej.: Horizonte de fuego" required></label><label>Categoría<select id="imageCategory"><option>Arte</option><option>Abstracto</option><option>Naturaleza</option><option>Espacio</option><option>Oscuro</option><option>Ciudades</option><option>Anime</option><option>Minimalista</option></select></label></div>
+        <div class="form-row"><label>Nombre del fondo<input id="imageTitle" maxlength="80" placeholder="Ej.: Horizonte de fuego" required></label><label>Categoría<select id="imageCategory"><option>Arte</option><option>Fantasía</option><option>Ciencia ficción</option><option>Abstracto</option><option>Naturaleza</option><option>Espacio</option><option>Oscuro</option><option>Ciudades</option><option>Anime</option><option>Minimalista</option></select></label></div>
         <div class="form-row"><label>Para qué pantalla<select id="imageDevice"><option value="Ambos">Celular y PC</option><option value="Celular">Solo celular</option><option value="PC">Solo PC</option></select></label><label>Permiso de administrador<input id="githubToken" type="password" autocomplete="off" placeholder="Token privado de GitHub" required></label></div>
         <div class="admin-note"><svg><use href="#i-shield"></use></svg><div>La página está alojada en GitHub Pages. Para publicar, usá un token personal de GitHub con acceso <strong>Contents: Read and write</strong> únicamente al repo <strong>DLupita</strong>. El token se usa para subir el archivo y <strong>no se guarda</strong> en esta web. No lo compartas con otras personas.</div></div>
         <button id="publishButton" class="btn-orange publish-btn" type="submit"><svg><use href="#i-upload"></use></svg> Publicar fondo</button>
