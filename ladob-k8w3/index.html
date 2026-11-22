@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Todo tiene un lado B. Acá te lo cuento. Psicología y curiosidades poco conocidas.">
+<meta name="theme-color" content="#151B39">
+<meta property="og:title" content="El lado B de las cosas">
+<meta property="og:description" content="Todo tiene un lado B. Acá te lo cuento.">
+<meta property="og:image" content="icono_512.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="icono_ladob.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icono_180.png">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>El lado B de las cosas</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Montserrat:wght@800;900&display=swap">
+<style>
+/* Layout: un vinilo que gira como portada, después el disco "se da vuelta": datos A/B, el experimento, videos, shorts y redes. Diseño de un solo tema (azul noche), elegido a propósito. */
+:root {
+  color-scheme: dark;
+  --noche: #151B39;
+  --profundo: #070B1A;
+  --vinilo: #0D0C11;
+  --borde: #A81B26;
+  --rojo: #E8262B;
+  --naranja: #F4A424;
+  --crema: #FEF3E0;
+  --amarillo: #FFD43B;
+  --celeste: #7CF5FF;
+  --texto: #E9E6F2;
+  --suave: #A8ABC8;
+  --linea: rgba(254, 243, 224, 0.12);
+  --panel: #1B2247;
+  --display: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --portada: "Montserrat", "Inter", Arial, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--profundo);
+  background-image: linear-gradient(180deg, var(--noche) 0%, var(--profundo) 70%);
+  color: var(--texto);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+a { color: inherit; }
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+section { padding-block: 72px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h2 {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--crema);
+}
+.etiqueta {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--naranja);
+  margin-bottom: 12px;
+}
+.bajada { color: var(--suave); max-width: 60ch; margin: 14px 0 0; font-size: 1.05rem; }
+mark { background: none; color: var(--amarillo); font-weight: 700; }
+:focus-visible { outline: 3px solid var(--amarillo); outline-offset: 3px; border-radius: 6px; }
+
+/* ---------- Botones ---------- */
+.botones { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+  font-family: var(--body);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-rojo { background: var(--rojo); color: #fff; box-shadow: 0 6px 0 var(--borde); }
+.btn-rojo:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--borde); }
+.btn-borde { border-color: var(--linea); color: var(--crema); background: rgba(254,243,224,0.04); }
+.btn-borde:hover { border-color: var(--crema); }
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+/* ---------- Portada ---------- */
+.hero { padding-block: 56px 40px; overflow: hidden; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: 40px;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2.8rem, 8.5vw, 5.6rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--crema);
+}
+.hero h1 .b { color: var(--naranja); }
+.hero .sub {
+  margin: 18px 0 0;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  font-size: 0.8rem;
+  color: var(--celeste);
+}
+.hero .lema { font-size: 1.3rem; margin: 22px 0 28px; color: var(--texto); max-width: 30ch; }
+.disco-box { position: relative; aspect-ratio: 1; max-width: 100%; width: min(460px, 100%); justify-self: center; }
+.disco-box::before {
+  content: ""; position: absolute; inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244,164,36,0.28), transparent 65%);
+  filter: blur(30px);
+}
+.disco { position: relative; width: 100%; height: 100%; display: block; }
+.disco .gira { transform-origin: 256px 256px; animation: girar 6s linear infinite; }
+.disco-box:hover .gira { animation-duration: 1.6s; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* ---------- Qué es ---------- */
+.quees { border-block: 1px solid var(--linea); padding-block: 40px; }
+.quees .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.quees h3 { font-family: var(--display); font-weight: 900; font-size: 1.05rem; text-transform: uppercase; color: var(--crema); margin-bottom: 6px; letter-spacing: 0.02em; }
+.quees p { margin: 0; color: var(--suave); }
+
+/* ---------- Dato B (flip) ---------- */
+.dato-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; align-items: center; margin-top: 8px; }
+.flip { perspective: 1400px; width: 100%; }
+.flip-in {
+  position: relative; display: grid;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1);
+  transform-style: preserve-3d;
+}
+.flip.dada .flip-in { transform: rotateY(180deg); }
+.cara {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 22px;
+  padding: 32px 28px 28px;
+  min-height: 300px;
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.cara-a { background: var(--crema); color: var(--vinilo); }
+.cara-b { background: var(--panel); color: var(--texto); transform: rotateY(180deg); border: 1px solid var(--linea); }
+.cara .lado {
+  font-family: var(--display); font-weight: 900; font-size: 0.75rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.cara-a .lado { color: var(--borde); }
+.cara-b .lado { color: var(--naranja); }
+.cara .lado i {
+  width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center;
+  font-style: normal; font-size: 0.7rem;
+}
+.cara-a .lado i { background: var(--vinilo); color: var(--crema); }
+.cara-b .lado i { background: var(--naranja); color: var(--crema); }
+.cara-a .pregunta {
+  font-family: var(--portada); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(1.5rem, 3.6vw, 2.1rem); line-height: 1.05; margin: 0;
+}
+.cara-b .respuesta { font-size: 1.08rem; margin: 0; }
+.cara .pie { margin-top: auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.cara-a .pista { font-size: 0.9rem; color: #5B5566; }
+.surcos {
+  position: absolute; right: -90px; bottom: -90px; width: 220px; height: 220px; border-radius: 50%;
+  background: repeating-radial-gradient(circle, rgba(13,12,17,0.09) 0 2px, transparent 2px 9px);
+  pointer-events: none;
+}
+.cara-b .surcos { background: repeating-radial-gradient(circle, rgba(254,243,224,0.06) 0 2px, transparent 2px 9px); }
+.btn-chico { padding: 10px 16px; font-size: 0.82rem; }
+.btn-oscuro { background: var(--vinilo); color: var(--crema); }
+.contador { font-size: 0.85rem; color: var(--suave); font-variant-numeric: tabular-nums; }
+
+/* ---------- Experimento ---------- */
+.exp {
+  background: linear-gradient(135deg, #2A1146, #151B39 60%);
+  border-radius: 28px;
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid var(--linea);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;
+}
+.exp .serie { font-family: var(--portada); font-weight: 900; color: var(--amarillo); letter-spacing: 0.04em; font-size: 0.9rem; text-transform: uppercase; }
+.paso { background: rgba(7,11,26,0.55); border-radius: 18px; padding: 24px; border: 1px solid var(--linea); min-width: 0; }
+.paso p { margin: 0 0 16px; font-size: 1.12rem; }
+.paso .grande { font-family: var(--portada); font-weight: 900; font-size: clamp(1.4rem, 3vw, 1.8rem); line-height: 1.15; text-transform: uppercase; color: var(--crema); }
+.paso .ancla { color: var(--amarillo); }
+.campo { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.campo input {
+  font: inherit; font-size: 1.3rem; font-weight: 700;
+  width: 120px; padding: 12px 14px;
+  border-radius: 12px; border: 2px solid var(--linea);
+  background: var(--profundo); color: var(--crema);
+  font-variant-numeric: tabular-nums;
+}
+.campo input:focus { border-color: var(--amarillo); outline: none; }
+.error { color: #FF8A8A; font-size: 0.9rem; margin: 10px 0 0; min-height: 1.2em; }
+.barras { display: grid; gap: 10px; margin: 16px 0; }
+.barra { display: grid; grid-template-columns: 120px 1fr 44px; gap: 10px; align-items: center; font-size: 0.88rem; }
+.barra .track { height: 14px; background: rgba(254,243,224,0.08); border-radius: 99px; overflow: hidden; }
+.barra .fill { height: 100%; border-radius: 99px; }
+.barra b { font-variant-numeric: tabular-nums; text-align: right; }
+.fuente { font-size: 0.8rem; color: var(--suave); margin: 14px 0 0; }
+
+/* ---------- Temas ---------- */
+.temas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+.tema {
+  border-radius: 20px; padding: 22px; min-height: 170px;
+  display: flex; flex-direction: column; gap: 8px;
+  color: #fff; position: relative; overflow: hidden;
+}
+.tema h3 { font-family: var(--portada); font-weight: 900; text-transform: uppercase; font-size: 1.3rem; line-height: 1.05; }
+.tema p { margin: 0; font-size: 0.92rem; opacity: 0.92; }
+.tema .nro { position: absolute; right: 16px; bottom: 10px; font-family: var(--display); font-weight: 900; font-size: 3.4rem; line-height: 1; opacity: 0.18; }
+
+/* ---------- Videos largos ---------- */
+.fila-titulo { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }
+.videos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
+.video { text-decoration: none; display: flex; flex-direction: column; gap: 10px; }
+.portada {
+  aspect-ratio: 16 / 9; max-width: 100%;
+  border-radius: 16px; position: relative; overflow: hidden;
+  padding: 16px; display: flex; align-items: flex-end;
+  transition: transform .2s ease;
+}
+.video:hover .portada { transform: scale(1.02); }
+.portada h3 {
+  font-family: var(--portada); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.05; color: #fff; max-width: 70%;
+  paint-order: stroke fill; -webkit-text-stroke: 4px rgba(7,11,26,0.85);
+  position: relative; z-index: 1;
+}
+.portada .orbe { position: absolute; border-radius: 50%; right: -8%; top: -18%; width: 62%; aspect-ratio: 1; }
+.portada .dur { position: absolute; right: 10px; bottom: 10px; background: rgba(7,11,26,0.8); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; z-index: 1; }
+.video .nota { font-size: 0.9rem; color: var(--suave); margin: 0; }
+
+/* ---------- Shorts ---------- */
+.shorts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
+.short {
+  aspect-ratio: 9 / 16; max-width: 100%;
+  border-radius: 18px; padding: 16px 14px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  text-decoration: none; color: #fff; position: relative; overflow: hidden;
+  transition: transform .2s ease;
+}
+.short:hover { transform: translateY(-4px) rotate(-0.6deg); }
+.short h3 {
+  font-family: var(--portada); font-weight: 900; text-transform: uppercase;
+  font-size: clamp(1rem, 2.2vw, 1.35rem); line-height: 1.02;
+  paint-order: stroke fill; -webkit-text-stroke: 4px rgba(7,11,26,0.7);
+  position: relative; z-index: 1;
+}
+.short h3 span { display: block; color: var(--amarillo); }
+.short .gancho {
+  align-self: flex-start; background: var(--crema); color: var(--vinilo);
+  font-weight: 800; font-size: 0.78rem; padding: 7px 10px; border-radius: 4px;
+  transform: rotate(-4deg); line-height: 1.25; position: relative; z-index: 1;
+  box-shadow: 3px 3px 0 rgba(7,11,26,0.5);
+}
+.short .luz { position: absolute; inset: 0; background: radial-gradient(circle at 50% 55%, rgba(255,255,255,0.28), transparent 55%); }
+
+/* ---------- Redes ---------- */
+.redes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
+.red {
+  text-decoration: none; border-radius: 18px; padding: 20px;
+  background: var(--panel); border: 1px solid var(--linea);
+  display: flex; flex-direction: column; gap: 4px; min-width: 0;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.red:hover { border-color: var(--crema); transform: translateY(-2px); }
+.red .ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 10px; }
+.red .ico svg { width: 22px; height: 22px; }
+.red b { font-size: 1.05rem; color: var(--crema); }
+.red span { font-size: 0.88rem; color: var(--suave); overflow-wrap: anywhere; }
+
+/* ---------- Cierre ---------- */
+.cierre { text-align: left; }
+.cierre-box {
+  background: var(--rojo); border-radius: 28px; padding: clamp(28px, 5vw, 56px);
+  display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cierre-box h2 { color: #fff; }
+.cierre-box p { margin: 10px 0 0; color: #FFE3E0; font-size: 1.05rem; }
+.cierre-box .btn { background: var(--crema); color: var(--vinilo); box-shadow: 0 6px 0 var(--borde); }
+footer { padding-block: 36px 48px; color: var(--suave); font-size: 0.9rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .hero-grid, .dato-grid, .exp { grid-template-columns: 1fr; }
+  .disco-box { width: min(340px, 80%); grid-row: 1; }
+  .temas, .videos { grid-template-columns: repeat(2, 1fr); }
+  .shorts { grid-template-columns: repeat(3, 1fr); }
+  .redes { grid-template-columns: repeat(2, 1fr); }
+  .quees .wrap { grid-template-columns: 1fr; gap: 20px; }
+  .cierre-box { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  section { padding-block: 52px; }
+  .temas, .videos { grid-template-columns: 1fr; }
+  .shorts { grid-template-columns: repeat(2, 1fr); }
+  .redes { grid-template-columns: 1fr; }
+  .barra { grid-template-columns: 90px 1fr 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .disco .gira { animation: none; }
+  .flip-in { transition: none; }
+  .btn, .short, .video .portada, .red { transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>El lado <span class="b">B</span><br>de las cosas</h1>
+      <p class="sub">PSICOLOGÍA · CURIOSIDADES</p>
+      <p class="lema">Todo tiene un lado B. <mark>Acá te lo cuento.</mark></p>
+      <div class="botones">
+        <a class="btn btn-rojo" data-red="youtube" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          Ver en YouTube
+        </a>
+        <a class="btn btn-borde" href="#redes">Seguinos en redes</a>
+      </div>
+    </div>
+    <div class="disco-box" aria-hidden="true">
+      <svg class="disco" viewBox="0 0 512 512">
+        <defs>
+          <radialGradient id="d-disc" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#1A1820"/><stop offset="1" stop-color="#0D0C11"/></radialGradient>
+          <linearGradient id="d-shine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.45" stop-color="#fff" stop-opacity="0.13"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.13"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+          <radialGradient id="d-label" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#FFC04D"/><stop offset="1" stop-color="#E8901A"/></radialGradient>
+          <clipPath id="d-clip"><circle cx="256" cy="256" r="232"/></clipPath>
+        </defs>
+        <circle cx="256" cy="256" r="252" fill="#A81B26"/>
+        <g class="gira">
+          <circle cx="256" cy="256" r="232" fill="url(#d-disc)"/>
+          <g fill="none" stroke="#2A2830" stroke-width="1.6">
+            <circle cx="256" cy="256" r="220"/><circle cx="256" cy="256" r="206"/><circle cx="256" cy="256" r="192"/><circle cx="256" cy="256" r="178"/><circle cx="256" cy="256" r="164"/><circle cx="256" cy="256" r="150"/><circle cx="256" cy="256" r="136"/><circle cx="256" cy="256" r="122"/><circle cx="256" cy="256" r="108"/>
+          </g>
+          <circle cx="256" cy="256" r="88" fill="url(#d-label)"/>
+          <text x="256" y="256" dy="0.36em" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="116" fill="#FEF3E0">B</text>
+          <circle cx="256" cy="256" r="6" fill="#0D0C11"/>
+        </g>
+        <g clip-path="url(#d-clip)" pointer-events="none">
+          <path d="M256 256 L 480 40 L 540 256 Z" fill="url(#d-shine)"/>
+          <path d="M256 256 L 32 472 L -28 256 Z" fill="url(#d-shine)"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<div class="quees">
+  <div class="wrap">
+    <div><h3>Qué es</h3><p>Psicología y curiosidades poco conocidas, contadas con animación y una voz que te habla como un amigo.</p></div>
+    <div><h3>La promesa</h3><p>Cada video te deja un descubrimiento real, de esos que después le contás a otro.</p></div>
+    <div><h3>De dónde somos</h3><p>Del planeta Tierra. En el lado B no tenemos fronteras.</p></div>
+  </div>
+</div>
+
+<main>
+  <section id="dato">
+    <div class="wrap dato-grid">
+      <div>
+        <span class="etiqueta">Dato B</span>
+        <h2>Dale vuelta al disco</h2>
+        <p class="bajada">En la cara A está lo que todos creen. En la cara B, lo que casi nadie sabe. Tocá la tarjeta para darla vuelta.</p>
+      </div>
+      <div class="flip" id="flip">
+        <div class="flip-in">
+          <div class="cara cara-a">
+            <span class="lado"><i>A</i> Cara A</span>
+            <p class="pregunta" id="dato-pregunta"></p>
+            <div class="pie">
+              <span class="pista">Pensalo un segundo…</span>
+              <button class="btn btn-oscuro btn-chico" id="dar-vuelta" type="button">Dar vuelta</button>
+            </div>
+            <div class="surcos"></div>
+          </div>
+          <div class="cara cara-b" aria-live="polite">
+            <span class="lado"><i>B</i> Cara B</span>
+            <p class="respuesta" id="dato-respuesta"></p>
+            <div class="pie">
+              <span class="contador" id="dato-contador"></span>
+              <button class="btn btn-rojo btn-chico" id="otro-dato" type="button">Otro dato</button>
+            </div>
+            <div class="surcos"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experimento">
+    <div class="wrap">
+      <div class="exp">
+        <div>
+          <span class="serie">Trampas de tu cerebro #1</span>
+          <h2 style="margin-top:10px">El efecto ancla</h2>
+          <p class="bajada">Probalo antes de que te lo expliquemos. Son dos preguntas y no hay respuestas tramposas… o casi.</p>
+        </div>
+        <div class="paso" id="exp-paso"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="temas">
+    <div class="wrap">
+      <span class="etiqueta">De qué hablamos</span>
+      <h2>Seis lados B</h2>
+      <div class="temas">
+        <div class="tema" style="background:linear-gradient(140deg,#6D3BD8,#3B1C8C)"><span class="nro">01</span><h3>Psicología y cerebro</h3><p>Trampas mentales, sesgos, memoria e ilusiones. Cómo te engaña tu propia cabeza.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,#1E3A8A,#0B1440)"><span class="nro">02</span><h3>Espacio</h3><p>Agujeros negros, estrellas de neutrones y planetas donde llueve metano.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,#12A6A0,#0B5E66)"><span class="nro">03</span><h3>Cuerpo y biología</h3><p>Bacterias, genes y animales que parecen inventados.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,#C9731C,#7A3A0C)"><span class="nro">04</span><h3>Historia con giro</h3><p>Datos reales que suenan a mentira.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,#2E3346,#12141F)"><span class="nro">05</span><h3>Misterios</h3><p>Los que se resolvieron y los que todavía no.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,#E8262B,#8A1018)"><span class="nro">06</span><h3>¿Qué pasaría si…?</h3><p>Llevamos una idea hasta el final, para ver qué pasa.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="videos">
+    <div class="wrap">
+      <div class="fila-titulo">
+        <div>
+          <span class="etiqueta">Videos largos</span>
+          <h2>Para ver hasta el final</h2>
+        </div>
+        <a class="btn btn-borde btn-chico" data-red="youtubeVideos" target="_blank" rel="noopener">Todos los videos</a>
+      </div>
+      <div class="videos" id="lista-videos"></div>
+    </div>
+  </section>
+
+  <section id="shorts">
+    <div class="wrap">
+      <div class="fila-titulo">
+        <div>
+          <span class="etiqueta">Shorts</span>
+          <h2>Un dato por minuto</h2>
+        </div>
+        <a class="btn btn-borde btn-chico" data-red="youtubeShorts" target="_blank" rel="noopener">Ver todos los Shorts</a>
+      </div>
+      <div class="shorts" id="lista-shorts"></div>
+    </div>
+  </section>
+
+  <section id="redes">
+    <div class="wrap">
+      <span class="etiqueta">Redes</span>
+      <h2>Seguinos para más del lado B</h2>
+      <div class="redes" id="lista-redes"></div>
+    </div>
+  </section>
+
+  <section class="cierre">
+    <div class="wrap">
+      <div class="cierre-box">
+        <div>
+          <h2>¿Qué tema querés que demos vuelta?</h2>
+          <p>Dejalo en los comentarios del último video. Los mejores pedidos se convierten en el próximo lado B.</p>
+        </div>
+        <a class="btn" data-red="youtube" target="_blank" rel="noopener">Ir al canal</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Hecho del lado B · Del planeta Tierra 🌍</span>
+    <span>© <span id="anio"></span> El lado B de las cosas</span>
+  </div>
+</footer>
+
+<script>
+/* ===== CONFIGURACIÓN: cambiá los usuarios acá y se actualiza toda la página ===== */
+const REDES = {
+  youtube:       { nombre: "YouTube",   usuario: "@ladob.delascosas",  url: "https://www.youtube.com/@ladob.delascosas" },
+  tiktok:        { nombre: "TikTok",    usuario: "@ladobdelacosas_",   url: "https://www.tiktok.com/@ladobdelacosas_" },
+  instagram:     { nombre: "Instagram", usuario: "@ladobdelascosas_",  url: "https://www.instagram.com/ladobdelascosas_" },
+  kwai:          { nombre: "Kwai",      usuario: "@ladobdelascosa",    url: "https://kwai-video.com/u/@ladobdelascosa/4DB9CciA" }
+};
+const LINKS = {
+  youtube: REDES.youtube.url,
+  youtubeVideos: REDES.youtube.url + "/videos",
+  youtubeShorts: REDES.youtube.url + "/shorts"
+};
+
+/* Cuando tengas el link de cada video, pegalo en "url". Si queda vacío, lleva al canal. */
+const VIDEOS = [
+  { titulo: "Viajé a la velocidad de la luz hasta el borde del universo", nota: "Un viaje con contador en pantalla.", fondo: "linear-gradient(120deg,#070B1A 30%,#1E3A8A)", orbe: "radial-gradient(circle at 35% 35%,#7CF5FF,#1E3A8A 60%,transparent 70%)", url: "" },
+  { titulo: "Toda la historia de la vida en un solo año", nota: "Y aparecimos a las 23:25 del 31 de diciembre.", fondo: "linear-gradient(120deg,#0B2B1A 30%,#2E9E4F)", orbe: "radial-gradient(circle at 35% 35%,#FFD43B,#2E9E4F 60%,transparent 70%)", url: "" },
+  { titulo: "¿Qué pasaría si pudieras recordarlo todo?", nota: "Hipertimesia, Jill Price y Funes el memorioso.", fondo: "linear-gradient(120deg,#1A0B2E 30%,#6D3BD8)", orbe: "radial-gradient(circle at 35% 35%,#F4A424,#6D3BD8 60%,transparent 70%)", url: "" },
+  { titulo: "Las personas que no sienten dolor", nota: "Y por qué no es un superpoder.", fondo: "linear-gradient(120deg,#2A0A0E 30%,#A81B26)", orbe: "radial-gradient(circle at 35% 35%,#FEF3E0,#E8262B 60%,transparent 70%)", url: "" },
+  { titulo: "Del átomo al universo", nota: "El zoom más grande de la historia.", fondo: "linear-gradient(120deg,#07141A 30%,#12A6A0)", orbe: "radial-gradient(circle at 35% 35%,#7CF5FF,#12A6A0 60%,transparent 70%)", url: "" },
+  { titulo: "Impacto", nota: "Qué pasa cuando un meteorito llega a la Tierra.", fondo: "linear-gradient(120deg,#1A0E05 30%,#C9731C)", orbe: "radial-gradient(circle at 35% 35%,#FFD43B,#E8262B 55%,transparent 70%)", url: "" }
+];
+
+const SHORTS = [
+  { l1: "Las bananas", l2: "son radiactivas", gancho: "Un poquito. Y es natural.", color: "#E8A21C", url: "" },
+  { l1: "TON 618", l2: "el más grande", gancho: "Un agujero negro gigante", color: "#3B1C8C", url: "" },
+  { l1: "La medusa", l2: "inmortal", gancho: "Vuelve a ser joven", color: "#12A6A0", url: "" },
+  { l1: "Oxford es más vieja", l2: "que los aztecas", gancho: "Y no es un chiste", color: "#C9731C", url: "" },
+  { l1: "La mujer", l2: "sin rostro", gancho: "40 crímenes, un mismo ADN", color: "#2E3346", url: "" },
+  { l1: "Efecto", l2: "Streisand", gancho: "Escondelo y se hace viral", color: "#6D3BD8", url: "" },
+  { l1: "Titán", l2: "llueve metano", gancho: "Una luna con lagos", color: "#1E6E8C", url: "" },
+  { l1: "El impuesto", l2: "a la orina", gancho: "Roma cobraba por esto", color: "#E8262B", url: "" }
+];
+
+const DATOS = [
+  { a: "¿Las bananas son radiactivas?", b: "Sí, un poquito. Tienen potasio, y una parte natural del potasio es radiactiva (el potasio-40). Para que te haga daño tendrías que comer una cantidad imposible de golpe." },
+  { a: "¿Qué es más viejo: la Universidad de Oxford o el Imperio azteca?", b: "Oxford. En 1096 ya se daban clases ahí. Tenochtitlan, la capital azteca, se fundó en 1325, más de dos siglos después." },
+  { a: "¿La luz del Sol tarda 8 minutos en llegarte?", b: "Desde la superficie, sí. Pero antes tuvo que salir del núcleo del Sol rebotando de átomo en átomo, y eso le lleva miles de años: las estimaciones van de unos 10.000 hasta 170.000 años." },
+  { a: "¿Existe un animal que no muere de viejo?", b: "La medusa Turritopsis dohrnii. Cuando está en peligro puede volver a su etapa juvenil y empezar de nuevo. Igual no es invencible: se la pueden comer o se puede enfermar." },
+  { a: "¿Sos más bacterias que persona?", b: "Más o menos mitad y mitad. Tenés unos 38 billones de bacterias y unos 30 billones de células propias. La vieja cifra de “10 bacterias por cada célula” estaba mal." },
+  { a: "¿Quién era la mujer sin rostro de Heilbronn?", b: "Nadie. Su ADN apareció en unas 40 escenas de crímenes en Europa, pero venía de los hisopos: estaban contaminados desde la fábrica por una empleada que los empaquetaba." },
+  { a: "¿Qué pasa si intentás borrar algo de internet?", b: "Que se vuelve viral. En 2003 Barbra Streisand demandó para sacar una foto de su casa que casi nadie había visto. Después de la demanda, la miraron cientos de miles de personas." },
+  { a: "¿Una señal misteriosa del espacio puede venir de un microondas?", b: "Pasó. Unas señales raras que captaba un radiotelescopio en Australia, los “perytones”, venían del microondas de la cocina cuando alguien lo abría antes de que terminara." },
+  { a: "¿Los romanos cobraban impuestos por la orina?", b: "Sí. La orina se juntaba para curtir cuero y lavar ropa, y el emperador Vespasiano le puso un impuesto. De ahí viene la frase “el dinero no tiene olor”." }
+];
+
+/* ===== Enlaces ===== */
+document.querySelectorAll("[data-red]").forEach(a => { a.href = LINKS[a.dataset.red]; });
+document.getElementById("anio").textContent = new Date().getFullYear();
+
+const ICONOS = {
+  youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9L15.5 12z"/></svg>',
+  tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.4v13.4a2.9 2.9 0 1 1-2-2.8V9.1a6.3 6.3 0 1 0 5.4 6.3V8.6a8 8 0 0 0 4.6 1.5V6.7a4.6 4.6 0 0 1-4.6-4.7z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+  kwai: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v1.5l4-2.5v12l-4-2.5V17a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/></svg>'
+};
+const FONDOS = { youtube: "#E8262B", tiktok: "#0D0C11", instagram: "linear-gradient(135deg,#F4A424,#E8262B 50%,#6D3BD8)", kwai: "#F47A1F" };
+
+document.getElementById("lista-redes").innerHTML = Object.entries(REDES).map(([k, r]) => `
+  <a class="red" href="${r.url}" target="_blank" rel="noopener">
+    <span class="ico" style="background:${FONDOS[k]};color:#fff">${ICONOS[k]}</span>
+    <b>${r.nombre}</b><span>${r.usuario}</span>
+  </a>`).join("");
+
+document.getElementById("lista-videos").innerHTML = VIDEOS.map(v => `
+  <a class="video" href="${v.url || LINKS.youtubeVideos}" target="_blank" rel="noopener">
+    <div class="portada" style="background:${v.fondo}">
+      <span class="orbe" style="background:${v.orbe}"></span>
+      <h3>${v.titulo}</h3>
+      <span class="dur">YouTube</span>
+    </div>
+    <p class="nota">${v.nota}</p>
+  </a>`).join("");
+
+document.getElementById("lista-shorts").innerHTML = SHORTS.map(s => `
+  <a class="short" href="${s.url || LINKS.youtubeShorts}" target="_blank" rel="noopener" style="background:${s.color}">
+    <span class="luz"></span>
+    <h3>${s.l1}<span>${s.l2}</span></h3>
+    <span class="gancho">${s.gancho}</span>
+  </a>`).join("");
+
+/* ===== Dato B ===== */
+const flip = document.getElementById("flip");
+const pregunta = document.getElementById("dato-pregunta");
+const respuesta = document.getElementById("dato-respuesta");
+const contador = document.getElementById("dato-contador");
+let orden = DATOS.map((_, i) => i).sort(() => Math.random() - 0.5);
+let pos = 0;
+function mostrarDato() {
+  const d = DATOS[orden[pos]];
+  pregunta.textContent = d.a;
+  respuesta.textContent = d.b;
+  contador.textContent = `Dato ${pos + 1} de ${DATOS.length}`;
+}
+mostrarDato();
+document.getElementById("dar-vuelta").addEventListener("click", () => {
+  flip.classList.add("dada");
+  document.getElementById("otro-dato").focus({ preventScroll: true });
+});
+document.getElementById("otro-dato").addEventListener("click", () => {
+  flip.classList.remove("dada");
+  setTimeout(() => {
+    pos = (pos + 1) % DATOS.length;
+    mostrarDato();
+    document.getElementById("dar-vuelta").focus({ preventScroll: true });
+  }, matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 350);
+});
+
+/* ===== Experimento: efecto ancla (Strack y Mussweiler, 1997) ===== */
+const paso = document.getElementById("exp-paso");
+const ANCLAS = [9, 140];
+const REAL = 78;
+const estado = { ancla: ANCLAS[Math.random() < 0.5 ? 0 : 1], arriba: null, estimacion: null };
+
+function paso1() {
+  paso.innerHTML = `
+    <p class="grande">¿Mahatma Gandhi murió antes o después de cumplir <span class="ancla">${estado.ancla}</span> años?</p>
+    <div class="botones">
+      <button class="btn btn-borde btn-chico" type="button" data-r="antes">Antes</button>
+      <button class="btn btn-borde btn-chico" type="button" data-r="despues">Después</button>
+    </div>`;
+  paso.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { estado.arriba = b.dataset.r; paso2(); }));
+}
+function paso2() {
+  paso.innerHTML = `
+    <p class="grande">Ahora sin pistas: ¿a qué edad crees que murió?</p>
+    <form id="exp-form" class="campo" novalidate>
+      <input id="exp-edad" type="number" inputmode="numeric" min="1" max="150" placeholder="Edad" aria-label="Edad estimada">
+      <button class="btn btn-rojo btn-chico" type="submit">Ver resultado</button>
+    </form>
+    <p class="error" id="exp-error"></p>`;
+  const input = document.getElementById("exp-edad");
+  input.focus({ preventScroll: true });
+  document.getElementById("exp-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const n = Number(input.value);
+    if (!input.value || !Number.isFinite(n) || n < 1 || n > 150) {
+      document.getElementById("exp-error").textContent = "Escribí una edad entre 1 y 150.";
+      return;
+    }
+    estado.estimacion = Math.round(n);
+    paso3();
+  });
+}
+function barra(etq, valor, color) {
+  const w = Math.min(100, (valor / 150) * 100);
+  return `<div class="barra"><span>${etq}</span><span class="track"><span class="fill" style="display:block;width:${w}%;background:${color}"></span></span><b>${valor}</b></div>`;
+}
+function paso3() {
+  const otraAncla = estado.ancla === 9 ? 140 : 9;
+  const tirada = estado.ancla === 9 ? "para abajo" : "para arriba";
+  paso.innerHTML = `
+    <p class="grande">Murió a los <span class="ancla">${REAL}</span> años.</p>
+    <p>El <mark>${estado.ancla}</mark> de la primera pregunta lo eligió la página al azar y no tenía nada que ver con la respuesta. Aun así, tu cerebro lo usó como punto de partida. A eso se le llama <mark>efecto ancla</mark>.</p>
+    <div class="barras">
+      ${barra("Tu respuesta", estado.estimacion, "#FEF3E0")}
+      ${barra("Con ancla 9", 50, "#7CF5FF")}
+      ${barra("Con ancla 140", 67, "#F4A424")}
+      ${barra("Real", REAL, "#E8262B")}
+    </div>
+    <p>Cuando hicieron este experimento con estudiantes, a quienes les preguntaron por 9 años respondieron 50 en promedio, y a quienes les preguntaron por 140, 67. Tu ancla era ${estado.ancla}, así que la trampa te tiraba ${tirada}.</p>
+    <div class="botones">
+      <button class="btn btn-borde btn-chico" type="button" id="exp-otra">Probar con el ${otraAncla}</button>
+    </div>
+    <p class="fuente">Fuente: Strack y Mussweiler (1997), Journal of Personality and Social Psychology.</p>`;
+  document.getElementById("exp-otra").addEventListener("click", () => { estado.ancla = otraAncla; paso1(); });
+}
+paso1();
+</script>
+</body>
+</html>
