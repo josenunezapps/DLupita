@@ -1,9 +1,31 @@
 {
   "name": "Arte",
   "slug": "arte",
-  "count": 17,
+  "count": 19,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "vidrio-2026-rosa-galactica-de-vidrio",
+      "title": "Rosa galáctica de vidrio",
+      "category": "Arte",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/68e2edaf-1957-4d0b-b49c-043700e4da24.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/68e2edaf-1957-4d0b-b49c-043700e4da24.png"
+    },
+    {
+      "id": "vidrio-2026-koi-de-cristal",
+      "title": "Koi de cristal en espiral",
+      "category": "Arte",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/65d2b2fc-62da-49a4-a2c3-125fabd36a7f.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/65d2b2fc-62da-49a4-a2c3-125fabd36a7f.png"
+    },
     {
       "id": "morfotrazo-grullas-papel",
       "title": "Grullas de papel",
