@@ -8,7 +8,10 @@
 <meta name="theme-color" content="#151B39">
 <meta property="og:title" content="El lado B de las cosas">
 <meta property="og:description" content="Todo tiene un lado B. Acá te lo cuento.">
-<meta property="og:image" content="icono_512.png">
+<meta property="og:image" content="https://josenunezapps.github.io/DLupita/ladob-k8w3/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="icono_ladob.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icono_180.png">
@@ -162,7 +165,7 @@ mark { background: none; color: var(--amarillo); font-weight: 700; }
   -webkit-backface-visibility: hidden;
   border-radius: 22px;
   padding: 32px 28px 28px;
-  min-height: 300px;
+  min-height: 360px;
   display: flex; flex-direction: column; gap: 14px;
   position: relative;
   overflow: hidden;
@@ -186,7 +189,10 @@ mark { background: none; color: var(--amarillo); font-weight: 700; }
   font-family: var(--portada); font-weight: 900; text-transform: uppercase;
   font-size: clamp(1.5rem, 3.6vw, 2.1rem); line-height: 1.05; margin: 0;
 }
-.cara-b .respuesta { font-size: 1.08rem; margin: 0; }
+.cara-b .respuesta { font-size: 1.02rem; margin: 0; }
+.cara-b .foto { height: 120px; margin: -32px -28px 0; background: var(--noche) center / cover no-repeat; position: relative; }
+.cara-b .foto::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--panel), transparent 70%); }
+.cara-b .foto:empty { display: block; }
 .cara .pie { margin-top: auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
 .cara-a .pista { font-size: 0.9rem; color: #5B5566; }
 .surcos {
@@ -247,19 +253,44 @@ mark { background: none; color: var(--amarillo); font-weight: 700; }
 .portada {
   aspect-ratio: 16 / 9; max-width: 100%;
   border-radius: 16px; position: relative; overflow: hidden;
-  padding: 16px; display: flex; align-items: flex-end;
-  transition: transform .2s ease;
+  padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+  background: var(--panel) center / cover no-repeat;
+  box-shadow: 0 0 0 1px var(--linea);
 }
-.video:hover .portada { transform: scale(1.02); }
+.portada::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(7,11,26,0.92) 0%, rgba(7,11,26,0.55) 42%, rgba(7,11,26,0) 70%),
+              linear-gradient(0deg, rgba(7,11,26,0.6), transparent 45%);
+}
+.portada .bg { position: absolute; inset: 0; background: inherit; background-size: cover; transition: transform .5s ease; }
+.video:hover .portada .bg { transform: scale(1.06); }
+.portada > *:not(.bg) { position: relative; z-index: 1; }
 .portada h3 {
   font-family: var(--portada); font-weight: 900; text-transform: uppercase;
-  font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.05; color: #fff; max-width: 70%;
+  font-size: clamp(1rem, 2vw, 1.25rem); line-height: 1.05; color: #fff; max-width: 62%;
   paint-order: stroke fill; -webkit-text-stroke: 4px rgba(7,11,26,0.85);
-  position: relative; z-index: 1;
 }
-.portada .orbe { position: absolute; border-radius: 50%; right: -8%; top: -18%; width: 62%; aspect-ratio: 1; }
-.portada .dur { position: absolute; right: 10px; bottom: 10px; background: rgba(7,11,26,0.8); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; z-index: 1; }
+.portada h3 span { color: var(--amarillo); }
+.chip {
+  align-self: flex-start; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  background: var(--rojo); color: #fff; padding: 3px 8px; border-radius: 4px;
+}
+.play {
+  position: absolute !important; right: 14px; bottom: 14px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(254,243,224,0.16); border: 2px solid rgba(254,243,224,0.7);
+  display: grid; place-items: center; backdrop-filter: blur(6px);
+  transition: background .2s ease, transform .2s ease;
+}
+.play svg { width: 18px; height: 18px; margin-left: 3px; fill: #fff; }
+.video:hover .play, .short:hover .play { background: var(--rojo); border-color: var(--rojo); transform: scale(1.08); }
 .video .nota { font-size: 0.9rem; color: var(--suave); margin: 0; }
+.insignia {
+  position: absolute !important; top: 12px; right: 12px; width: 30px; height: 30px; border-radius: 50%;
+  background: radial-gradient(circle, var(--naranja) 0 34%, var(--vinilo) 35% 88%, var(--borde) 89%);
+  display: grid; place-items: center; font-family: var(--display); font-weight: 900; font-size: 0.62rem; color: var(--crema);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
 
 /* ---------- Shorts ---------- */
 .shorts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
@@ -269,22 +300,27 @@ mark { background: none; color: var(--amarillo); font-weight: 700; }
   display: flex; flex-direction: column; justify-content: space-between;
   text-decoration: none; color: #fff; position: relative; overflow: hidden;
   transition: transform .2s ease;
+  background-position: center; background-size: cover; background-repeat: no-repeat;
+}
+.short::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(7,11,26,0.78) 0%, rgba(7,11,26,0) 34%, rgba(7,11,26,0) 66%, rgba(7,11,26,0.75) 100%);
 }
 .short:hover { transform: translateY(-4px) rotate(-0.6deg); }
 .short h3 {
   font-family: var(--portada); font-weight: 900; text-transform: uppercase;
-  font-size: clamp(1rem, 2.2vw, 1.35rem); line-height: 1.02;
+  font-size: clamp(1rem, 2.2vw, 1.35rem); line-height: 1.02; padding-right: 30px;
   paint-order: stroke fill; -webkit-text-stroke: 4px rgba(7,11,26,0.7);
   position: relative; z-index: 1;
 }
+.short .play { right: 12px; bottom: 12px; width: 38px; height: 38px; z-index: 1; }
 .short h3 span { display: block; color: var(--amarillo); }
 .short .gancho {
   align-self: flex-start; background: var(--crema); color: var(--vinilo);
   font-weight: 800; font-size: 0.78rem; padding: 7px 10px; border-radius: 4px;
   transform: rotate(-4deg); line-height: 1.25; position: relative; z-index: 1;
-  box-shadow: 3px 3px 0 rgba(7,11,26,0.5);
+  box-shadow: 3px 3px 0 rgba(7,11,26,0.5); max-width: calc(100% - 44px);
 }
-.short .luz { position: absolute; inset: 0; background: radial-gradient(circle at 50% 55%, rgba(255,255,255,0.28), transparent 55%); }
 
 /* ---------- Redes ---------- */
 .redes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
@@ -409,6 +445,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
             <div class="surcos"></div>
           </div>
           <div class="cara cara-b" aria-live="polite">
+            <div class="foto" id="dato-foto"></div>
             <span class="lado"><i>B</i> Cara B</span>
             <p class="respuesta" id="dato-respuesta"></p>
             <div class="pie">
@@ -440,12 +477,12 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
       <span class="etiqueta">De qué hablamos</span>
       <h2>Seis lados B</h2>
       <div class="temas">
-        <div class="tema" style="background:linear-gradient(140deg,#6D3BD8,#3B1C8C)"><span class="nro">01</span><h3>Psicología y cerebro</h3><p>Trampas mentales, sesgos, memoria e ilusiones. Cómo te engaña tu propia cabeza.</p></div>
-        <div class="tema" style="background:linear-gradient(140deg,#1E3A8A,#0B1440)"><span class="nro">02</span><h3>Espacio</h3><p>Agujeros negros, estrellas de neutrones y planetas donde llueve metano.</p></div>
-        <div class="tema" style="background:linear-gradient(140deg,#12A6A0,#0B5E66)"><span class="nro">03</span><h3>Cuerpo y biología</h3><p>Bacterias, genes y animales que parecen inventados.</p></div>
-        <div class="tema" style="background:linear-gradient(140deg,#C9731C,#7A3A0C)"><span class="nro">04</span><h3>Historia con giro</h3><p>Datos reales que suenan a mentira.</p></div>
-        <div class="tema" style="background:linear-gradient(140deg,#2E3346,#12141F)"><span class="nro">05</span><h3>Misterios</h3><p>Los que se resolvieron y los que todavía no.</p></div>
-        <div class="tema" style="background:linear-gradient(140deg,#E8262B,#8A1018)"><span class="nro">06</span><h3>¿Qué pasaría si…?</h3><p>Llevamos una idea hasta el final, para ver qué pasa.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,rgba(109,59,216,0.94),rgba(59,28,140,0.55)),url(img/video-recordarlo-todo.webp) center/cover"><span class="nro">01</span><h3>Psicología y cerebro</h3><p>Trampas mentales, sesgos, memoria e ilusiones. Cómo te engaña tu propia cabeza.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,rgba(30,58,138,0.94),rgba(11,20,64,0.45)),url(img/short-ton618.webp) center/cover"><span class="nro">02</span><h3>Espacio</h3><p>Agujeros negros, estrellas de neutrones y planetas donde llueve metano.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,rgba(18,166,160,0.94),rgba(11,94,102,0.45)),url(img/short-medusa.webp) center/cover"><span class="nro">03</span><h3>Cuerpo y biología</h3><p>Bacterias, genes y animales que parecen inventados.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,rgba(201,115,28,0.94),rgba(122,58,12,0.45)),url(img/short-oxford.webp) center/cover"><span class="nro">04</span><h3>Historia con giro</h3><p>Datos reales que suenan a mentira.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,rgba(46,51,70,0.94),rgba(18,20,31,0.45)),url(img/short-mujer-sin-rostro.webp) center/cover"><span class="nro">05</span><h3>Misterios</h3><p>Los que se resolvieron y los que todavía no.</p></div>
+        <div class="tema" style="background:linear-gradient(140deg,rgba(232,38,43,0.94),rgba(138,16,24,0.45)),url(img/video-impacto.webp) center/cover"><span class="nro">06</span><h3>¿Qué pasaría si…?</h3><p>Llevamos una idea hasta el final, para ver qué pasa.</p></div>
       </div>
     </div>
   </section>
@@ -520,35 +557,35 @@ const LINKS = {
 
 /* Cuando tengas el link de cada video, pegalo en "url". Si queda vacío, lleva al canal. */
 const VIDEOS = [
-  { titulo: "Viajé a la velocidad de la luz hasta el borde del universo", nota: "Un viaje con contador en pantalla.", fondo: "linear-gradient(120deg,#070B1A 30%,#1E3A8A)", orbe: "radial-gradient(circle at 35% 35%,#7CF5FF,#1E3A8A 60%,transparent 70%)", url: "" },
-  { titulo: "Toda la historia de la vida en un solo año", nota: "Y aparecimos a las 23:25 del 31 de diciembre.", fondo: "linear-gradient(120deg,#0B2B1A 30%,#2E9E4F)", orbe: "radial-gradient(circle at 35% 35%,#FFD43B,#2E9E4F 60%,transparent 70%)", url: "" },
-  { titulo: "¿Qué pasaría si pudieras recordarlo todo?", nota: "Hipertimesia, Jill Price y Funes el memorioso.", fondo: "linear-gradient(120deg,#1A0B2E 30%,#6D3BD8)", orbe: "radial-gradient(circle at 35% 35%,#F4A424,#6D3BD8 60%,transparent 70%)", url: "" },
-  { titulo: "Las personas que no sienten dolor", nota: "Y por qué no es un superpoder.", fondo: "linear-gradient(120deg,#2A0A0E 30%,#A81B26)", orbe: "radial-gradient(circle at 35% 35%,#FEF3E0,#E8262B 60%,transparent 70%)", url: "" },
-  { titulo: "Del átomo al universo", nota: "El zoom más grande de la historia.", fondo: "linear-gradient(120deg,#07141A 30%,#12A6A0)", orbe: "radial-gradient(circle at 35% 35%,#7CF5FF,#12A6A0 60%,transparent 70%)", url: "" },
-  { titulo: "Impacto", nota: "Qué pasa cuando un meteorito llega a la Tierra.", fondo: "linear-gradient(120deg,#1A0E05 30%,#C9731C)", orbe: "radial-gradient(circle at 35% 35%,#FFD43B,#E8262B 55%,transparent 70%)", url: "" }
+  { titulo: "Viajé a la velocidad de la luz <span>hasta el borde del universo</span>", nota: "Un viaje con contador en pantalla.", img: "video-luz", url: "" },
+  { titulo: "Toda la historia de la vida <span>en un solo año</span>", nota: "Y aparecimos a las 23:25 del 31 de diciembre.", img: "video-vida-un-anio", url: "" },
+  { titulo: "¿Qué pasaría si pudieras <span>recordarlo todo?</span>", nota: "Hipertimesia, Jill Price y Funes el memorioso.", img: "video-recordarlo-todo", url: "" },
+  { titulo: "Las personas que <span>no sienten dolor</span>", nota: "Y por qué no es un superpoder.", img: "video-sin-dolor", url: "" },
+  { titulo: "Del átomo <span>al universo</span>", nota: "El zoom más grande de la historia.", img: "video-atomo-universo", url: "" },
+  { titulo: "Impacto", nota: "Qué pasa cuando un meteorito llega a la Tierra.", img: "video-impacto", url: "" }
 ];
 
 const SHORTS = [
-  { l1: "Las bananas", l2: "son radiactivas", gancho: "Un poquito. Y es natural.", color: "#E8A21C", url: "" },
-  { l1: "TON 618", l2: "el más grande", gancho: "Un agujero negro gigante", color: "#3B1C8C", url: "" },
-  { l1: "La medusa", l2: "inmortal", gancho: "Vuelve a ser joven", color: "#12A6A0", url: "" },
-  { l1: "Oxford es más vieja", l2: "que los aztecas", gancho: "Y no es un chiste", color: "#C9731C", url: "" },
-  { l1: "La mujer", l2: "sin rostro", gancho: "40 crímenes, un mismo ADN", color: "#2E3346", url: "" },
-  { l1: "Efecto", l2: "Streisand", gancho: "Escondelo y se hace viral", color: "#6D3BD8", url: "" },
-  { l1: "Titán", l2: "llueve metano", gancho: "Una luna con lagos", color: "#1E6E8C", url: "" },
-  { l1: "El impuesto", l2: "a la orina", gancho: "Roma cobraba por esto", color: "#E8262B", url: "" }
+  { l1: "Las bananas", l2: "son radiactivas", gancho: "Un poquito. Y es natural.", img: "short-bananas", color: "#E8A21C", url: "" },
+  { l1: "TON 618", l2: "el más grande", gancho: "Un agujero negro gigante", img: "short-ton618", color: "#3B1C8C", url: "" },
+  { l1: "La medusa", l2: "inmortal", gancho: "Vuelve a ser joven", img: "short-medusa", color: "#12A6A0", url: "" },
+  { l1: "Oxford es más vieja", l2: "que los aztecas", gancho: "Y no es un chiste", img: "short-oxford", color: "#C9731C", url: "" },
+  { l1: "La mujer", l2: "sin rostro", gancho: "40 crímenes, un mismo ADN", img: "short-mujer-sin-rostro", color: "#2E3346", url: "" },
+  { l1: "Efecto", l2: "Streisand", gancho: "Escondelo y se hace viral", img: "short-streisand", color: "#6D3BD8", url: "" },
+  { l1: "Titán", l2: "llueve metano", gancho: "Una luna con lagos", img: "short-titan", color: "#1E6E8C", url: "" },
+  { l1: "El impuesto", l2: "a la orina", gancho: "Roma cobraba por esto", img: "short-orina", color: "#E8262B", url: "" }
 ];
 
 const DATOS = [
-  { a: "¿Las bananas son radiactivas?", b: "Sí, un poquito. Tienen potasio, y una parte natural del potasio es radiactiva (el potasio-40). Para que te haga daño tendrías que comer una cantidad imposible de golpe." },
-  { a: "¿Qué es más viejo: la Universidad de Oxford o el Imperio azteca?", b: "Oxford. En 1096 ya se daban clases ahí. Tenochtitlan, la capital azteca, se fundó en 1325, más de dos siglos después." },
-  { a: "¿La luz del Sol tarda 8 minutos en llegarte?", b: "Desde la superficie, sí. Pero antes tuvo que salir del núcleo del Sol rebotando de átomo en átomo, y eso le lleva miles de años: las estimaciones van de unos 10.000 hasta 170.000 años." },
-  { a: "¿Existe un animal que no muere de viejo?", b: "La medusa Turritopsis dohrnii. Cuando está en peligro puede volver a su etapa juvenil y empezar de nuevo. Igual no es invencible: se la pueden comer o se puede enfermar." },
-  { a: "¿Sos más bacterias que persona?", b: "Más o menos mitad y mitad. Tenés unos 38 billones de bacterias y unos 30 billones de células propias. La vieja cifra de “10 bacterias por cada célula” estaba mal." },
-  { a: "¿Quién era la mujer sin rostro de Heilbronn?", b: "Nadie. Su ADN apareció en unas 40 escenas de crímenes en Europa, pero venía de los hisopos: estaban contaminados desde la fábrica por una empleada que los empaquetaba." },
-  { a: "¿Qué pasa si intentás borrar algo de internet?", b: "Que se vuelve viral. En 2003 Barbra Streisand demandó para sacar una foto de su casa que casi nadie había visto. Después de la demanda, la miraron cientos de miles de personas." },
-  { a: "¿Una señal misteriosa del espacio puede venir de un microondas?", b: "Pasó. Unas señales raras que captaba un radiotelescopio en Australia, los “perytones”, venían del microondas de la cocina cuando alguien lo abría antes de que terminara." },
-  { a: "¿Los romanos cobraban impuestos por la orina?", b: "Sí. La orina se juntaba para curtir cuero y lavar ropa, y el emperador Vespasiano le puso un impuesto. De ahí viene la frase “el dinero no tiene olor”." }
+  { img: "short-bananas", a: "¿Las bananas son radiactivas?", b: "Sí, un poquito. Tienen potasio, y una parte natural del potasio es radiactiva (el potasio-40). Para que te haga daño tendrías que comer una cantidad imposible de golpe." },
+  { img: "short-oxford", a: "¿Qué es más viejo: la Universidad de Oxford o el Imperio azteca?", b: "Oxford. En 1096 ya se daban clases ahí. Tenochtitlan, la capital azteca, se fundó en 1325, más de dos siglos después." },
+  { img: "video-luz", a: "¿La luz del Sol tarda 8 minutos en llegarte?", b: "Desde la superficie, sí. Pero antes tuvo que salir del núcleo del Sol rebotando de átomo en átomo, y eso le lleva miles de años: las estimaciones van de unos 10.000 hasta 170.000 años." },
+  { img: "short-medusa", a: "¿Existe un animal que no muere de viejo?", b: "La medusa Turritopsis dohrnii. Cuando está en peligro puede volver a su etapa juvenil y empezar de nuevo. Igual no es invencible: se la pueden comer o se puede enfermar." },
+  { img: "video-atomo-universo", a: "¿Sos más bacterias que persona?", b: "Más o menos mitad y mitad. Tenés unos 38 billones de bacterias y unos 30 billones de células propias. La vieja cifra de “10 bacterias por cada célula” estaba mal." },
+  { img: "short-mujer-sin-rostro", a: "¿Quién era la mujer sin rostro de Heilbronn?", b: "Nadie. Su ADN apareció en unas 40 escenas de crímenes en Europa, pero venía de los hisopos: estaban contaminados desde la fábrica por una empleada que los empaquetaba." },
+  { img: "short-streisand", a: "¿Qué pasa si intentás borrar algo de internet?", b: "Que se vuelve viral. En 2003 Barbra Streisand demandó para sacar una foto de su casa que casi nadie había visto. Después de la demanda, la miraron cientos de miles de personas." },
+  { img: "video-luz", a: "¿Una señal misteriosa del espacio puede venir de un microondas?", b: "Pasó. Unas señales raras que captaba un radiotelescopio en Australia, los “perytones”, venían del microondas de la cocina cuando alguien lo abría antes de que terminara." },
+  { img: "short-orina", a: "¿Los romanos cobraban impuestos por la orina?", b: "Sí. La orina se juntaba para curtir cuero y lavar ropa, y el emperador Vespasiano le puso un impuesto. De ahí viene la frase “el dinero no tiene olor”." }
 ];
 
 /* ===== Enlaces ===== */
@@ -571,17 +608,19 @@ document.getElementById("lista-redes").innerHTML = Object.entries(REDES).map(([k
 
 document.getElementById("lista-videos").innerHTML = VIDEOS.map(v => `
   <a class="video" href="${v.url || LINKS.youtubeVideos}" target="_blank" rel="noopener">
-    <div class="portada" style="background:${v.fondo}">
-      <span class="orbe" style="background:${v.orbe}"></span>
+    <div class="portada">
+      <span class="bg" style="background-image:url(img/${v.img}.webp)"></span>
+      <span class="chip">Video largo</span>
       <h3>${v.titulo}</h3>
-      <span class="dur">YouTube</span>
+      <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
     </div>
     <p class="nota">${v.nota}</p>
   </a>`).join("");
 
 document.getElementById("lista-shorts").innerHTML = SHORTS.map(s => `
-  <a class="short" href="${s.url || LINKS.youtubeShorts}" target="_blank" rel="noopener" style="background:${s.color}">
-    <span class="luz"></span>
+  <a class="short" href="${s.url || LINKS.youtubeShorts}" target="_blank" rel="noopener" style="background-color:${s.color};background-image:url(img/${s.img}.webp)">
+    <span class="insignia" aria-hidden="true">B</span>
+    <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
     <h3>${s.l1}<span>${s.l2}</span></h3>
     <span class="gancho">${s.gancho}</span>
   </a>`).join("");
@@ -597,6 +636,7 @@ function mostrarDato() {
   const d = DATOS[orden[pos]];
   pregunta.textContent = d.a;
   respuesta.textContent = d.b;
+  document.getElementById("dato-foto").style.backgroundImage = `url(img/${d.img}.webp)`;
   contador.textContent = `Dato ${pos + 1} de ${DATOS.length}`;
 }
 mostrarDato();
