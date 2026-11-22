@@ -1,0 +1,44 @@
+{
+  "name": "Minimalista",
+  "slug": "minimalista",
+  "count": 4,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-elegancia-en-blanco",
+      "title": "Elegancia en blanco",
+      "category": "Minimalista",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e1ec3801-1d67-42d0-8a53-e5311db6f430.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e1ec3801-1d67-42d0-8a53-e5311db6f430.jpg"
+    },
+    {
+      "id": "morfotrazo-casa-azul",
+      "title": "Refugio azul",
+      "category": "Minimalista",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4d61de70-483d-4372-a142-6f6ee76ddece.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4d61de70-483d-4372-a142-6f6ee76ddece.jpg"
+    },
+    {
+      "id": "morfotrazo-elegancia-roja",
+      "title": "Elegancia en rojo",
+      "category": "Minimalista",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b1a8758d-6d01-4e76-9fce-f27f07074731.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b1a8758d-6d01-4e76-9fce-f27f07074731.jpg"
+    },
+    {
+      "id": "arquitectura-sol",
+      "title": "Hogar del horizonte",
+      "category": "Minimalista",
+      "device": "PC",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=max&w=3840&q=95"
+    }
+  ]
+}
