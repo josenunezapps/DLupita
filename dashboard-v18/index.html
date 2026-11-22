@@ -23,18 +23,18 @@ button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
 .orbs i:nth-child(2){width:38vw;height:38vw;background:#f6b9dc;right:-6%;top:22%;animation-duration:26s}
 .orbs i:nth-child(3){width:34vw;height:34vw;background:#b6e8d2;left:28%;bottom:-18%;animation-duration:30s}
 @keyframes drift{to{transform:translate(6vw,5vh) scale(1.12)}}
-.app{display:flex;gap:18px;height:100vh;padding:18px;position:relative;z-index:1}
+.app{display:flex;gap:18px;height:100vh;height:100dvh;padding:18px;position:relative;z-index:1}
 /* ---------- Sidebar ---------- */
 .side{width:64px;flex:none;background:rgba(13,13,16,.88);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:40px;display:flex;flex-direction:column;align-items:center;padding:20px 0;gap:6px;position:relative;z-index:5}
 .logo{color:#fff;font-weight:800;font-style:italic;font-size:20px;letter-spacing:-2px;margin-bottom:22px}
 .nav{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#9a9aa6;position:relative;transition:color .25s}
 .nav svg{width:19px;height:19px;position:relative;z-index:1}
-.nav:hover{color:#fff}
+@media (hover:hover){.nav:hover{color:#fff}}
 .nav.on{color:#2b2290}
 .pill{position:absolute;left:11px;width:42px;height:42px;border-radius:50%;background:var(--lav2);transition:transform .55s var(--ease);top:0}
 .nav .tip{position:absolute;left:58px;background:#0d0d10;color:#fff;font-size:12px;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;transform:translateX(-6px);pointer-events:none;transition:.25s var(--ease)}
 .nav .tip::before{content:"";position:absolute;left:-12px;top:50%;width:8px;height:16px;margin-top:-8px;background:#0d0d10;border-radius:0 8px 8px 0}
-.nav:hover .tip{opacity:1;transform:none}
+@media (hover:hover){.nav:hover .tip{opacity:1;transform:none}}
 .spacer{flex:1}
 
 /* ---------- Main ---------- */
