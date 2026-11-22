@@ -1,7 +1,19 @@
 {
   "name": "Oscuro",
   "slug": "oscuro",
-  "count": 0,
+  "count": 1,
   "source": "../../data.json",
-  "works": []
+  "works": [
+    {
+      "id": "vidrio-2026-flor-cristal-oscuro",
+      "title": "Flor de cristal en la oscuridad",
+      "category": "Oscuro",
+      "device": "Ambos",
+      "quality": "941 × 1672",
+      "width": 941,
+      "height": 1672,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2b5cd406-6ee6-4146-9225-ed23c8ebc0c6.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2b5cd406-6ee6-4146-9225-ed23c8ebc0c6.png"
+    }
+  ]
 }
