@@ -1,0 +1,62 @@
+{
+  "name": "Fantasía",
+  "slug": "fantasia",
+  "count": 6,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-palacio-medusas",
+      "title": "Palacio de las medusas",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e2eea17-58cb-4b64-bac8-c908ce12b2d6.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e2eea17-58cb-4b64-bac8-c908ce12b2d6.jpg"
+    },
+    {
+      "id": "morfotrazo-biblioteca-infinita",
+      "title": "Biblioteca del infinito",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/313c4bc9-f3df-4321-846e-a6f844e5c17d.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/313c4bc9-f3df-4321-846e-a6f844e5c17d.jpg"
+    },
+    {
+      "id": "morfotrazo-flores-cosmicas",
+      "title": "Flores cósmicas",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f9dc4a2a-5709-4513-ac6a-9157b5309fea.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f9dc4a2a-5709-4513-ac6a-9157b5309fea.jpg"
+    },
+    {
+      "id": "morfotrazo-bosque-aurora",
+      "title": "Bosque de auroras",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5e204233-5493-4084-8372-1151de9fab09.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5e204233-5493-4084-8372-1151de9fab09.jpg"
+    },
+    {
+      "id": "morfotrazo-islas-celestiales",
+      "title": "Islas celestiales",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/96f5ba5f-e10d-4c0c-a428-62ceafbbcf26.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/96f5ba5f-e10d-4c0c-a428-62ceafbbcf26.jpg"
+    },
+    {
+      "id": "morfotrazo-catedral-abisal",
+      "title": "Catedral abisal",
+      "category": "Fantasía",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/59896405-a8e9-45ed-9092-21b3fe6da875.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/59896405-a8e9-45ed-9092-21b3fe6da875.jpg"
+    }
+  ]
+}
