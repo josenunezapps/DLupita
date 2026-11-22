@@ -1,0 +1,35 @@
+{
+  "name": "Ciudades",
+  "slug": "ciudades",
+  "count": 3,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-metropolis-lunar-dorada",
+      "title": "Metrópolis lunar",
+      "category": "Ciudades",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/649cdea9-0a06-448a-9f16-e414b01f06d8.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/649cdea9-0a06-448a-9f16-e414b01f06d8.jpg"
+    },
+    {
+      "id": "morfotrazo-ciudad-lunar",
+      "title": "Ciudad lunar",
+      "category": "Ciudades",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e17f211c-2c6c-443f-9bc8-ac1b6736b2da.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e17f211c-2c6c-443f-9bc8-ac1b6736b2da.jpg"
+    },
+    {
+      "id": "ciudad-neon",
+      "title": "Ciudad neón",
+      "category": "Ciudades",
+      "device": "PC",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=max&w=3840&q=95"
+    }
+  ]
+}
