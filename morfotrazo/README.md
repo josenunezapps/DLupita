@@ -15,36 +15,30 @@ https://josenunezapps.github.io/DLupita/morfotrazo/
 - Catálogo público `data.json`, dividido en destacados y recientes.
 - Búsqueda instantánea y filtros por celular, computadora y temática.
 - Vista ampliada, favoritos locales y descarga del archivo de imagen.
-- Publicación de JPG, PNG y WebP desde el botón **Subir imagen** (hasta 15 MB).
+- Sitio público de solo lectura: los visitantes únicamente exploran, guardan favoritos y descargan imágenes.
+- Categorías disponibles como filtros de texto, sin tarjetas grandes de vista previa por carpeta.
 
-## Cómo publicar un fondo
-Este sitio funciona sobre **GitHub Pages**, que no tiene backend. Por eso, las publicaciones están protegidas por GitHub:
-1. Desde tu cuenta de GitHub, creá un **fine-grained personal access token** limitado exclusivamente al repositorio **josenunezapps/DLupita**. Permisos del repositorio: **Contents — Read and write**. No habilites más permisos de los necesarios.
-2. Abrí la página y tocá **Subir imagen**.
-3. Elegí el archivo, título, categoría, dispositivo y pegá tu token privado.
-4. Tocá **Publicar fondo**. La web guardará el archivo dentro de `morfotrazo/imagenes/<carpeta>/` y añadirá su entrada a `morfotrazo/data.json`, además de actualizar el catálogo de la carpeta.
-5. GitHub Pages publicará los cambios cuando finalice su despliegue. El token no se escribe en `localStorage`, cookies ni en el repositorio.
-
-**Importante:** no compartas tu token en capturas ni con visitantes. Las personas que descargan **no necesitan cuenta**. Para recibir publicaciones de terceros sin darles acceso al repositorio, hace falta agregar más adelante un backend con moderación.
+## Administración de fondos
+Para incorporar nuevos fondos, el administrador debe actualizar los archivos de catálogo del repositorio mediante GitHub. La web pública **no ofrece un formulario de subida**, ni solicita credenciales o tokens a sus visitantes.
 
 ## Contenido de demostración
-El catálogo inicial incluye imágenes de muestra de Unsplash. Reemplazalas con tu arte MORFOTRAZO; los rótulos de resolución de los ejemplos son orientativos y no representan mediciones automáticas. Los nuevos fondos cargados desde el panel se guardan con el archivo original.
+El catálogo inicial incluye imágenes de muestra de Unsplash. Reemplazalas con tu arte MORFOTRAZO; los rótulos de resolución de los ejemplos son orientativos y no representan mediciones automáticas. No hay formulario de publicación en el sitio público.
 
 ## Recursos
 - `index.html`: estructura y modales.
 - `styles.css`: estética y responsive.
-- `app.js`: búsqueda, filtros, favoritos, descargas y publicación vía GitHub.
+- `app.js`: búsqueda, filtros, favoritos, vista ampliada y descargas por resolución.
 - `data.json`: catálogo de fondos.
 - `colecciones/<carpeta>/catalogo.json`: índices separados por temática con los títulos y enlaces de las obras.
-- `imagenes/<carpeta>/`: lugar para los archivos que se suban desde el panel (se crea al publicar el primer archivo de esa temática).
+- `imagenes/<carpeta>/`: ubicación disponible para imágenes que el administrador agregue al repositorio.
 
 ## Carpetas / colecciones
 Los fondos se organizan por: **Fantasía, Arte, Espacio, Naturaleza, Abstracto, Ciudades, Minimalista y Ciencia ficción**. También hay índices preparados para Anime y Oscuro.
 
 Cada fondo figura en `data.json` con `category` y `folder` y tiene su referencia en `colecciones/<carpeta>/catalogo.json`.
-Las colecciones se muestran como carpetas con portada y contador en la web y se pueden filtrar desde el celular o PC.
+Las colecciones se exploran mediante botones de categoría escritos debajo de la portada; no se muestran tarjetas visuales de carpetas.
 
-**Archivos históricos:** las 41 imágenes publicadas hasta el 22/11/2026, incluyendo las obras originales y las imágenes de muestra, siguen alojadas fuera del repositorio y se referencian desde su carpeta. No se copiaron binarios antiguos a GitHub. Las imágenes nuevas subidas desde el panel sí se guardan físicamente en `imagenes/<carpeta>/`.
+**Archivos históricos:** las 41 imágenes publicadas hasta el 22/11/2026, incluyendo las obras originales y las imágenes de muestra, siguen alojadas fuera del repositorio y se referencian desde su carpeta. No se copiaron binarios antiguos a GitHub. Los archivos que el administrador agregue directamente al repositorio pueden guardarse en `imagenes/<carpeta>/`.
 
 ## Descargas adaptadas a cada dispositivo (noviembre de 2026)
 - El catálogo incluye **68 fondos**, de ellos **20 nuevas obras de vidrio/cristal** en distintas categorías.
