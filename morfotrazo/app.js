@@ -7,6 +7,17 @@
   const slug=v=>String(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,55)||'imagen';
   const safeUrl=v=>{try{const u=new URL(String(v||''),document.baseURI);return ['http:','https:','blob:'].includes(u.protocol)?u.href:''}catch{return ''}};
   let wallpapers=[],filter='Todas',query='',showMode='normal',favoriteOnly=false,active=null,uploadObjectURL=null;
+  const collections=[
+    {name:'Fantasía',slug:'fantasia',icon:'spark'},
+    {name:'Arte',slug:'arte',icon:'palette'},
+    {name:'Espacio',slug:'espacio',icon:'spark'},
+    {name:'Naturaleza',slug:'naturaleza',icon:'leaf'},
+    {name:'Abstracto',slug:'abstracto',icon:'layers'},
+    {name:'Ciudades',slug:'ciudades',icon:'home'},
+    {name:'Minimalista',slug:'minimalista',icon:'layers'},
+    {name:'Ciencia ficción',slug:'ciencia-ficcion',icon:'spark'}
+  ];
+  const folderSlug=name=>collections.find(c=>c.name===name)?.slug||slug(name);
   let toastTimer;
   let favorites=new Set();
   try{const stored=JSON.parse(localStorage.getItem('morfotrazo:favs:v1')||'[]');favorites=new Set(Array.isArray(stored)?stored:[])}catch{}
@@ -45,6 +56,22 @@
     return !query||hay.includes(query.toLocaleLowerCase('es'));
   }
   function appendCards(container,items){container.replaceChildren(...items.map(card))}
+  function renderFolders(){
+    const container=$('#folderGrid');
+    const cards=collections.map(c=>{
+      const works=wallpapers.filter(p=>p.folder===c.slug||(!p.folder&&p.category===c.name));
+      if(!works.length)return null;
+      const button=document.createElement('button');button.type='button';button.className='folder-card';button.dataset.category=c.name;
+      button.setAttribute('aria-label','Abrir carpeta '+c.name+', '+works.length+' fondos');
+      const image=document.createElement('img');image.loading='lazy';image.decoding='async';image.alt='';
+      image.src=imageUrl(works[0]);button.appendChild(image);
+      const left=document.createElement('span');left.className='folder-label';left.innerHTML=icon(c.icon);
+      const title=document.createElement('span');title.textContent=c.name;left.appendChild(title);
+      const count=document.createElement('span');count.className='folder-count';count.textContent=works.length+' fondos';
+      button.append(left,count);return button;
+    }).filter(Boolean);
+    container.replaceChildren(...cards);
+  }
   function render(){
     const matched=wallpapers.filter(match);
     let featured=matched.filter(p=>p.featured);
@@ -63,6 +90,7 @@
     document.querySelectorAll('.category').forEach(b=>{const selected=b.dataset.filter===filter;b.classList.toggle('active',selected);b.setAttribute('aria-pressed',String(selected))});
     $('#favoritesBtn').style.color=favoriteOnly?'#ff8a20':'';
     $('#favoritesBtn').setAttribute('aria-pressed',String(favoriteOnly));
+    document.querySelectorAll('.folder-card').forEach(b=>b.classList.toggle('is-selected',b.dataset.category===filter));
   }
   function setCategory(next){filter=next;showMode='normal';favoriteOnly=false;render()}
   function reset(){filter='Todas';query='';showMode='normal';favoriteOnly=false;$('#searchInput').value='';render()}
@@ -108,7 +136,7 @@
       if(!response.ok)throw Error('No se pudo obtener el catálogo');
       const data=await response.json();
       wallpapers=Array.isArray(data.wallpapers)?data.wallpapers.filter(p=>p&&p.id&&p.title&&p.image):[];
-      render();
+      renderFolders();render();
     }catch(err){
       $('#filterStatus').textContent='El catálogo no está disponible en este momento.';
       toast('No pudimos cargar la galería. Volvé a intentar.');
@@ -127,6 +155,11 @@
   document.querySelectorAll('.modal-backdrop').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)closeModal(el.id)}));
   document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-backdrop:not([hidden])').forEach(el=>closeModal(el.id))});
   $('#categories').addEventListener('click',e=>{const button=e.target.closest('.category');if(button)setCategory(button.dataset.filter)});
+  $('#folderGrid').addEventListener('click',e=>{
+    const button=e.target.closest('.folder-card');if(!button)return;
+    query='';$('#searchInput').value='';setCategory(button.dataset.category);
+    $('#destacados').hidden?$('#recientes').scrollIntoView({behavior:'smooth'}):$('#destacados').scrollIntoView({behavior:'smooth'});
+  });
   $('#searchForm').addEventListener('submit',e=>{e.preventDefault();query=$('#searchInput').value.trim();showMode='normal';render();$('#explorar').scrollIntoView({behavior:'smooth'})});
   $('#searchInput').addEventListener('input',e=>{query=e.target.value.trim();showMode='normal';render()});
   $('#clearFilters').addEventListener('click',reset);
@@ -200,18 +233,29 @@
       const imageData=await readDataURL(file);
       const extension=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg';
       const id='obra-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
-      const path=ROOT+'/uploads/'+id+'.'+extension;
+      const category=$('#imageCategory').value,folder=folderSlug(category);
+      const path=ROOT+'/imagenes/'+folder+'/'+id+'.'+extension;
       const original=await githubRequest(ROOT+'/data.json',token);
       const data=JSON.parse(decodeGithub(original.content));
       if(!Array.isArray(data.wallpapers))throw Error('Formato del catálogo inválido');
       await githubRequest(path,token,'PUT',{message:'MORFOTRAZO: publicar imagen '+title,content:String(imageData).split(',')[1],branch:BRANCH});
       resultBox.textContent='Imagen subida. Actualizando la galería...';
-      const item={id,title,category:$('#imageCategory').value,device:$('#imageDevice').value,featured:false,createdAt:new Date().toISOString(),quality:'Original',image:'./uploads/'+id+'.'+extension,download:'./uploads/'+id+'.'+extension,source:'MORFOTRAZO'};
+      const item={id,title,category,folder,device:$('#imageDevice').value,featured:false,createdAt:new Date().toISOString(),quality:'Original',image:'./imagenes/'+folder+'/'+id+'.'+extension,download:'./imagenes/'+folder+'/'+id+'.'+extension,source:'MORFOTRAZO'};
       data.wallpapers.unshift(item);
       await githubRequest(ROOT+'/data.json',token,'PUT',{message:'MORFOTRAZO: agregar '+title+' al catálogo',content:encodeGithub(JSON.stringify(data,null,2)+'\n'),sha:original.sha,branch:BRANCH});
+      let catalogFolderUpdated=true;
+      try{
+        const manifestPath=ROOT+'/colecciones/'+folder+'/catalogo.json';
+        const manifest=await githubRequest(manifestPath,token);
+        const manifestData=JSON.parse(decodeGithub(manifest.content));
+        if(!Array.isArray(manifestData.works))manifestData.works=[];
+        manifestData.works.unshift({id:item.id,title:item.title,category:item.category,device:item.device,quality:item.quality,image:item.image,download:item.download});
+        manifestData.count=manifestData.works.length;
+        await githubRequest(manifestPath,token,'PUT',{message:'MORFOTRAZO: actualizar carpeta '+category,content:encodeGithub(JSON.stringify(manifestData,null,2)+'\n'),sha:manifest.sha,branch:BRANCH});
+      }catch(folderError){catalogFolderUpdated=false}
       item.localUrl=URL.createObjectURL(file);
-      wallpapers.unshift(item);render();
-      resultBox.textContent='¡Publicado en GitHub! Aparecerá para todos cuando se actualice GitHub Pages.';
+      wallpapers.unshift(item);renderFolders();render();
+      resultBox.textContent=catalogFolderUpdated?'¡Publicado en GitHub y guardado en la carpeta '+category+'! Aparecerá para todos al actualizarse GitHub Pages.':'Imagen publicada y visible en el catálogo. No se pudo actualizar el índice de la carpeta.';
       $('#githubToken').value='';$('#imageTitle').value='';imageFile.value='';
       $('#dropTitle').textContent='Elegí una imagen o arrastrala acá';$('#uploadPreview').hidden=true;
       toast('Fondo publicado correctamente');
