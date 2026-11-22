@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "site": "MORFOTRAZO",
+  "wallpapers": [
+    {
+      "id": "horizonte-fuego",
+      "title": "Horizonte de fuego",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "featured": true,
+      "createdAt": "2026-11-21T19:21:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "ciudad-neon",
+      "title": "Ciudad neón",
+      "category": "Ciudades",
+      "device": "PC",
+      "featured": true,
+      "createdAt": "2026-11-21T17:10:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "espiritu-salvaje",
+      "title": "Espíritu salvaje",
+      "category": "Arte",
+      "device": "Ambos",
+      "featured": true,
+      "createdAt": "2026-11-20T18:10:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "mirada-felina",
+      "title": "Mirada salvaje",
+      "category": "Arte",
+      "device": "Celular",
+      "featured": true,
+      "createdAt": "2026-11-20T16:00:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "bosque-lunar",
+      "title": "Bosque encantado",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "featured": true,
+      "createdAt": "2026-11-19T19:31:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "viaje-espacial",
+      "title": "Más allá de la Tierra",
+      "category": "Espacio",
+      "device": "PC",
+      "featured": true,
+      "createdAt": "2026-11-18T20:30:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "cielo-de-colores",
+      "title": "Cielo de colores",
+      "category": "Arte",
+      "device": "Celular",
+      "featured": true,
+      "createdAt": "2026-11-18T19:30:00Z",
+      "quality": "HD",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "olas-eternas",
+      "title": "Olas eternas",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "featured": true,
+      "createdAt": "2026-11-17T14:30:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "primavera-rosa",
+      "title": "Primavera rosa",
+      "category": "Arte",
+      "device": "Celular",
+      "featured": true,
+      "createdAt": "2026-11-16T15:05:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "luces-abstractas",
+      "title": "Luz infinita",
+      "category": "Abstracto",
+      "device": "PC",
+      "featured": false,
+      "createdAt": "2026-11-22T14:55:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "naturaleza-viva",
+      "title": "Naturaleza viva",
+      "category": "Naturaleza",
+      "device": "Ambos",
+      "featured": false,
+      "createdAt": "2026-11-22T13:26:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "arquitectura-sol",
+      "title": "Hogar del horizonte",
+      "category": "Minimalista",
+      "device": "PC",
+      "featured": false,
+      "createdAt": "2026-11-22T10:13:00Z",
+      "quality": "4K",
+      "source": "Unsplash · imagen de muestra",
+      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=max&w=3840&q=95"
+    }
+  ]
+}
