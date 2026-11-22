@@ -1,0 +1,17 @@
+{
+  "name": "Ciencia ficción",
+  "slug": "ciencia-ficcion",
+  "count": 1,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-jardin-robotico",
+      "title": "Jardín de otro mundo",
+      "category": "Ciencia ficción",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5566ead7-a46f-4146-9d4a-8843a74bab21.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5566ead7-a46f-4146-9d4a-8843a74bab21.jpg"
+    }
+  ]
+}
