@@ -3,6 +3,156 @@
   "site": "MORFOTRAZO",
   "wallpapers": [
     {
+      "id": "morfotrazo-palacio-medusas",
+      "title": "Palacio de las medusas",
+      "category": "Fantasía",
+      "folder": "fantasia",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:05:00.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e2eea17-58cb-4b64-bac8-c908ce12b2d6.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e2eea17-58cb-4b64-bac8-c908ce12b2d6.jpg"
+    },
+    {
+      "id": "morfotrazo-biblioteca-infinita",
+      "title": "Biblioteca del infinito",
+      "category": "Fantasía",
+      "folder": "fantasia",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:59.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/313c4bc9-f3df-4321-846e-a6f844e5c17d.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/313c4bc9-f3df-4321-846e-a6f844e5c17d.jpg"
+    },
+    {
+      "id": "morfotrazo-jardin-robotico",
+      "title": "Jardín de otro mundo",
+      "category": "Ciencia ficción",
+      "folder": "ciencia-ficcion",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:58.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5566ead7-a46f-4146-9d4a-8843a74bab21.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5566ead7-a46f-4146-9d4a-8843a74bab21.jpg"
+    },
+    {
+      "id": "morfotrazo-flores-cosmicas",
+      "title": "Flores cósmicas",
+      "category": "Fantasía",
+      "folder": "fantasia",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:57.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f9dc4a2a-5709-4513-ac6a-9157b5309fea.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f9dc4a2a-5709-4513-ac6a-9157b5309fea.jpg"
+    },
+    {
+      "id": "morfotrazo-ballena-cosmica",
+      "title": "Ballena de las galaxias",
+      "category": "Espacio",
+      "folder": "espacio",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:56.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d613147e-7700-4715-a041-7e3005fb966f.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d613147e-7700-4715-a041-7e3005fb966f.jpg"
+    },
+    {
+      "id": "morfotrazo-bosque-aurora",
+      "title": "Bosque de auroras",
+      "category": "Fantasía",
+      "folder": "fantasia",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:55.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5e204233-5493-4084-8372-1151de9fab09.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/5e204233-5493-4084-8372-1151de9fab09.jpg"
+    },
+    {
+      "id": "morfotrazo-islas-celestiales",
+      "title": "Islas celestiales",
+      "category": "Fantasía",
+      "folder": "fantasia",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:54.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/96f5ba5f-e10d-4c0c-a428-62ceafbbcf26.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/96f5ba5f-e10d-4c0c-a428-62ceafbbcf26.jpg"
+    },
+    {
+      "id": "morfotrazo-eclipse-cristal",
+      "title": "Eclipse de cristal",
+      "category": "Espacio",
+      "folder": "espacio",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:53.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b249528d-e987-4d4f-b1ac-6e3dbdad6151.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b249528d-e987-4d4f-b1ac-6e3dbdad6151.jpg"
+    },
+    {
+      "id": "morfotrazo-reloj-de-mundos",
+      "title": "Reloj de los mundos",
+      "category": "Abstracto",
+      "folder": "abstracto",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:52.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/bf002925-89f4-40dc-8c82-ea8413560591.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/bf002925-89f4-40dc-8c82-ea8413560591.jpg"
+    },
+    {
+      "id": "morfotrazo-catedral-abisal",
+      "title": "Catedral abisal",
+      "category": "Fantasía",
+      "folder": "fantasia",
+      "device": "Celular",
+      "featured": false,
+      "createdAt": "2026-11-22T16:04:51.000Z",
+      "quality": "864 × 1536",
+      "width": 864,
+      "height": 1536,
+      "source": "MORFOTRAZO",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/59896405-a8e9-45ed-9092-21b3fe6da875.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/59896405-a8e9-45ed-9092-21b3fe6da875.jpg"
+    },
+    {
       "id": "morfotrazo-caballo-mar-turquesa",
       "title": "Caballo del mar turquesa",
       "category": "Arte",
@@ -14,7 +164,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/0b02dcec-34f6-4a03-a2f9-ac0b057f2175.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/0b02dcec-34f6-4a03-a2f9-ac0b057f2175.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/0b02dcec-34f6-4a03-a2f9-ac0b057f2175.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-fenix-oleo-nocturno",
@@ -28,7 +179,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/231d00aa-cf86-4777-a351-918014be97f3.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/231d00aa-cf86-4777-a351-918014be97f3.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/231d00aa-cf86-4777-a351-918014be97f3.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-dama-del-farol",
@@ -42,7 +194,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/1d5e7db8-2a08-446d-9d46-52504b2ac04b.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/1d5e7db8-2a08-446d-9d46-52504b2ac04b.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/1d5e7db8-2a08-446d-9d46-52504b2ac04b.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-metropolis-lunar-dorada",
@@ -56,7 +209,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/649cdea9-0a06-448a-9f16-e414b01f06d8.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/649cdea9-0a06-448a-9f16-e414b01f06d8.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/649cdea9-0a06-448a-9f16-e414b01f06d8.jpg",
+      "folder": "ciudades"
     },
     {
       "id": "morfotrazo-koi-espiral",
@@ -70,7 +224,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7e870ace-d0bc-4e45-acfa-b6fd4fa52485.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7e870ace-d0bc-4e45-acfa-b6fd4fa52485.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7e870ace-d0bc-4e45-acfa-b6fd4fa52485.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-mirada-de-fuego",
@@ -84,7 +239,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/851bad72-3d5d-4d84-b0e9-9fe19c15ba10.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/851bad72-3d5d-4d84-b0e9-9fe19c15ba10.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/851bad72-3d5d-4d84-b0e9-9fe19c15ba10.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-camino-solar",
@@ -98,7 +254,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d6c59d3b-0f87-48bf-8a5e-b9c0391247b0.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d6c59d3b-0f87-48bf-8a5e-b9c0391247b0.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d6c59d3b-0f87-48bf-8a5e-b9c0391247b0.jpg",
+      "folder": "abstracto"
     },
     {
       "id": "morfotrazo-viajera-de-acuarela",
@@ -112,7 +269,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c812bbc2-eeef-47d3-b173-29dee1983489.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c812bbc2-eeef-47d3-b173-29dee1983489.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c812bbc2-eeef-47d3-b173-29dee1983489.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-elegancia-en-blanco",
@@ -126,7 +284,8 @@
       "height": 1536,
       "source": "MORFOTRAZO",
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e1ec3801-1d67-42d0-8a53-e5311db6f430.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e1ec3801-1d67-42d0-8a53-e5311db6f430.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e1ec3801-1d67-42d0-8a53-e5311db6f430.jpg",
+      "folder": "minimalista"
     },
     {
       "id": "morfotrazo-rostro-en-llamas",
@@ -140,7 +299,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/45de28f4-2292-4b1b-b9a8-1d97ff6cadff.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/45de28f4-2292-4b1b-b9a8-1d97ff6cadff.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/45de28f4-2292-4b1b-b9a8-1d97ff6cadff.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-vuelo-acuarela",
@@ -154,7 +314,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3eae0859-3de6-4b9e-aeda-b8ae35615d51.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3eae0859-3de6-4b9e-aeda-b8ae35615d51.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3eae0859-3de6-4b9e-aeda-b8ae35615d51.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-danza-dorada",
@@ -168,7 +329,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f41d7e70-8b6d-44c3-a6be-e93c82f06b8f.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f41d7e70-8b6d-44c3-a6be-e93c82f06b8f.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f41d7e70-8b6d-44c3-a6be-e93c82f06b8f.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-casa-azul",
@@ -182,7 +344,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4d61de70-483d-4372-a142-6f6ee76ddece.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4d61de70-483d-4372-a142-6f6ee76ddece.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4d61de70-483d-4372-a142-6f6ee76ddece.jpg",
+      "folder": "minimalista"
     },
     {
       "id": "morfotrazo-noche-carmesi",
@@ -196,7 +359,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e7e5ecf-5f04-4492-b1d0-0f196e250e48.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e7e5ecf-5f04-4492-b1d0-0f196e250e48.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e7e5ecf-5f04-4492-b1d0-0f196e250e48.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-ciudad-lunar",
@@ -210,7 +374,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e17f211c-2c6c-443f-9bc8-ac1b6736b2da.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e17f211c-2c6c-443f-9bc8-ac1b6736b2da.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/e17f211c-2c6c-443f-9bc8-ac1b6736b2da.jpg",
+      "folder": "ciudades"
     },
     {
       "id": "morfotrazo-elegancia-roja",
@@ -224,7 +389,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b1a8758d-6d01-4e76-9fce-f27f07074731.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b1a8758d-6d01-4e76-9fce-f27f07074731.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b1a8758d-6d01-4e76-9fce-f27f07074731.jpg",
+      "folder": "minimalista"
     },
     {
       "id": "morfotrazo-caballo-blanco",
@@ -238,7 +404,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a4bc28ea-63ef-4c19-86cd-00cb413c4f20.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a4bc28ea-63ef-4c19-86cd-00cb413c4f20.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a4bc28ea-63ef-4c19-86cd-00cb413c4f20.jpg",
+      "folder": "arte"
     },
     {
       "id": "morfotrazo-camino-al-sol",
@@ -252,7 +419,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f8782f65-55c2-4931-aaaa-0e7369952c2d.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f8782f65-55c2-4931-aaaa-0e7369952c2d.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f8782f65-55c2-4931-aaaa-0e7369952c2d.jpg",
+      "folder": "abstracto"
     },
     {
       "id": "morfotrazo-fenix-colores",
@@ -266,7 +434,8 @@
       "width": 1229,
       "height": 1536,
       "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2e1f6295-3507-46ce-8452-74e2e8a43988.jpg",
-      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2e1f6295-3507-46ce-8452-74e2e8a43988.jpg"
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2e1f6295-3507-46ce-8452-74e2e8a43988.jpg",
+      "folder": "arte"
     },
     {
       "id": "horizonte-fuego",
@@ -278,7 +447,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=max&w=3840&q=95",
+      "folder": "naturaleza"
     },
     {
       "id": "ciudad-neon",
@@ -290,7 +460,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=max&w=3840&q=95",
+      "folder": "ciudades"
     },
     {
       "id": "espiritu-salvaje",
@@ -302,7 +473,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=max&w=3840&q=95",
+      "folder": "arte"
     },
     {
       "id": "mirada-felina",
@@ -314,7 +486,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=max&w=3840&q=95",
+      "folder": "arte"
     },
     {
       "id": "bosque-lunar",
@@ -326,7 +499,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=max&w=3840&q=95",
+      "folder": "naturaleza"
     },
     {
       "id": "viaje-espacial",
@@ -338,7 +512,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=max&w=3840&q=95",
+      "folder": "espacio"
     },
     {
       "id": "cielo-de-colores",
@@ -350,7 +525,8 @@
       "quality": "HD",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=max&w=3840&q=95",
+      "folder": "arte"
     },
     {
       "id": "olas-eternas",
@@ -362,7 +538,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=max&w=3840&q=95",
+      "folder": "naturaleza"
     },
     {
       "id": "primavera-rosa",
@@ -374,7 +551,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=max&w=3840&q=95",
+      "folder": "arte"
     },
     {
       "id": "luces-abstractas",
@@ -386,7 +564,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=max&w=3840&q=95",
+      "folder": "abstracto"
     },
     {
       "id": "naturaleza-viva",
@@ -398,7 +577,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=max&w=3840&q=95",
+      "folder": "naturaleza"
     },
     {
       "id": "arquitectura-sol",
@@ -410,7 +590,8 @@
       "quality": "4K",
       "source": "Unsplash · imagen de muestra",
       "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85",
-      "download": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=max&w=3840&q=95"
+      "download": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=max&w=3840&q=95",
+      "folder": "minimalista"
     }
   ]
 }
