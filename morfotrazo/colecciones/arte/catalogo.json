@@ -1,0 +1,152 @@
+{
+  "name": "Arte",
+  "slug": "arte",
+  "count": 16,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-caballo-mar-turquesa",
+      "title": "Caballo del mar turquesa",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/0b02dcec-34f6-4a03-a2f9-ac0b057f2175.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/0b02dcec-34f6-4a03-a2f9-ac0b057f2175.jpg"
+    },
+    {
+      "id": "morfotrazo-fenix-oleo-nocturno",
+      "title": "Fénix de fuego",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/231d00aa-cf86-4777-a351-918014be97f3.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/231d00aa-cf86-4777-a351-918014be97f3.jpg"
+    },
+    {
+      "id": "morfotrazo-dama-del-farol",
+      "title": "Dama del farol",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/1d5e7db8-2a08-446d-9d46-52504b2ac04b.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/1d5e7db8-2a08-446d-9d46-52504b2ac04b.jpg"
+    },
+    {
+      "id": "morfotrazo-koi-espiral",
+      "title": "Danza de los koi",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7e870ace-d0bc-4e45-acfa-b6fd4fa52485.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/7e870ace-d0bc-4e45-acfa-b6fd4fa52485.jpg"
+    },
+    {
+      "id": "morfotrazo-mirada-de-fuego",
+      "title": "Mirada de fuego",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/851bad72-3d5d-4d84-b0e9-9fe19c15ba10.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/851bad72-3d5d-4d84-b0e9-9fe19c15ba10.jpg"
+    },
+    {
+      "id": "morfotrazo-viajera-de-acuarela",
+      "title": "Viajera de acuarela",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c812bbc2-eeef-47d3-b173-29dee1983489.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c812bbc2-eeef-47d3-b173-29dee1983489.jpg"
+    },
+    {
+      "id": "morfotrazo-rostro-en-llamas",
+      "title": "Rostro en llamas",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/45de28f4-2292-4b1b-b9a8-1d97ff6cadff.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/45de28f4-2292-4b1b-b9a8-1d97ff6cadff.jpg"
+    },
+    {
+      "id": "morfotrazo-vuelo-acuarela",
+      "title": "Vuelo de acuarela",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3eae0859-3de6-4b9e-aeda-b8ae35615d51.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/3eae0859-3de6-4b9e-aeda-b8ae35615d51.jpg"
+    },
+    {
+      "id": "morfotrazo-danza-dorada",
+      "title": "Danza dorada",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f41d7e70-8b6d-44c3-a6be-e93c82f06b8f.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/f41d7e70-8b6d-44c3-a6be-e93c82f06b8f.jpg"
+    },
+    {
+      "id": "morfotrazo-noche-carmesi",
+      "title": "Noche carmesí",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e7e5ecf-5f04-4492-b1d0-0f196e250e48.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/4e7e5ecf-5f04-4492-b1d0-0f196e250e48.jpg"
+    },
+    {
+      "id": "morfotrazo-caballo-blanco",
+      "title": "Espíritu libre",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a4bc28ea-63ef-4c19-86cd-00cb413c4f20.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a4bc28ea-63ef-4c19-86cd-00cb413c4f20.jpg"
+    },
+    {
+      "id": "morfotrazo-fenix-colores",
+      "title": "Renacer del fénix",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "1229×1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2e1f6295-3507-46ce-8452-74e2e8a43988.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/2e1f6295-3507-46ce-8452-74e2e8a43988.jpg"
+    },
+    {
+      "id": "espiritu-salvaje",
+      "title": "Espíritu salvaje",
+      "category": "Arte",
+      "device": "Ambos",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "mirada-felina",
+      "title": "Mirada salvaje",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "cielo-de-colores",
+      "title": "Cielo de colores",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "HD",
+      "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=max&w=3840&q=95"
+    },
+    {
+      "id": "primavera-rosa",
+      "title": "Primavera rosa",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=max&w=3840&q=95"
+    }
+  ]
+}
