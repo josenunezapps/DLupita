@@ -1,0 +1,35 @@
+{
+  "name": "Espacio",
+  "slug": "espacio",
+  "count": 3,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "morfotrazo-ballena-cosmica",
+      "title": "Ballena de las galaxias",
+      "category": "Espacio",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d613147e-7700-4715-a041-7e3005fb966f.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/d613147e-7700-4715-a041-7e3005fb966f.jpg"
+    },
+    {
+      "id": "morfotrazo-eclipse-cristal",
+      "title": "Eclipse de cristal",
+      "category": "Espacio",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b249528d-e987-4d4f-b1ac-6e3dbdad6151.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/b249528d-e987-4d4f-b1ac-6e3dbdad6151.jpg"
+    },
+    {
+      "id": "viaje-espacial",
+      "title": "Más allá de la Tierra",
+      "category": "Espacio",
+      "device": "PC",
+      "quality": "4K",
+      "image": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1400&q=85",
+      "download": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=max&w=3840&q=95"
+    }
+  ]
+}
