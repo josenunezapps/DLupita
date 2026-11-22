@@ -1,9 +1,18 @@
 {
   "name": "Arte",
   "slug": "arte",
-  "count": 16,
+  "count": 17,
   "source": "../../data.json",
   "works": [
+    {
+      "id": "morfotrazo-grullas-papel",
+      "title": "Grullas de papel",
+      "category": "Arte",
+      "device": "Celular",
+      "quality": "864 × 1536",
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c2827d7d-3908-4be2-83fa-95f990d20783.jpg",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/c2827d7d-3908-4be2-83fa-95f990d20783.jpg"
+    },
     {
       "id": "morfotrazo-caballo-mar-turquesa",
       "title": "Caballo del mar turquesa",
