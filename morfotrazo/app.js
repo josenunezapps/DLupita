@@ -237,8 +237,23 @@
       toast('Fondo descargado en '+size.w+' × '+size.h);
       canvas.width=1;canvas.height=1;
     }catch(e){
-      note.textContent='No se pudo crear este tamaño: '+(e.message||'error desconocido')+'. Podés descargar el original.';
-      toast('No se pudo convertir el fondo. Probá con el original.');
+      // Último recurso: pedir el tamaño exacto a un servicio de redimensionamiento CORS.
+      const variantUrl='https://wsrv.nl/?url='+encodeURIComponent(source)+'&w='+size.w+'&h='+size.h+
+        '&fit='+(mode==='cover'?'cover':'contain')+'&cbg=061019&output=jpg&q=93';
+      try{
+        const response=await fetch(variantUrl,{mode:'cors'});
+        if(!response.ok)throw Error('Imagen no disponible');
+        const resized=await response.blob();
+        if(!resized.type.startsWith('image/'))throw Error('Respuesta no válida');
+        deliverBlob(resized,'morfotrazo-'+slug(p.title)+'-'+selectedDevice+'-'+size.w+'x'+size.h+'.jpg');
+        note.textContent='Descarga lista: '+size.w+' × '+size.h+' (adaptación básica).';
+        toast('Fondo descargado en '+size.w+' × '+size.h);
+      }catch(fallbackError){
+        const anchor=document.createElement('a');anchor.href=variantUrl;anchor.target='_blank';anchor.rel='noopener noreferrer';
+        document.body.appendChild(anchor);anchor.click();anchor.remove();
+        note.textContent='No se pudo iniciar la descarga directa. Abrimos una versión redimensionada en otra pestaña. También podés usar el original.';
+        toast('Abrimos el tamaño elegido en otra pestaña');
+      }
     }finally{
       downloadBusy=false;button.disabled=false;button.innerHTML=icon('download')+' Descargar tamaño elegido';
     }
