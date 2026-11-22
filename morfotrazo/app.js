@@ -26,6 +26,11 @@
   try{const stored=JSON.parse(localStorage.getItem('morfotrazo:favs:v1')||'[]');favorites=new Set(Array.isArray(stored)?stored:[])}catch{}
   const fmtDevice=d=>d==='Ambos'?'Celular y PC':d==='PC'?'Computadora':'Celular';
   const imageUrl=p=>safeUrl(p.localUrl||p.image);
+  const thumbnailUrl=p=>{
+    const source=imageUrl(p);
+    if(!source||!source.startsWith('https://'))return source;
+    return 'https://wsrv.nl/?url='+encodeURIComponent(source)+'&w=520&h=650&fit=cover&output=webp&q=78';
+  };
   const hasPhone=p=>p.variantsEnabled===true||p.device!=='PC';
   const hasPC=p=>p.variantsEnabled===true||p.device!=='Celular';
   function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('visible'),3700)}
@@ -34,7 +39,7 @@
   function closeModal(id){$('#'+id).hidden=true;if(!document.querySelector('.modal-backdrop:not([hidden])'))document.body.classList.remove('modal-open');if(id==='uploadModal'){$('#githubToken').value='';$('#uploadResult').textContent=''}}
   function card(p){
     const fav=favorites.has(p.id);
-    const img=imageUrl(p);
+    const img=thumbnailUrl(p);
     const wrapper=document.createElement('article');
     wrapper.className='wall-card';
     wrapper.dataset.id=p.id;
@@ -48,7 +53,11 @@
       '</div>'+
       '<div class="wall-bottom"><p class="wall-name" title="'+esc(p.title)+'">'+esc(p.title)+'</p><button class="download-btn" data-action="download" data-id="'+esc(p.id)+'">'+icon('download')+' Descargar</button></div>';
     const image=wrapper.querySelector('img');
-    image.addEventListener('error',()=>{image.style.display='none';wrapper.querySelector('.wall-image-wrap').style.background='radial-gradient(circle at 30% 20%,#ec640b,#11364c 42%,#07111b 85%)'});
+    image.addEventListener('error',()=>{
+      if(!image.dataset.originalFallback){image.dataset.originalFallback='1';image.src=imageUrl(p);return}
+      image.style.display='none';
+      wrapper.querySelector('.wall-image-wrap').style.background='radial-gradient(circle at 30% 20%,#ec640b,#11364c 42%,#07111b 85%)';
+    });
     return wrapper;
   }
   function match(p){
@@ -67,7 +76,9 @@
       const button=document.createElement('button');button.type='button';button.className='folder-card';button.dataset.category=c.name;
       button.setAttribute('aria-label','Abrir carpeta '+c.name+', '+works.length+' fondos');
       const image=document.createElement('img');image.loading='lazy';image.decoding='async';image.alt='';
-      image.src=imageUrl(works[0]);button.appendChild(image);
+      image.src=thumbnailUrl(works[0]);
+      image.addEventListener('error',()=>{if(!image.dataset.originalFallback){image.dataset.originalFallback='1';image.src=imageUrl(works[0]);}});
+      button.appendChild(image);
       const left=document.createElement('span');left.className='folder-label';left.innerHTML=icon(c.icon);
       const title=document.createElement('span');title.textContent=c.name;left.appendChild(title);
       const count=document.createElement('span');count.className='folder-count';count.textContent=works.length+' fondos';
