@@ -22,7 +22,7 @@ Este sitio funciona sobre **GitHub Pages**, que no tiene backend. Por eso, las p
 1. Desde tu cuenta de GitHub, creá un **fine-grained personal access token** limitado exclusivamente al repositorio **josenunezapps/DLupita**. Permisos del repositorio: **Contents — Read and write**. No habilites más permisos de los necesarios.
 2. Abrí la página y tocá **Subir imagen**.
 3. Elegí el archivo, título, categoría, dispositivo y pegá tu token privado.
-4. Tocá **Publicar fondo**. La web enviará el archivo a `morfotrazo/uploads/` y añadirá su entrada a `morfotrazo/data.json`.
+4. Tocá **Publicar fondo**. La web guardará el archivo dentro de `morfotrazo/imagenes/<carpeta>/` y añadirá su entrada a `morfotrazo/data.json`, además de actualizar el catálogo de la carpeta.
 5. GitHub Pages publicará los cambios cuando finalice su despliegue. El token no se escribe en `localStorage`, cookies ni en el repositorio.
 
 **Importante:** no compartas tu token en capturas ni con visitantes. Las personas que descargan **no necesitan cuenta**. Para recibir publicaciones de terceros sin darles acceso al repositorio, hace falta agregar más adelante un backend con moderación.
@@ -35,7 +35,16 @@ El catálogo inicial incluye imágenes de muestra de Unsplash. Reemplazalas con 
 - `styles.css`: estética y responsive.
 - `app.js`: búsqueda, filtros, favoritos, descargas y publicación vía GitHub.
 - `data.json`: catálogo de fondos.
-- `uploads/`: archivos agregados desde el panel (se crea con la primera publicación).
+- `colecciones/<carpeta>/catalogo.json`: índices separados por temática con los títulos y enlaces de las obras.
+- `imagenes/<carpeta>/`: lugar para los archivos que se suban desde el panel (se crea al publicar el primer archivo de esa temática).
+
+## Carpetas / colecciones
+Los fondos se organizan por: **Fantasía, Arte, Espacio, Naturaleza, Abstracto, Ciudades, Minimalista y Ciencia ficción**. También hay índices preparados para Anime y Oscuro.
+
+Cada fondo figura en `data.json` con `category` y `folder` y tiene su referencia en `colecciones/<carpeta>/catalogo.json`.
+Las colecciones se muestran como carpetas con portada y contador en la web y se pueden filtrar desde el celular o PC.
+
+**Archivos históricos:** las 41 imágenes publicadas hasta el 22/11/2026, incluyendo las obras originales y las imágenes de muestra, siguen alojadas fuera del repositorio y se referencian desde su carpeta. No se copiaron binarios antiguos a GitHub. Las imágenes nuevas subidas desde el panel sí se guardan físicamente en `imagenes/<carpeta>/`.
 
 ## Nota de infraestructura
 Los dos recursos gráficos originales están referenciados desde URLs públicas de CloudFront. Para que el sitio no dependa de ese proveedor, conviene guardarlos en `morfotrazo/assets/` en una siguiente mejora. GitHub Pages es un hosting estático, sin base de datos ni almacenamiento de subidas anónimas.
