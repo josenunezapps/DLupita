@@ -1,0 +1,19 @@
+{
+  "name": "Blanco y negro",
+  "slug": "blanco-y-negro",
+  "count": 1,
+  "source": "../../data.json",
+  "works": [
+    {
+      "id": "vidrio-2026-tigre-lunar-monocromo",
+      "title": "Tigre lunar en blanco y negro",
+      "category": "Blanco y negro",
+      "device": "Ambos",
+      "quality": "1672 × 941",
+      "width": 1672,
+      "height": 941,
+      "image": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a2572bb3-0936-4797-afc9-8cfdf51c7728.png",
+      "download": "https://d2ol7oe51mr4n9.cloudfront.net/user_3JhuYVTAZZfkugncJaW2oz5H8Sc/a2572bb3-0936-4797-afc9-8cfdf51c7728.png"
+    }
+  ]
+}
