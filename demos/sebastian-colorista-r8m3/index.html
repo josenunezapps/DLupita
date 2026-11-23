@@ -173,6 +173,29 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 .booking-customer-actions{display:flex;justify-content:flex-end;align-items:center;gap:9px;margin-bottom:16px;flex-wrap:wrap}.booking-customer-actions .button{font-size:10px;min-height:35px;padding:7px 14px}
 .time:disabled{opacity:.26;cursor:not-allowed;text-decoration:line-through}
 @media(max-width:740px){.booking-customer-actions{justify-content:center}.booking-customer-actions .button{flex:1;text-align:center;font-size:9px;min-width:125px}}
+.pro-profile{margin-top:18px;display:grid;gap:14px}
+.pro-quote{margin:0;font-family:var(--display);font-size:17px;line-height:1.4;color:#eadfce}
+.pro-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pro-stats div{background:#171717;border:1px solid #313131;border-radius:5px;padding:10px 11px;display:grid;gap:2px}
+.pro-stats b{color:var(--gold-light);font-size:17px;font-family:var(--display);line-height:1.2}
+.pro-stats small{color:var(--muted);font-size:10px}
+.pro-tags{display:flex;flex-wrap:wrap;gap:6px}
+.pro-tags span{border:1px solid #4a3a2b;color:#dcc4a5;border-radius:99px;padding:3px 10px;font-size:10px;letter-spacing:.03em}
+.pro-sub{margin:2px 0 -4px;color:#cfc8be;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.pro-works{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pro-works img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:5px;border:1px solid #2f2a25;display:block}
+.pro-ig{width:100%;min-height:42px;font-size:11px}
+.select-card{min-height:50px;padding:8px 11px}
+.cats{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 12px}
+.cat{border:1px solid #3a3a3a;background:#171717;color:#cfc8be;border-radius:99px;padding:5px 11px;font-size:10.5px;font-weight:600}
+.cat:hover{border-color:#74563a}.cat.on{background:var(--gold);border-color:var(--gold);color:#17110b}
+.works{margin-top:28px}
+.works-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}
+.works-head h2{font-family:var(--display);font-weight:600;font-size:30px;margin:0;line-height:1.1}
+.works-head .eyebrow{margin-bottom:6px}
+.works-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.works-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid #2f2a25;display:block}
+@media(max-width:740px){.works-grid{grid-template-columns:repeat(3,1fr);gap:6px}.works-head h2{font-size:24px}.works-head .button{min-height:38px;font-size:10px;padding:0 12px}}
 </style>
 </head>
 <body>
@@ -202,7 +225,7 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 <div class="site" id="inicio">
   <header class="header"><div class="shell header-inner">
     <a href="#inicio" class="brand" aria-label="Sebastián González, inicio"><span class="brand-emblem"><svg><use href="#i-scissors" /></svg></span><span class="brand-text">ESTILISTA · COLORISTA<strong>SEBASTIÁN GONZÁLEZ</strong></span></a>
-    <nav id="main-nav" class="nav" aria-label="Navegación principal"><a href="#inicio">INICIO</a><a href="#servicios">SERVICIOS</a><a href="#barberos">PROFESIONAL</a><a href="#galeria" data-gallery>GALERÍA</a><a href="#contacto">CONTACTO</a></nav>
+    <nav id="main-nav" class="nav" aria-label="Navegación principal"><a href="#inicio">INICIO</a><a href="#servicios">SERVICIOS</a><a href="#barberos">PROFESIONAL</a><a href="#trabajos">TRABAJOS</a><a href="#contacto">CONTACTO</a></nav>
     <a href="#reservas" class="button outline">AGENDAR <svg><use href="#i-calendar" /></svg></a>
     <button id="mobile-menu" class="menu-button" aria-label="Abrir menú" aria-expanded="false"><svg><use href="#i-menu" /></svg></button>
   </div></header>
@@ -223,13 +246,19 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
         <button type="button" class="step" data-step="4"><span class="step-circle">4</span><span class="step-label">Confirmar<small>Revisá y continuá</small></span></button>
       </div>
       <div class="columns">
-        <section class="column" id="servicios" aria-label="Elegí el servicio"><h3 class="column-title"><svg><use href="#i-scissors" /></svg>Elegí el servicio</h3><div id="service-list" class="selection-list"></div><div class="mini-note"><svg><use href="#i-info" /></svg><span>Los precios marcados con "desde" pueden variar según el largo y el estado del cabello.</span></div></section>
-        <section class="column" id="barberos" aria-label="Tu profesional"><h3 class="column-title"><svg><use href="#i-person" /></svg>Tu profesional</h3><div id="barber-list" class="selection-list"></div><button class="text-link" id="all-barbers" type="button">Ver trabajos <svg><use href="#i-right" /></svg></button></section>
+        <section class="column" id="servicios" aria-label="Elegí el servicio"><h3 class="column-title"><svg><use href="#i-scissors" /></svg>Elegí el servicio</h3><div id="service-cats" class="cats"></div><div id="service-list" class="selection-list"></div><div class="mini-note"><svg><use href="#i-info" /></svg><span>Los precios marcados con "desde" pueden variar según el largo y el estado del cabello.</span></div></section>
+        <section class="column" id="barberos" aria-label="Tu profesional"><h3 class="column-title"><svg><use href="#i-person" /></svg>Tu profesional</h3><div id="barber-list" class="selection-list"></div><div class="pro-profile">
+  <p class="pro-quote">“Creo versiones premium para mujeres que buscan destacar.”</p>
+  <div class="pro-stats"><div><b>22</b><small>años como colorista</small></div><div><b>Recoleta</b><small>Rodríguez Peña 1168</small></div></div>
+  <div class="pro-tags"><span>Rubios</span><span>Balayage</span><span>Corrección de color</span><span>Fantasías</span><span>Alisados</span></div>
+  <a class="button outline pro-ig" href="https://instagram.com/sebascolorista" target="_blank" rel="noopener">VER MÁS EN INSTAGRAM <svg><use href="#i-right" /></svg></a>
+</div></section>
         <section class="column" id="fechas" aria-label="Elegí fecha y horario"><h3 class="column-title"><svg><use href="#i-calendar" /></svg>Elegí la fecha</h3><div class="calendar-head"><button type="button" class="cal-arrow" id="prev-month" aria-label="Mes anterior"><svg><use href="#i-left" /></svg></button><span class="month-title" id="month-label"></span><button type="button" class="cal-arrow" id="next-month" aria-label="Mes siguiente"><svg><use href="#i-right" /></svg></button></div><div class="cal-week" aria-hidden="true"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div><div class="cal-grid" id="calendar" role="group" aria-label="Días disponibles"></div><h4 class="time-label">Elegí un horario</h4><div class="time-grid" id="times" role="group" aria-label="Horarios disponibles de la agenda demo"></div></section>
         <section class="column" id="resumen" aria-label="Resumen de la reserva"><h3 class="column-title"><svg><use href="#i-clipboard" /></svg>Resumen del turno</h3><div class="summary" id="summary"></div><div class="summary-total"><span>Total</span><b id="total"></b></div><button class="button confirm" id="confirm-button" type="button">CONFIRMAR TURNO DEMO</button><div class="summary-foot"><svg><use href="#i-shield" /></svg>Agenda de demostración · Sin sincronización entre dispositivos</div></section>
       </div>
       <div class="demo-note"><svg><use href="#i-info" /></svg><span><strong>Plantilla de demostración.</strong> Demo personalizada por Zenix AR para Sebastián González. Los turnos de prueba quedan en este navegador y no son reservas reales.</span></div>
     </section>
+    <section class="shell works" id="trabajos" aria-label="Trabajos"><div class="works-head"><div><p class="eyebrow">TRABAJOS</p><h2>Color que se nota</h2></div><a class="button outline" href="https://instagram.com/sebascolorista" target="_blank" rel="noopener">@SEBASCOLORISTA <svg><use href="#i-right" /></svg></a></div><div class="works-grid"><img src="img/w1.jpg" alt="Balayage" loading="lazy"><img src="img/w2.jpg" alt="Iluminación" loading="lazy"><img src="img/w3.jpg" alt="Fantasías de color" loading="lazy"><img src="img/w4.jpg" alt="Alisado" loading="lazy"><img src="img/w5.jpg" alt="Brushing" loading="lazy"><img src="img/w6.jpg" alt="Corte dama" loading="lazy"></div></section>
     <section class="shell benefits" aria-label="Beneficios">
       <div class="benefit"><svg><use href="#i-calendar" /></svg><div><strong>Reservá las 24 hs</strong><p>Elegí servicio, día y horario desde el celu, sin esperar respuesta.</p></div></div>
       <div class="benefit"><svg><use href="#i-award" /></svg><div><strong>22 años de experiencia</strong><p>Especialista en rubios, balayage y corrección de color.</p></div></div>
@@ -255,22 +284,22 @@ button,input,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoratio
 // Ejemplo argentino: "54911XXXXXXXX". En blanco, la plantilla permite copiar la solicitud.
 const CONFIG={business:'Sebastián González',whatsapp:'5491168228736'};
 const services=[
-  {id:'raices',name:'Color (raíces)',price:50000,duration:90},
-  {id:'balayage',name:'Balayage',price:140000,duration:180,from:true},
-  {id:'iluminacion',name:'Iluminación / Babylights',price:140000,duration:180,from:true},
-  {id:'fantasia',name:'Fantasías de color',price:80000,duration:150,from:true},
-  {id:'botox',name:'Botox capilar / Shock de keratina',price:65000,duration:90},
-  {id:'alisado',name:'Alisado',price:90000,duration:150,from:true},
-  {id:'alisadosf',name:'Alisado sin formol',price:120000,duration:180,from:true},
-  {id:'ondulacion',name:'Ondulación / Permanente',price:70000,duration:120,from:true},
-  {id:'cortedama',name:'Corte dama',price:30000,duration:60},
-  {id:'tendencia',name:'Corte en tendencia',price:30000,duration:60},
-  {id:'caballero',name:'Corte caballero',price:25000,duration:45},
-  {id:'brushcorto',name:'Brushing corto',price:18000,duration:30},
-  {id:'brushlargo',name:'Brushing largo',price:20000,duration:45},
-  {id:'urbano',name:'Peinado urbano',price:50000,duration:60},
-  {id:'gala',name:'Peinado recogido de gala',price:50000,duration:90},
-  {id:'lavado',name:'Lavado',price:7000,duration:30}
+  {id:'raices',cat:'color',name:'Color (raíces)',price:50000,duration:90},
+  {id:'balayage',cat:'color',name:'Balayage',price:140000,duration:180,from:true},
+  {id:'iluminacion',cat:'color',name:'Iluminación / Babylights',price:140000,duration:180,from:true},
+  {id:'fantasia',cat:'color',name:'Fantasías de color',price:80000,duration:150,from:true},
+  {id:'botox',cat:'alisados',name:'Botox capilar / Shock de keratina',price:65000,duration:90},
+  {id:'alisado',cat:'alisados',name:'Alisado',price:90000,duration:150,from:true},
+  {id:'alisadosf',cat:'alisados',name:'Alisado sin formol',price:120000,duration:180,from:true},
+  {id:'ondulacion',cat:'alisados',name:'Ondulación / Permanente',price:70000,duration:120,from:true},
+  {id:'cortedama',cat:'cortes',name:'Corte dama',price:30000,duration:60},
+  {id:'tendencia',cat:'cortes',name:'Corte en tendencia',price:30000,duration:60},
+  {id:'caballero',cat:'cortes',name:'Corte caballero',price:25000,duration:45},
+  {id:'brushcorto',cat:'peinados',name:'Brushing corto',price:18000,duration:30},
+  {id:'brushlargo',cat:'peinados',name:'Brushing largo',price:20000,duration:45},
+  {id:'urbano',cat:'peinados',name:'Peinado urbano',price:50000,duration:60},
+  {id:'gala',cat:'peinados',name:'Peinado recogido de gala',price:50000,duration:90},
+  {id:'lavado',cat:'cortes',name:'Lavado',price:7000,duration:30}
 ];
 const barbers=[
   {id:'sebastian',name:'Sebastián González',rating:'5.0',initials:'SG',photo:'img/sebastian.jpg'}
@@ -319,7 +348,9 @@ const service=()=>services.find(x=>x.id===state.service);
 const barber=()=>barbers.find(x=>x.id===state.barber);
 function persist(){try{localStorage.setItem('sg-demo-selection',JSON.stringify(state))}catch(e){}}
 function toast(text){const node=el('toast');node.textContent=text;node.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>node.classList.remove('show'),2700)}
-function renderServices(){el('service-list').innerHTML=services.filter(s=>s.active!==false).map(s=>`<button class="select-card ${s.id===state.service?'selected':''}" data-service="${s.id}" type="button" aria-pressed="${s.id===state.service}"><span class="card-copy"><strong>${s.name}</strong><small>${price(s)} · ${s.duration} min</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
+const CATS=[['color','Color'],['alisados','Alisados y tratamientos'],['cortes','Cortes'],['peinados','Brushing y peinados']];
+let activeCat=null;
+function renderServices(){const vis=services.filter(s=>s.active!==false);if(!activeCat)activeCat=(vis.find(s=>s.id===state.service)||vis[0]||{}).cat||'color';const cats=CATS.filter(c=>vis.some(s=>s.cat===c[0]));el('service-cats').innerHTML=cats.map(c=>`<button type="button" class="cat ${c[0]===activeCat?'on':''}" data-cat="${c[0]}">${c[1]}</button>`).join('');el('service-list').innerHTML=vis.filter(s=>s.cat===activeCat).map(s=>`<button class="select-card ${s.id===state.service?'selected':''}" data-service="${s.id}" type="button" aria-pressed="${s.id===state.service}"><span class="card-copy"><strong>${s.name}</strong><small>${price(s)} · ${s.duration} min</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
 function renderBarbers(){el('barber-list').innerHTML=barbers.filter(b=>b.active!==false).map(b=>`<button class="select-card ${b.id===state.barber?'selected':''}" data-barber="${b.id}" type="button" aria-pressed="${b.id===state.barber}"><span class="avatar" aria-hidden="true"><img src="${b.photo}" loading="lazy" alt="" onerror="this.remove()">${b.initials}</span><span class="card-copy"><strong>${b.name}</strong><small class="stars">${icon('star')} ${b.rating} · Profesional</small></span><span class="check-circle">${icon('check')}</span></button>`).join('')}
 function renderCalendar(){
  const first=new Date(month.getFullYear(),month.getMonth(),1);
@@ -383,6 +414,7 @@ async function copyText(){try{await navigator.clipboard.writeText(currentText);t
 function downloadText(){const data=new Blob([currentText],{type:'text/plain;charset=utf-8'});const u=URL.createObjectURL(data);const a=document.createElement('a');a.href=u;a.download='solicitud-turno.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000)}
 function contact(){const w=CONFIG.whatsapp.replace(/\D/g,'');if(w)window.open(`https://wa.me/${w}`,'_blank','noopener,noreferrer');else toast('Para activar WhatsApp, configurá el número en CONFIG.whatsapp')}
 document.addEventListener('click',e=>{
+ const ct=e.target.closest('[data-cat]');if(ct){activeCat=ct.dataset.cat;renderServices();return}
  const sv=e.target.closest('[data-service]');if(sv){state.service=sv.dataset.service;activate(2);render();return}
  const br=e.target.closest('[data-barber]');if(br){state.barber=br.dataset.barber;activate(3);render();return}
  const dt=e.target.closest('[data-date]');if(dt&&!dt.disabled){state.date=dt.dataset.date;activate(3);render();return}
