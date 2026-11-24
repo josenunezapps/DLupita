@@ -1,0 +1,16 @@
+{
+  "name": "Turnos · Estudio Aurora",
+  "short_name": "Turnos Aurora",
+  "description": "Reservá tu turno con Estudio Aurora, salón de color en Palermo.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0b0b0b",
+  "lang": "es-AR",
+  "icons": [
+    { "src": "/img/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/img/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/img/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
