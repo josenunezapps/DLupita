@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alojate Ushuaia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday product: a local booking app that feels shipped, calm and trustworthy
+   IDEA a mountain-lodge guest book: listings as postcards of Ushuaia, verified reviews as signed entries
+   PICTURE layered scene of Martial glacier over the Beagle channel; each listing gets its own drawn postcard
+   COLOUR canal blue as dominant field, snow white ground, lenga-autumn orange as the sharp accent
+   TYPE Archivo wide 800 for titles + Archivo for text
+   LAYOUT laptop: scene band with search docked under it, grid of postcards; phone: title, scene, search, list */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0a1720);--ink:light-dark(#0d1b26,#e7eef3);--mut:light-dark(#566673,#9fb0bc);--canal:light-dark(#0f3b5c,#163f5e);--deep:#0b2c45;--lenga:light-dark(#c9481f,#f0773f);--snow:light-dark(#eef4f7,#12232f);--line:light-dark(#d9e3ea,#24394a);--card:light-dark(#ffffff,#0f202c);--ok:light-dark(#1f7a4d,#5cc795)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-stretch:112%;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:0}
+h1{font-size:clamp(32px,5vw,50px);text-wrap:balance}
+h2{font-size:clamp(24px,3vw,32px)}
+h3{font-size:19px}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 max(4vw,16px)}
+header{background:var(--deep);color:#fff}
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px}
+.logo{font-weight:800;font-stretch:118%;font-size:20px;text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo i{width:14px;height:14px;border-radius:50%;background:var(--lenga);display:inline-block}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+nav a{text-decoration:none;padding:10px 14px;border-radius:999px;font-size:15px;color:#cfe0ec}
+nav a.on{background:#ffffff1f;color:#fff}
+.hero{position:relative;background:var(--canal);color:#fff;overflow:hidden}
+.hero svg{display:block;width:100%;height:clamp(220px,34vw,380px)}
+.hero .t{position:absolute;left:max(4vw,16px);top:clamp(20px,4vw,48px);max-width:560px}
+.hero .t p{margin:10px 0 0;font-size:17px;color:#e3eef6}
+.search{position:relative;margin-top:-44px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;box-shadow:0 10px 30px #0b2c4520}
+label{font-size:13px;color:var(--mut);display:block;margin-bottom:4px}
+input,select,textarea{font:16px Archivo,sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-height:44px}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--lenga) 60%,transparent);outline-offset:1px}
+button{font:600 16px Archivo,sans-serif;min-height:44px;padding:10px 18px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.pri{background:var(--lenga);border-color:var(--lenga);color:#fff}
+button.pri:hover{filter:brightness(1.07)}
+button.ghost{background:transparent}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 6px}
+.chip{border-radius:999px;padding:8px 14px;min-height:40px;font-weight:500}
+.chip.on{background:var(--canal);border-color:var(--canal);color:#fff}
+.bar{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:18px 0 12px}
+.mut{color:var(--mut)}
+.small{font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;padding-bottom:48px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;text-align:left;padding:0;font-weight:400;display:block;width:100%}
+.card:hover{border-color:var(--canal)}
+.card .pic svg{display:block;width:100%;aspect-ratio:16/10}
+.card .b{padding:14px 16px 16px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.price{font-weight:700;white-space:nowrap}
+.star{color:var(--lenga);white-space:nowrap;font-weight:600}
+.tag{display:inline-block;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--snow);color:var(--ink);margin:6px 6px 0 0}
+.empty{padding:40px;text-align:center;border:1px dashed var(--line);border-radius:16px}
+.det{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:28px;padding:24px 0 56px;align-items:start}
+.det .pic svg{display:block;width:100%;aspect-ratio:16/9;border-radius:16px}
+.book{position:sticky;top:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.book .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.sum{margin:14px 0;border-top:1px solid var(--line);padding-top:12px}
+.sum div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.sum b{white-space:nowrap}
+.sum .tot{font-weight:700;font-size:18px;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+.sum .sena{color:var(--lenga);font-weight:700}
+.meters{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 24px;margin:14px 0 20px}
+.m{display:grid;grid-template-columns:8.5em 1fr auto;gap:10px;align-items:center;font-size:15px}
+.m .tr{height:6px;background:var(--snow);border-radius:9px;overflow:hidden}
+.m .tr i{display:block;height:100%;background:var(--canal)}
+.rev{border-top:1px solid var(--line);padding:16px 0}
+.rev .who{display:flex;gap:12px;align-items:center}
+.av{width:40px;height:40px;border-radius:50%;background:var(--canal);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.ver{font-size:13px;color:var(--ok);font-weight:600}
+.reply{margin:10px 0 0 52px;padding:10px 14px;background:var(--snow);border-radius:10px;font-size:15px}
+.amen{columns:2;padding-left:18px;margin:8px 0 0}
+.panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:20px 0}
+.kpi{background:var(--snow);border-radius:14px;padding:16px}
+.kpi b{display:block;font-size:clamp(24px,3vw,30px);font-stretch:112%;white-space:nowrap}
+.two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;padding-bottom:56px;align-items:start}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.res{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding:12px 0}
+.res .acts{display:flex;gap:8px}
+.st{font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--snow);white-space:nowrap}
+.st.p{color:var(--lenga)}.st.c{color:var(--ok)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:10px;font-size:14px;text-align:center}
+.cal span{padding:8px 0;border-radius:8px}
+.cal .h{color:var(--mut);font-size:13px}
+.cal .d{background:var(--snow);cursor:pointer}
+.cal .bk{background:var(--canal);color:#fff}
+.cal .bl{background:repeating-linear-gradient(45deg,var(--snow) 0 4px,var(--line) 4px 8px);color:var(--mut)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.stars{display:flex;gap:2px}
+.stars button{min-height:44px;width:44px;padding:0;font-size:24px;border:0;background:none;color:var(--line)}
+.stars button.on{color:var(--lenga)}
+.rrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 0}
+.toggle{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--ink)}
+.toggle input{width:22px;height:22px;min-height:0}
+dialog{border:0;border-radius:18px;padding:0;max-width:440px;width:calc(100% - 32px);background:var(--card);color:var(--ink)}
+dialog::backdrop{background:#0b2c45aa}
+dialog .in{padding:22px}
+.mp{background:#009ee3;border-color:#009ee3;color:#fff;width:100%}
+.note{font-size:13px;color:var(--mut);margin:8px 0 0}
+footer{background:var(--deep);color:#cfe0ec;font-size:14px;padding:22px 0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.show{opacity:1}
+@media(max-width:860px){.det,.two-col{grid-template-columns:minmax(0,1fr)}.book{position:static}}
+@media(max-width:600px){.hero .t p{display:none}.amen{columns:1}.m{grid-template-columns:7.5em 1fr auto}nav a{padding:10px 10px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><a class="logo" href="#buscar"><i></i>Alojate Ushuaia</a>
+<nav id="nav"><a href="#buscar" data-v="buscar">Buscar</a><a href="#resena" data-v="resena">Dejar reseña</a><a href="#duenio" data-v="duenio">Soy dueño</a></nav></div></header>
+<main id="app"></main>
+<footer><div class="wrap">Demo con alojamientos, personas y reseñas ficticias · Zenix AR</div></footer>
+<dialog id="dlg"><div class="in" id="dlgIn"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ars=n=>'$ '+Math.round(n).toLocaleString('es-AR');
+const COM=0.07,SENA=0.3;
+const CATS=[['lim','Limpieza'],['ubi','Ubicación'],['com','Comunicación'],['pre','Precio-calidad']];
+const L=[
+{id:1,n:'Cabaña Lenga',tipo:'Cabaña',barrio:'Río Pipo',hues:4,amb:2,precio:98000,masc:true,owner:'Marta',kind:'cabin',sky:['#f6b27a','#7fa7c9'],amen:['Hogar a leña','Wifi','Cochera','Vista al bosque','Parrilla','Ropa de cama'],desc:'Cabaña de madera entre lengas, a 10 minutos del centro y 5 del Parque Nacional. Ideal para parejas o familias chicas.',cancel:'Moderada: reembolso de la seña hasta 7 días antes.'},
+{id:2,n:'Depto Vista al Canal',tipo:'Departamento',barrio:'Centro',hues:3,amb:2,precio:120000,masc:false,owner:'Diego',kind:'building',sky:['#9cc6e4','#3d6f98'],amen:['Vista al Beagle','Wifi','Calefacción central','Cocina equipada','A 2 cuadras de San Martín'],desc:'Piso alto con ventanal al Canal Beagle. Caminás al puerto y a los restaurantes.',cancel:'Flexible: reembolso total hasta 48 h antes.'},
+{id:3,n:'Refugio Glaciar Martial',tipo:'Cabaña',barrio:'Camino al Martial',hues:6,amb:3,precio:165000,masc:true,owner:'Lucía',kind:'cabin2',sky:['#d6e6f2','#6f95b5'],amen:['Jacuzzi','Hogar','Wifi','Cochera','Ski-in a la aerosilla','Lavarropas'],desc:'Casa amplia al pie del glaciar. En invierno salís caminando a la pista; en verano, al sendero.',cancel:'Estricta: la seña no se reembolsa a menos de 30 días.'},
+{id:4,n:'Domo Tierra Mayor',tipo:'Domo',barrio:'Valle Tierra Mayor',hues:2,amb:1,precio:110000,masc:false,owner:'Pablo',kind:'dome',sky:['#28406b','#0d1a33'],amen:['Techo transparente','Calefactor','Desayuno incluido','Senderos','Trineos en invierno'],desc:'Domo geodésico en el valle, para mirar las estrellas sin salir de la cama.',cancel:'Moderada: reembolso de la seña hasta 7 días antes.'},
+{id:5,n:'Loft del Puerto',tipo:'Departamento',barrio:'Centro',hues:2,amb:1,precio:76000,masc:true,owner:'Diego',kind:'building2',sky:['#f2c9a0','#8fb1cc'],amen:['Wifi','Smart TV','Cocina','Frente al puerto','Check-in autónomo'],desc:'Loft chico y cálido frente a la bahía, a pasos del muelle de excursiones.',cancel:'Flexible: reembolso total hasta 48 h antes.'},
+{id:6,n:'Casa Valle de Andorra',tipo:'Casa',barrio:'Valle de Andorra',hues:8,amb:4,precio:210000,masc:true,owner:'Marta',kind:'house',sky:['#b9d7c8','#5d8aa8'],amen:['3 dormitorios','Quincho','Hogar','Wifi','Parque amplio','Cochera para 2'],desc:'Casa familiar con parque en el valle, rodeada de montañas. Para grupos o dos familias.',cancel:'Moderada: reembolso de la seña hasta 7 días antes.'}];
+const R=[
+{l:1,n:'Carolina R.',de:'Rosario',f:'oct 2026',s:{lim:5,ubi:5,com:5,pre:4},t:'El hogar a leña es un sueño. Marta nos esperó con la cabaña calentita y nos recomendó dónde comer.',rep:'¡Gracias Caro! Vuelvan en invierno que nieva lindo.'},
+{l:1,n:'Matías G.',de:'Córdoba',f:'sep 2026',s:{lim:5,ubi:4,com:5,pre:5},t:'Muy limpia y equipada. Conviene tener auto, aunque hay colectivo cerca.'},
+{l:2,n:'Ana P.',de:'CABA',f:'nov 2026',s:{lim:5,ubi:5,com:4,pre:4},t:'La vista al canal vale cada peso. Desayunar mirando los barcos no tiene precio.'},
+{l:2,n:'Jorge L.',de:'Mendoza',f:'ago 2026',s:{lim:4,ubi:5,com:4,pre:4},t:'Ubicación perfecta. El ascensor es chico, nada grave.',rep:'Gracias Jorge, ya avisamos al consorcio.'},
+{l:3,n:'Familia Sosa',de:'Neuquén',f:'jul 2026',s:{lim:5,ubi:5,com:5,pre:5},t:'Fuimos a esquiar y salíamos caminando. El jacuzzi después de la pista, lo mejor.'},
+{l:4,n:'Valen y Tomi',de:'La Plata',f:'oct 2026',s:{lim:5,ubi:4,com:5,pre:4},t:'Vimos una aurora tenue desde la cama. Pablo súper atento con las indicaciones.'},
+{l:5,n:'Sofía M.',de:'Bahía Blanca',f:'nov 2026',s:{lim:4,ubi:5,com:5,pre:5},t:'Chiquito pero tiene todo. El check-in autónomo es comodísimo si llegás de noche.'},
+{l:6,n:'Grupo Ferreyra',de:'Salta',f:'sep 2026',s:{lim:5,ubi:4,com:5,pre:5},t:'Fuimos 7 y sobró lugar. El quincho fue el centro de todo el viaje.'}];
+const RES=[
+{id:'R-1042',l:1,h:'Lucas Benítez',d:'18–22 dic',p:2,st:'p'},
+{id:'R-1039',l:6,h:'Andrea Molina',d:'27 dic–2 ene',p:7,st:'p'},
+{id:'R-1031',l:1,h:'Martín Quiroga',d:'5–9 dic',p:3,st:'c'},
+{id:'R-1027',l:6,h:'Clara Duarte',d:'12–15 dic',p:5,st:'c'}];
+const S={view:'buscar',sel:1,tipo:'Todos',q:'',hues:2,masc:false,orden:'rel',ci:'2026-12-18',co:'2026-12-22',bh:2,cal:{booked:[5,6,7,8,12,13,14,18,19,20,21],blocked:[24,25]},ical:true,rv:{l:1,lim:0,ubi:0,com:0,pre:0}};
+const avg=l=>{const rs=R.filter(r=>r.l===l.id);if(!rs.length)return 0;return rs.reduce((a,r)=>a+(r.s.lim+r.s.ubi+r.s.com+r.s.pre)/4,0)/rs.length};
+const nrev=l=>R.filter(r=>r.l===l.id).length;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.k);toast.k=setTimeout(()=>t.classList.remove('show'),2600)};
+let uid=0;
+function rnd(seed){let s=seed*7919%2147483647||1;return()=>(s=s*16807%2147483647)/2147483647}
+function trees(r,y0,n,w,c){let o='';for(let i=0;i<n;i++){const x=r()*w,h=26+r()*30,y=y0+r()*16;o+=`<path d="M${x} ${y-h}L${x+h*.32} ${y}H${x-h*.32}Z" fill="${c}"/>`}return o}
+function scene(l,big){
+const u='g'+(uid++),r=rnd(l.id*31+7),[a,b]=l.sky,night=l.kind==='dome';
+let s=`<svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${b}"/><stop offset="1" stop-color="${a}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6f99"/><stop offset="1" stop-color="#0f3b5c"/></linearGradient></defs><rect width="400" height="250" fill="url(#${u})"/>`;
+if(night){for(let i=0;i<40;i++)s+=`<circle cx="${r()*400}" cy="${r()*120}" r="${r()*1.3+.3}" fill="#fff" opacity="${.4+r()*.6}"/>`;s+=`<path d="M0 70Q120 30 220 60T400 40" stroke="#6fe3b0" stroke-width="18" fill="none" opacity=".22"/>`}
+s+=`<path d="M-10 170L60 92L110 130L170 70L240 135L300 88L410 160V250H-10Z" fill="${night?'#1d2c4a':'#8aa6bd'}"/>`;
+s+=`<path d="M150 92L170 70L192 92L180 88L170 96L160 88Z M282 104L300 88L318 104L306 101L298 108Z M44 110L60 92L76 110L66 106L58 112Z" fill="#fff" opacity="${night?.5:.95}"/>`;
+s+=`<path d="M-10 190L80 140L150 170L230 128L320 165L410 140V250H-10Z" fill="${night?'#152238':'#5f7f97'}"/>`;
+const water=['building','building2','cabin'].includes(l.kind);
+if(water)s+=`<rect y="196" width="400" height="54" fill="url(#${u}w)"/><path d="M20 210h60M140 222h90M280 212h70" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>`;
+else s+=`<rect y="200" width="400" height="50" fill="${night?'#0f1a2c':'#3f6b4e'}"/>`;
+s+=trees(r,206,14,400,night?'#0b1424':'#2c5a3d');
+const lit='#ffd27a';
+if(l.kind==='cabin'||l.kind==='cabin2'){const x=l.kind==='cabin'?150:130,w=l.kind==='cabin'?100:140;s+=`<ellipse cx="${x+w/2}" cy="232" rx="${w*.7}" ry="6" fill="#000" opacity=".18"/><rect x="${x}" y="180" width="${w}" height="52" fill="#7a4a2b"/><rect x="${x}" y="180" width="${w*.18}" height="52" fill="#5e3820"/><path d="M${x-12} 184L${x+w/2} 140L${x+w+12} 184Z" fill="#3a2a22"/><path d="M${x+w/2} 140L${x+w+12} 184H${x+w/2}Z" fill="#2a1e18"/><rect x="${x+w*.28}" y="194" width="18" height="16" fill="${lit}"/><rect x="${x+w*.62}" y="194" width="18" height="16" fill="${lit}"/><rect x="${x+w/2-8}" y="208" width="16" height="24" fill="#3a2a22"/><rect x="${x+w*.7}" y="146" width="10" height="20" fill="#5e3820"/>`}
+if(l.kind==='house'){s+=`<ellipse cx="200" cy="233" rx="110" ry="6" fill="#000" opacity=".18"/><rect x="120" y="178" width="160" height="54" fill="#e8e1d6"/><rect x="120" y="178" width="30" height="54" fill="#cfc6b8"/><path d="M108 182L200 136L292 182Z" fill="#9c3b22"/><path d="M200 136L292 182H200Z" fill="#7c2d19"/>${[140,175,225,255].map(x=>`<rect x="${x}" y="192" width="16" height="16" fill="${lit}"/>`).join('')}<rect x="194" y="206" width="14" height="26" fill="#5e3820"/>`}
+if(l.kind==='building'||l.kind==='building2'){const x=l.kind==='building'?160:120,w=l.kind==='building'?80:120,h=l.kind==='building'?110:60;s+=`<rect x="${x}" y="${196-h}" width="${w}" height="${h}" fill="#dfe6ea"/><rect x="${x}" y="${196-h}" width="${w*.2}" height="${h}" fill="#bfcbd3"/>`;for(let yy=196-h+10;yy<186;yy+=16)for(let xx=x+w*.28;xx<x+w-12;xx+=18)s+=`<rect x="${xx}" y="${yy}" width="10" height="9" fill="${r()>.45?lit:'#6d8899'}"/>`;if(l.kind==='building2')s+=`<path d="M250 200l40-8 60 0 -10 8Z" fill="#c9481f"/><rect x="290" y="184" width="4" height="10" fill="#333"/>`}
+if(l.kind==='dome'){s+=`<ellipse cx="200" cy="232" rx="70" ry="6" fill="#000" opacity=".3"/><path d="M140 232A60 60 0 0 1 260 232Z" fill="#cfe3f0" opacity=".9"/><path d="M200 172A60 60 0 0 1 260 232H200Z" fill="#9fbfd4"/><path d="M152 210L248 210M162 192L238 192M200 172V232M170 182L230 232M230 182L170 232" stroke="#7d9bb0" stroke-width="1.5"/><circle cx="200" cy="214" r="10" fill="${lit}" opacity=".9"/>`}
+if(l.kind!=='dome')s+=trees(r,236,big?8:5,400,'#244a33');
+return s+'</svg>'}
+function heroScene(){return `<svg viewBox="0 0 1200 380" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#173f60"/><stop offset=".7" stop-color="#5d8cb1"/><stop offset="1" stop-color="#f2b07a"/></linearGradient><linearGradient id="hw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d6a93"/><stop offset="1" stop-color="#0b2c45"/></linearGradient></defs><rect width="1200" height="380" fill="url(#hs)"/><path d="M0 250L120 170L210 210L330 120L420 180L520 90L640 190L760 130L880 200L990 110L1100 180L1200 140V380H0Z" fill="#7c9bb4"/><path d="M490 120L520 90L552 122L536 116L522 128L506 116Z M960 140L990 110L1020 142L1004 136L992 146L976 136Z M300 150L330 120L360 152L344 146L332 156L316 146Z" fill="#fff"/><path d="M0 290L160 220L300 260L460 200L620 250L780 205L940 250L1100 215L1200 240V380H0Z" fill="#4f708a"/><rect y="292" width="1200" height="88" fill="url(#hw)"/><path d="M60 312h120M380 330h160M760 318h140M1020 340h110" stroke="#fff" stroke-opacity=".3" stroke-width="3"/><path d="M820 300l80-14 110 0 -18 14Z" fill="#c9481f"/><rect x="900" y="268" width="8" height="18" fill="#222"/><rect x="930" y="276" width="40" height="10" fill="#eef4f7"/><path d="M0 300Q60 286 140 296L170 300Z" fill="#244a33"/></svg>`}
+function card(l){const a=avg(l);return `<button class="card" data-open="${l.id}"><div class="pic">${scene(l)}</div><div class="b"><div class="row"><h3>${esc(l.n)}</h3><span class="star">★ ${a.toFixed(1)}</span></div><div class="mut small">${esc(l.tipo)} · ${esc(l.barrio)} · hasta ${l.hues} personas</div><div class="row" style="margin-top:8px"><span><span class="price">${ars(l.precio)}</span> <span class="mut small">/ noche</span></span><span class="mut small">${nrev(l)} reseña${nrev(l)>1?'s':''}</span></div>${l.masc?'<span class="tag">Acepta mascotas</span>':''}</div></button>`}
+function vBuscar(){
+const tipos=['Todos','Cabaña','Departamento','Casa','Domo'];
+let list=L.filter(l=>(S.tipo==='Todos'||l.tipo===S.tipo)&&l.hues>=S.hues&&(!S.masc||l.masc)&&(l.barrio+' '+l.n).toLowerCase().includes(S.q.toLowerCase()));
+if(S.orden==='bar')list.sort((a,b)=>a.precio-b.precio);if(S.orden==='val')list.sort((a,b)=>avg(b)-avg(a));
+return `<section class="hero">${heroScene()}<div class="t"><h1>Alojamientos en Ushuaia, de dueños de acá</h1><p>Reservá con seña, sin comisiones gigantes. Todas las reseñas son de gente que se alojó.</p></div></section>
+<div class="wrap"><form class="search" id="sf"><div><label for="q">Zona o nombre</label><input id="q" value="${esc(S.q)}" placeholder="Centro, Río Pipo…"></div><div><label for="ci">Llegada</label><input id="ci" type="date" value="${S.ci}"></div><div><label for="co">Salida</label><input id="co" type="date" value="${S.co}"></div><div><label for="hu">Huéspedes</label><select id="hu">${[1,2,3,4,5,6,7,8].map(n=>`<option ${n===S.hues?'selected':''}>${n}</option>`).join('')}</select></div><div><label for="or">Ordenar</label><select id="or"><option value="rel">Recomendados</option><option value="bar" ${S.orden==='bar'?'selected':''}>Más baratos</option><option value="val" ${S.orden==='val'?'selected':''}>Mejor valorados</option></select></div></form>
+<div class="chips">${tipos.map(t=>`<button class="chip ${S.tipo===t?'on':''}" data-tipo="${t}">${t}</button>`).join('')}<label class="toggle chip" style="margin:0;border:1px solid var(--line)"><input type="checkbox" id="ma" ${S.masc?'checked':''}> Con mascotas</label></div>
+<div class="bar"><h2>${list.length} alojamiento${list.length===1?'':'s'} disponible${list.length===1?'':'s'}</h2><span class="mut small">Precios por noche, en pesos</span></div>
+${list.length?`<div class="grid">${list.map(card).join('')}</div>`:`<div class="empty" style="margin-bottom:48px"><h3>No hay lugares con esos filtros</h3><p class="mut">Probá con menos huéspedes o sin filtro de tipo.</p><button id="clr">Limpiar filtros</button></div>`}</div>`}
+function nights(){const d=(new Date(S.co)-new Date(S.ci))/864e5;return d>0?d:0}
+function vDet(){
+const l=L.find(x=>x.id===S.sel)||L[0],rs=R.filter(r=>r.l===l.id),a=avg(l),n=nights(),sub=n*l.precio,limp=Math.round(l.precio*.15),tot=sub+limp;
+const cat=k=>rs.reduce((s,r)=>s+r.s[k],0)/rs.length;
+return `<div class="wrap"><p style="margin:18px 0 0"><a href="#buscar">← Volver a resultados</a></p><div class="det"><div><div class="pic">${scene(l,1)}</div><h1 style="margin-top:20px">${esc(l.n)}</h1><p class="mut" style="margin:8px 0 0">${esc(l.tipo)} · ${esc(l.barrio)} · ${l.amb} ambiente${l.amb>1?'s':''} · hasta ${l.hues} personas · Anfitrión: ${esc(l.owner)} (verificado)</p><p>${esc(l.desc)}</p><h3>Qué incluye</h3><ul class="amen">${l.amen.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="small"><b>Cancelación.</b> ${esc(l.cancel)}</p>
+<h2 style="margin-top:28px">★ ${a.toFixed(1)} · ${rs.length} reseña${rs.length>1?'s':''} verificada${rs.length>1?'s':''}</h2><div class="meters">${CATS.map(([k,t])=>{const v=cat(k);return `<div class="m"><span>${t}</span><span class="tr"><i style="width:${v/5*100}%"></i></span><b>${v.toFixed(1)}</b></div>`}).join('')}</div>
+${rs.map(r=>`<div class="rev"><div class="who"><span class="av">${esc(r.n[0])}</span><div><b>${esc(r.n)}</b> <span class="mut small">· ${esc(r.de)}</span><div class="ver">✓ Se alojó en ${esc(r.f)} · <span class="star">★ ${((r.s.lim+r.s.ubi+r.s.com+r.s.pre)/4).toFixed(1)}</span></div></div></div><p style="margin:10px 0 0">${esc(r.t)}</p>${r.rep?`<div class="reply"><b>Respuesta de ${esc(l.owner)}:</b> ${esc(r.rep)}</div>`:''}</div>`).join('')}</div>
+<aside class="book"><div class="row"><span><span class="price" style="font-size:22px">${ars(l.precio)}</span> <span class="mut">/ noche</span></span><span class="star">★ ${a.toFixed(1)}</span></div><div class="two" style="margin-top:14px"><div><label for="bci">Llegada</label><input id="bci" type="date" value="${S.ci}"></div><div><label for="bco">Salida</label><input id="bco" type="date" value="${S.co}"></div></div><label for="bh">Huéspedes</label><select id="bh">${Array.from({length:l.hues},(_,i)=>`<option ${i+1===S.bh?'selected':''}>${i+1}</option>`).join('')}</select>
+${n?`<div class="sum"><div><span>${ars(l.precio)} × ${n} noche${n>1?'s':''}</span><b>${ars(sub)}</b></div><div><span>Limpieza</span><b>${ars(limp)}</b></div><div class="tot"><span>Total</span><b>${ars(tot)}</b></div><div class="sena"><span>Seña hoy (30%)</span><b>${ars(tot*SENA)}</b></div><div class="mut small"><span>Resto al llegar</span><b>${ars(tot*(1-SENA))}</b></div></div><button class="pri" style="width:100%" id="reservar">Reservar con seña</button><p class="note">No se te cobra nada hasta que ${esc(l.owner)} acepte la reserva.</p>`:`<p class="note" style="color:var(--lenga)">Elegí una salida posterior a la llegada.</p>`}</aside></div></div>`}
+function stars(k){return `<div class="stars" role="radiogroup" aria-label="${k}">${[1,2,3,4,5].map(i=>`<button type="button" class="${S.rv[k]>=i?'on':''}" data-st="${k}" data-v="${i}" aria-label="${i} estrellas">★</button>`).join('')}</div>`}
+function vResena(){
+const l=L.find(x=>x.id===S.rv.l);
+return `<div class="wrap" style="padding:28px 16px 56px;max-width:720px"><h1>Contá cómo te fue</h1><p class="mut">Solo pueden opinar quienes se alojaron con una reserva hecha acá. Tu reseña se publica cuando el anfitrión también te califica, o a los 14 días.</p>
+<div class="box" style="margin-top:18px"><label for="rl">Tu estadía</label><select id="rl">${L.slice(0,3).map(x=>`<option value="${x.id}" ${x.id===S.rv.l?'selected':''}>${esc(x.n)} · reserva completada</option>`).join('')}</select><div style="display:flex;gap:14px;align-items:center;margin:14px 0"><div style="width:120px;border-radius:10px;overflow:hidden;flex:none">${scene(l)}</div><div><b>${esc(l.n)}</b><div class="mut small">${esc(l.barrio)} · Anfitrión: ${esc(l.owner)}</div></div></div>
+${CATS.map(([k,t])=>`<div class="rrow"><span>${t}</span>${stars(k)}</div>`).join('')}<label for="rt" style="margin-top:12px">Comentario</label><textarea id="rt" rows="4" placeholder="¿Qué te gustó? ¿Qué mejorarías?"></textarea><button class="pri" style="margin-top:14px;width:100%" id="rsend">Enviar reseña</button></div></div>`}
+function vDuenio(){
+const mine=RES.map(r=>({...r,l:L.find(x=>x.id===r.l)}));
+const conf=mine.filter(r=>r.st==='c'),bruto=1210000,comi=bruto*COM;
+const days=[];for(let i=0;i<1;i++)days.push('');
+return `<div class="wrap" style="padding-top:28px"><h1>Hola, Marta</h1><p class="mut" style="margin:8px 0 0">Tus alojamientos: Cabaña Lenga y Casa Valle de Andorra</p>
+<div class="panel"><div class="kpi"><span class="mut small">Ingresos diciembre</span><b>${ars(bruto-comi)}</b><span class="small mut">neto, ya sin comisión</span></div><div class="kpi"><span class="mut small">Comisión Alojate (7%)</span><b>${ars(comi)}</b><span class="small mut">Airbnb te cobraría bastante más</span></div><div class="kpi"><span class="mut small">Ocupación diciembre</span><b>${Math.round(S.cal.booked.length/31*100)}%</b><span class="small mut">Cabaña Lenga</span></div><div class="kpi"><span class="mut small">Tu calificación</span><b>★ 4.8</b><span class="small mut">4 reseñas</span></div></div>
+<div class="two-col"><div class="box"><h3>Reservas</h3>${mine.map(r=>`<div class="res"><div><b>${esc(r.h)}</b> <span class="mut small">· ${r.p} pers.</span><div class="small mut">${esc(r.l.n)} · ${esc(r.d)} · ${esc(r.id)}</div></div>${r.st==='p'?`<div class="acts"><button class="ghost" data-rej="${r.id}">Rechazar</button><button class="pri" data-acc="${r.id}">Aceptar</button></div>`:`<span class="st ${r.st}">${r.st==='c'?'Confirmada · seña cobrada':'Rechazada'}</span>`}</div>`).join('')}
+<div class="res"><div><b>Martín Quiroga</b> se fue el 9 de dic<div class="small mut">Calificá a tu huésped para publicar las dos reseñas</div></div><button id="calh">Calificar</button></div></div>
+<div class="box"><div class="row"><h3>Calendario · Cabaña Lenga</h3><span class="mut small">Diciembre 2026</span></div><div class="cal">${['L','M','M','J','V','S','D'].map(d=>`<span class="h">${d}</span>`).join('')}${'<span></span>'.repeat(1)}${Array.from({length:31},(_,i)=>{const d=i+1,c=S.cal.booked.includes(d)?'bk':S.cal.blocked.includes(d)?'bl':'d';return `<span class="${c}" data-day="${d}" title="${c==='bk'?'Reservado':c==='bl'?'Bloqueado':'Libre'}">${d}</span>`}).join('')}</div>
+<div class="legend"><span><i style="background:var(--canal)"></i>Reservado</span><span><i style="background:repeating-linear-gradient(45deg,var(--snow) 0 3px,var(--line) 3px 6px)"></i>Bloqueado por vos</span><span><i style="background:var(--snow);border:1px solid var(--line)"></i>Libre</span></div><p class="note">Tocá un día libre para bloquearlo, o uno bloqueado para liberarlo.</p>
+<label class="toggle" style="margin-top:14px"><input type="checkbox" id="ical" ${S.ical?'checked':''}> Sincronizar con Airbnb y Booking (iCal), así no hay doble reserva</label>
+<label for="pt" style="margin-top:14px">Precio por noche en temporada alta</label><input id="pt" inputmode="numeric" value="${L[0].precio.toLocaleString('es-AR')}"></div></div></div>`}
+function render(){
+const v=S.view;document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===v||(v==='alojamiento'&&a.dataset.v==='buscar')));
+$('#app').innerHTML=v==='alojamiento'?vDet():v==='resena'?vResena():v==='duenio'?vDuenio():vBuscar()}
+function route(){const h=location.hash.slice(1);S.view=['buscar','alojamiento','resena','duenio'].includes(h)?h:'buscar';render();window.scrollTo(0,0)}
+function dlg(html){$('#dlgIn').innerHTML=html;const d=$('#dlg');try{d.showModal()}catch(e){d.setAttribute('open','')}}
+$('#app').addEventListener('click',e=>{
+const t=e.target.closest('button,[data-day]');if(!t)return;
+if(t.dataset.open){S.sel=+t.dataset.open;if(location.hash==='#alojamiento')route();else location.hash='alojamiento';return}
+if(t.dataset.tipo){S.tipo=t.dataset.tipo;render();return}
+if(t.id==='clr'){Object.assign(S,{tipo:'Todos',q:'',hues:1,masc:false});render();return}
+if(t.id==='reservar'){const l=L.find(x=>x.id===S.sel),n=nights(),tot=n*l.precio+Math.round(l.precio*.15);dlg(`<h2>Pagar seña</h2><p class="mut">${esc(l.n)} · ${n} noche${n>1?'s':''} · ${S.bh} huésped${S.bh>1?'es':''}</p><div class="sum"><div class="sena"><span>Seña (30%)</span><b>${ars(tot*SENA)}</b></div><div class="mut small"><span>Resto al llegar</span><b>${ars(tot*(1-SENA))}</b></div></div><button class="mp" data-pay>Pagar con Mercado Pago</button><button class="ghost" style="width:100%;margin-top:8px" data-close>Cancelar</button><p class="note">Demo: no se cobra nada real.</p>`);return}
+if(t.dataset.st){S.rv[t.dataset.st]=+t.dataset.v;const txt=$('#rt').value;render();$('#rt').value=txt;return}
+if(t.id==='rsend'){const sc={lim:S.rv.lim,ubi:S.rv.ubi,com:S.rv.com,pre:S.rv.pre};if(Object.values(sc).some(v=>!v)){toast('Calificá las cuatro categorías');return}const tx=$('#rt').value.trim();if(tx.length<10){toast('Escribí un comentario de al menos 10 letras');return}R.unshift({l:S.rv.l,n:'Vos',de:'Ushuaia',f:'nov 2026',s:sc,t:tx});Object.assign(S.rv,{lim:0,ubi:0,com:0,pre:0});S.sel=R[0].l;toast('¡Gracias! En la demo la publicamos al toque');location.hash='alojamiento';return}
+if(t.dataset.acc||t.dataset.rej){const r=RES.find(x=>x.id===(t.dataset.acc||t.dataset.rej));r.st=t.dataset.acc?'c':'x';if(r.st==='c'){const lid=r.l;if(lid===1)[18,19,20,21].forEach(d=>S.cal.booked.includes(d)||S.cal.booked.push(d))}toast(t.dataset.acc?`Reserva aceptada. Se le cobró la seña a ${r.h}`:`Reserva rechazada. ${r.h} no paga nada`);render();return}
+if(t.id==='calh'){dlg(`<h2>Calificá a Martín</h2><p class="mut">Solo lo ven otros anfitriones.</p>${['Cuidó el lugar','Respetó horarios','Comunicación'].map(c=>`<div class="rrow"><span>${c}</span><span class="star">★★★★★</span></div>`).join('')}<button class="pri" style="width:100%;margin-top:14px" data-close data-done>Enviar calificación</button>`);return}
+if(t.dataset.day){const d=+t.dataset.day,c=S.cal;if(c.booked.includes(d)){toast('Ese día tiene una reserva');return}const i=c.blocked.indexOf(d);i>=0?c.blocked.splice(i,1):c.blocked.push(d);render();return}});
+$('#app').addEventListener('input',e=>{const t=e.target;
+if(t.id==='q'){S.q=t.value;const p=t.selectionStart;render();const q=$('#q');q.focus();q.setSelectionRange(p,p)}});
+$('#app').addEventListener('change',e=>{const t=e.target;
+if(t.id==='hu'){S.hues=+t.value;render()}if(t.id==='or'){S.orden=t.value;render()}if(t.id==='ma'){S.masc=t.checked;render()}
+if(t.id==='ci'||t.id==='bci'){S.ci=t.value;if(t.id==='bci')render()}if(t.id==='co'||t.id==='bco'){S.co=t.value;if(t.id==='bco')render()}
+if(t.id==='bh'){S.bh=+t.value;render()}if(t.id==='rl'){S.rv.l=+t.value;render()}
+if(t.id==='ical'){S.ical=t.checked;toast(t.checked?'Calendario sincronizado con Airbnb y Booking':'Sincronización pausada')}
+if(t.id==='pt'){const v=+t.value.replace(/\D/g,'');if(v){L[0].precio=v;t.value=v.toLocaleString('es-AR');toast('Precio actualizado')}}});
+$('#app').addEventListener('submit',e=>e.preventDefault());
+$('#dlg').addEventListener('click',e=>{const t=e.target;const d=$('#dlg');
+if(t.dataset.pay){$('#dlgIn').innerHTML=`<h2>¡Solicitud enviada!</h2><p>Le avisamos al anfitrión por WhatsApp. Si acepta, se acredita la seña y te llega la confirmación con la dirección exacta.</p><p class="note">Si la rechaza, se te devuelve todo automáticamente.</p><button class="pri" style="width:100%;margin-top:12px" data-close>Listo</button>`;return}
+if(t.dataset.close!==undefined||t===d){if(t.dataset.done!==undefined)toast('Listo: se publicaron las dos reseñas');try{d.close()}catch(_){d.removeAttribute('open')}}});
+window.addEventListener('hashchange',route);
+route();
+}
+</script>
+</body>
+</html>
