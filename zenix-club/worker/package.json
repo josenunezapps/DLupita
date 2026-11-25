@@ -1,0 +1,10 @@
+{
+  "name": "zenix-club-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "test": "node --no-warnings test/api.test.mjs",
+    "new-club": "node scripts/new-club.mjs"
+  }
+}

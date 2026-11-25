@@ -1,0 +1,18 @@
+{
+  // Zenix Club: la app (carpeta zenix-club/) + la API (/api/*) en un solo Worker.
+  "name": "zenix-club",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "..",
+    "binding": "ASSETS",
+    "not_found_handling": "none"
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "zenix-club", "database_id": "cb8f05cf-6bf2-43a7-b8b7-5925b57d4818" }
+  ],
+  "routes": [
+    { "pattern": "club.zenix.com.ar", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}

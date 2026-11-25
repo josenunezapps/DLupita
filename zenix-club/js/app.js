@@ -1,6 +1,7 @@
 // Zenix Club — fidelización con tarjeta de sellos digital.
 import * as S from './store.js';
 import { fmt, esc, DAY, debounce, download, toCSV, encodeShare, decodeShare, startOfDay } from './util.js';
+import { qrSVG } from './qr.js';
 
 const I = {
   stamp: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>', home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
@@ -13,6 +14,10 @@ const I = {
   back: '<path d="M15 18l-6-6 6-6"/>', trash: '<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/>',
   download: '<path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M4 17v3h16v-3"/>', upload: '<path d="M12 15V3m0 0L7.5 7.5M12 3l4.5 4.5"/><path d="M4 17v3h16v-3"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>', link: '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/>',
+  qr: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/>',
+  cloud: '<path d="M7 18a4.5 4.5 0 0 1-.6-9 6 6 0 0 1 11.4 1.5A3.8 3.8 0 0 1 17.5 18z"/>', star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  share: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="m8.2 10.8 7.6-3.6M8.2 13.2l7.6 3.6"/>',
+  logout: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>', alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.01"/>', key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l2 2M15 8l2 2"/>',
 };
 const icon = (n, c = '') => `<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true">${I[n] || ''}</svg>`;
 const $ = (s, r = document) => r.querySelector(s);
@@ -24,6 +29,16 @@ const first = name => String(name).split(' ')[0];
 const waPhone = p => { const d = S.normPhone(p); return d ? '549' + d : ''; };
 const wa = (phone, text) => window.open(`https://wa.me/${waPhone(phone)}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
 const ago = ts => { const d = S.daysSince(ts); return d === 0 ? 'hoy' : d === 1 ? 'ayer' : d < 30 ? `hace ${d} días` : d < 60 ? 'hace un mes' : `hace ${Math.round(d / 30)} meses`; };
+// corre un comando (puede ir a la nube) y muestra el error si falla
+async function act(fn, btn) {
+  if (btn) { if (btn.disabled) return; btn.disabled = true; }
+  try { return await fn(); } catch (e) { toast(e.message || 'Algo salió mal', 'err'); if (e.sessionLost) setTimeout(route, 1200); return undefined; } finally { if (btn) btn.disabled = false; }
+}
+const ask = (title, text, okLabel, cls = 'primary') => new Promise(res => {
+  let done = false;
+  modal({ title, size: 'sm', body: `<p>${text}</p>`, foot: `<button class="btn ghost" data-close>Cancelar</button><button class="btn ${cls}" id="askOk">${esc(okLabel)}</button>`,
+    onMount: (w, close) => { $('#askOk', w).onclick = () => { done = true; close(); res(true); }; new MutationObserver((_, o) => { if (!w.isConnected) { o.disconnect(); if (!done) res(false); } }).observe($('#modals'), { childList: true }); } });
+});
 
 // ---------- tarjeta (compartida entre la app y el link del cliente) ----------
 function cardHTML({ b, c, compact = false }) {
@@ -54,7 +69,7 @@ function shell() {
   <nav class="tabbar">${NAV.map(([id, l, ic]) => `<a href="#/${id}" data-nav="${id}">${icon(ic)}<span>${l.split(' ')[0]}</span></a>`).join('')}</nav>
   <div id="modals"></div><div id="toasts" aria-live="polite"></div><canvas id="confetti"></canvas>`;
 }
-function chrome() { const b = S.get().biz; $('#bizName').innerHTML = `<span class="em">${esc(b.emoji)}</span>${esc(b.name)}${b.demo ? '<small>demo</small>' : ''}`; document.documentElement.style.setProperty('--brand', b.color); }
+function chrome() { const b = S.get().biz; $('#bizName').innerHTML = `<span class="em">${esc(b.emoji)}</span>${esc(b.name)}${S.getMode() === 'demo' ? '<small>demo</small>' : `<small class="who" title="Datos guardados en la nube">${icon('cloud')} ${esc(S.me()?.name || '')}</small>`}`; document.documentElement.style.setProperty('--brand', b.color); }
 
 function toast(msg, type = 'ok', action) {
   // un solo aviso a la vez en el mostrador: el nuevo reemplaza al anterior
@@ -93,10 +108,20 @@ function confetti() {
 // ---------- rutas ----------
 const VIEWS = {};
 async function route() {
-  const [id, arg] = location.hash.replace(/^#\/?/, '').split('/');
+  // links públicos: /t/<token> y /u/<club>/<ref> (club.zenix.com.ar) o sus equivalentes con #
+  const pm = location.pathname.match(/\/(t|u)\/([A-Za-z0-9-]+)(?:\/([A-Za-z0-9]+))?\/?$/);
+  const [id, arg, arg2] = pm && !location.hash ? [pm[1], pm[2], pm[3]] : location.hash.replace(/^#\/?/, '').split('/');
   while (stack.length) stack[stack.length - 1]();
-  current?.destroy?.();
+  current?.destroy?.(); current = null;
   if (id === 'tarjeta') return publicCard(arg);
+  if (id === 't') return liveCard(arg);
+  if (id === 'u' || id === 'unirme') return joinPage(arg, arg2);
+  if (S.getMode() === 'none') {
+    // embebida en otra página (mockups de Zenix) o con ?demo: abre la demo directo
+    let framed = false; try { framed = window.self !== window.top; } catch { framed = true; }
+    if (framed || new URLSearchParams(location.search).has('demo')) S.startDemo(); else return onboarding();
+  }
+  if (!S.get()) return loadingScreen();
   if (!$('.top')) shell();
   const v = VIEWS[id] ? id : 'sumar';
   document.body.dataset.view = v;
@@ -105,7 +130,7 @@ async function route() {
   current = VIEWS[v](root, arg) || {};
   chrome(); window.scrollTo(0, 0);
 }
-S.subscribe(() => { if ($('.top')) chrome(); current?.update?.(); });
+S.subscribe(() => { if ($('.top')) chrome(); if (!stack.length) current?.update?.(); });
 
 // =====================================================================
 // SUMAR SELLOS (la pantalla de mostrador)
@@ -139,36 +164,57 @@ VIEWS.sumar = (root, preId) => {
     if (!selected) { p.innerHTML = `<div class="hint-empty"><div class="hint-card">${cardHTML({ ...cardData({ name: 'Tu cliente', stamps: 3 }), compact: true })}</div><h2>Buscá al cliente</h2><p class="muted">Escribí su teléfono o nombre. Si es nuevo, lo sumás en un toque y le mandás su tarjeta por WhatsApp.</p></div>`; return; }
     const c = S.byId(selected.id); if (!c) { selected = null; return drawPanel(); }
     selected = c;
-    const ready = S.rewardsReady(c), bd = S.birthdaySoon(c, 0);
+    const b = S.get().biz, ready = S.rewardsReady(c), bd = S.birthdaySoon(c, 0), refBy = S.referrerOf(c);
+    const askReview = b.reviewUrl && (c.visits || 0) >= (+b.reviewAfter || 3) && !S.reviewAsked(c.id);
     p.innerHTML = `
       <div class="p-head"><button class="icon-btn mob-only" id="backList" aria-label="Volver">${icon('back')}</button><div><h2>${esc(c.name)}</h2><p class="muted">${esc(c.phone)} · ${plural(c.visits || 0, 'visita', 'visitas')} · cliente desde ${fmt.dateShort(c.createdAt)}</p></div></div>
       ${bd === 0 ? `<div class="promo bd">${icon('cake')} ¡Hoy cumple años! Regalo: <b>${esc(b.birthdayGift || 'un detalle de la casa')}</b></div>` : ''}
+      ${refBy && !c.refPaid && !(c.visits || 0) && +b.refBonus ? `<div class="promo ref">${icon('share')} <span>Lo recomendó <b>${esc(refBy.name)}</b>: con esta primera visita ganan <b>+${b.refBonus}</b> los dos.</span></div>` : ''}
+      ${refBy && c.refPaid && (c.visits || 0) === 1 ? `<div class="promo ref">${icon('share')} <span><b>${esc(first(refBy.name))}</b> ganó +${b.refBonus} por recomendarlo.</span><button class="btn ghost sm" id="tellRef">${icon('wa')} Avisarle</button></div>` : ''}
       <div class="p-card" id="pcard">${cardHTML(cardData(c))}</div>
       <div class="actions">
         <button class="btn primary xl" id="add1">${icon('stamp')} Sumar sello${S.isDoubleToday() ? ' <em>×2</em>' : ''}</button>
         ${ready ? `<button class="btn gift xl" id="redeem">${icon('gift')} Canjear premio</button>` : ''}
         <div class="row2"><button class="btn ghost" id="add2">+2 sellos</button><button class="btn ghost" id="send">${icon('wa')} Enviar tarjeta</button></div>
+        ${askReview ? `<button class="btn ghost review" id="review">${icon('star')} Pedirle una reseña en Google</button>` : ''}
       </div>`;
-    $('#add1').onclick = () => doStamp(1);
-    $('#add2').onclick = () => doStamp(2);
+    $('#add1').onclick = e => doStamp(1, e.currentTarget);
+    $('#add2').onclick = e => doStamp(2, e.currentTarget);
     $('#redeem')?.addEventListener('click', doRedeem);
     $('#send').onclick = () => sendCard(c);
+    $('#review')?.addEventListener('click', () => sendCard(c, 'review'));
+    $('#tellRef')?.addEventListener('click', () => sendCard(refBy, 'refgift', c));
     $('#backList')?.addEventListener('click', () => { selected = null; document.body.classList.remove('picked'); drawPanel(); drawResults(); q.focus(); });
   };
   function pick(id) { selected = S.byId(id); document.body.classList.add('picked'); drawPanel(); drawResults(); if (innerWidth > 900) setTimeout(() => $('#add1')?.focus(), 50); }
-  function doStamp(n) {
-    const r = S.stamp(selected.id, n);
-    const c = S.byId(selected.id);
+  const undo = id => act(async () => { await S.undoLast(id); drawPanel(); drawResults(); toast('Listo, se deshizo'); });
+  async function doStamp(n, btn, force = false) {
+    const id = selected.id;
+    let r;
+    try { if (btn) btn.disabled = true; r = await S.stamp(id, n, force); }
+    catch (e) {
+      if (e.code === 'recent') {
+        $$('#toasts .toast').forEach(t => t.remove());
+        // antifraude: avisa si ya le sumaron hace poco y deja seguir solo a propósito (queda registrado)
+        if (await ask('¿Sumar otro sello?', `${esc(e.message)} Si de verdad volvió, podés sumarlo igual: queda marcado en el historial.`, 'Sumar igual')) return doStamp(n, null, true);
+        return;
+      }
+      return toast(e.message, 'err');
+    } finally { if (btn?.isConnected) btn.disabled = false; }
+    const c = S.byId(id);
     drawPanel(); drawResults();
     $('#pcard .card3d')?.classList.add('bump');
     if (r.justCompleted) { confetti(); toast(`¡${first(c.name)} completó la tarjeta! Ya puede canjear su premio.`, 'ok', { label: 'Avisarle', run: () => sendCard(c, 'ready') }); }
-    else toast(`+${r.added} ${r.added === 1 ? 'sello' : 'sellos'}${r.double ? ' (doble del día)' : ''} para ${first(c.name)}`, 'ok', { label: 'Deshacer', run: () => { S.undoLast(c.id); drawPanel(); drawResults(); } });
+    else if (r.referrer) toast(`+${r.added} para ${first(c.name)} y +${S.get().biz.refBonus} para ${first(r.referrer.name)}, que lo recomendó 🤝`, 'ok', { label: 'Deshacer', run: () => undo(id) });
+    else toast(`+${r.added} ${r.added === 1 ? 'sello' : 'sellos'}${r.double ? ' (doble del día)' : ''} para ${first(c.name)}`, 'ok', { label: 'Deshacer', run: () => undo(id) });
   }
   function doRedeem() {
-    const c = S.byId(selected.id);
-    modal({ title: 'Canjear premio', size: 'sm', body: `<div class="redeem-box"><span>🎁</span><b>${esc(b.reward)}</b><p class="muted">para ${esc(c.name)}. Se descuentan ${S.goal()} sellos de su tarjeta.</p></div>`,
+    const c = S.byId(selected.id), b = S.get().biz;
+    const recent = S.get().events.filter(e => e.cid === c.id && e.type === 'stamp').slice(-3).reverse();
+    modal({ title: 'Canjear premio', size: 'sm', body: `<div class="redeem-box"><span>🎁</span><b>${esc(b.reward)}</b><p class="muted">para ${esc(c.name)}. Se descuentan ${S.goal()} sellos de su tarjeta.</p></div>
+      ${recent.length ? `<h4 class="sub">Últimos sellos</h4><ul class="hist">${recent.map(e => `<li><span>+${e.n}${e.flag === 'forced' ? ' ⚠️' : ''}${S.staffName(e.by) ? ' · ' + esc(S.staffName(e.by)) : ''}</span><time>${fmt.dateTime(e.ts)}</time></li>`).join('')}</ul>` : ''}`,
       foot: `<button class="btn ghost" data-close>Cancelar</button><button class="btn gift" id="okR">Entregar premio</button>`,
-      onMount: (w, close) => $('#okR', w).onclick = () => { S.redeem(c.id); close(); drawPanel(); drawResults(); confetti(); toast(`Premio entregado a ${first(c.name)} 🎉`, 'ok', { label: 'Deshacer', run: () => { S.undoLast(c.id); drawPanel(); drawResults(); } }); } });
+      onMount: (w, close) => $('#okR', w).onclick = e => act(async () => { await S.redeem(c.id); close(); drawPanel(); drawResults(); confetti(); toast(`Premio entregado a ${first(c.name)} 🎉`, 'ok', { label: 'Deshacer', run: () => undo(c.id) }); }, e.currentTarget) });
   }
   root.addEventListener('click', e => {
     const r = e.target.closest('[data-c]'); if (r) return pick(r.dataset.c);
@@ -179,7 +225,7 @@ VIEWS.sumar = (root, preId) => {
   drawResults(); drawPanel();
   if (selected) document.body.classList.add('picked'); else document.body.classList.remove('picked');
   if (innerWidth > 900 && !selected) setTimeout(() => q.focus(), 40);
-  return { destroy() { document.body.classList.remove('picked'); } };
+  return { destroy() { document.body.classList.remove('picked'); }, update() { if (document.activeElement !== q) { drawResults(); drawPanel(); } } };
 };
 
 function newCustomer(prefill = '', onDone) {
@@ -195,28 +241,34 @@ function newCustomer(prefill = '', onDone) {
     </form>`,
     foot: `<button class="btn ghost" data-close>Cancelar</button><button class="btn primary" id="nfOk">Crear y enviar tarjeta</button>`,
     onMount(w, close) {
-      const go = () => {
+      let busy = false;
+      const go = async () => {
+        if (busy) return; busy = true;
         const d = Object.fromEntries(new FormData($('#nf', w)));
         try {
-          const c = S.addCustomer({ name: d.name, phone: d.phone, birthday: d.bdd && d.bdm ? `${String(d.bdm).padStart(2, '0')}-${String(d.bdd).padStart(2, '0')}` : '' });
+          const c = await S.addCustomer({ name: d.name, phone: d.phone, birthday: d.bdd && d.bdm ? `${String(d.bdm).padStart(2, '0')}-${String(d.bdd).padStart(2, '0')}` : '' });
           close(); toast(`${first(c.name)} ya es parte del club`); onDone?.(c);
-        } catch (e) { toast(e.message, 'err'); }
+        } catch (e) { toast(e.message, 'err'); } finally { busy = false; }
       };
       $('#nfOk', w).onclick = go; $('#nf', w).onkeydown = e => e.key === 'Enter' && e.target.tagName === 'INPUT' && go();
     },
   });
 }
 
-async function cardLink(c) { return location.href.split('#')[0] + '#/tarjeta/' + await encodeShare(S.cardPayload(c)); }
-async function sendCard(c, kind = 'update') {
+// En la nube el link es fijo y siempre muestra los sellos al día; en la demo, la tarjeta viaja dentro del link.
+async function cardLink(c) { return S.getMode() === 'cloud' && c.token ? S.liveCardUrl(c) : location.href.split('#')[0] + '#/tarjeta/' + await encodeShare(S.cardPayload(c)); }
+async function sendCard(c, kind = 'update', extra = null) {
   const b = S.get().biz, g = S.goal(), cur = Math.min(c.stamps % g || (S.rewardsReady(c) ? g : 0), g), left = g - cur;
   const url = await cardLink(c);
+  if (kind === 'review') S.markReviewAsked(c.id);
   const msg = {
-    welcome: `¡Hola ${first(c.name)}! 👋 Bienvenido/a al club de ${b.name} ${b.emoji}\nCon ${g} sellos te llevás: ${b.reward}.\nYa tenés ${plural(c.stamps, 'sello', 'sellos')}. Tu tarjeta:\n${url}`,
+    welcome: `¡Hola ${first(c.name)}! 👋 Bienvenido/a al club de ${b.name} ${b.emoji}\nCon ${g} sellos te llevás: ${b.reward}.\nYa tenés ${plural(c.stamps, 'sello', 'sellos')}. Tu tarjeta:\n${url}${S.getMode() === 'cloud' && +b.refBonus ? `\nDesde ahí podés invitar amigos: cuando vengan, ganan +${b.refBonus} los dos.` : ''}`,
     ready: `¡${first(c.name)}, completaste tu tarjeta en ${b.name}! 🎉\nLa próxima vez que vengas te espera: ${b.reward}.\n${url}`,
     update: S.rewardsReady(c) ? `¡${first(c.name)}! Tenés un premio esperándote en ${b.name} 🎁\n${url}` : `¡Gracias por venir, ${first(c.name)}! ${b.emoji}\nLlevás ${cur} de ${g} sellos: te ${left === 1 ? 'falta 1' : `faltan ${left}`} para ${b.reward.toLowerCase()}.\n${url}`,
     miss: `¡Hola ${first(c.name)}! Hace rato que no te vemos por ${b.name} ${b.emoji}\n${cur ? `Tenés ${plural(cur, 'sello', 'sellos')} en tu tarjeta${left <= 3 ? ` y te ${left === 1 ? 'falta solo 1' : `faltan solo ${left}`} para tu premio` : ''}.` : `Tu próxima visita ya suma para tu próximo premio: ${b.reward.toLowerCase()}.`} ¡Te esperamos!\n${url}`,
     bday: `¡Feliz cumpleaños, ${first(c.name)}! 🎂\nEn ${b.name} te regalamos ${(b.birthdayGift || 'un detalle de la casa').toLowerCase()}: pasá a buscarlo esta semana.\n${url}`,
+    review: `¡Hola ${first(c.name)}! Gracias por elegirnos siempre ${b.emoji}\n¿Nos regalás 30 segundos? Una reseña en Google nos ayuda muchísimo a que nos conozcan:\n${b.reviewUrl}`,
+    refgift: `¡${first(c.name)}, gracias por recomendarnos! 🤝\n${extra ? first(extra.name) + ' vino' : 'Vino alguien'} de tu parte y te sumamos +${b.refBonus} ${+b.refBonus === 1 ? 'sello' : 'sellos'} en ${b.name}.\n${url}`,
   }[kind];
   modal({
     title: 'Enviar por WhatsApp', size: 'sm',
@@ -243,8 +295,10 @@ VIEWS.inicio = root => {
       <div class="kpi"><span>Visitas este mes</span><b>${s.monthVisits}</b><small>${delta === null ? '' : `<em class="${delta >= 0 ? 'up' : 'down'}">${delta >= 0 ? '▲' : '▼'} ${Math.abs(Math.round(delta * 100))}%</em> vs. mismo día del mes pasado`}</small></div>
       <div class="kpi"><span>Clientes activos</span><b>${s.active}</b><small>vinieron en los últimos 30 días, de ${s.total}</small></div>
       <div class="kpi"><span>Vuelven</span><b>${Math.round(s.returnRate * 100)}%</b><small>de los clientes vino 2 veces o más</small></div>
-      <div class="kpi"><span>Premios entregados</span><b>${s.monthRedeems}</b><small>este mes · ${s.monthNew} socios nuevos</small></div>
+      <div class="kpi"><span>Premios entregados</span><b>${s.monthRedeems}</b><small>este mes · ${s.monthNew} socios nuevos${s.monthReferred ? ` · ${s.monthReferred} por recomendación` : ''}${s.monthQr ? ` · ${s.monthQr} por QR` : ''}</small></div>
     </section>
+    ${s.alerts.length && S.isOwner() ? `<section class="box alerts"><div class="bh"><h3>${icon('alert')} Sellos sumados pese al aviso</h3><span class="muted small">últimos 7 días</span></div>
+      <ul class="list">${s.alerts.map(e => { const c = S.byId(e.cid); return `<li><div class="li"><div><b>${esc(c?.name || 'Cliente borrado')}</b><small>+${e.n} · ${fmt.dateTime(e.ts)}${S.staffName(e.by) ? ' · lo sumó ' + esc(S.staffName(e.by)) : ''}</small></div></div></li>`; }).join('')}</ul></section>` : ''}
     <section class="g21">
       <div class="box"><div class="bh"><h3>Visitas · últimos 30 días</h3><span class="muted small">${b.doubleDay !== '' && b.doubleDay !== null ? `los ${DIAS[b.doubleDay]} suman doble` : ''}</span></div>
         <div class="spark">${s.series.map((d, i) => `<i style="--v:${d.v / max}" class="${new Date(d.ts).getDay() === +b.doubleDay ? 'dbl' : ''} ${i === 29 ? 'today' : ''}" title="${fmt.date(d.ts)}: ${plural(d.v, 'visita', 'visitas')}"></i>`).join('')}</div>
@@ -315,26 +369,28 @@ function editCustomer(id) {
       <label class="field"><span>Teléfono</span><input name="phone" value="${esc(c.phone)}" inputmode="tel"></label>
       <label class="field"><span>Cumpleaños</span><div class="bd-in"><select name="bdd"><option value="">Día</option>${Array.from({ length: 31 }, (_, i) => `<option ${+bd === i + 1 ? 'selected' : ''}>${i + 1}</option>`).join('')}</select><select name="bdm"><option value="">Mes</option>${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((m, i) => `<option value="${i + 1}" ${+bm === i + 1 ? 'selected' : ''}>${m}</option>`).join('')}</select></div></label>
     </form>
-    <h4 class="sub">Historial</h4><ul class="hist">${hist.map(e => `<li><span>${e.type === 'stamp' ? `+${e.n} ${e.n === 1 ? 'sello' : 'sellos'}` : e.type === 'redeem' ? '🎁 Premio canjeado' : '👋 Se sumó al club'}</span><time>${fmt.dateTime(e.ts)}</time></li>`).join('')}</ul>`,
-    foot: `<button class="btn ghost danger" id="del">${icon('trash')}</button><button class="btn ghost" data-close>Cancelar</button><button class="btn primary" id="sv">Guardar</button>`,
+    ${S.referrerOf(c) ? `<p class="muted small">${icon('share')} Vino recomendado por ${esc(S.referrerOf(c).name)}</p>` : ''}
+    <h4 class="sub">Historial</h4><ul class="hist">${hist.map(e => `<li><span>${e.type === 'stamp' ? `+${e.n} ${e.n === 1 ? 'sello' : 'sellos'}${e.flag === 'forced' ? ' ⚠️' : ''}` : e.type === 'redeem' ? '🎁 Premio canjeado' : e.type === 'ref' ? `🤝 +${e.n} por recomendación` : e.flag === 'qr' ? '👋 Se sumó con el QR' : '👋 Se sumó al club'}${S.staffName(e.by) ? ` <small class="muted">· ${esc(S.staffName(e.by))}</small>` : ''}</span><time>${fmt.dateTime(e.ts)}</time></li>`).join('')}</ul>`,
+    foot: `${S.isOwner() ? `<button class="btn ghost danger" id="del">${icon('trash')}</button>` : ''}<button class="btn ghost" data-close>Cancelar</button><button class="btn primary" id="sv">Guardar</button>`,
     onMount(w, close) {
-      $('#sv', w).onclick = () => { const d = Object.fromEntries(new FormData($('#ef', w))); try { S.updateCustomer(id, { name: d.name.trim() || c.name, phone: d.phone, birthday: d.bdd && d.bdm ? `${String(d.bdm).padStart(2, '0')}-${String(d.bdd).padStart(2, '0')}` : '' }); toast('Cliente actualizado'); close(); } catch (e) { toast(e.message, 'err'); } };
-      $('#del', w).onclick = () => { if (confirm(`¿Borrar a ${c.name} del club? Se pierde su historial.`)) { S.deleteCustomer(id); toast('Cliente borrado'); close(); } };
+      $('#sv', w).onclick = async e => { const d = Object.fromEntries(new FormData($('#ef', w))); try { e.currentTarget.disabled = true; await S.updateCustomer(id, { name: d.name.trim() || c.name, phone: d.phone, birthday: d.bdd && d.bdm ? `${String(d.bdm).padStart(2, '0')}-${String(d.bdd).padStart(2, '0')}` : '' }); toast('Cliente actualizado'); close(); } catch (err) { toast(err.message, 'err'); $('#sv', w).disabled = false; } };
+      $('#del', w)?.addEventListener('click', async () => { if (await ask('Borrar cliente', `¿Borrar a ${esc(c.name)} del club? Se pierde su historial.`, 'Borrar', 'danger-solid')) act(async () => { await S.deleteCustomer(id); toast('Cliente borrado'); close(); }); });
     },
   });
 }
 
 // =====================================================================
-// PROGRAMA (configuración)
+// PROGRAMA (configuración, equipo y datos)
 // =====================================================================
 const EMOJIS = ['☕', '🥐', '💈', '🍕', '🍦', '🥩', '🌮', '🍺', '🐾', '💅', '🌿', '⭐'];
 const COLORS = ['#0f6b4f', '#6d3df5', '#c2410c', '#be123c', '#1d4ed8', '#111827'];
 VIEWS.programa = root => {
-  const b = S.get().biz;
+  const b = S.get().biz, cloud = S.getMode() === 'cloud', owner = S.isOwner();
   root.innerHTML = `
-  <div class="ph"><h1>Tu programa</h1><p class="muted">Así lo ven tus clientes en su tarjeta.</p></div>
+  <div class="ph"><h1>Tu programa</h1><p class="muted">${owner ? 'Así lo ven tus clientes en su tarjeta.' : 'Solo el dueño puede cambiar el programa.'}</p></div>
   <div class="prog">
-    <form class="box" id="pf" onsubmit="return false">
+    <div class="stackcol">
+    <form class="box" id="pf" onsubmit="return false"><fieldset ${owner ? '' : 'disabled'}>
       <div class="form two">
         <label class="field s2"><span>Nombre del comercio</span><input name="name" value="${esc(b.name)}"></label>
         <div class="field s2"><span>Ícono del sello</span><div class="emojis" id="em">${EMOJIS.map(e => `<button type="button" data-e="${e}" class="${e === b.emoji ? 'on' : ''}">${e}</button>`).join('')}</div></div>
@@ -347,45 +403,159 @@ VIEWS.programa = root => {
         <label class="field s2"><span>Regalo de cumpleaños</span><input name="birthdayGift" value="${esc(b.birthdayGift || '')}"></label>
         <label class="field s2"><span>Dirección</span><input name="address" value="${esc(b.address || '')}"></label>
       </div>
-      <div class="row-end"><button class="btn primary" id="sv">Guardar cambios</button></div>
-    </form>
+      <h3 class="sec">${icon('share')} Para conseguir clientes nuevos</h3>
+      <div class="form two">
+        <label class="field"><span>Premio por recomendar <i>sellos para los dos</i></span><input name="refBonus" type="number" min="0" max="5" value="${b.refBonus}"></label>
+        <label class="field"><span>Pedir reseña desde la visita n.º</span><input name="reviewAfter" type="number" min="1" max="50" value="${b.reviewAfter}"></label>
+        <label class="field s2"><span>Link para dejar reseña en Google <i>opcional</i></span><input name="reviewUrl" value="${esc(b.reviewUrl || '')}" placeholder="https://g.page/r/..." inputmode="url"></label>
+        <p class="muted small s2">Lo sacás de tu Perfil de Empresa de Google → "Pedir opiniones". Cuando un cliente llega a esa visita, aparece el botón para pedírsela por WhatsApp.</p>
+      </div>
+      <h3 class="sec">${icon('alert')} Control</h3>
+      <div class="form two">
+        <label class="field"><span>Avisar si se suma otro sello antes de <i>horas</i></span><input name="minHours" type="number" min="0" max="48" value="${b.minHours}"></label>
+        <p class="muted small">Evita sellos de más. Igual se puede sumar, pero queda marcado y te aparece en el Tablero. 0 = sin aviso.</p>
+      </div>
+      ${owner ? `<div class="row-end"><button class="btn primary" id="sv">Guardar cambios</button></div>` : ''}
+    </fieldset></form>
+    ${cloud && owner ? `<div class="box" id="team"></div>` : ''}
+    </div>
     <aside class="prev"><div class="sticky"><span class="muted small">Vista previa</span><div id="pv"></div>
+      ${cloud ? `
+      <div class="box data"><h3>${icon('qr')} Cartel para el mostrador</h3><p class="muted small">Tus clientes escanean el QR y se suman solos al club, sin que tengas que cargarlos.</p>
+        <div class="row"><button class="btn primary sm" id="poster">${icon('qr')} Ver e imprimir</button><button class="btn ghost sm" id="cpJoin">${icon('link')} Copiar link</button></div></div>
+      <div class="box data"><h3>${icon('cloud')} Cuenta</h3><p class="muted small">Club <b>${esc(S.slug())}</b> · entraste como ${esc(S.me()?.name || '')}. Los datos se guardan en la nube: podés usar la app en varios celulares a la vez.</p>
+        <div class="row">${owner ? `<button class="btn ghost sm" id="bk">${icon('download')} Respaldo</button><button class="btn ghost sm" id="pw">${icon('key')} Contraseña</button>` : ''}<button class="btn ghost sm" id="lo">${icon('logout')} Salir</button></div></div>` : `
+      <div class="box data"><h3>${icon('cloud')} ¿Ya tenés tu club?</h3><p class="muted small">Esto es una demo: todo se guarda solo en este dispositivo. Con tu cuenta, los datos quedan en la nube, lo usan tus empleados y tus clientes se suman con un QR.</p>
+        <div class="row"><button class="btn primary sm" id="li">Entrar a mi club</button></div></div>
       <div class="box data"><h3>Datos</h3><p class="muted small">Todo se guarda en este dispositivo.</p>
         <div class="row"><button class="btn ghost sm" id="bk">${icon('download')} Respaldo</button><button class="btn ghost sm" id="rs">${icon('upload')} Restaurar</button><input type="file" id="rf" accept=".json" hidden></div>
-        <div class="row"><button class="btn ghost sm" id="dm">Restaurar demo</button><button class="btn ghost sm danger" id="wp">Empezar de cero</button></div></div></div></aside>
+        <div class="row"><button class="btn ghost sm" id="dm">Restaurar demo</button><button class="btn ghost sm danger" id="wp">Empezar de cero</button></div></div>`}
+    </div></aside>
   </div>`;
   let emoji = b.emoji, color = b.color;
   const form = $('#pf');
-  const preview = () => { const d = Object.fromEntries(new FormData(form)); $('#pv').innerHTML = cardHTML({ b: { n: d.name || 'Tu comercio', e: emoji, c: color, g: Math.max(3, +d.goal || 8), r: d.reward || 'Tu premio' }, c: { n: 'Valentina Gómez', s: Math.min(5, Math.max(3, +d.goal || 8) - 2) } }); };
+  const preview = () => { const d = Object.fromEntries(new FormData(form)); $('#pv').innerHTML = cardHTML({ b: { n: d.name || b.name || 'Tu comercio', e: emoji, c: color, g: Math.max(3, +(d.goal ?? b.goal) || 8), r: d.reward || b.reward || 'Tu premio' }, c: { n: 'Valentina Gómez', s: Math.min(5, Math.max(3, +(d.goal ?? b.goal) || 8) - 2) } }); };
   form.oninput = preview;
-  $('#em').onclick = e => { const x = e.target.closest('[data-e]'); if (x) { emoji = x.dataset.e; $$('#em button').forEach(y => y.classList.toggle('on', y === x)); preview(); } };
+  $('#em').onclick = e => { const x = e.target.closest('[data-e]'); if (x && owner) { emoji = x.dataset.e; $$('#em button').forEach(y => y.classList.toggle('on', y === x)); preview(); } };
   const setC = c => { color = c; $('#cc').value = c; $$('#co button').forEach(y => y.classList.toggle('on', y.dataset.co === c)); preview(); };
-  $('#co').onclick = e => { const x = e.target.closest('[data-co]'); if (x) setC(x.dataset.co); };
+  $('#co').onclick = e => { const x = e.target.closest('[data-co]'); if (x && owner) setC(x.dataset.co); };
   $('#cc').oninput = e => setC(e.target.value);
-  $('#sv').onclick = () => {
+  $('#sv')?.addEventListener('click', e => {
     const d = Object.fromEntries(new FormData(form));
     if (!d.name.trim()) return toast('Poné el nombre del comercio', 'err');
-    S.saveBiz({ ...d, emoji, color, goal: Math.min(20, Math.max(3, +d.goal || 8)), welcome: Math.min(5, Math.max(0, +d.welcome || 0)), doubleDay: d.doubleDay === '' ? '' : +d.doubleDay, demo: false });
-    toast('Programa actualizado');
-  };
-  $('#bk').onclick = () => download(`zenix-club-respaldo-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(S.get()), 'application/json');
-  $('#rs').onclick = () => $('#rf').click();
-  $('#rf').onchange = async e => { const fl = e.target.files[0]; if (!fl) return; try { S.importBackup(JSON.parse(await fl.text())); toast('Respaldo restaurado'); route(); } catch (err) { toast(err.message, 'err'); } };
-  $('#dm').onclick = () => { if (confirm('¿Reemplazar todo por los datos de ejemplo?')) { S.resetDemo(); route(); } };
-  $('#wp').onclick = () => { if (confirm('Se borran todos los clientes y su historial. ¿Seguro?')) { S.wipe(); toast('Listo, club vacío'); route(); } };
+    if (d.reviewUrl && !/^https:\/\/\S+$/.test(d.reviewUrl.trim())) return toast('El link de reseñas tiene que empezar con https://', 'err');
+    act(async () => {
+      await S.saveBiz({ ...d, reviewUrl: d.reviewUrl.trim(), emoji, color, goal: Math.min(20, Math.max(3, +d.goal || 8)), welcome: Math.min(5, Math.max(0, +d.welcome || 0)), doubleDay: d.doubleDay === '' ? '' : +d.doubleDay,
+        refBonus: Math.min(5, Math.max(0, +d.refBonus || 0)), reviewAfter: Math.min(50, Math.max(1, +d.reviewAfter || 3)), minHours: Math.min(48, Math.max(0, +d.minHours || 0)), demo: false });
+      toast('Programa actualizado');
+    }, e.currentTarget);
+  });
+  $('#bk')?.addEventListener('click', () => download(`zenix-club-respaldo-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(S.get()), 'application/json'));
+  if (cloud) {
+    $('#poster').onclick = posterModal;
+    $('#cpJoin').onclick = async () => { try { await navigator.clipboard.writeText(S.joinUrl()); toast('Link copiado'); } catch { toast('No se pudo copiar', 'err'); } };
+    $('#lo').onclick = async () => { if (await ask('Salir', 'Vas a cerrar la sesión en este dispositivo. Los datos quedan guardados en la nube.', 'Salir')) { await S.logout(); location.hash = ''; route(); } };
+    $('#pw')?.addEventListener('click', passwordModal);
+    if ($('#team')) drawTeam();
+  } else {
+    $('#li').onclick = () => loginModal();
+    $('#rs').onclick = () => $('#rf').click();
+    $('#rf').onchange = async e => { const fl = e.target.files[0]; if (!fl) return; try { S.importBackup(JSON.parse(await fl.text())); toast('Respaldo restaurado'); route(); } catch (err) { toast(err.message, 'err'); } };
+    $('#dm').onclick = async () => { if (await ask('Restaurar demo', '¿Reemplazar todo por los datos de ejemplo?', 'Reemplazar')) { S.resetDemo(); route(); } };
+    $('#wp').onclick = async () => { if (await ask('Empezar de cero', 'Se borran todos los clientes y su historial. ¿Seguro?', 'Borrar todo', 'danger-solid')) { S.wipe(); toast('Listo, club vacío. Configurá tu comercio.'); route(); } };
+  }
   preview();
 };
 
+function drawTeam() {
+  const box = $('#team'); if (!box) return;
+  const st = S.get().staff || [];
+  box.innerHTML = `<div class="bh"><h3>${icon('users')} Equipo</h3><span class="muted small">cada uno entra con su PIN</span></div>
+    <ul class="list">${st.map(x => `<li><div class="li"><span class="av sm" style="--h:${hue(x.name)}">${esc(initials(x.name))}</span><div><b>${esc(x.name)}</b><small>${x.role === 'owner' ? 'Dueño · contraseña' : 'Empleado · PIN'}</small></div>${x.role === 'staff' ? `<button class="icon-btn sm" data-rm="${x.id}" aria-label="Quitar">${icon('trash')}</button>` : ''}</div></li>`).join('')}</ul>
+    <form class="form team-add" id="ta" onsubmit="return false"><label class="field"><span>Nombre</span><input name="name" placeholder="Ej.: Lucas" autocomplete="off"></label><label class="field"><span>PIN (4 a 6 números)</span><input name="pin" inputmode="numeric" maxlength="6" pattern="\\d*" autocomplete="off"></label><button class="btn primary" id="taOk">${icon('plus')} Sumar</button></form>
+    <p class="muted small">Los empleados pueden sumar sellos, canjear y cargar clientes. No pueden borrar clientes ni cambiar el programa. Cada sello queda registrado con quién lo puso.</p>`;
+  $('#taOk').onclick = e => { const d = Object.fromEntries(new FormData($('#ta'))); act(async () => { await S.addStaff(d.name.trim(), d.pin); toast(`${d.name.trim()} ya puede entrar con su PIN`); drawTeam(); }, e.currentTarget); };
+  box.onclick = async e => { const r = e.target.closest('[data-rm]'); if (!r) return; const x = st.find(y => y.id === r.dataset.rm); if (await ask('Quitar del equipo', `${esc(x.name)} no va a poder entrar más.`, 'Quitar', 'danger-solid')) act(async () => { await S.removeStaff(x.id); drawTeam(); }); };
+}
+
+function passwordModal() {
+  modal({ title: 'Cambiar contraseña', size: 'sm', body: `<form class="form" id="pwf" onsubmit="return false"><label class="field"><span>Contraseña actual</span><input type="password" name="cur" autocomplete="current-password" autofocus></label><label class="field"><span>Nueva <i>10+ caracteres, letras y números</i></span><input type="password" name="nw" autocomplete="new-password"></label></form>`,
+    foot: `<button class="btn ghost" data-close>Cancelar</button><button class="btn primary" id="pwOk">Cambiar</button>`,
+    onMount: (w, close) => $('#pwOk', w).onclick = e => { const d = Object.fromEntries(new FormData($('#pwf', w))); act(async () => { await S.changePassword(d.cur, d.nw); toast('Contraseña cambiada. Se cerraron las otras sesiones.'); close(); }, e.currentTarget); } });
+}
+
+// Cartel imprimible con el QR para sumarse al club
+function posterModal() {
+  const b = S.get().biz, url = S.joinUrl();
+  const poster = `<div class="poster" style="--brand:${esc(b.color)}"><div class="po-top"><span class="po-em">${esc(b.emoji)}</span><b>${esc(b.name)}</b></div>
+    <h2>Sumate a nuestro club</h2><p>Con <b>${S.goal()} sellos</b> te llevás:<br><span class="po-rw">${esc(b.reward)}</span></p>
+    <div class="po-qr">${qrSVG(url)}</div><p class="po-how">Escaneá con la cámara del celular${+b.welcome ? ` y arrancá con <b>${plural(+b.welcome, 'sello', 'sellos')} de regalo</b>` : ''}</p>
+    ${+b.refBonus ? `<p class="po-ref">🤝 Invitá a un amigo y ganan <b>+${b.refBonus}</b> los dos</p>` : ''}<small>Club de clientes con Zenix Club</small></div>`;
+  modal({ title: 'Cartel para el mostrador', body: poster, foot: `<button class="btn ghost" id="poDl">${icon('download')} Bajar QR</button><button class="btn primary" id="poPr">Imprimir</button>`,
+    onMount(w) {
+      $('#poPr', w).onclick = () => { const f = document.createElement('div'); f.id = 'printArea'; f.innerHTML = poster; document.body.appendChild(f); document.body.classList.add('printing'); setTimeout(() => { print(); document.body.classList.remove('printing'); f.remove(); }, 60); };
+      $('#poDl', w).onclick = () => download(`qr-club-${S.slug()}.svg`, qrSVG(url, { color: '#111' }), 'image/svg+xml');
+    } });
+}
+
 // =====================================================================
-// TARJETA DEL CLIENTE (link público, sin datos del comercio)
+// BIENVENIDA · LOGIN
 // =====================================================================
-async function publicCard(payload) {
-  document.body.dataset.view = 'tarjeta';
-  let d = null; try { d = await decodeShare(payload || ''); } catch {}
-  if (!d?.b) { document.body.innerHTML = `<div class="pub"><div class="empty big"><h2>No pudimos abrir tu tarjeta</h2><p class="muted">Pedile al comercio que te la reenvíe.</p></div></div>`; return; }
+function bare(view, html) { current?.destroy?.(); current = null; document.body.dataset.view = view; document.body.innerHTML = html + '<div id="modals"></div><div id="toasts" aria-live="polite"></div><canvas id="confetti"></canvas>'; }
+function loginForm(id = 'lf') {
+  let saved = ''; try { saved = localStorage.getItem('zenix-club:last-club') || ''; } catch {}
+  return `<form class="form" id="${id}" onsubmit="return false">
+    <label class="field"><span>Código del club</span><input name="club" value="${esc(saved)}" placeholder="ej.: cafe-lapataia" autocapitalize="none" autocomplete="username" spellcheck="false"></label>
+    <label class="field"><span>Contraseña o PIN</span><input name="secret" type="password" autocomplete="current-password"></label>
+    <button class="btn primary xl" type="submit">Entrar</button></form>`;
+}
+function bindLogin(form, onDone) {
+  form.onsubmit = e => {
+    e.preventDefault(); const d = Object.fromEntries(new FormData(form));
+    if (!d.club.trim() || !d.secret) return toast('Completá el código del club y la contraseña', 'err');
+    act(async () => { await S.login(d.club, d.secret); try { localStorage.setItem('zenix-club:last-club', d.club.trim().toLowerCase()); } catch {} onDone(); }, $('button[type=submit]', form));
+  };
+}
+function loginModal() {
+  modal({ title: 'Entrar a mi club', size: 'sm', body: loginForm('lfm'), onMount(w, close) { bindLogin($('#lfm', w), () => { close(); location.hash = '#/sumar'; document.body.innerHTML = ''; route(); toast('¡Listo! Ya estás en tu club'); }); setTimeout(() => $('input[name=' + ($('#lfm input[name=club]', w).value ? 'secret' : 'club') + ']', w)?.focus(), 60); } });
+}
+function onboarding() {
+  bare('bienvenida', `<div class="welcome">
+    <div class="w-brand"><span class="logo">${logo()}</span><span><b>Zenix</b> Club</span></div>
+    <h1>Que tus clientes vuelvan</h1><p class="muted">Tarjeta de sellos digital por WhatsApp para cafés, panaderías, barberías y comercios de barrio.</p>
+    <div class="w-grid">
+      <div class="box"><h3>Entrar a mi club</h3>${loginForm()}</div>
+      <div class="box w-demo"><h3>Probar la demo</h3><p class="muted">Un café de ejemplo con 60 clientes y 3 meses de visitas. Todo queda en este dispositivo.</p><button class="btn ghost xl" id="demo">Ver la demo</button>
+        <p class="muted small">¿Querés Zenix Club para tu comercio? <a href="https://zenix.com.ar" target="_blank" rel="noopener">Escribinos</a>.</p></div>
+    </div></div>`);
+  document.documentElement.style.setProperty('--brand', '#0f6b4f');
+  bindLogin($('#lf'), () => { location.hash = '#/sumar'; document.body.innerHTML = ''; route(); });
+  $('#demo').onclick = () => { S.startDemo(); location.hash = '#/sumar'; document.body.innerHTML = ''; route(); };
+}
+function loadingScreen() {
+  bare('cargando', `<div class="pub"><div class="empty big"><div class="spinner"></div><p class="muted">Cargando tu club…</p></div></div>`);
+  S.refresh().then(() => { document.body.innerHTML = ''; route(); }).catch(e => { if (S.getMode() === 'none' || e.status === 401) return route(); $('.empty').innerHTML = `<h2>No pudimos cargar tu club</h2><p class="muted">${esc(e.message)}</p><button class="btn primary" id="retry">Reintentar</button>`; $('#retry').onclick = () => route(); });
+}
+
+// =====================================================================
+// TARJETA DEL CLIENTE
+// =====================================================================
+function tiltCard() {
+  const card = $('.card3d'); if (!card) return;
+  const tilt = (x, y) => { const r = card.getBoundingClientRect(); const px = Math.max(-0.5, Math.min(0.5, (x - r.left) / r.width - 0.5)), py = Math.max(-0.5, Math.min(0.5, (y - r.top) / r.height - 0.5)); card.style.transform = `perspective(800px) rotateY(${px * 14}deg) rotateX(${-py * 14}deg)`; card.style.setProperty('--gx', `${(px + 0.5) * 100}%`); card.style.setProperty('--gy', `${(py + 0.5) * 100}%`); };
+  addEventListener('pointermove', e => tilt(e.clientX, e.clientY));
+  const orient = () => addEventListener('deviceorientation', e => { if (e.gamma == null) return; const r = card.getBoundingClientRect(); tilt(r.left + r.width * (0.5 + e.gamma / 60), r.top + r.height * (0.5 + (e.beta - 40) / 60)); });
+  // iPhone pide permiso para leer el giro: se pide con el primer toque
+  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    addEventListener('pointerdown', () => DeviceOrientationEvent.requestPermission().then(p => p === 'granted' && orient()).catch(() => {}), { once: true });
+  } else orient();
+}
+function cardPage(d, live) {
   const { b, c } = d; document.documentElement.style.setProperty('--brand', b.c);
   document.title = `Mi tarjeta · ${b.n}`;
   const g = b.g, ready = Math.floor(c.s / g), cur = ready ? g : c.s % g;
+  const invite = live && b.slug && +b.rb ? `${S.PUBLIC}/u/${b.slug}/${c.k}` : '';
+  document.body.dataset.view = 'tarjeta';
   document.body.innerHTML = `
   <div class="pub">
     <p class="pub-hi">Hola, ${esc(first(c.n))} 👋</p>
@@ -393,16 +563,79 @@ async function publicCard(payload) {
     <div class="pub-info">
       ${ready ? `<div class="pub-ready">🎁 <b>¡Tu premio te espera!</b><span>Mostrá esta pantalla en ${esc(b.n)}.</span></div>` : `<div class="pub-left"><b>${g - cur}</b><span>${g - cur === 1 ? 'sello más' : 'sellos más'} para ${esc(String(b.r).charAt(0).toLowerCase() + String(b.r).slice(1))}</span></div>`}
       <dl><div><dt>Visitas</dt><dd>${Math.max(0, c.v ?? c.t)}</dd></div><div><dt>Premios</dt><dd>${c.r}</dd></div><div><dt>Socio desde</dt><dd>${fmt.dateShort(c.j)}</dd></div></dl>
-      ${b.d !== '' && b.d !== null && b.d !== undefined ? `<p class="pub-tip">${icon('bolt')} Los ${DIAS[b.d]} cada visita suma <b>doble</b>.</p>` : ''}
+      ${b.d !== '' && b.d !== null && b.d !== undefined ? `<p class="pub-tip">${icon('bolt')} <span>Los ${DIAS[b.d]} cada visita suma <b>doble</b>.</span></p>` : ''}
     </div>
+    ${invite ? `<div class="pub-invite"><b>🤝 Invitá a un amigo</b><span>Cuando venga por primera vez, ganan <b>+${b.rb} ${+b.rb === 1 ? 'sello' : 'sellos'}</b> los dos.</span><button class="btn primary" id="inv">${icon('share')} Invitar</button></div>` : ''}
+    ${b.rv ? `<a class="btn ghost xl" href="${esc(b.rv)}" target="_blank" rel="noopener">${icon('star')} Dejanos tu reseña en Google</a>` : ''}
     ${b.p ? `<a class="btn wa xl" href="https://wa.me/${waPhone(b.p)}?text=${encodeURIComponent(`¡Hola! Soy ${c.n}, socio/a del club.`)}" target="_blank" rel="noopener">${icon('wa')} Escribirle a ${esc(b.n)}</a>` : ''}
-    <p class="pub-foot">Actualizada el ${fmt.dateTime(d.ts)}${b.a ? ` · ${esc(b.a)}` : ''}<br>Club de clientes con Zenix Club</p>
-  </div>`;
-  // efecto 3D con el dedo / mouse
-  const card = $('.card3d');
-  const tilt = (x, y) => { const r = card.getBoundingClientRect(); const px = (x - r.left) / r.width - 0.5, py = (y - r.top) / r.height - 0.5; card.style.transform = `perspective(800px) rotateY(${px * 14}deg) rotateX(${-py * 14}deg)`; card.style.setProperty('--gx', `${(px + 0.5) * 100}%`); card.style.setProperty('--gy', `${(py + 0.5) * 100}%`); };
-  addEventListener('pointermove', e => tilt(e.clientX, e.clientY));
-  addEventListener('deviceorientation', e => { if (e.gamma == null) return; const r = card.getBoundingClientRect(); tilt(r.left + r.width * (0.5 + e.gamma / 60), r.top + r.height * (0.5 + (e.beta - 40) / 60)); });
+    <p class="pub-foot">${live ? `${icon('cloud')} Se actualiza sola cada vez que venís` : `Actualizada el ${fmt.dateTime(d.ts)}`}${b.a ? ` · ${esc(b.a)}` : ''}<br>Club de clientes con Zenix Club</p>
+  </div><div id="toasts" aria-live="polite"></div>`;
+  $('#inv')?.addEventListener('click', async () => {
+    const text = `Sumate al club de ${b.n} ${b.e}: con ${g} sellos te llevás ${String(b.r).toLowerCase()}. Si te anotás con mi link y vas, ganamos un sello los dos 😉`;
+    if (navigator.share) { try { await navigator.share({ title: `Club de ${b.n}`, text, url: invite }); } catch {} }
+    else window.open(`https://wa.me/?text=${encodeURIComponent(text + '\n' + invite)}`, '_blank', 'noopener');
+  });
+  tiltCard();
+}
+// link viejo (la tarjeta viaja en el link; se usa en la demo)
+async function publicCard(payload) {
+  document.body.dataset.view = 'tarjeta';
+  let d = null; try { d = await decodeShare(payload || ''); } catch {}
+  if (!d?.b) { document.body.innerHTML = `<div class="pub"><div class="empty big"><h2>No pudimos abrir tu tarjeta</h2><p class="muted">Pedile al comercio que te la reenvíe.</p></div></div>`; return; }
+  cardPage(d, false);
+}
+// link fijo: siempre muestra los sellos al día
+async function liveCard(token) {
+  document.body.dataset.view = 'tarjeta';
+  document.body.innerHTML = `<div class="pub"><div class="empty big"><div class="spinner"></div></div></div>`;
+  const load = async () => {
+    try { const { card } = await S.publicApi('GET', 'card/' + encodeURIComponent(token || '')); try { localStorage.setItem('zenix-club:card:' + token, JSON.stringify(card)); } catch {} cardPage(card, true); }
+    catch (e) {
+      let cached = null; try { cached = JSON.parse(localStorage.getItem('zenix-club:card:' + token) || 'null'); } catch {}
+      if (cached && e.offline) return cardPage(cached, true);
+      document.body.innerHTML = `<div class="pub"><div class="empty big"><h2>No pudimos abrir tu tarjeta</h2><p class="muted">${e.offline ? 'Revisá tu conexión a internet.' : 'Pedile al comercio que te la reenvíe.'}</p></div></div>`;
+    }
+  };
+  await load();
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') load(); });
+}
+
+// =====================================================================
+// ALTA DEL CLIENTE POR QR (y por invitación de un amigo)
+// =====================================================================
+async function joinPage(slug, ref) {
+  document.body.dataset.view = 'tarjeta';
+  document.body.innerHTML = `<div class="pub"><div class="empty big"><div class="spinner"></div></div></div>`;
+  let club;
+  try { ({ club } = await S.publicApi('GET', 'club/' + encodeURIComponent(slug || ''))); }
+  catch (e) { document.body.innerHTML = `<div class="pub"><div class="empty big"><h2>No encontramos este club</h2><p class="muted">${esc(e.message)}</p></div></div>`; return; }
+  document.documentElement.style.setProperty('--brand', club.color);
+  document.title = `Sumate al club · ${club.name}`;
+  document.body.innerHTML = `
+  <div class="pub join">
+    <div class="po-top"><span class="po-em">${esc(club.emoji)}</span><b>${esc(club.name)}</b></div>
+    <h1>Sumate al club</h1>
+    <p class="muted">Con <b>${club.goal} sellos</b> te llevás: <b>${esc(club.reward)}</b>.${+club.welcome ? ` Arrancás con ${plural(+club.welcome, 'sello', 'sellos')} de regalo.` : ''}</p>
+    ${ref && +club.refBonus ? `<div class="pub-tip"><span>🤝 Te invitó un amigo: en tu primera visita ganan <b>+${club.refBonus}</b> los dos.</span></div>` : ''}
+    <form class="form box" id="jf" onsubmit="return false">
+      <label class="field"><span>Tu nombre</span><input name="name" autocomplete="name" placeholder="Ej.: Valentina Gómez" required></label>
+      <label class="field"><span>Tu WhatsApp</span><input name="phone" inputmode="tel" autocomplete="tel" placeholder="2901 471353" required></label>
+      <label class="field"><span>Cumpleaños <i>opcional, ¡hay regalo!</i></span><div class="bd-in"><select name="bdd"><option value="">Día</option>${Array.from({ length: 31 }, (_, i) => `<option>${i + 1}</option>`).join('')}</select><select name="bdm"><option value="">Mes</option>${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((m, i) => `<option value="${i + 1}">${m}</option>`).join('')}</select></div></label>
+      <button class="btn primary xl" type="submit">Quiero mi tarjeta</button>
+      <p class="muted small">Usamos tu WhatsApp solo para mandarte tu tarjeta y avisos del club.</p>
+    </form>
+  </div><div id="toasts" aria-live="polite"></div>`;
+  const f = $('#jf');
+  f.onsubmit = e => {
+    e.preventDefault(); const d = Object.fromEntries(new FormData(f));
+    act(async () => {
+      const r = await S.publicApi('POST', 'join', { club: club.slug, name: d.name, phone: d.phone, ref: ref || '', birthday: d.bdd && d.bdm ? `${String(d.bdm).padStart(2, '0')}-${String(d.bdd).padStart(2, '0')}` : '' });
+      const link = `${S.PUBLIC}/t/${r.token}`;
+      document.body.innerHTML = `<div class="pub join"><div class="pub-ready">🎉 <b>¡Ya sos parte del club!</b><span>Guardá tu tarjeta: mandátela por WhatsApp así la tenés siempre a mano.</span></div>
+        <a class="btn wa xl" href="https://wa.me/?text=${encodeURIComponent(`Mi tarjeta del club de ${club.name} ${club.emoji}\n${link}`)}" target="_blank" rel="noopener">${icon('wa')} Guardarla en mi WhatsApp</a>
+        <a class="btn ghost xl" href="${esc(link)}">Ver mi tarjeta</a></div>`;
+    }, $('button[type=submit]', f));
+  };
 }
 
 // ---------- detalles ----------
@@ -413,4 +646,8 @@ const logo = () => `<svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40"
 S.load();
 window.addEventListener('hashchange', route);
 route();
-if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js').catch(() => {});
+// en la nube: se sincroniza solo (varios celulares a la vez)
+const sync = () => { if (S.getMode() === 'cloud' && S.get() && document.visibilityState === 'visible' && $('.top')) S.refresh().catch(() => {}); };
+setInterval(sync, 45000); sync();
+document.addEventListener('visibilitychange', sync);
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register(new URL('sw.js', document.baseURI)).catch(() => {});
