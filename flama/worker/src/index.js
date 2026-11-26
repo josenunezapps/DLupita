@@ -17,6 +17,7 @@
 const SESSION_DAYS = 30;
 const MAX_ATTEMPTS = 8;           // intentos fallidos por IP cada 15 minutos
 const MAX_IMAGE = 1_500_000;      // bytes
+const ORDER_DAYS = 90;            // los pedidos se borran solos después de estos días (privacidad)
 const MAX_ORDERS = 12;            // pedidos por IP cada 15 minutos
 const ALLOWED_ORIGINS = [/^https:\/\/flama\.zenix\.com\.ar$/, /^https:\/\/josenunezapps\.github\.io$/, /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/, /^https:\/\/[a-z0-9-]+\.workers\.dev$/];
 
@@ -130,7 +131,7 @@ async function api(req, env, url) {
     const total = items.reduce((a, x) => a + x.price * x.qty, 0);
     const res = await env.DB.prepare('INSERT INTO orders (created, name, phone, mode, address, notes, items, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id')
       .bind(now(), name, phone, mode, mode === 'Delivery' ? address : '', notes, JSON.stringify(items), total).first();
-    await env.DB.batch([env.DB.prepare('INSERT INTO attempts (ip, at) VALUES (?, ?)').bind(ip, now()), env.DB.prepare('DELETE FROM attempts WHERE at < ?').bind(since)]);
+    await env.DB.batch([env.DB.prepare('INSERT INTO attempts (ip, at) VALUES (?, ?)').bind(ip, now()), env.DB.prepare('DELETE FROM attempts WHERE at < ?').bind(since), env.DB.prepare('DELETE FROM orders WHERE created < ?').bind(now() - ORDER_DAYS * 86400000)]);
     const st = JSON.parse((await env.DB.prepare('SELECT data FROM settings WHERE id = 1').first())?.data || '{}');
     return json(req, { id: res.id, total, whatsapp: st.whatsappOrders !== false });
   }
@@ -198,6 +199,7 @@ async function api(req, env, url) {
   }
 
   if (m === 'GET' && path === 'admin/orders') {
+    await env.DB.prepare('DELETE FROM orders WHERE created < ?').bind(now() - ORDER_DAYS * 86400000).run();
     const row = r => ({ ...r, items: JSON.parse(r.items) });
     const [pending, done] = await Promise.all([
       env.DB.prepare("SELECT * FROM orders WHERE status = 'pendiente' ORDER BY created").all(),
