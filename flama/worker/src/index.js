@@ -3,6 +3,7 @@
 //
 // Públicas:  GET  /api/catalog            productos activos + datos del negocio
 //            GET  /api/img/:key           foto subida desde el panel (caché larga)
+//            POST /api/order              {name,phone,mode,address,notes,items:[{id,variant,qty}]} → {id,total,whatsapp}
 // Sesión:    POST /api/login              {password} → {token}
 //            POST /api/logout
 // Dueño:     GET  /api/admin/catalog      todos los productos (también ocultos)
@@ -10,10 +11,13 @@
 //            DELETE /api/admin/product/:id
 //            PUT  /api/admin/settings     {settings}
 //            POST /api/admin/password     {current,next}
+//            GET  /api/admin/orders       {pending:[...], done:[...]}
+//            PUT  /api/admin/order/:id    {status: pendiente|entregado|cancelado}
 
 const SESSION_DAYS = 30;
 const MAX_ATTEMPTS = 8;           // intentos fallidos por IP cada 15 minutos
 const MAX_IMAGE = 1_500_000;      // bytes
+const MAX_ORDERS = 12;            // pedidos por IP cada 15 minutos
 const ALLOWED_ORIGINS = [/^https:\/\/flama\.zenix\.com\.ar$/, /^https:\/\/josenunezapps\.github\.io$/, /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/, /^https:\/\/[a-z0-9-]+\.workers\.dev$/];
 
 class HttpError extends Error { constructor(status, msg) { super(msg); this.status = status; } }
@@ -102,6 +106,35 @@ async function api(req, env, url) {
     return new Response(new Uint8Array(row.data), { headers: { 'Content-Type': row.type, 'Cache-Control': 'public, max-age=31536000, immutable', ...cors(req) } });
   }
 
+  if (m === 'POST' && path === 'order') {
+    const ip = 'o:' + (req.headers.get('CF-Connecting-IP') || 'local');
+    const since = now() - 15 * 60 * 1000;
+    const { n } = await env.DB.prepare('SELECT COUNT(*) AS n FROM attempts WHERE ip = ? AND at > ?').bind(ip, since).first();
+    if (n >= MAX_ORDERS) fail(429, 'Hiciste muchos pedidos seguidos. Esperá unos minutos o escribí al local por WhatsApp.');
+    const o = await body(req);
+    const name = str(o.name, 80), mode = o.mode === 'Retiro' ? 'Retiro' : 'Delivery', address = str(o.address, 150), notes = str(o.notes, 300);
+    const phone = String(o.phone || '').replace(/\D/g, '').slice(0, 15);
+    if (!name) fail(400, 'Escribí tu nombre.');
+    if (phone.length < 8) fail(400, 'Escribí tu número de WhatsApp para que el local te confirme.');
+    if (mode === 'Delivery' && !address) fail(400, 'Escribí la dirección de entrega.');
+    const wanted = (Array.isArray(o.items) ? o.items : []).slice(0, 40);
+    if (!wanted.length) fail(400, 'El pedido está vacío.');
+    const { products } = await catalog(env, false);
+    const items = wanted.map(w => {
+      const p = products.find(p => p.id === w?.id), v = p?.variants.find(v => v.name === w?.variant);
+      const qty = Math.round(Number(w?.qty));
+      if (!p || !v) fail(409, 'Un producto de tu pedido cambió o ya no está disponible. Revisá el carrito.');
+      if (!(qty >= 1 && qty <= 50)) fail(400, 'Revisá las cantidades.');
+      return { id: p.id, name: p.name, variant: v.name, price: v.price, qty, demo: !!p.demo };
+    });
+    const total = items.reduce((a, x) => a + x.price * x.qty, 0);
+    const res = await env.DB.prepare('INSERT INTO orders (created, name, phone, mode, address, notes, items, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id')
+      .bind(now(), name, phone, mode, mode === 'Delivery' ? address : '', notes, JSON.stringify(items), total).first();
+    await env.DB.batch([env.DB.prepare('INSERT INTO attempts (ip, at) VALUES (?, ?)').bind(ip, now()), env.DB.prepare('DELETE FROM attempts WHERE at < ?').bind(since)]);
+    const st = JSON.parse((await env.DB.prepare('SELECT data FROM settings WHERE id = 1').first())?.data || '{}');
+    return json(req, { id: res.id, total, whatsapp: st.whatsappOrders !== false });
+  }
+
   if (m === 'POST' && path === 'login') {
     const ip = req.headers.get('CF-Connecting-IP') || 'local';
     const since = now() - 15 * 60 * 1000;
@@ -158,9 +191,27 @@ async function api(req, env, url) {
     if (!/^[0-9]{10,15}$/.test(phone)) fail(400, 'El WhatsApp tiene que tener entre 10 y 15 números.');
     const storeStatus = ['auto', 'open', 'closed'].includes(s.storeStatus) ? s.storeStatus : 'auto';
     const next = { ...cur, phone, address: str(s.address, 150), hours: str(s.hours, 100), storeStatus, scheduleDefault: storeStatus === 'auto',
+      whatsappOrders: s.whatsappOrders !== false,
       categories: [...new Set((Array.isArray(s.categories) ? s.categories : []).map(c => str(c, 40)).filter(Boolean))].slice(0, 15) };
     await env.DB.prepare('INSERT INTO settings (id, data) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data').bind(JSON.stringify(next)).run();
     return json(req, await catalog(env, true));
+  }
+
+  if (m === 'GET' && path === 'admin/orders') {
+    const row = r => ({ ...r, items: JSON.parse(r.items) });
+    const [pending, done] = await Promise.all([
+      env.DB.prepare("SELECT * FROM orders WHERE status = 'pendiente' ORDER BY created").all(),
+      env.DB.prepare("SELECT * FROM orders WHERE status <> 'pendiente' ORDER BY done_at DESC LIMIT 60").all(),
+    ]);
+    return json(req, { pending: pending.results.map(row), done: done.results.map(row) });
+  }
+
+  if (m === 'PUT' && path.startsWith('admin/order/')) {
+    const id = Number(path.slice('admin/order/'.length));
+    const { status } = await body(req);
+    if (!Number.isSafeInteger(id) || !['pendiente', 'entregado', 'cancelado'].includes(status)) fail(400, 'Datos inválidos.');
+    const r = await env.DB.prepare('UPDATE orders SET status = ?, done_at = ? WHERE id = ?').bind(status, status === 'pendiente' ? null : now(), id).run();
+    return json(req, { ok: true });
   }
 
   if (m === 'POST' && path === 'admin/password') {
