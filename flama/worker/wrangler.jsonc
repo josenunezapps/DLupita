@@ -1,0 +1,19 @@
+{
+  // Flama Burguer: la tienda (carpeta flama/) + la API (/api/*) en un solo Worker.
+  "name": "flama",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "..",
+    "binding": "ASSETS",
+    "not_found_handling": "none"
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "flama", "database_id": "04a046aa-c98e-4dac-a2be-52e9038cef43" }
+  ],
+  "routes": [
+    { "pattern": "flama.zenix.com.ar", "custom_domain": true }
+  ],
+  "workers_dev": true,
+  "observability": { "enabled": true }
+}

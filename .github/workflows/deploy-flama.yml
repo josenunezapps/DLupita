@@ -1,0 +1,31 @@
+name: Publicar Flama en Cloudflare
+
+on:
+  push:
+    branches: [main]
+    paths: ['flama/**', '.github/workflows/deploy-flama.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-flama
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Revisar token de Cloudflare
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Falta el secreto CLOUDFLARE_API_TOKEN en Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+      - name: Publicar Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: flama/worker
+          command: deploy
