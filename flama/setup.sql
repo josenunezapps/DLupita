@@ -31,3 +31,11 @@ insert into public.flama_products(id,product,active,position) values ('cheese','
 ('cola','{"id":"cola","name":"Gaseosa cola 500 ml","description":"Producto y precio ilustrativos; confirmar con el local.","category":"Bebidas","image":"","active":true,"demo":true,"variants":[{"name":"500 ml","price":2500}]}'::jsonb,true,8),
 ('lima','{"id":"lima","name":"Gaseosa lima-limón 500 ml","description":"Producto y precio ilustrativos; confirmar con el local.","category":"Bebidas","image":"","active":true,"demo":true,"variants":[{"name":"500 ml","price":2500}]}'::jsonb,true,9),
 ('agua','{"id":"agua","name":"Agua 500 ml","description":"Producto y precio ilustrativos; confirmar con el local.","category":"Bebidas","image":"","active":true,"demo":true,"variants":[{"name":"500 ml","price":2000}]}'::jsonb,true,10) on conflict do nothing;
+-- Fotos de productos en Supabase Storage (bucket público de solo lectura; solo admins suben o borran)
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values('flama','flama',true,2000000,array['image/jpeg','image/png','image/webp']) on conflict (id) do nothing;
+drop policy if exists flama_photos_insert on storage.objects;
+create policy flama_photos_insert on storage.objects for insert to authenticated with check(bucket_id='flama' and exists(select 1 from public.flama_admins a where a.user_id=(select auth.uid())));
+drop policy if exists flama_photos_update on storage.objects;
+create policy flama_photos_update on storage.objects for update to authenticated using(bucket_id='flama' and exists(select 1 from public.flama_admins a where a.user_id=(select auth.uid())));
+drop policy if exists flama_photos_delete on storage.objects;
+create policy flama_photos_delete on storage.objects for delete to authenticated using(bucket_id='flama' and exists(select 1 from public.flama_admins a where a.user_id=(select auth.uid())));
