@@ -3,6 +3,7 @@
 //
 // Públicas:  GET  /api/catalog            productos activos + datos del negocio
 //            GET  /api/img/:key           foto subida desde el panel (caché larga)
+//            POST /api/visit              {page: tienda|panel, me}  registro anónimo de visitas (sin IP)
 //            POST /api/order              {name,phone,mode,address,notes,items:[{id,variant,qty}]} → {id,total,whatsapp}
 // Sesión:    POST /api/login              {password} → {token}
 //            POST /api/logout
@@ -107,6 +108,20 @@ async function api(req, env, url) {
     return new Response(new Uint8Array(row.data), { headers: { 'Content-Type': row.type, 'Cache-Control': 'public, max-age=31536000, immutable', ...cors(req) } });
   }
 
+  if (m === 'POST' && path === 'visit') {
+    const v = await body(req);
+    const page = v.page === 'panel' ? 'panel' : 'tienda';
+    const ua = req.headers.get('User-Agent') || '';
+    const device = /iPhone|iPad/i.test(ua) ? 'iPhone/iPad' : /Android/i.test(ua) ? 'Android' : /Windows/i.test(ua) ? 'Windows' : /Macintosh/i.test(ua) ? 'Mac' : /Linux/i.test(ua) ? 'Linux' : 'Otro';
+    const browser = /Instagram/i.test(ua) ? 'Instagram' : /FBAN|FBAV/i.test(ua) ? 'Facebook' : /WhatsApp/i.test(ua) ? 'WhatsApp' : /Edg\//i.test(ua) ? 'Edge' : /SamsungBrowser/i.test(ua) ? 'Samsung' : /Chrome|CriOS/i.test(ua) ? 'Chrome' : /Firefox|FxiOS/i.test(ua) ? 'Firefox' : /Safari/i.test(ua) ? 'Safari' : 'Otro';
+    const cf = req.cf || {};
+    await env.DB.batch([
+      env.DB.prepare('INSERT INTO visits (at, page, mine, city, region, country, device, browser) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').bind(now(), page, v.me ? 1 : 0, str(cf.city, 60), str(cf.region, 60), str(cf.country, 4), device, browser),
+      env.DB.prepare('DELETE FROM visits WHERE at < ?').bind(now() - ORDER_DAYS * 86400000),
+    ]);
+    return json(req, { ok: true });
+  }
+
   if (m === 'POST' && path === 'order') {
     const ip = 'o:' + (req.headers.get('CF-Connecting-IP') || 'local');
     const since = now() - 15 * 60 * 1000;
@@ -128,12 +143,13 @@ async function api(req, env, url) {
       if (!(qty >= 1 && qty <= 50)) fail(400, 'Revisá las cantidades.');
       return { id: p.id, name: p.name, variant: v.name, price: v.price, qty, demo: !!p.demo };
     });
-    const total = items.reduce((a, x) => a + x.price * x.qty, 0);
-    const res = await env.DB.prepare('INSERT INTO orders (created, name, phone, mode, address, notes, items, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id')
-      .bind(now(), name, phone, mode, mode === 'Delivery' ? address : '', notes, JSON.stringify(items), total).first();
-    await env.DB.batch([env.DB.prepare('INSERT INTO attempts (ip, at) VALUES (?, ?)').bind(ip, now()), env.DB.prepare('DELETE FROM attempts WHERE at < ?').bind(since), env.DB.prepare('DELETE FROM orders WHERE created < ?').bind(now() - ORDER_DAYS * 86400000)]);
     const st = JSON.parse((await env.DB.prepare('SELECT data FROM settings WHERE id = 1').first())?.data || '{}');
-    return json(req, { id: res.id, total, whatsapp: st.whatsappOrders !== false });
+    const delivery = mode === 'Delivery' && Number.isSafeInteger(st.deliveryFee) ? st.deliveryFee : null;   // null = a confirmar
+    const total = items.reduce((a, x) => a + x.price * x.qty, 0) + (delivery || 0);
+    const res = await env.DB.prepare('INSERT INTO orders (created, name, phone, mode, address, notes, items, total, delivery) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id')
+      .bind(now(), name, phone, mode, mode === 'Delivery' ? address : '', notes, JSON.stringify(items), total, mode === 'Delivery' ? delivery : 0).first();
+    await env.DB.batch([env.DB.prepare('INSERT INTO attempts (ip, at) VALUES (?, ?)').bind(ip, now()), env.DB.prepare('DELETE FROM attempts WHERE at < ?').bind(since), env.DB.prepare('DELETE FROM orders WHERE created < ?').bind(now() - ORDER_DAYS * 86400000)]);
+    return json(req, { id: res.id, total, delivery: mode === 'Delivery' ? delivery : 0, whatsapp: st.whatsappOrders !== false });
   }
 
   if (m === 'POST' && path === 'login') {
@@ -193,6 +209,7 @@ async function api(req, env, url) {
     const storeStatus = ['auto', 'open', 'closed'].includes(s.storeStatus) ? s.storeStatus : 'auto';
     const next = { ...cur, phone, address: str(s.address, 150), hours: str(s.hours, 100), storeStatus, scheduleDefault: storeStatus === 'auto',
       whatsappOrders: s.whatsappOrders !== false,
+      deliveryFee: s.deliveryFee === null || s.deliveryFee === '' || s.deliveryFee === undefined ? null : (Number.isSafeInteger(Math.round(Number(s.deliveryFee))) && Number(s.deliveryFee) >= 0 && Number(s.deliveryFee) <= 1000000 ? Math.round(Number(s.deliveryFee)) : fail(400, 'Revisá el costo de envío.')),
       categories: [...new Set((Array.isArray(s.categories) ? s.categories : []).map(c => str(c, 40)).filter(Boolean))].slice(0, 15) };
     await env.DB.prepare('INSERT INTO settings (id, data) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data').bind(JSON.stringify(next)).run();
     return json(req, await catalog(env, true));
