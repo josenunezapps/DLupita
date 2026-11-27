@@ -10,3 +10,4 @@ CREATE INDEX IF NOT EXISTS orders_status ON orders (status, created);
 ALTER TABLE orders ADD COLUMN delivery INTEGER;
 CREATE TABLE IF NOT EXISTS visits (id INTEGER PRIMARY KEY AUTOINCREMENT, at INTEGER NOT NULL, page TEXT NOT NULL, mine INTEGER NOT NULL DEFAULT 0, city TEXT, region TEXT, country TEXT, device TEXT, browser TEXT);
 CREATE INDEX IF NOT EXISTS visits_at ON visits (at);
+ALTER TABLE orders ADD COLUMN confirmed_at INTEGER;

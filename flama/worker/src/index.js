@@ -13,7 +13,7 @@
 //            PUT  /api/admin/settings     {settings}
 //            POST /api/admin/password     {current,next}
 //            GET  /api/admin/orders       {pending:[...], done:[...]}
-//            PUT  /api/admin/order/:id    {status: pendiente|entregado|cancelado}
+//            PUT  /api/admin/order/:id    {status: pendiente|confirmado|entregado|cancelado, delivery?}
 
 const SESSION_DAYS = 30;
 const MAX_ATTEMPTS = 8;           // intentos fallidos por IP cada 15 minutos
@@ -209,6 +209,7 @@ async function api(req, env, url) {
     const storeStatus = ['auto', 'open', 'closed'].includes(s.storeStatus) ? s.storeStatus : 'auto';
     const next = { ...cur, phone, address: str(s.address, 150), hours: str(s.hours, 100), storeStatus, scheduleDefault: storeStatus === 'auto',
       whatsappOrders: s.whatsappOrders !== false,
+      mpAlias: str(s.mpAlias, 60).replace(/\s+/g, ''),
       deliveryFee: s.deliveryFee === null || s.deliveryFee === '' || s.deliveryFee === undefined ? null : (Number.isSafeInteger(Math.round(Number(s.deliveryFee))) && Number(s.deliveryFee) >= 0 && Number(s.deliveryFee) <= 1000000 ? Math.round(Number(s.deliveryFee)) : fail(400, 'Revisá el costo de envío.')),
       categories: [...new Set((Array.isArray(s.categories) ? s.categories : []).map(c => str(c, 40)).filter(Boolean))].slice(0, 15) };
     await env.DB.prepare('INSERT INTO settings (id, data) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data').bind(JSON.stringify(next)).run();
@@ -219,17 +220,28 @@ async function api(req, env, url) {
     await env.DB.prepare('DELETE FROM orders WHERE created < ?').bind(now() - ORDER_DAYS * 86400000).run();
     const row = r => ({ ...r, items: JSON.parse(r.items) });
     const [pending, done] = await Promise.all([
-      env.DB.prepare("SELECT * FROM orders WHERE status = 'pendiente' ORDER BY created").all(),
-      env.DB.prepare("SELECT * FROM orders WHERE status <> 'pendiente' ORDER BY done_at DESC LIMIT 60").all(),
+      env.DB.prepare("SELECT * FROM orders WHERE status IN ('pendiente', 'confirmado') ORDER BY created").all(),
+      env.DB.prepare("SELECT * FROM orders WHERE status IN ('entregado', 'cancelado') ORDER BY done_at DESC LIMIT 60").all(),
     ]);
     return json(req, { pending: pending.results.map(row), done: done.results.map(row) });
   }
 
   if (m === 'PUT' && path.startsWith('admin/order/')) {
     const id = Number(path.slice('admin/order/'.length));
-    const { status } = await body(req);
-    if (!Number.isSafeInteger(id) || !['pendiente', 'entregado', 'cancelado'].includes(status)) fail(400, 'Datos inválidos.');
-    const r = await env.DB.prepare('UPDATE orders SET status = ?, done_at = ? WHERE id = ?').bind(status, status === 'pendiente' ? null : now(), id).run();
+    const { status, delivery } = await body(req);
+    if (!Number.isSafeInteger(id) || !['pendiente', 'confirmado', 'entregado', 'cancelado'].includes(status)) fail(400, 'Datos inválidos.');
+    const o = await env.DB.prepare('SELECT items, mode, delivery FROM orders WHERE id = ?').bind(id).first();
+    if (!o) fail(404, 'Pedido no encontrado.');
+    if (status === 'confirmado') {
+      let d = o.mode === 'Delivery' ? o.delivery : 0;
+      if (o.mode === 'Delivery' && delivery !== undefined && delivery !== null && delivery !== '') {
+        d = Math.round(Number(delivery)); if (!Number.isSafeInteger(d) || d < 0 || d > 1000000) fail(400, 'Revisá el costo de envío.');
+      }
+      const total = JSON.parse(o.items).reduce((a, x) => a + x.price * x.qty, 0) + (d || 0);
+      await env.DB.prepare('UPDATE orders SET status = ?, delivery = ?, total = ?, confirmed_at = ?, done_at = NULL WHERE id = ?').bind(status, d, total, now(), id).run();
+    } else {
+      await env.DB.prepare('UPDATE orders SET status = ?, done_at = ? WHERE id = ?').bind(status, status === 'pendiente' ? null : now(), id).run();
+    }
     return json(req, { ok: true });
   }
 
