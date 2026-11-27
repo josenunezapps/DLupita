@@ -1,0 +1,18 @@
+{
+  "id": "/panel/",
+  "name": "Flama Panel",
+  "short_name": "Flama Panel",
+  "description": "Pedidos y administración de Flama Burguer.",
+  "lang": "es-AR",
+  "start_url": "/panel/#admin",
+  "scope": "/panel/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0908",
+  "theme_color": "#0c0908",
+  "icons": [
+    { "src": "/img/icon-panel-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/img/icon-panel-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/img/icon-panel-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

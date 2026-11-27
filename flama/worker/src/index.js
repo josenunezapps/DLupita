@@ -273,6 +273,18 @@ export default {
         return json(req, { error: 'Error del servidor. Probá de nuevo.' }, 500);
       }
     }
+    // /panel/: la misma app abierta en el panel, con su propio manifiesto para instalarla aparte de la tienda.
+    if (url.pathname === '/panel') return Response.redirect(url.origin + '/panel/' + url.search + url.hash, 301);
+    if (url.pathname === '/panel/' || url.pathname === '/panel/index.html') {
+      const page = await env.ASSETS.fetch(new Request(url.origin + '/', { headers: req.headers }));
+      let html = await page.text();
+      html = html.replace('<head>', `<head><base href="/"><script>if(location.hash!=='#admin')history.replaceState(null,'',location.pathname+location.search+'#admin')</script>`)
+        .replace('href="manifest.webmanifest"', 'href="/manifest-panel.webmanifest"')
+        .replace('href="img/icon-180.png"', 'href="/img/icon-panel-180.png"')
+        .replace('content="Flama"', 'content="Flama Panel"')
+        .replace('<title>Flama Burguer | Ushuaia</title>', '<title>Flama Panel</title>');
+      return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' } });
+    }
     return env.ASSETS.fetch(req);
   },
 };
