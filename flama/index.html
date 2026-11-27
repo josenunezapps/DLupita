@@ -28,4 +28,4 @@ modal(order?`<h2>¡Pedido #${order.id} recibido!</h2><p class="muted">${wa?'El l
 function admin(){closeModal();$('#app').innerHTML=`<main class="admin" style="text-align:center;padding-top:20vh"><img src="${ASSET.logo}" alt="Flama" style="width:120px;height:80px;object-fit:contain"></main>`}
 var api,login,logout,editProduct,saveProduct,removeProduct;
 window.addEventListener('hashchange',render);document.addEventListener('click',ev=>{const b=ev.target.closest('[data-store-tab]');if(b)selectTab(b.dataset.storeTab)});render();
-</script><script src="admin.js?v=12"></script></body></html>
+</script><script src="admin.js?v=13"></script></body></html>
